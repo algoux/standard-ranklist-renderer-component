@@ -1,0 +1,49 @@
+{
+  "name": "@algoux/standard-ranklist-renderer-component",
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
+  },
+  "homepage": "https://github.com/algoux/standard-ranklist-renderer-component",
+  "dependencies": {
+    "classnames": "^2.3.1",
+    "color": "^4.2.3",
+    "semver": "^7.3.7",
+    "textcolor": "^1.0.2"
+  },
+  "devDependencies": {
+    "@algoux/standard-ranklist": "^0.2.1",
+    "@types/classnames": "^2.3.1",
+    "@types/color": "^3.0.3",
+    "@types/node": "^14.18.22",
+    "@types/react": "^16.8.0",
+    "@types/react-dom": "^16.8.0",
+    "@types/semver": "^7.3.10",
+    "@typescript-eslint/eslint-plugin": "^5.10.2",
+    "@typescript-eslint/parser": "^5.10.2",
+    "@vitejs/plugin-react": "^1.3.2",
+    "less": "^4.1.3",
+    "prettier": "^2.5.1",
+    "rc-dialog": "^8.4.6",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "typescript": "^4.5.5",
+    "vite": "^2.9.12",
+    "vite-plugin-dts": "^1.4.0"
+  },
+  "peerDependencies": {
+    "rc-dialog": "^8.4.6",
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
+  },
+  "license": "MIT"
+}
