@@ -11,31 +11,35 @@ export default class SolutionsModalSingleton {
   dom: Element | null;
   ref: SolutionsModal | null;
 
-  constructor(options: SolutionsModalProps) {
+  constructor(private readonly options: SolutionsModalProps) {
     this.dom = null;
     this.ref = null;
-    this.newInstance(options);
   }
 
-  newInstance(options: SolutionsModalProps) {
+  mountToDom() {
     if (!this.dom) {
       this.dom = document.createElement('div');
       this.dom.id = 'solution-modal';
       document.body.appendChild(this.dom);
     }
-    ReactDOM.render(<SolutionsModal {...options} ref={(ref) => (this.ref = ref)} />, this.dom);
+    ReactDOM.render(
+      <SolutionsModal {...this.options} ref={(ref) => (this.ref = ref)} />,
+      this.dom,
+    );
   }
 
   modal(options: SolutionsModalOptions, e?: React.MouseEvent) {
-    this.ref &&
-      this.ref.setState({
-        ...options,
-        mousePosition: e && {
-          x: e.pageX,
-          y: e.pageY,
-        },
-        visible: true,
-      });
+    if (!this.ref) {
+      this.mountToDom();
+    }
+    this.ref?.setState({
+      ...options,
+      mousePosition: e && {
+        x: e.pageX,
+        y: e.pageY,
+      },
+      visible: true,
+    });
   }
 
   destroy() {
