@@ -9,7 +9,7 @@ export default class App extends React.Component {
     return (
       <div className="app">
         {/* @ts-ignore */}
-        <Ranklist data={data} />
+        <Ranklist data={data} theme="light" />
       </div>
     );
   }

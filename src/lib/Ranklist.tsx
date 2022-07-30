@@ -13,7 +13,7 @@ const MIN_SUPPORTED_VERSION = '0.0.1';
 const MAX_SUPPORTED_VERSION = '0.2.1';
 const solutionsModal = SolutionsModalSingleton.getInstance();
 
-enum EnumTheme {
+export enum EnumTheme {
   light = 'light',
   dark = 'dark',
 }
@@ -25,10 +25,15 @@ interface ThemeColor {
 
 export interface RanklistProps {
   data: srk.Ranklist;
+
+  /**
+   * Theme
+   * @default 'light'
+   */
+  theme?: EnumTheme;
 }
 
 interface State {
-  theme: keyof typeof EnumTheme;
   marker: string;
   error: string | null;
 }
@@ -39,40 +44,17 @@ const defaultBackgroundColor = {
 };
 
 export default class Ranklist extends React.Component<RanklistProps, State> {
-  private _themeMedia: MediaQueryList = window.matchMedia(
-    '(prefers-color-scheme: dark)',
-  );
+  static defaultProps: Partial<RanklistProps> = {
+    theme: EnumTheme.light,
+  };
 
   constructor(props: RanklistProps) {
     super(props);
     this.state = {
-      theme: this._themeMedia.matches ? EnumTheme.dark : EnumTheme.light,
       marker: 'all',
       error: null,
     };
   }
-
-  componentDidMount(): void {
-    // @ts-ignore
-    this._themeMedia.addEventListener('change', this.listenThemeChange);
-  }
-
-  componentWillUnmount() {
-    // @ts-ignore
-    this._themeMedia.removeEventListener('change', this.listenThemeChange);
-  }
-
-  listenThemeChange = (mql: MediaQueryList) => {
-    if (mql.matches) {
-      this.setState({
-        theme: EnumTheme.dark,
-      });
-    } else {
-      this.setState({
-        theme: EnumTheme.light,
-      });
-    }
-  };
 
   formatTimeDuration(
     time: srk.TimeDuration,
@@ -189,7 +171,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
   };
 
   renderSingleProblemHeader = (p: srk.Problem, index: number) => {
-    const { theme } = this.state;
+    const theme = this.props.theme!;
     const alias = p.alias ? p.alias : numberToAlphabet(index);
     const stat = p.statistics;
     const { textColor, backgroundColor } = this.resolveStyle(p.style || {});
@@ -232,7 +214,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
     series: srk.RankSeries,
     row: srk.RanklistRow,
   ) => {
-    const { theme } = this.state;
+    const theme = this.props.theme!;
     const innerComp: React.ReactNode = rk.rank
       ? rk.rank
       : row.user.official === false
@@ -283,7 +265,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
     const {
       data: { markers = [] },
     } = this.props;
-    const { theme } = this.state;
+    const theme = this.props.theme!;
     let className = '';
     let bodyStyle: React.CSSProperties = {};
     let bodyLabel = '';
