@@ -177,13 +177,12 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
     const { textColor, backgroundColor } = this.resolveStyle(p.style || {});
     const innerComp = (
       <>
-        <span className="-display-block" style={{ color: textColor[theme] }}>
+        <span className="-display-block">
           {alias}
         </span>
         {stat ? (
           <span
             className="-display-block srk-problem-stats"
-            style={{ color: textColor[theme] }}
           >
             {stat.accepted} / {stat.submitted}
           </span>
@@ -193,16 +192,18 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
     const cellComp = p.link
       ? this.genExternalLink(p.link, innerComp)
       : innerComp;
-    const bgColor = Color(
-      backgroundColor[theme] || defaultBackgroundColor[theme],
-    )
-      .alpha(0.75)
-      .string();
+      const bgColorStr = Color(
+        backgroundColor[theme] || defaultBackgroundColor[theme],
+      ).string();
+      const bgColorAlphaStr = Color(
+        backgroundColor[theme] || defaultBackgroundColor[theme],
+      ).alpha(0.27).string();
+    const bgImageStr = `linear-gradient(180deg, ${bgColorStr} 0%, ${bgColorStr} 10%, ${bgColorAlphaStr} 10%, transparent 100%)`;
     return (
       <th
         key={p.alias || p.title}
         className="-nowrap problem"
-        style={{ backgroundColor: bgColor }}
+        style={{ backgroundImage: bgImageStr }}
       >
         {cellComp}
       </th>
