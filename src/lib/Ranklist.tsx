@@ -141,7 +141,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
 
   genExternalLink(link: string, children: React.ReactNode) {
     return (
-      <a href={link} target="_blank" rel="noopener noreferrer">
+      <a href={link} target="_blank" rel="noopener noreferrer" style={{ color: 'unset' }}>
         {children}
       </a>
     );
