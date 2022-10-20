@@ -4,6 +4,8 @@ The srk renderer component.
 
 This package only includes the implementation for React.
 
+Supported srk versions: `>=0.0.1 && <=0.2.3`
+
 ## Installation
 
 ```bash

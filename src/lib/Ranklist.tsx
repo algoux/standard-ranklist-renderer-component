@@ -7,10 +7,11 @@ import TEXTColor from 'textcolor';
 import type * as srk from '@algoux/standard-ranklist';
 import SolutionsModalSingleton from '../components/SolutionsModalSingleton';
 import { numberToAlphabet, secToTimeStr } from '../utils/format';
+import { resolveText } from './utils';
 import './Ranklist.less';
 
 const MIN_SUPPORTED_VERSION = '0.0.1';
-const MAX_SUPPORTED_VERSION = '0.2.1';
+const MAX_SUPPORTED_VERSION = '0.2.3';
 const solutionsModal = SolutionsModalSingleton.getInstance();
 
 export enum EnumTheme {
@@ -201,7 +202,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
     const bgImageStr = `linear-gradient(180deg, ${bgColorStr} 0%, ${bgColorStr} 10%, ${bgColorAlphaStr} 10%, transparent 100%)`;
     return (
       <th
-        key={p.alias || p.title}
+        key={p.alias || resolveText(p.title)}
         className="-nowrap problem"
         style={{ backgroundImage: bgImageStr }}
       >
@@ -258,8 +259,8 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
 
   renderUserName = (user: srk.User) => {
     const { teamMembers = [] } = user;
-    const memberStr = teamMembers.map((m) => m.name || '').join(' / ');
-    return <span title={memberStr}>{user.name}</span>;
+    const memberStr = teamMembers.map((m) => resolveText(m.name)).join(' / ');
+    return <span title={memberStr}>{resolveText(user.name)}</span>;
   };
 
   renderUserBody = (user: srk.User) => {
@@ -272,7 +273,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
     let bodyLabel = '';
     const marker = markers.find((m) => m.id === user.marker);
     if (marker) {
-      bodyLabel = marker.label;
+      bodyLabel = resolveText(marker.label);
       const markerStyle = marker.style;
       let backgroundColor: ThemeColor = {
         [EnumTheme.light]: undefined,
@@ -295,7 +296,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
         {this.renderUserName(user)}
         {user.organization && (
           <p className="user-second-name" title="">
-            {user.organization}
+            {resolveText(user.organization)}
           </p>
         )}
       </td>
@@ -380,7 +381,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
     const result = st.result;
     let commonClassName = '-text-center -nowrap';
     const problem = problems[problemIndex] || {};
-    const key = problem.alias || problem.title || problemIndex;
+    const key = problem.alias || resolveText(problem.title) || problemIndex;
     const solutions = [...(st.solutions || [])].reverse();
     const hasSolutions = solutions.length > 0;
     if (hasSolutions) {
@@ -391,7 +392,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
           solutionsModal.modal(
             {
               title: `Solutions of ${numberToAlphabet(problemIndex)} (${
-                user.name
+                resolveText(user.name)
               })`,
               content: (
                 <table className="srk-common-table srk-solutions-table">
@@ -522,7 +523,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
           </thead>
           <tbody>
             {rows.map((r) => (
-              <tr key={r.user.id || r.user.name}>
+              <tr key={r.user.id || resolveText(r.user.name)}>
                 {r.ranks.map((rk, index) =>
                   this.renderSingleSeriesBody(rk, series[index], r),
                 )}

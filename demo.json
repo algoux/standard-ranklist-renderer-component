@@ -179,7 +179,11 @@
       "user": {
         "id": "T010",
         "name": "逆十字",
-        "organization": "北京大学",
+        "organization": {
+          "zh-CN": "北京大学",
+          "en": "Peking University",
+          "fallback": "Peking University"
+        },
         "teamMembers": [
           {
             "name": "罗国杰(教练)"
