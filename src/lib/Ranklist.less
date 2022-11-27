@@ -187,6 +187,8 @@
   --color-marker-pink: #ffc9f2;
 
   --srk-table-head-bg: rgba(255, 255, 255, 0.75);
+  --srk-table-head-backdrop-filter: saturate(180%) blur(20px);
+  --srk-table-body-user-max-width: 300px;
   --srk-table-border: #ddd;
   --srk-body-color: inherit;
   --srk-body-bg: inherit;
@@ -271,7 +273,7 @@
       position: sticky;
       top: 0;
       background-color: var(--srk-table-head-bg);
-      backdrop-filter: saturate(180%) blur(20px);
+      backdrop-filter: var(--srk-table-head-backdrop-filter);
 
       &.series {
         min-width: 40px;
@@ -286,7 +288,15 @@
       padding: 8px;
       border-bottom: 1px solid var(--srk-table-border);
       vertical-align: middle;
+      height: 40px;
 
+      &.user {
+        max-width: var(--srk-table-body-user-max-width);
+        height: 100%;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
       .user-second-name {
         margin: 0;
         font-size: 12px;
@@ -368,6 +378,7 @@
 
   .srk-problem-stats {
     font-size: 12px;
+    transform: scale(0.9);
   }
 }
 

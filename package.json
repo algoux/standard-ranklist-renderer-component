@@ -1,7 +1,7 @@
 {
   "name": "@algoux/standard-ranklist-renderer-component",
   "description": "Standard Ranklist Renderer Component",
-  "version": "0.2.4",
+  "version": "0.2.6",
   "type": "module",
   "files": [
     "dist"
@@ -51,7 +51,7 @@
     "vite-plugin-dts": "^1.4.0"
   },
   "peerDependencies": {
-    "@algoux/standard-ranklist": "^0.2.3",
+    "@algoux/standard-ranklist": ">=0.0.1 && <=0.2.3",
     "rc-dialog": "^8.4.6",
     "react": ">=16.9.0",
     "react-dom": ">=16.9.0"

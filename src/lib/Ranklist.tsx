@@ -142,7 +142,12 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
 
   genExternalLink(link: string, children: React.ReactNode) {
     return (
-      <a href={link} target="_blank" rel="noopener noreferrer" style={{ color: 'unset' }}>
+      <a
+        href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ color: 'unset' }}
+      >
         {children}
       </a>
     );
@@ -176,16 +181,19 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
     const alias = p.alias ? p.alias : numberToAlphabet(index);
     const stat = p.statistics;
     const { textColor, backgroundColor } = this.resolveStyle(p.style || {});
+    const statDesc = stat
+      ? `${stat.accepted} / ${stat.submitted} (${
+          stat.submitted
+            ? ((stat.accepted / stat.submitted) * 100).toFixed(1)
+            : 0
+        }%)`
+      : '';
     const innerComp = (
       <>
-        <span className="-display-block">
-          {alias}
-        </span>
+        <span className="-display-block">{alias}</span>
         {stat ? (
-          <span
-            className="-display-block srk-problem-stats"
-          >
-            {stat.accepted} / {stat.submitted}
+          <span title={statDesc} className="-display-block srk-problem-stats">
+            {stat.accepted}
           </span>
         ) : null}
       </>
@@ -193,12 +201,14 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
     const cellComp = p.link
       ? this.genExternalLink(p.link, innerComp)
       : innerComp;
-      const bgColorStr = Color(
-        backgroundColor[theme] || defaultBackgroundColor[theme],
-      ).string();
-      const bgColorAlphaStr = Color(
-        backgroundColor[theme] || defaultBackgroundColor[theme],
-      ).alpha(0.27).string();
+    const bgColorStr = Color(
+      backgroundColor[theme] || defaultBackgroundColor[theme],
+    ).string();
+    const bgColorAlphaStr = Color(
+      backgroundColor[theme] || defaultBackgroundColor[theme],
+    )
+      .alpha(0.27)
+      .string();
     const bgImageStr = `linear-gradient(180deg, ${bgColorStr} 0%, ${bgColorStr} 10%, ${bgColorAlphaStr} 10%, transparent 100%)`;
     return (
       <th
@@ -259,8 +269,9 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
 
   renderUserName = (user: srk.User) => {
     const { teamMembers = [] } = user;
-    const memberStr = teamMembers.map((m) => resolveText(m.name)).join(' / ');
-    return <span title={memberStr}>{resolveText(user.name)}</span>;
+    // const memberStr = teamMembers.map((m) => resolveText(m.name)).join(' / ');
+    const name = resolveText(user.name);
+    return <span title={name}>{name}</span>;
   };
 
   renderUserBody = (user: srk.User) => {
@@ -289,7 +300,10 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
     }
     return (
       <td
-        className={classnames('-text-left -nowrap srk-marker-bg', className)}
+        className={classnames(
+          '-text-left -nowrap user srk-marker-bg',
+          className,
+        )}
         style={bodyStyle}
         title={bodyLabel}
       >
@@ -313,15 +327,21 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
         );
       case 'AC':
         return (
-          <span className="srk-solution-result-text srk-preset-result-ac">Accepted</span>
+          <span className="srk-solution-result-text srk-preset-result-ac">
+            Accepted
+          </span>
         );
       case 'RJ':
         return (
-          <span className="srk-solution-result-text srk-preset-result-rj">Rejected</span>
+          <span className="srk-solution-result-text srk-preset-result-rj">
+            Rejected
+          </span>
         );
       case '?':
         return (
-          <span className="srk-solution-result-text srk-preset-result-fz">Frozen</span>
+          <span className="srk-solution-result-text srk-preset-result-fz">
+            Frozen
+          </span>
         );
       case 'WA':
         return (
@@ -391,9 +411,9 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
       ? (e: React.MouseEvent) =>
           solutionsModal.modal(
             {
-              title: `Solutions of ${numberToAlphabet(problemIndex)} (${
-                resolveText(user.name)
-              })`,
+              title: `Solutions of ${numberToAlphabet(
+                problemIndex,
+              )} (${resolveText(user.name)})`,
               content: (
                 <table className="srk-common-table srk-solutions-table">
                   <thead>
@@ -437,7 +457,10 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
           <td
             key={key}
             onClick={onClick}
-            className={classnames(commonClassName, 'srk-prest-status-block-accepted')}
+            className={classnames(
+              commonClassName,
+              'srk-prest-status-block-accepted',
+            )}
           >
             {st.tries}/
             {st.time
@@ -450,7 +473,10 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
           <td
             key={key}
             onClick={onClick}
-            className={classnames(commonClassName, 'srk-prest-status-block-frozen')}
+            className={classnames(
+              commonClassName,
+              'srk-prest-status-block-frozen',
+            )}
           >
             {st.tries}
           </td>
@@ -460,7 +486,10 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
           <td
             key={key}
             onClick={onClick}
-            className={classnames(commonClassName, 'srk-prest-status-block-failed')}
+            className={classnames(
+              commonClassName,
+              'srk-prest-status-block-failed',
+            )}
           >
             {st.tries}
           </td>
@@ -485,7 +514,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
     }
     const { data } = this.props;
     const rows = data.rows;
-    const { type, version, contest, problems, series, _now, markers } = data;
+    const { type, version, problems, series } = data;
     if (type !== 'general') {
       return <div>srk type "{type}" is not supported</div>;
     }
@@ -499,7 +528,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
       return (
         <div>
           srk version "{version}" is not supported ({MIN_SUPPORTED_VERSION} to{' '}
-          {MAX_SUPPORTED_VERSION})
+          {MAX_SUPPORTED_VERSION} only)
         </div>
       );
     }
