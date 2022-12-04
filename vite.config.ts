@@ -1,7 +1,9 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
-import dts from 'vite-plugin-dts'
+import dts from 'vite-plugin-dts';
+// @ts-ignore
+import pkg from './package.json';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -28,5 +30,8 @@ export default defineConfig({
       //   }
       // }
     }
-  }
+  },
+  define: {
+    SRK_SUPPORTED_VERSIONS: JSON.stringify(pkg.srkSupportedVersions),
+  },
 });

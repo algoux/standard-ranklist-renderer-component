@@ -1,17 +1,14 @@
 import classnames from 'classnames';
 import Color from 'color';
 import React from 'react';
-import semver from 'semver';
 // @ts-ignore
 import TEXTColor from 'textcolor';
 import type * as srk from '@algoux/standard-ranklist';
 import SolutionsModalSingleton from '../components/SolutionsModalSingleton';
-import { numberToAlphabet, secToTimeStr } from '../utils/format';
-import { resolveText } from './utils';
+import { formatTimeDuration, resolveText, numberToAlphabet, secToTimeStr } from './utils';
+import { caniuse, srkSupportedVersions } from './caniuse';
 import './Ranklist.less';
 
-const MIN_SUPPORTED_VERSION = '0.0.1';
-const MAX_SUPPORTED_VERSION = '0.2.3';
 const solutionsModal = SolutionsModalSingleton.getInstance();
 
 export enum EnumTheme {
@@ -55,44 +52,6 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
       marker: 'all',
       error: null,
     };
-  }
-
-  formatTimeDuration(
-    time: srk.TimeDuration,
-    targetUnit: srk.TimeUnit = 'ms',
-    fmt: (num: number) => number = (num) => num,
-  ) {
-    let ms = -1;
-    switch (time[1]) {
-      case 'ms':
-        ms = time[0];
-        break;
-      case 's':
-        ms = time[0] * 1000;
-        break;
-      case 'min':
-        ms = time[0] * 1000 * 60;
-        break;
-      case 'h':
-        ms = time[0] * 1000 * 60 * 60;
-        break;
-      case 'd':
-        ms = time[0] * 1000 * 60 * 60 * 24;
-        break;
-    }
-    switch (targetUnit) {
-      case 'ms':
-        return ms;
-      case 's':
-        return fmt(ms / 1000);
-      case 'min':
-        return fmt(ms / 1000 / 60);
-      case 'h':
-        return fmt(ms / 1000 / 60 / 60);
-      case 'd':
-        return fmt(ms / 1000 / 60 / 60 / 24);
-    }
-    return -1;
   }
 
   resolveColor(color: srk.Color) {
@@ -427,7 +386,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
                       <tr key={`${s.result}_${s.time[0]}_${index}`}>
                         <td>{this.renderResultLabel(s.result)}</td>
                         <td className="-text-right">
-                          {secToTimeStr(this.formatTimeDuration(s.time, 's'))}
+                          {secToTimeStr(formatTimeDuration(s.time, 's'))}
                         </td>
                       </tr>
                     ))}
@@ -448,7 +407,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
           >
             {st.tries}/
             {st.time
-              ? this.formatTimeDuration(st.time, 'min', Math.floor)
+              ? formatTimeDuration(st.time, 'min', Math.floor)
               : '-'}
           </td>
         );
@@ -464,7 +423,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
           >
             {st.tries}/
             {st.time
-              ? this.formatTimeDuration(st.time, 'min', Math.floor)
+              ? formatTimeDuration(st.time, 'min', Math.floor)
               : '-'}
           </td>
         );
@@ -519,16 +478,11 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
       return <div>srk type "{type}" is not supported</div>;
     }
     if (
-      !(
-        semver.valid(version) &&
-        semver.gte(version, MIN_SUPPORTED_VERSION) &&
-        semver.lte(version, MAX_SUPPORTED_VERSION)
-      )
+      !caniuse(version)
     ) {
       return (
         <div>
-          srk version "{version}" is not supported ({MIN_SUPPORTED_VERSION} to{' '}
-          {MAX_SUPPORTED_VERSION} only)
+          srk version "{version}" is not supported (current supported: {srkSupportedVersions})
         </div>
       );
     }
@@ -560,7 +514,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
                 <td className="-text-right -nowrap">{r.score.value}</td>
                 <td className="-text-right -nowrap">
                   {r.score.time
-                    ? this.formatTimeDuration(r.score.time, 'min', Math.floor)
+                    ? formatTimeDuration(r.score.time, 'min', Math.floor)
                     : '-'}
                 </td>
                 {r.statuses.map((st, index) =>

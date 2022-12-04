@@ -1,7 +1,7 @@
 {
   "name": "@algoux/standard-ranklist-renderer-component",
   "description": "Standard Ranklist Renderer Component",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "type": "module",
   "files": [
     "dist"
@@ -11,7 +11,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "serve": "vite preview"
   },
   "author": "bLue",
@@ -31,7 +31,7 @@
     "textcolor": "^1.0.2"
   },
   "devDependencies": {
-    "@algoux/standard-ranklist": "0.2.3",
+    "@algoux/standard-ranklist": "0.2.4",
     "@types/classnames": "^2.3.1",
     "@types/color": "^3.0.3",
     "@types/node": "^14.18.22",
@@ -51,10 +51,11 @@
     "vite-plugin-dts": "^1.4.0"
   },
   "peerDependencies": {
-    "@algoux/standard-ranklist": ">=0.0.1 && <=0.2.3",
+    "@algoux/standard-ranklist": "*",
     "rc-dialog": "^8.4.6",
     "react": ">=16.9.0",
     "react-dom": ">=16.9.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "srkSupportedVersions": ">=0.0.1 <=0.2.4"
 }
