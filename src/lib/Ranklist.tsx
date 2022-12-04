@@ -3,6 +3,7 @@ import Color from 'color';
 import React from 'react';
 // @ts-ignore
 import TEXTColor from 'textcolor';
+import BigNumber from "bignumber.js";
 import type * as srk from '@algoux/standard-ranklist';
 import SolutionsModalSingleton from '../components/SolutionsModalSingleton';
 import { formatTimeDuration, resolveText, numberToAlphabet, secToTimeStr } from './utils';
@@ -19,6 +20,17 @@ export enum EnumTheme {
 interface ThemeColor {
   [EnumTheme.light]: string | undefined;
   [EnumTheme.dark]: string | undefined;
+}
+
+interface RankValue {
+  /** Rank value initially. If the user is unofficial and rank value equals null, it will be rendered as unofficial mark such as '*'. */
+  rank: number | null;
+
+  /**
+   * Series segment index which this rank belongs to initially. `null` means this rank does not belong to any segment. `undefined` means it will be calculated automatically (only if the segment's count property exists).
+   * @defaultValue null
+   */
+  segmentIndex?: number | null;
 }
 
 export interface RanklistProps {
@@ -64,12 +76,8 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
   }
 
   resolveThemeColor(themeColor: srk.ThemeColor): ThemeColor {
-    let light = this.resolveColor(
-      typeof themeColor === 'string' ? themeColor : themeColor.light,
-    );
-    let dark = this.resolveColor(
-      typeof themeColor === 'string' ? themeColor : themeColor.dark,
-    );
+    let light = this.resolveColor(typeof themeColor === 'string' ? themeColor : themeColor.light);
+    let dark = this.resolveColor(typeof themeColor === 'string' ? themeColor : themeColor.dark);
     return {
       [EnumTheme.light]: light,
       [EnumTheme.dark]: dark,
@@ -101,16 +109,173 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
 
   genExternalLink(link: string, children: React.ReactNode) {
     return (
-      <a
-        href={link}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ color: 'unset' }}
-      >
+      <a href={link} target="_blank" rel="noopener noreferrer" style={{ color: 'unset' }}>
         {children}
       </a>
     );
   }
+
+  genSeriesCalcFns = (series: srk.RankSeries[], rows: srk.RanklistRow[], ranks: number[], officialRanks: (number | null)[]) => {
+    const fallbackSeriesCalcFn = () => ({
+      rank: null,
+      segmentIndex: null,
+    });
+    const fns: Array<( row: srk.RanklistRow, index: number) => RankValue> =
+      series.map((seriesConfig) => {
+        const { rule } = seriesConfig;
+        if (!rule) {
+          return fallbackSeriesCalcFn;
+        }
+        const { preset } = rule;
+        switch (preset) {
+          case 'Normal': {
+            const options = rule.options as srk.RankSeriesRulePresetNormal['options'];
+            return (row, index) => {
+              if (options?.includeOfficialOnly && row.user.official === false) {
+                return {
+                  rank: null,
+                  segmentIndex: null,
+                };
+              }
+              return {
+                rank: options?.includeOfficialOnly ? officialRanks[index] : ranks[index],
+                segmentIndex: null,
+              };
+            };
+          }
+          case 'UniqByUserField': {
+            const options = rule.options as srk.RankSeriesRulePresetUniqByUserField['options'];
+            const field = options?.field;
+            const assignedRanksMap = new Map<number, number>();
+            const valueSet = new Set<string>();
+            const stringify = (v: any) => (typeof v === 'object' ? JSON.stringify(v) : `${v}`);
+            let lastOuterRank = 0;
+            let lastRank = 0;
+            rows.forEach((row, index) => {
+              if (options.includeOfficialOnly && row.user.official === false) {
+                return;
+              }
+              const value = stringify(row.user[field]);
+              if (value && !valueSet.has(value)) {
+                const outerRank = options.includeOfficialOnly ? officialRanks[index] as number : ranks[index];
+                valueSet.add(value);
+                if (outerRank !== lastOuterRank) {
+                  lastOuterRank = outerRank;
+                  lastRank = assignedRanksMap.size + 1;
+                  assignedRanksMap.set(index, lastRank);
+                }
+                assignedRanksMap.set(index, lastRank);
+              }
+            });
+            return (row, index) => {
+              return {
+                rank: assignedRanksMap.get(index) ?? null,
+                segmentIndex: null,
+              };
+            };
+          }
+          case 'ICPC': {
+            const options = rule.options as srk.RankSeriesRulePresetICPC['options'];
+            const usingEndpointRules: number[][] = [];
+            if (options.ratio) {
+              const { value, rounding = 'ceil', denominator = 'all' } = options.ratio;
+              let total =
+                denominator === 'submitted'
+                  ? rows.filter((row) => !row.statuses.every((s) => s.result === null)).length
+                  : rows.length;
+              total = 240;
+              const accValues: BigNumber[] = [];
+              for (let i = 0; i < value.length; i++) {
+                if (i === 0) {
+                  accValues[i] = new BigNumber(value[i]);
+                } else {
+                  accValues[i] = accValues[i - 1].plus(new BigNumber(value[i]));
+                }
+              }
+              const segmentRawEndpoints = accValues.map((v) => v.times(total).toNumber());
+              usingEndpointRules.push(
+                segmentRawEndpoints.map((v) => {
+                  return rounding === 'floor' ? Math.floor(v) : rounding === 'round' ? Math.round(v) : Math.ceil(v);
+                }),
+              );
+            }
+            if (options.count) {
+              const { value } = options.count;
+              const accValues: number[] = [];
+              for (let i = 0; i < value.length; i++) {
+                accValues[i] = (i > 0 ? accValues[i - 1] : 0) + value[i];
+              }
+              usingEndpointRules.push(accValues);
+            }
+            return (row, index) => {
+              if (row.user.official === false) {
+                return {
+                  rank: null,
+                  segmentIndex: null,
+                };
+              }
+              const usingSegmentIndex = (seriesConfig.segments || []).findIndex((_, segIndex) => {
+                return usingEndpointRules.map((e) => e[segIndex]).every((endpoints) => officialRanks[index]! <= endpoints);
+              });
+              return {
+                rank: officialRanks[index],
+                segmentIndex: usingSegmentIndex > -1 ? usingSegmentIndex : null,
+              };
+            };
+          }
+          default:
+            console.warn('Unknown series rule preset：', preset);
+            return fallbackSeriesCalcFn;
+        }
+      });
+    return fns;
+  };
+
+  genRowRanks = (rows: srk.RanklistRow[]) => {
+    const rowRanks: Array<{ rank: number; officialRank: number | null }> = [];
+    const compareScoreEqual = (a: srk.RankScore, b: srk.RankScore) => {
+      if (a.value !== b.value) {
+        return false;
+      }
+      const da = a.time ? formatTimeDuration(a.time) : 0;
+      const db = b.time ? formatTimeDuration(b.time) : 0;
+      return da === db;
+    };
+    const genRanks = (rows: srk.RanklistRow[]) => {
+      let ranks: number[] = new Array(rows.length).fill(null);
+      for (let i = 0; i < rows.length; ++i) {
+        if (i === 0) {
+          ranks[i] = 1;
+          continue;
+        }
+        if (compareScoreEqual(rows[i].score, rows[i - 1].score)) {
+          ranks[i] = ranks[i - 1];
+        } else {
+          ranks[i] = i + 1;
+        }
+      }
+      return ranks;
+    };
+    const ranks = genRanks(rows);
+    const officialPartialRows: srk.RanklistRow[] = [];
+    const officialIndexBackMap = new Map<number, number>();
+    rows.forEach((row, index) => {
+      if (row.user.official !== false) {
+        officialIndexBackMap.set(index, officialPartialRows.length);
+        officialPartialRows.push(row);
+      }
+    });
+    const officialPartialRanks = genRanks(officialPartialRows);
+    const officialRanks = new Array(rows.length)
+      .fill(null)
+      .map((_, index) =>
+        officialIndexBackMap.get(index) === undefined ? null : officialPartialRanks[officialIndexBackMap.get(index)!],
+      );
+    return {
+      ranks,
+      officialRanks,
+    };
+  };
 
   renderContestBanner = () => {
     const banner = this.props.data.contest.banner;
@@ -125,9 +290,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
       imgSrc = banner.image;
       link = banner.link;
     }
-    const imgComp = (
-      <img src={imgSrc} alt="Contest Banner" className="-full-width" />
-    );
+    const imgComp = <img src={imgSrc} alt="Contest Banner" className="-full-width" />;
     if (link) {
       return this.genExternalLink(link, imgComp);
     } else {
@@ -142,9 +305,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
     const { textColor, backgroundColor } = this.resolveStyle(p.style || {});
     const statDesc = stat
       ? `${stat.accepted} / ${stat.submitted} (${
-          stat.submitted
-            ? ((stat.accepted / stat.submitted) * 100).toFixed(1)
-            : 0
+          stat.submitted ? ((stat.accepted / stat.submitted) * 100).toFixed(1) : 0
         }%)`
       : '';
     const innerComp = (
@@ -157,44 +318,23 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
         ) : null}
       </>
     );
-    const cellComp = p.link
-      ? this.genExternalLink(p.link, innerComp)
-      : innerComp;
-    const bgColorStr = Color(
-      backgroundColor[theme] || defaultBackgroundColor[theme],
-    ).string();
-    const bgColorAlphaStr = Color(
-      backgroundColor[theme] || defaultBackgroundColor[theme],
-    )
+    const cellComp = p.link ? this.genExternalLink(p.link, innerComp) : innerComp;
+    const bgColorStr = Color(backgroundColor[theme] || defaultBackgroundColor[theme]).string();
+    const bgColorAlphaStr = Color(backgroundColor[theme] || defaultBackgroundColor[theme])
       .alpha(0.27)
       .string();
     const bgImageStr = `linear-gradient(180deg, ${bgColorStr} 0%, ${bgColorStr} 10%, ${bgColorAlphaStr} 10%, transparent 100%)`;
     return (
-      <th
-        key={p.alias || resolveText(p.title)}
-        className="-nowrap problem"
-        style={{ backgroundImage: bgImageStr }}
-      >
+      <th key={p.alias || resolveText(p.title)} className="-nowrap problem" style={{ backgroundImage: bgImageStr }}>
         {cellComp}
       </th>
     );
   };
 
-  renderSingleSeriesBody = (
-    rk: srk.RankValue,
-    series: srk.RankSeries,
-    row: srk.RanklistRow,
-  ) => {
+  renderSingleSeriesBody = (rk: RankValue, series: srk.RankSeries, row: srk.RanklistRow) => {
     const theme = this.props.theme!;
-    const innerComp: React.ReactNode = rk.rank
-      ? rk.rank
-      : row.user.official === false
-      ? '*'
-      : '';
-    const segment =
-      (series.segments || [])[
-        rk.segmentIndex || rk.segmentIndex === 0 ? rk.segmentIndex : -1
-      ] || {};
+    const innerComp: React.ReactNode = rk.rank ? rk.rank : row.user.official === false ? '*' : '';
+    const segment = (series.segments || [])[rk.segmentIndex || rk.segmentIndex === 0 ? rk.segmentIndex : -1] || {};
     const segmentStyle = segment.style;
     let className = '';
     let textColor: ThemeColor = {
@@ -259,10 +399,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
     }
     return (
       <td
-        className={classnames(
-          '-text-left -nowrap user srk-marker-bg',
-          className,
-        )}
+        className={classnames('-text-left -nowrap user srk-marker-bg', className)}
         style={bodyStyle}
         title={bodyLabel}
       >
@@ -279,65 +416,25 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
   renderResultLabel = (result: srk.Solution['result']) => {
     switch (result) {
       case 'FB':
-        return (
-          <span className="srk-solution-result-text srk-preset-result-fb">
-            First Blood
-          </span>
-        );
+        return <span className="srk-solution-result-text srk-preset-result-fb">First Blood</span>;
       case 'AC':
-        return (
-          <span className="srk-solution-result-text srk-preset-result-ac">
-            Accepted
-          </span>
-        );
+        return <span className="srk-solution-result-text srk-preset-result-ac">Accepted</span>;
       case 'RJ':
-        return (
-          <span className="srk-solution-result-text srk-preset-result-rj">
-            Rejected
-          </span>
-        );
+        return <span className="srk-solution-result-text srk-preset-result-rj">Rejected</span>;
       case '?':
-        return (
-          <span className="srk-solution-result-text srk-preset-result-fz">
-            Frozen
-          </span>
-        );
+        return <span className="srk-solution-result-text srk-preset-result-fz">Frozen</span>;
       case 'WA':
-        return (
-          <span className="srk-solution-result-text srk-preset-result-rj">
-            Wrong Answer
-          </span>
-        );
+        return <span className="srk-solution-result-text srk-preset-result-rj">Wrong Answer</span>;
       case 'PE':
-        return (
-          <span className="srk-solution-result-text srk-preset-result-rj">
-            Presentation Error
-          </span>
-        );
+        return <span className="srk-solution-result-text srk-preset-result-rj">Presentation Error</span>;
       case 'TLE':
-        return (
-          <span className="srk-solution-result-text srk-preset-result-rj">
-            Time Limit Exceeded
-          </span>
-        );
+        return <span className="srk-solution-result-text srk-preset-result-rj">Time Limit Exceeded</span>;
       case 'MLE':
-        return (
-          <span className="srk-solution-result-text srk-preset-result-rj">
-            Memory Limit Exceeded
-          </span>
-        );
+        return <span className="srk-solution-result-text srk-preset-result-rj">Memory Limit Exceeded</span>;
       case 'OLE':
-        return (
-          <span className="srk-solution-result-text srk-preset-result-rj">
-            Output Limit Exceeded
-          </span>
-        );
+        return <span className="srk-solution-result-text srk-preset-result-rj">Output Limit Exceeded</span>;
       case 'RTE':
-        return (
-          <span className="srk-solution-result-text srk-preset-result-rj">
-            Runtime Error
-          </span>
-        );
+        return <span className="srk-solution-result-text srk-preset-result-rj">Runtime Error</span>;
       case 'CE':
         return <span className="srk-solution-result-text">Compile Error</span>;
       case 'UKE':
@@ -349,11 +446,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
     }
   };
 
-  renderSingleStatusBody = (
-    st: srk.RankProblemStatus,
-    problemIndex: number,
-    user: srk.User,
-  ) => {
+  renderSingleStatusBody = (st: srk.RankProblemStatus, problemIndex: number, user: srk.User) => {
     const {
       data: { problems },
     } = this.props;
@@ -370,9 +463,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
       ? (e: React.MouseEvent) =>
           solutionsModal.modal(
             {
-              title: `Solutions of ${numberToAlphabet(
-                problemIndex,
-              )} (${resolveText(user.name)})`,
+              title: `Solutions of ${numberToAlphabet(problemIndex)} (${resolveText(user.name)})`,
               content: (
                 <table className="srk-common-table srk-solutions-table">
                   <thead>
@@ -385,9 +476,7 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
                     {solutions.map((s, index) => (
                       <tr key={`${s.result}_${s.time[0]}_${index}`}>
                         <td>{this.renderResultLabel(s.result)}</td>
-                        <td className="-text-right">
-                          {secToTimeStr(formatTimeDuration(s.time, 's'))}
-                        </td>
+                        <td className="-text-right">{secToTimeStr(formatTimeDuration(s.time, 's'))}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -400,56 +489,25 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
     switch (result) {
       case 'FB':
         return (
-          <td
-            key={key}
-            onClick={onClick}
-            className={classnames(commonClassName, 'srk-prest-status-block-fb')}
-          >
-            {st.tries}/
-            {st.time
-              ? formatTimeDuration(st.time, 'min', Math.floor)
-              : '-'}
+          <td key={key} onClick={onClick} className={classnames(commonClassName, 'srk-prest-status-block-fb')}>
+            {st.tries}/{st.time ? formatTimeDuration(st.time, 'min', Math.floor) : '-'}
           </td>
         );
       case 'AC':
         return (
-          <td
-            key={key}
-            onClick={onClick}
-            className={classnames(
-              commonClassName,
-              'srk-prest-status-block-accepted',
-            )}
-          >
-            {st.tries}/
-            {st.time
-              ? formatTimeDuration(st.time, 'min', Math.floor)
-              : '-'}
+          <td key={key} onClick={onClick} className={classnames(commonClassName, 'srk-prest-status-block-accepted')}>
+            {st.tries}/{st.time ? formatTimeDuration(st.time, 'min', Math.floor) : '-'}
           </td>
         );
       case '?':
         return (
-          <td
-            key={key}
-            onClick={onClick}
-            className={classnames(
-              commonClassName,
-              'srk-prest-status-block-frozen',
-            )}
-          >
+          <td key={key} onClick={onClick} className={classnames(commonClassName, 'srk-prest-status-block-frozen')}>
             {st.tries}
           </td>
         );
       case 'RJ':
         return (
-          <td
-            key={key}
-            onClick={onClick}
-            className={classnames(
-              commonClassName,
-              'srk-prest-status-block-failed',
-            )}
-          >
+          <td key={key} onClick={onClick} className={classnames(commonClassName, 'srk-prest-status-block-failed')}>
             {st.tries}
           </td>
         );
@@ -472,20 +530,21 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
       );
     }
     const { data } = this.props;
-    const rows = data.rows;
-    const { type, version, problems, series } = data;
+    const { type, version, problems, series, rows } = data;
     if (type !== 'general') {
       return <div>srk type "{type}" is not supported</div>;
     }
-    if (
-      !caniuse(version)
-    ) {
+    if (!caniuse(version)) {
       return (
         <div>
           srk version "{version}" is not supported (current supported: {srkSupportedVersions})
         </div>
       );
     }
+
+    const rowRanks = this.genRowRanks(rows);
+    const seriesCalcFns = this.genSeriesCalcFns(series, rows, rowRanks.ranks, rowRanks.officialRanks);
+
     return (
       <div className="srk-common-table srk-main">
         <table>
@@ -499,29 +558,24 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
               <th className="-text-left -nowrap">Name</th>
               <th className="-nowrap">Score</th>
               <th className="-nowrap">Time</th>
-              {problems.map((p, index) =>
-                this.renderSingleProblemHeader(p, index),
-              )}
+              {problems.map((p, index) => this.renderSingleProblemHeader(p, index))}
             </tr>
           </thead>
           <tbody>
-            {rows.map((r) => (
-              <tr key={r.user.id || resolveText(r.user.name)}>
-                {r.ranks.map((rk, index) =>
-                  this.renderSingleSeriesBody(rk, series[index], r),
-                )}
-                {this.renderUserBody(r.user)}
-                <td className="-text-right -nowrap">{r.score.value}</td>
-                <td className="-text-right -nowrap">
-                  {r.score.time
-                    ? formatTimeDuration(r.score.time, 'min', Math.floor)
-                    : '-'}
-                </td>
-                {r.statuses.map((st, index) =>
-                  this.renderSingleStatusBody(st, index, r.user),
-                )}
-              </tr>
-            ))}
+            {rows.map((r, index) => {
+              const rankValues = seriesCalcFns.map(fn => fn(r, index));
+              return (
+                <tr key={r.user.id || resolveText(r.user.name)}>
+                  {rankValues.map((rk, index) => this.renderSingleSeriesBody(rk, series[index], r))}
+                  {this.renderUserBody(r.user)}
+                  <td className="-text-right -nowrap">{r.score.value}</td>
+                  <td className="-text-right -nowrap">
+                    {r.score.time ? formatTimeDuration(r.score.time, 'min', Math.floor) : '-'}
+                  </td>
+                  {r.statuses.map((st, index) => this.renderSingleStatusBody(st, index, r.user))}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

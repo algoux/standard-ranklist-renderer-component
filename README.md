@@ -4,7 +4,9 @@ The srk renderer component.
 
 This package only includes the implementation for React.
 
-Supported srk versions: `>=0.0.1 && <=0.2.4`
+Supported srk versions: `>=0.3.0 && <=0.3.0`.
+
+For older srk version support, please install older version of this package.
 
 ## Installation
 

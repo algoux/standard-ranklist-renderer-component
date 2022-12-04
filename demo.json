@@ -1,5 +1,6 @@
 {
-
+  "type": "general",
+  "version": "0.3.0",
   "contest": {
     "title": "2020 China Collegiate Programming Contest Changchun Site",
     "startAt": "2020-11-08T09:00:00+08:00",
@@ -14,26 +15,42 @@
       "segments": [
         {
           "title": "Gold Medalist",
-          "count": 24,
           "style": "gold"
         },
         {
           "title": "Silver Medalist",
-          "count": 48,
           "style": "silver"
         },
         {
           "title": "Bronze Medalist",
-          "count": 74,
           "style": "bronze"
         }
-      ]
+      ],
+      "rule": {
+        "preset": "ICPC",
+        "options": {
+          "count": {
+            "value": [24, 48, 74]
+          }
+        }
+      }
     },
     {
-      "title": "R#"
+      "title": "R#",
+      "rule": {
+        "preset": "Normal",
+        "options": {}
+      }
     },
     {
-      "title": "S#"
+      "title": "S#",
+      "rule": {
+        "preset": "UniqByUserField",
+        "options": {
+          "field": "organization",
+          "includeOfficialOnly": true
+        }
+      }
     }
   ],
   "markers": [
@@ -43,8 +60,6 @@
       "style": "pink"
     }
   ],
-  "type": "general",
-  "version": "0.2.1",
   "problems": [
     {
       "alias": "A",
@@ -179,11 +194,7 @@
       "user": {
         "id": "T010",
         "name": "逆十字",
-        "organization": {
-          "zh-CN": "北京大学",
-          "en": "Peking University",
-          "fallback": "Peking University"
-        },
+        "organization": "北京大学",
         "teamMembers": [
           {
             "name": "罗国杰(教练)"
