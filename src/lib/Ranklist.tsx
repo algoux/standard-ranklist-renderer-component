@@ -3,7 +3,7 @@ import Color from 'color';
 import React from 'react';
 // @ts-ignore
 import TEXTColor from 'textcolor';
-import BigNumber from "bignumber.js";
+import BigNumber from 'bignumber.js';
 import type * as srk from '@algoux/standard-ranklist';
 import SolutionsModalSingleton from '../components/SolutionsModalSingleton';
 import { formatTimeDuration, resolveText, numberToAlphabet, secToTimeStr } from './utils';
@@ -33,8 +33,12 @@ interface RankValue {
   segmentIndex?: number | null;
 }
 
+export type StaticRanklist = Omit<srk.Ranklist, 'rows'> & {
+  rows: Array<srk.RanklistRow & { rankValues: RankValue[] }>;
+};
+
 export interface RanklistProps {
-  data: srk.Ranklist;
+  data: StaticRanklist;
 
   /**
    * Theme
@@ -53,7 +57,7 @@ const defaultBackgroundColor = {
   [EnumTheme.dark]: '#191919',
 };
 
-export default class Ranklist extends React.Component<RanklistProps, State> {
+export class Ranklist extends React.Component<RanklistProps, State> {
   static defaultProps: Partial<RanklistProps> = {
     theme: EnumTheme.light,
   };
@@ -114,168 +118,6 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
       </a>
     );
   }
-
-  genSeriesCalcFns = (series: srk.RankSeries[], rows: srk.RanklistRow[], ranks: number[], officialRanks: (number | null)[]) => {
-    const fallbackSeriesCalcFn = () => ({
-      rank: null,
-      segmentIndex: null,
-    });
-    const fns: Array<( row: srk.RanklistRow, index: number) => RankValue> =
-      series.map((seriesConfig) => {
-        const { rule } = seriesConfig;
-        if (!rule) {
-          return fallbackSeriesCalcFn;
-        }
-        const { preset } = rule;
-        switch (preset) {
-          case 'Normal': {
-            const options = rule.options as srk.RankSeriesRulePresetNormal['options'];
-            return (row, index) => {
-              if (options?.includeOfficialOnly && row.user.official === false) {
-                return {
-                  rank: null,
-                  segmentIndex: null,
-                };
-              }
-              return {
-                rank: options?.includeOfficialOnly ? officialRanks[index] : ranks[index],
-                segmentIndex: null,
-              };
-            };
-          }
-          case 'UniqByUserField': {
-            const options = rule.options as srk.RankSeriesRulePresetUniqByUserField['options'];
-            const field = options?.field;
-            const assignedRanksMap = new Map<number, number>();
-            const valueSet = new Set<string>();
-            const stringify = (v: any) => (typeof v === 'object' ? JSON.stringify(v) : `${v}`);
-            let lastOuterRank = 0;
-            let lastRank = 0;
-            rows.forEach((row, index) => {
-              if (options.includeOfficialOnly && row.user.official === false) {
-                return;
-              }
-              const value = stringify(row.user[field]);
-              if (value && !valueSet.has(value)) {
-                const outerRank = options.includeOfficialOnly ? officialRanks[index] as number : ranks[index];
-                valueSet.add(value);
-                if (outerRank !== lastOuterRank) {
-                  lastOuterRank = outerRank;
-                  lastRank = assignedRanksMap.size + 1;
-                  assignedRanksMap.set(index, lastRank);
-                }
-                assignedRanksMap.set(index, lastRank);
-              }
-            });
-            return (row, index) => {
-              return {
-                rank: assignedRanksMap.get(index) ?? null,
-                segmentIndex: null,
-              };
-            };
-          }
-          case 'ICPC': {
-            const options = rule.options as srk.RankSeriesRulePresetICPC['options'];
-            const usingEndpointRules: number[][] = [];
-            if (options.ratio) {
-              const { value, rounding = 'ceil', denominator = 'all' } = options.ratio;
-              let total =
-                denominator === 'submitted'
-                  ? rows.filter((row) => !row.statuses.every((s) => s.result === null)).length
-                  : rows.length;
-              total = 240;
-              const accValues: BigNumber[] = [];
-              for (let i = 0; i < value.length; i++) {
-                if (i === 0) {
-                  accValues[i] = new BigNumber(value[i]);
-                } else {
-                  accValues[i] = accValues[i - 1].plus(new BigNumber(value[i]));
-                }
-              }
-              const segmentRawEndpoints = accValues.map((v) => v.times(total).toNumber());
-              usingEndpointRules.push(
-                segmentRawEndpoints.map((v) => {
-                  return rounding === 'floor' ? Math.floor(v) : rounding === 'round' ? Math.round(v) : Math.ceil(v);
-                }),
-              );
-            }
-            if (options.count) {
-              const { value } = options.count;
-              const accValues: number[] = [];
-              for (let i = 0; i < value.length; i++) {
-                accValues[i] = (i > 0 ? accValues[i - 1] : 0) + value[i];
-              }
-              usingEndpointRules.push(accValues);
-            }
-            return (row, index) => {
-              if (row.user.official === false) {
-                return {
-                  rank: null,
-                  segmentIndex: null,
-                };
-              }
-              const usingSegmentIndex = (seriesConfig.segments || []).findIndex((_, segIndex) => {
-                return usingEndpointRules.map((e) => e[segIndex]).every((endpoints) => officialRanks[index]! <= endpoints);
-              });
-              return {
-                rank: officialRanks[index],
-                segmentIndex: usingSegmentIndex > -1 ? usingSegmentIndex : null,
-              };
-            };
-          }
-          default:
-            console.warn('Unknown series rule preset：', preset);
-            return fallbackSeriesCalcFn;
-        }
-      });
-    return fns;
-  };
-
-  genRowRanks = (rows: srk.RanklistRow[]) => {
-    const rowRanks: Array<{ rank: number; officialRank: number | null }> = [];
-    const compareScoreEqual = (a: srk.RankScore, b: srk.RankScore) => {
-      if (a.value !== b.value) {
-        return false;
-      }
-      const da = a.time ? formatTimeDuration(a.time) : 0;
-      const db = b.time ? formatTimeDuration(b.time) : 0;
-      return da === db;
-    };
-    const genRanks = (rows: srk.RanklistRow[]) => {
-      let ranks: number[] = new Array(rows.length).fill(null);
-      for (let i = 0; i < rows.length; ++i) {
-        if (i === 0) {
-          ranks[i] = 1;
-          continue;
-        }
-        if (compareScoreEqual(rows[i].score, rows[i - 1].score)) {
-          ranks[i] = ranks[i - 1];
-        } else {
-          ranks[i] = i + 1;
-        }
-      }
-      return ranks;
-    };
-    const ranks = genRanks(rows);
-    const officialPartialRows: srk.RanklistRow[] = [];
-    const officialIndexBackMap = new Map<number, number>();
-    rows.forEach((row, index) => {
-      if (row.user.official !== false) {
-        officialIndexBackMap.set(index, officialPartialRows.length);
-        officialPartialRows.push(row);
-      }
-    });
-    const officialPartialRanks = genRanks(officialPartialRows);
-    const officialRanks = new Array(rows.length)
-      .fill(null)
-      .map((_, index) =>
-        officialIndexBackMap.get(index) === undefined ? null : officialPartialRanks[officialIndexBackMap.get(index)!],
-      );
-    return {
-      ranks,
-      officialRanks,
-    };
-  };
 
   renderContestBanner = () => {
     const banner = this.props.data.contest.banner;
@@ -542,9 +384,6 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
       );
     }
 
-    const rowRanks = this.genRowRanks(rows);
-    const seriesCalcFns = this.genSeriesCalcFns(series, rows, rowRanks.ranks, rowRanks.officialRanks);
-
     return (
       <div className="srk-common-table srk-main">
         <table>
@@ -563,7 +402,12 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
           </thead>
           <tbody>
             {rows.map((r, index) => {
-              const rankValues = seriesCalcFns.map(fn => fn(r, index));
+              if (!r.rankValues) {
+                console.warn(
+                  'Rank values is not provided, you may need to pass static ranklist data generated by `convertToStaticRanklist()`',
+                );
+              }
+              const rankValues = r.rankValues || series.map((s) => ({ rank: null, segmentIndex: null }));
               return (
                 <tr key={r.user.id || resolveText(r.user.name)}>
                   {rankValues.map((rk, index) => this.renderSingleSeriesBody(rk, series[index], r))}
@@ -581,4 +425,187 @@ export default class Ranklist extends React.Component<RanklistProps, State> {
       </div>
     );
   }
+}
+
+function genSeriesCalcFns(
+  series: srk.RankSeries[],
+  rows: srk.RanklistRow[],
+  ranks: number[],
+  officialRanks: (number | null)[],
+) {
+  const fallbackSeriesCalcFn = () => ({
+    rank: null,
+    segmentIndex: null,
+  });
+  const fns: Array<(row: srk.RanklistRow, index: number) => RankValue> = series.map((seriesConfig) => {
+    const { rule } = seriesConfig;
+    if (!rule) {
+      return fallbackSeriesCalcFn;
+    }
+    const { preset } = rule;
+    switch (preset) {
+      case 'Normal': {
+        const options = rule.options as srk.RankSeriesRulePresetNormal['options'];
+        return (row, index) => {
+          if (options?.includeOfficialOnly && row.user.official === false) {
+            return {
+              rank: null,
+              segmentIndex: null,
+            };
+          }
+          return {
+            rank: options?.includeOfficialOnly ? officialRanks[index] : ranks[index],
+            segmentIndex: null,
+          };
+        };
+      }
+      case 'UniqByUserField': {
+        const options = rule.options as srk.RankSeriesRulePresetUniqByUserField['options'];
+        const field = options?.field;
+        const assignedRanksMap = new Map<number, number>();
+        const valueSet = new Set<string>();
+        const stringify = (v: any) => (typeof v === 'object' ? JSON.stringify(v) : `${v}`);
+        let lastOuterRank = 0;
+        let lastRank = 0;
+        rows.forEach((row, index) => {
+          if (options.includeOfficialOnly && row.user.official === false) {
+            return;
+          }
+          const value = stringify(row.user[field]);
+          if (value && !valueSet.has(value)) {
+            const outerRank = options.includeOfficialOnly ? (officialRanks[index] as number) : ranks[index];
+            valueSet.add(value);
+            if (outerRank !== lastOuterRank) {
+              lastOuterRank = outerRank;
+              lastRank = assignedRanksMap.size + 1;
+              assignedRanksMap.set(index, lastRank);
+            }
+            assignedRanksMap.set(index, lastRank);
+          }
+        });
+        return (row, index) => {
+          return {
+            rank: assignedRanksMap.get(index) ?? null,
+            segmentIndex: null,
+          };
+        };
+      }
+      case 'ICPC': {
+        const options = rule.options as srk.RankSeriesRulePresetICPC['options'];
+        const usingEndpointRules: number[][] = [];
+        if (options.ratio) {
+          const { value, rounding = 'ceil', denominator = 'all' } = options.ratio;
+          let total =
+            denominator === 'submitted'
+              ? rows.filter((row) => !row.statuses.every((s) => s.result === null)).length
+              : rows.length;
+          total = 240;
+          const accValues: BigNumber[] = [];
+          for (let i = 0; i < value.length; i++) {
+            if (i === 0) {
+              accValues[i] = new BigNumber(value[i]);
+            } else {
+              accValues[i] = accValues[i - 1].plus(new BigNumber(value[i]));
+            }
+          }
+          const segmentRawEndpoints = accValues.map((v) => v.times(total).toNumber());
+          usingEndpointRules.push(
+            segmentRawEndpoints.map((v) => {
+              return rounding === 'floor' ? Math.floor(v) : rounding === 'round' ? Math.round(v) : Math.ceil(v);
+            }),
+          );
+        }
+        if (options.count) {
+          const { value } = options.count;
+          const accValues: number[] = [];
+          for (let i = 0; i < value.length; i++) {
+            accValues[i] = (i > 0 ? accValues[i - 1] : 0) + value[i];
+          }
+          usingEndpointRules.push(accValues);
+        }
+        return (row, index) => {
+          if (row.user.official === false) {
+            return {
+              rank: null,
+              segmentIndex: null,
+            };
+          }
+          const usingSegmentIndex = (seriesConfig.segments || []).findIndex((_, segIndex) => {
+            return usingEndpointRules.map((e) => e[segIndex]).every((endpoints) => officialRanks[index]! <= endpoints);
+          });
+          return {
+            rank: officialRanks[index],
+            segmentIndex: usingSegmentIndex > -1 ? usingSegmentIndex : null,
+          };
+        };
+      }
+      default:
+        console.warn('Unknown series rule preset：', preset);
+        return fallbackSeriesCalcFn;
+    }
+  });
+  return fns;
+}
+
+function genRowRanks(rows: srk.RanklistRow[]) {
+  const compareScoreEqual = (a: srk.RankScore, b: srk.RankScore) => {
+    if (a.value !== b.value) {
+      return false;
+    }
+    const da = a.time ? formatTimeDuration(a.time) : 0;
+    const db = b.time ? formatTimeDuration(b.time) : 0;
+    return da === db;
+  };
+  const genRanks = (rows: srk.RanklistRow[]) => {
+    let ranks: number[] = new Array(rows.length).fill(null);
+    for (let i = 0; i < rows.length; ++i) {
+      if (i === 0) {
+        ranks[i] = 1;
+        continue;
+      }
+      if (compareScoreEqual(rows[i].score, rows[i - 1].score)) {
+        ranks[i] = ranks[i - 1];
+      } else {
+        ranks[i] = i + 1;
+      }
+    }
+    return ranks;
+  };
+  const ranks = genRanks(rows);
+  const officialPartialRows: srk.RanklistRow[] = [];
+  const officialIndexBackMap = new Map<number, number>();
+  rows.forEach((row, index) => {
+    if (row.user.official !== false) {
+      officialIndexBackMap.set(index, officialPartialRows.length);
+      officialPartialRows.push(row);
+    }
+  });
+  const officialPartialRanks = genRanks(officialPartialRows);
+  const officialRanks = new Array(rows.length)
+    .fill(null)
+    .map((_, index) =>
+      officialIndexBackMap.get(index) === undefined ? null : officialPartialRanks[officialIndexBackMap.get(index)!],
+    );
+  return {
+    ranks,
+    officialRanks,
+  };
+}
+
+export function convertToStaticRanklist(ranklist: srk.Ranklist): StaticRanklist {
+  if (!ranklist) {
+    return ranklist;
+  }
+  const { series, rows } = ranklist;
+  const rowRanks = genRowRanks(rows);
+  const seriesCalcFns = genSeriesCalcFns(series, rows, rowRanks.ranks, rowRanks.officialRanks);
+  return {
+    ...ranklist,
+    rows: rows.map((row, index) => {
+      return {
+        ...row,
+        rankValues: seriesCalcFns.map((fn) => fn(row, index)),
+      };
+    }),
+  };
 }

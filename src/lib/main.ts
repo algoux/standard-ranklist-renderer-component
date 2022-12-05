@@ -1,5 +1,3 @@
-import Ranklist from './Ranklist';
-
-export { Ranklist };
+export * from './Ranklist';
 export * from './utils';
 export * from './caniuse';
