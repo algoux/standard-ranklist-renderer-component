@@ -1,5 +1,8 @@
 import type * as srk from '@algoux/standard-ranklist';
 import { lookup as langLookup } from 'bcp-47-match';
+import semver from 'semver';
+
+const MIN_REGEN_SUPPORTED_VERSION = '0.3.0';
 
 export function resolveText(text: srk.Text | undefined): string {
   if (text === undefined) {
@@ -12,8 +15,7 @@ export function resolveText(text: srk.Text | undefined): string {
       .filter((k) => k && k !== 'fallback')
       .sort()
       .reverse();
-    const userLangs =
-      (typeof navigator !== 'undefined' && [...navigator.languages]) || [];
+    const userLangs = (typeof navigator !== 'undefined' && [...navigator.languages]) || [];
     const usingLang = langLookup(userLangs, langs) || 'fallback';
     return text[usingLang] ?? '';
   }
@@ -91,14 +93,7 @@ export function secToTimeStr(second: number, showDay = false): string {
   if (sec < 0) {
     return '--';
   }
-  return (
-    str_d +
-    preZeroFill(h, 2) +
-    ':' +
-    preZeroFill(m, 2) +
-    ':' +
-    preZeroFill(s, 2)
-  );
+  return str_d + preZeroFill(h, 2) + ':' + preZeroFill(m, 2) + ':' + preZeroFill(s, 2);
 }
 
 /**
@@ -193,4 +188,196 @@ export function resolveContributor(
   }
   name = words.slice(0, index + 1).join(' ');
   return { name, email, url };
+}
+
+export type CalculatedSolutionTetrad = [
+  /** user id */ string,
+  /** problem index */ number,
+  /** result */ Exclude<srk.SolutionResultFull, null> | srk.SolutionResultCustom,
+  /** solution submitted time */ srk.TimeDuration,
+];
+
+export function getSortedCalculatedRawSolutions(rows: srk.RanklistRow[]): CalculatedSolutionTetrad[] {
+  const solutions: CalculatedSolutionTetrad[] = [];
+  for (const row of rows) {
+    const { user, statuses } = row;
+    const userId =
+      (user.id && `${user.id}`) || `${typeof user.name === 'string' ? user.name : JSON.stringify(user.name)}`;
+    statuses.forEach((status, index) => {
+      if (Array.isArray(status.solutions) && status.solutions.length) {
+        solutions.push(
+          ...status.solutions.map(
+            (solution) => [userId, index, solution.result, solution.time] as CalculatedSolutionTetrad,
+          ),
+        );
+      } else if (status.result && status.time?.[0]) {
+        // use status.result as partial solutions
+        if (status.result === 'AC' || status.result === 'FB') {
+          // push a series of mocked rejected solutions based on tries
+          for (let i = 1; i < (status.tries || 0); i++) {
+            solutions.push([userId, index, 'RJ', status.time]);
+          }
+          solutions.push([userId, index, status.result, status.time]);
+        }
+      }
+    });
+  }
+  return solutions.sort((a, b) => {
+    const ta = a[3];
+    const tb = b[3];
+    // if time duration unit is same, directly compare their value; else convert to minimum unit to compare
+    const timeComp = ta[1] === tb[1] ? ta[0] - tb[0] : formatTimeDuration(ta) - formatTimeDuration(tb);
+    if (timeComp !== 0) {
+      return timeComp;
+    }
+    const resultValue: Record<string, number> = {
+      FB: 998,
+      AC: 999,
+      '?': 1000,
+    };
+    const resultA = resultValue[a[2]] || 0;
+    const resultB = resultValue[b[2]] || 0;
+    return resultA - resultB;
+  });
+}
+
+export function filterSolutionsUntil(
+  solutions: CalculatedSolutionTetrad[],
+  time: srk.TimeDuration,
+): CalculatedSolutionTetrad[] {
+  const timeValue = formatTimeDuration(time);
+  const check = (tetrad: CalculatedSolutionTetrad) => formatTimeDuration(tetrad[3]) <= timeValue;
+  let lastIndex = 0;
+  let low = 0;
+  let high = solutions.length - 1;
+  while (low <= high) {
+    const mid = (low + high) >> 1;
+    if (check(solutions[mid])) {
+      lastIndex = mid;
+      low = mid + 1;
+    } else {
+      high = mid - 1;
+    }
+  }
+  return solutions.slice(0, lastIndex + 1);
+}
+
+export function canRegenerateRanklist(ranklist: srk.Ranklist): boolean {
+  if (!semver.gte(ranklist.version, MIN_REGEN_SUPPORTED_VERSION)) {
+    return false;
+  }
+  if (ranklist.sorter?.algorithm !== 'ICPC') {
+    return false;
+  }
+  return true;
+}
+
+export function regenerateRanklistBySolutions(
+  originalRanklist: srk.Ranklist,
+  solutions: CalculatedSolutionTetrad[],
+): srk.Ranklist {
+  if (!canRegenerateRanklist(originalRanklist)) {
+    throw new Error('The ranklist is not supported to regenerate');
+  }
+  const sorterConfig: srk.SorterICPC['config'] = {
+    penalty: [20, 'min'],
+    noPenaltyResults: ['FB', 'AC', '?', 'CE', 'UKE', null],
+    ...JSON.parse(JSON.stringify(originalRanklist.sorter?.config || {})),
+  };
+  const ranklist: srk.Ranklist = {
+    ...originalRanklist,
+    rows: [],
+  };
+  const rows: srk.RanklistRow[] = [];
+  const userRowMap = new Map<string, srk.RanklistRow>();
+  const problemCount = originalRanklist.problems.length;
+  originalRanklist.rows.forEach((row) => {
+    const userId =
+      (row.user.id && `${row.user.id}`) ||
+      `${typeof row.user.name === 'string' ? row.user.name : JSON.stringify(row.user.name)}`;
+    userRowMap.set(userId, {
+      user: row.user,
+      score: {
+        value: 0,
+      },
+      statuses: new Array(problemCount).fill(null).map(() => ({ result: null, solutions: [] })),
+    });
+  });
+  for (const tetrad of solutions) {
+    const [userId, problemIndex, result, time] = tetrad;
+    let row = userRowMap.get(userId);
+    if (!row) {
+      console.error(`Invalid user id ${userId} found when regenerating ranklist`);
+      break;
+    }
+    const status = row.statuses[problemIndex];
+    status.solutions!.push({ result, time });
+  }
+  const problemAcceptedCount = new Array(problemCount).fill(0);
+  const problemSubmittedCount = new Array(problemCount).fill(0);
+  for (const row of userRowMap.values()) {
+    const { statuses } = row;
+    let scoreValue = 0;
+    let totalTimeMs = 0;
+    for (let i = 0; i < statuses.length; ++i) {
+      const status = statuses[i];
+      // calculate for each problem
+      const solutions = status.solutions!;
+      for (const solution of solutions) {
+        if (!solution.result) {
+          continue;
+        }
+        if (solution.result === '?') {
+          status.result = solution.result;
+          status.tries = (status.tries || 0) + 1;
+          problemSubmittedCount[i] += 1;
+          continue;
+        }
+        if (solution.result === 'AC' || solution.result === 'FB') {
+          status.result = solution.result;
+          status.time = solution.time;
+          status.tries = (status.tries || 0) + 1;
+          problemAcceptedCount[i] += 1;
+          problemSubmittedCount[i] += 1;
+          break;
+        }
+        // @ts-ignore
+        if ((sorterConfig.noPenaltyResults || []).includes(solution.result)) {
+          continue;
+        }
+        status.result = 'RJ';
+        status.tries = (status.tries || 0) + 1;
+        problemSubmittedCount[i] += 1;
+      }
+      if (status.result === 'AC' || status.result === 'FB') {
+        scoreValue += 1;
+        totalTimeMs +=
+          formatTimeDuration(status.time!, 'ms') +
+          (status.tries! - 1) * formatTimeDuration(sorterConfig.penalty!, 'ms');
+      }
+    }
+    row.score = {
+      value: scoreValue,
+      time: [totalTimeMs, 'ms'],
+    };
+    rows.push(row);
+  }
+  rows.sort((a, b) => {
+    if (a.score.value !== b.score.value) {
+      return b.score.value - a.score.value;
+    }
+    return formatTimeDuration(a.score.time!) - formatTimeDuration(b.score.time!);
+  });
+  ranklist.rows = rows;
+  ranklist.problems.forEach((problem, index) => {
+    if (!problem.statistics) {
+      problem.statistics = {
+        accepted: 0,
+        submitted: 0,
+      };
+    }
+    problem.statistics.accepted = problemAcceptedCount[index];
+    problem.statistics.submitted = problemSubmittedCount[index];
+  });
+  return ranklist;
 }
