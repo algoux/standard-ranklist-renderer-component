@@ -1,0 +1,87 @@
+.srk-progress-bar-container {
+  --color-progress-bar-normal-bg: #14c514;
+  --color-progress-bar-frozen-bg: #648fff;
+  --color-progress-bar-border-color: #cacaca;
+  --color-progress-bar-slider-bg: #eee;
+  --color-progress-bar-slider-border-color: #d2d2d2;
+  --color-progress-bar-live-text: #0faa0f;
+  --color-progress-bar-time-machine-text-color: #2e68ff;
+  --color-progress-bar-time-machine-text-shadow: 0 0 5px #f2f7ff, 0 0 10px #aec5ff, 0 0 15px #a0bbff, 0 0 20px white;
+  @media screen and (prefers-color-scheme: dark) {
+    --color-progress-bar-normal-bg: #1a740f;
+    --color-progress-bar-frozen-bg: #1440ab;
+    --color-progress-bar-border-color: #666;
+    --color-progress-bar-slider-bg: #bfbfbf;
+    --color-progress-bar-slider-border-color: #eee;
+    --color-progress-bar-live-text: #15d415;
+    --color-progress-bar-time-machine-text-color: #8fb1ff;
+    --color-progress-bar-time-machine-text-shadow: 0 0 5px #0058ff, 0 0 10px #0942d2, 0 0 15px #004aff, 0 0 20px white;
+  }
+
+  .srk-progress-bar {
+    border: 0.5px solid var(--color-progress-bar-border-color);
+    line-height: 0;
+    height: 10px;
+    position: relative;
+    margin: 5px 0;
+    .srk-progress-bar-body {
+      position: absolute;
+      width: 100%;
+      .srk-progress-bar-segment {
+        display: inline-block;
+        .filled {
+          height: 10px;
+          transition: width 0.3s;
+        }
+        &.srk-progress-bar-normal .filled {
+          background: var(--color-progress-bar-normal-bg);
+        }
+        &.srk-progress-bar-frozen .filled {
+          background: var(--color-progress-bar-frozen-bg);
+        }
+      }
+    }
+  }
+
+  .srk-progress-secondary-area {
+    min-height: 20px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    .srk-progress-secondary-area-left {
+      min-width: 180px;
+    }
+    .srk-progress-secondary-area-center {
+    }
+    .srk-progress-secondary-area-right {
+      min-width: 180px;
+      text-align: right;
+    }
+  }
+
+  .srk-progress-live-text {
+    color: var(--color-progress-bar-live-text)
+  }
+
+  .srk-progress-time-machine-status {
+    @keyframes text-blink {
+      0% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.7;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .srk-progress-time-machine-text {
+      color: var(--color-progress-bar-time-machine-text-color);
+      text-shadow: var(--color-progress-bar-time-machine-text-shadow);
+      animation: text-blink 1.5s ease-in-out infinite;
+    }
+  }
+}

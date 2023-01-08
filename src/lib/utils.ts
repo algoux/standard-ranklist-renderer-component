@@ -247,7 +247,7 @@ export function filterSolutionsUntil(
 ): CalculatedSolutionTetrad[] {
   const timeValue = formatTimeDuration(time);
   const check = (tetrad: CalculatedSolutionTetrad) => formatTimeDuration(tetrad[3]) <= timeValue;
-  let lastIndex = 0;
+  let lastIndex = -1;
   let low = 0;
   let high = solutions.length - 1;
   while (low <= high) {
