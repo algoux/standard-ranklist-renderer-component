@@ -225,7 +225,9 @@ export class ProgressBar extends React.Component<ProgressBarProps, State> {
               </div>
             ) : live && !this.isEnded ? (
               <div className="srk-progress-live-text">Live</div>
-            ) : null}
+            ) : (
+              <div style={{ visibility: 'hidden' }}>SRK</div>
+            )}
           </div>
           <div className="srk-progress-secondary-area-right" style={live || inTimeMachine ? {} : { display: 'none' }}>
             Remaining: {secToTimeStr(Math.round((inTimeMachine ? timeTravelRemaining : remaining) / 1000))}
