@@ -3,10 +3,10 @@ import type * as srk from '@algoux/standard-ranklist';
 import Slider, { SliderTooltip } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import './ProgressBar.less';
-import { formatTimeDuration, secToTimeStr } from './utils';
+import { canRegenerateRanklist, formatTimeDuration, secToTimeStr } from './utils';
 
 export interface ProgressBarProps {
-  contest: srk.Contest;
+  data: srk.Ranklist;
   /** Whether to enable time travel. */
   enableTimeTravel?: boolean;
   /** Whether to enable live progress bar. */
@@ -51,22 +51,22 @@ export class ProgressBar extends React.Component<ProgressBarProps, State> {
       localTime,
       inTimeMachine: false,
       timeTravelIsChanging: false,
-      timeTravelCurrentValue: ProgressBar.getMaxAvailableMinutes(props.contest, localTime, props.td),
+      timeTravelCurrentValue: ProgressBar.getMaxAvailableMinutes(props.data.contest, localTime, props.td),
       timeTravelValue: null,
     };
   }
 
   get durationMinutes() {
-    return ProgressBar.getDurationMinutes(this.props.contest);
+    return ProgressBar.getDurationMinutes(this.props.data.contest);
   }
 
   get maxAvailableMinutes() {
-    return ProgressBar.getMaxAvailableMinutes(this.props.contest, this.state.localTime, this.props.td);
+    return ProgressBar.getMaxAvailableMinutes(this.props.data.contest, this.state.localTime, this.props.td);
   }
 
   get isEnded() {
-    const startAt = new Date(this.props.contest.startAt).getTime();
-    const endAt = startAt + formatTimeDuration(this.props.contest.duration, 'ms');
+    const startAt = new Date(this.props.data.contest.startAt).getTime();
+    const endAt = startAt + formatTimeDuration(this.props.data.contest.duration, 'ms');
     const localTime = this.state.localTime;
     const currentTime = localTime - (this.props.td || 0);
     return currentTime >= endAt;
@@ -140,7 +140,8 @@ export class ProgressBar extends React.Component<ProgressBarProps, State> {
   };
 
   render() {
-    const { contest, enableTimeTravel = false, live = false, td = 0 } = this.props;
+    const { data, enableTimeTravel = false, live = false, td = 0 } = this.props;
+    const { contest } = data;
     const startAt = new Date(contest.startAt).getTime();
     const endAt = startAt + formatTimeDuration(contest.duration, 'ms');
     const frozenLength = contest.frozenDuration ? formatTimeDuration(contest.frozenDuration, 'ms') : 0;
@@ -163,6 +164,7 @@ export class ProgressBar extends React.Component<ProgressBarProps, State> {
     for (let i = 0; i <= this.maxAvailableMinutes; ++i) {
       sliderMarks[i] = '';
     }
+    const supportRegen = canRegenerateRanklist(data);
 
     return (
       <div className="srk-progress-bar-container">
@@ -181,7 +183,7 @@ export class ProgressBar extends React.Component<ProgressBarProps, State> {
               <div className="filled" style={{ width: `${frozenInnerPercent}%` }}></div>
             </div>
           </div>
-          {enableTimeTravel && (
+          {enableTimeTravel && supportRegen && (
             <Slider
               min={0}
               max={this.durationMinutes}

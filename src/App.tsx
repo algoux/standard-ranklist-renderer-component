@@ -34,7 +34,7 @@ export default class App extends React.Component {
       <div className="app">
         <div style={{ height: '40px' }}></div>
         {/* @ts-ignore */}
-        <ProgressBar contest={data.contest} td={0} enableTimeTravel onTimeTravel={this.handleTimeTravel} />
+        <ProgressBar data={data} td={0} enableTimeTravel onTimeTravel={this.handleTimeTravel} />
         <div style={{ height: '20px' }}></div>
         {/* @ts-ignore */}
         <Ranklist data={convertToStaticRanklist(this.state.data)} theme="light" />
