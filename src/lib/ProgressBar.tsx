@@ -29,6 +29,7 @@ interface State {
   timeTravelIsChanging: boolean;
   timeTravelCurrentValue: number;
   timeTravelValue: number | null;
+  isMounted: boolean;
 }
 
 export class ProgressBar extends React.Component<ProgressBarProps, State> {
@@ -53,6 +54,7 @@ export class ProgressBar extends React.Component<ProgressBarProps, State> {
       timeTravelIsChanging: false,
       timeTravelCurrentValue: ProgressBar.getMaxAvailableMinutes(props.data.contest, localTime, props.td),
       timeTravelValue: null,
+      isMounted: false,
     };
   }
 
@@ -78,6 +80,7 @@ export class ProgressBar extends React.Component<ProgressBarProps, State> {
         this.handleProgressTimer();
       }, 1000);
     }
+    this.setState({ isMounted: true });
   }
 
   componentDidUpdate(prevProps: ProgressBarProps) {
@@ -99,7 +102,12 @@ export class ProgressBar extends React.Component<ProgressBarProps, State> {
       this.setState({ timeTravelCurrentValue: this.maxAvailableMinutes });
     }
     if (JSON.stringify(this.props.data?.contest?.title) !== JSON.stringify(prevProps.data?.contest?.title)) {
-      this.setState({ timeTravelCurrentValue: this.maxAvailableMinutes, timeTravelValue: null });
+      this.setState({
+        timeTravelIsChanging: false,
+        timeTravelCurrentValue: this.maxAvailableMinutes,
+        timeTravelValue: null,
+        inTimeMachine: false,
+      });
       this.props.onTimeTravel?.(null);
     }
   }
@@ -187,10 +195,11 @@ export class ProgressBar extends React.Component<ProgressBarProps, State> {
               <div className="filled" style={{ width: `${frozenInnerPercent}%` }}></div>
             </div>
           </div>
-          {enableTimeTravel && supportRegen && (
+          {enableTimeTravel && supportRegen && this.state.isMounted && (
             <Slider
               min={0}
               max={this.durationMinutes}
+              defaultValue={this.maxAvailableMinutes}
               value={this.state.timeTravelCurrentValue}
               step={null}
               marks={sliderMarks}
