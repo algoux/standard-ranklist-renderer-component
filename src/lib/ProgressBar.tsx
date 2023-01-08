@@ -98,6 +98,10 @@ export class ProgressBar extends React.Component<ProgressBarProps, State> {
     ) {
       this.setState({ timeTravelCurrentValue: this.maxAvailableMinutes });
     }
+    if (JSON.stringify(this.props.data?.contest?.title) !== JSON.stringify(prevProps.data?.contest?.title)) {
+      this.setState({ timeTravelCurrentValue: this.maxAvailableMinutes, timeTravelValue: null });
+      this.props.onTimeTravel?.(null);
+    }
   }
 
   componentWillUnmount() {
