@@ -211,7 +211,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
   };
 
   renderUserName = (user: srk.User) => {
-    const { teamMembers = [] } = user;
+    // const { teamMembers = [] } = user;
     // const memberStr = teamMembers.map((m) => resolveText(m.name)).join(' / ');
     const name = resolveText(user.name);
     return <span title={name}>{name}</span>;
@@ -226,19 +226,20 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     let bodyStyle: React.CSSProperties = {};
     let bodyLabel = '';
     const marker = markers.find((m) => m.id === user.marker);
+    let markerClassName = '';
+    let markerBackgroundColor: ThemeColor = {
+      [EnumTheme.light]: undefined,
+      [EnumTheme.dark]: undefined,
+    };
     if (marker) {
       bodyLabel = resolveText(marker.label);
       const markerStyle = marker.style;
-      let backgroundColor: ThemeColor = {
-        [EnumTheme.light]: undefined,
-        [EnumTheme.dark]: undefined,
-      };
       if (typeof markerStyle === 'string') {
-        className = `srk-preset-marker-${markerStyle}`;
+        className = markerClassName = `srk-preset-marker-${markerStyle}`;
       } else if (markerStyle) {
         const style = this.resolveStyle(markerStyle);
-        backgroundColor = style.backgroundColor;
-        bodyStyle.backgroundImage = `linear-gradient(90deg, transparent 0%, ${backgroundColor[theme]} 100%)`;
+        markerBackgroundColor = style.backgroundColor;
+        bodyStyle.backgroundImage = `linear-gradient(90deg, transparent 0%, ${markerBackgroundColor[theme]} 100%)`;
       }
     }
 
@@ -253,6 +254,19 @@ export class Ranklist extends React.Component<RanklistProps, State> {
               {!!user.organization && (
                 <p className="srk-user-modal-info-user-second-name">{resolveText(user.organization)}</p>
               )}
+              <div className="srk-user-modal-info-labels">
+                <span className="srk-user-modal-info-labels-label srk-user-modal-info-labels-label-preset-general">
+                  {user.official === false ? '* 非正式参加者' : '正式参加者'}
+                </span>
+                {!!marker && (
+                  <span
+                    className={classnames('srk-user-modal-info-labels-label', markerClassName)}
+                    style={{ backgroundColor: markerBackgroundColor[theme] }}
+                  >
+                    {marker.label}
+                  </span>
+                )}
+              </div>
               {hasMembers && (
                 <div className="srk-user-modal-info-team-members">
                   {user.teamMembers!.map((m, mIndex) => (

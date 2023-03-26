@@ -134,6 +134,48 @@
   cursor: pointer;
 }
 
+:root {
+  --srk-color-user-second-name: #828282;
+  --srk-color-accepted-bg: #99ff99;
+  --srk-color-failed-bg: #ff9999;
+  --srk-color-frozen-bg: #c8d6fa;
+  --srk-color-fb-bg: #009900;
+  --srk-color-fb-text: #ffffff;
+  --srk-color-fb-attempted-text: #f0f0f0;
+  --srk-color-gold: #f8bf29;
+  --srk-color-silver: #c0c0c0;
+  --srk-color-bronze: #d69872;
+  --srk-color-iron: #a94442;
+  --srk-color-marker-red: #ff8989;
+  --srk-color-marker-orange: #ffa67e;
+  --srk-color-marker-yellow: #fff275;
+  --srk-color-marker-green: #64de7c;
+  --srk-color-marker-blue: #6dbeff;
+  --srk-color-marker-purple: #d384ff;
+  --srk-color-marker-pink: #ffc9f2;
+
+  @media screen and (prefers-color-scheme: dark) {
+    --srk-color-user-second-name: #a5a5a5;
+    --srk-color-accepted-bg: #084b00;
+    --srk-color-failed-bg: #690700;
+    --srk-color-frozen-bg: #2f4a8e;
+    --srk-color-fb-bg: #248e18;
+    --srk-color-fb-text: #ffffff;
+    --srk-color-fb-attempted-text: #f0f0f0;
+    --srk-color-gold: #c39824;
+    --srk-color-silver: #adadad;
+    --srk-color-bronze: #b77750;
+    --srk-color-iron: #773b3a;
+    --srk-color-marker-red: #692424;
+    --srk-color-marker-orange: #6f3216;
+    --srk-color-marker-yellow: #6b620f;
+    --srk-color-marker-green: #20542b;
+    --srk-color-marker-blue: #3c6f98;
+    --srk-color-marker-purple: #54236f;
+    --srk-color-marker-pink: #79416c;
+  }
+}
+
 .srk-error {
   margin-top: 30px;
   margin-bottom: 120px;
@@ -167,25 +209,6 @@
 }
 
 .srk-main {
-  --color-user-second-name: #828282;
-  --color-accepted-bg: #99ff99;
-  --color-failed-bg: #ff9999;
-  --color-frozen-bg: #c8d6fa;
-  --color-fb-bg: #009900;
-  --color-fb-text: #ffffff;
-  --color-fb-attempted-text: #f0f0f0;
-  --color-gold: #f8bf29;
-  --color-silver: #c0c0c0;
-  --color-bronze: #d69872;
-  --color-iron: #a94442;
-  --color-marker-red: #ff8989;
-  --color-marker-orange: #ffa67e;
-  --color-marker-yellow: #fff275;
-  --color-marker-green: #64de7c;
-  --color-marker-blue: #6dbeff;
-  --color-marker-purple: #d384ff;
-  --color-marker-pink: #ffc9f2;
-
   --srk-table-head-bg: rgba(255, 255, 255, 0.75);
   --srk-table-head-backdrop-filter: saturate(180%) blur(20px);
   --srk-table-body-user-max-width: 300px;
@@ -195,25 +218,6 @@
   --srk-series-segment-border-width: 8px;
 
   @media screen and (prefers-color-scheme: dark) {
-    --color-user-second-name: #a5a5a5;
-    --color-accepted-bg: #084b00;
-    --color-failed-bg: #690700;
-    --color-frozen-bg: #2f4a8e;
-    --color-fb-bg: #248e18;
-    --color-fb-text: #ffffff;
-    --color-fb-attempted-text: #f0f0f0;
-    --color-gold: #c39824;
-    --color-silver: #adadad;
-    --color-bronze: #b77750;
-    --color-iron: #773b3a;
-    --color-marker-red: #692424;
-    --color-marker-orange: #6f3216;
-    --color-marker-yellow: #6b620f;
-    --color-marker-green: #20542b;
-    --color-marker-blue: #3c6f98;
-    --color-marker-purple: #54236f;
-    --color-marker-pink: #79416c;
-
     --srk-table-head-bg: rgba(25, 25, 25, 0.75);
     --srk-table-border: #3b3b3b;
     // --srk-body-color: rgb(223, 223, 223);
@@ -224,40 +228,40 @@
   background-color: var(--srk-body-bg);
 
   .srk-prest-status-block-accepted {
-    background: var(--color-accepted-bg);
+    background: var(--srk-color-accepted-bg);
   }
 
   .srk-prest-status-block-failed {
-    background: var(--color-failed-bg);
+    background: var(--srk-color-failed-bg);
   }
 
   .srk-prest-status-block-frozen {
-    background: var(--color-frozen-bg);
+    background: var(--srk-color-frozen-bg);
   }
 
   .srk-prest-status-block-fb {
-    background: var(--color-fb-bg);
-    color: var(--color-fb-text);
+    background: var(--srk-color-fb-bg);
+    color: var(--srk-color-fb-text);
   }
 
   .srk-prest-status-block-fb .srk-prest-status-block-attempted {
-    color: var(--color-fb-attempted-text);
+    color: var(--srk-color-fb-attempted-text);
   }
 
   .srk-preset-series-segment-gold {
-    border-right: var(--srk-series-segment-border-width) solid var(--color-gold);
+    border-right: var(--srk-series-segment-border-width) solid var(--srk-color-gold);
   }
 
   .srk-preset-series-segment-silver {
-    border-right: var(--srk-series-segment-border-width) solid var(--color-silver);
+    border-right: var(--srk-series-segment-border-width) solid var(--srk-color-silver);
   }
 
   .srk-preset-series-segment-bronze {
-    border-right: var(--srk-series-segment-border-width) solid var(--color-bronze);
+    border-right: var(--srk-series-segment-border-width) solid var(--srk-color-bronze);
   }
 
   .srk-preset-series-segment-iron {
-    border-right: var(--srk-series-segment-border-width) solid var(--color-iron);
+    border-right: var(--srk-series-segment-border-width) solid var(--srk-color-iron);
   }
 
   table {
@@ -300,7 +304,7 @@
       .user-second-name {
         margin: 0;
         font-size: 12px;
-        color: var(--color-user-second-name);
+        color: var(--srk-color-user-second-name);
       }
     }
   }
@@ -316,31 +320,31 @@
     height: 12px;
 
     &.srk-preset-marker-red {
-      background-color: var(--color-marker-red);
+      background-color: var(--srk-color-marker-red);
     }
 
     &.srk-preset-marker-orange {
-      background-color: var(--color-marker-orange);
+      background-color: var(--srk-color-marker-orange);
     }
 
     &.srk-preset-marker-yellow {
-      background-color: var(--color-marker-yellow);
+      background-color: var(--srk-color-marker-yellow);
     }
 
     &.srk-preset-marker-green {
-      background-color: var(--color-marker-green);
+      background-color: var(--srk-color-marker-green);
     }
 
     &.srk-preset-marker-blue {
-      background-color: var(--color-marker-blue);
+      background-color: var(--srk-color-marker-blue);
     }
 
     &.srk-preset-marker-purple {
-      background-color: var(--color-marker-purple);
+      background-color: var(--srk-color-marker-purple);
     }
 
     &.srk-preset-marker-pink {
-      background-color: var(--color-marker-pink);
+      background-color: var(--srk-color-marker-pink);
     }
   }
 
@@ -348,31 +352,31 @@
     background-color: transparent;
 
     &.srk-preset-marker-red {
-      background-image: linear-gradient(90deg, transparent 0%, var(--color-marker-red) 100%);
+      background-image: linear-gradient(90deg, transparent 0%, var(--srk-color-marker-red) 100%);
     }
 
     &.srk-preset-marker-orange {
-      background-image: linear-gradient(90deg, transparent 0%, var(--color-marker-orange) 100%);
+      background-image: linear-gradient(90deg, transparent 0%, var(--srk-color-marker-orange) 100%);
     }
 
     &.srk-preset-marker-yellow {
-      background-image: linear-gradient(90deg, transparent 0%, var(--color-marker-yellow) 100%);
+      background-image: linear-gradient(90deg, transparent 0%, var(--srk-color-marker-yellow) 100%);
     }
 
     &.srk-preset-marker-green {
-      background-image: linear-gradient(90deg, transparent 0%, var(--color-marker-green) 100%);
+      background-image: linear-gradient(90deg, transparent 0%, var(--srk-color-marker-green) 100%);
     }
 
     &.srk-preset-marker-blue {
-      background-image: linear-gradient(90deg, transparent 0%, var(--color-marker-blue) 100%);
+      background-image: linear-gradient(90deg, transparent 0%, var(--srk-color-marker-blue) 100%);
     }
 
     &.srk-preset-marker-purple {
-      background-image: linear-gradient(90deg, transparent 0%, var(--color-marker-purple) 100%);
+      background-image: linear-gradient(90deg, transparent 0%, var(--srk-color-marker-purple) 100%);
     }
 
     &.srk-preset-marker-pink {
-      background-image: linear-gradient(90deg, transparent 0%, var(--color-marker-pink) 100%);
+      background-image: linear-gradient(90deg, transparent 0%, var(--srk-color-marker-pink) 100%);
     }
   }
 
@@ -392,28 +396,28 @@
 }
 
 .srk-solution-result-text {
-  --color-accepted: #009a04;
-  --color-accepted-masked: #03f90b;
-  --color-rejected: #f75757;
-  --color-frozen: #727bec;
+  --srk-color-accepted: #009a04;
+  --srk-color-accepted-masked: #03f90b;
+  --srk-color-rejected: #f75757;
+  --srk-color-frozen: #727bec;
 
   @media screen and (prefers-color-scheme: dark) {
-    --color-accepted: #06a20a;
-    --color-accepted-masked: #03f90b;
-    --color-rejected: #e83a3a;
-    --color-frozen: #737df9;
+    --srk-color-accepted: #06a20a;
+    --srk-color-accepted-masked: #03f90b;
+    --srk-color-rejected: #e83a3a;
+    --srk-color-frozen: #737df9;
   }
 
   font-weight: 500;
   &.srk-preset-result-fb {
-    color: var(--color-accepted);
+    color: var(--srk-color-accepted);
     background-image: linear-gradient(
       90deg,
-      var(--color-accepted),
-      var(--color-accepted-masked) 25%,
-      var(--color-accepted) 50%,
-      var(--color-accepted-masked) 75%,
-      var(--color-accepted)
+      var(--srk-color-accepted),
+      var(--srk-color-accepted-masked) 25%,
+      var(--srk-color-accepted) 50%,
+      var(--srk-color-accepted-masked) 75%,
+      var(--srk-color-accepted)
     );
     -webkit-text-fill-color: transparent;
     text-fill-color: transparent;
@@ -423,13 +427,13 @@
     animation: srk-masked-animation 2s infinite linear;
   }
   &.srk-preset-result-ac {
-    color: var(--color-accepted);
+    color: var(--srk-color-accepted);
   }
   &.srk-preset-result-rj {
-    color: var(--color-rejected);
+    color: var(--srk-color-rejected);
   }
   &.srk-preset-result-fz {
-    color: var(--color-frozen);
+    color: var(--srk-color-frozen);
   }
 }
 
@@ -454,26 +458,75 @@
 }
 
 .srk-user-modal-info {
+  --border-color: #777;
   --divider-color: #ececec;
 
   @media screen and (prefers-color-scheme: dark) {
+    --border-color: #999;
     --divider-color: #3e3e3e;
   }
 
   & &-user-name {
-    margin: 0 0 6px;
+    margin: 0;
     font-size: 18px;
     font-weight: bolder;
   }
   & &-user-second-name {
-    margin: 0;
+    margin: 4px 0 0;
+    margin-bottom: 0;
     font-size: 14px;
     opacity: 0.75;
+  }
+  & &-labels {
+    margin-top: 6px;
+
+    &-label {
+      border-radius: 4px;
+      font-size: 12px;
+      border: 1px solid transparent;
+      padding: 2px;
+      &:not(:last-of-type) {
+        margin-right: 4px;
+      }
+
+      &-preset-general {
+        border: 1px solid var(--border-color);
+      }
+
+      &.srk-preset-marker-red {
+        background-color: var(--srk-color-marker-red);
+      }
+
+      &.srk-preset-marker-orange {
+        background-color: var(--srk-color-marker-orange);
+      }
+
+      &.srk-preset-marker-yellow {
+        background-color: var(--srk-color-marker-yellow);
+      }
+
+      &.srk-preset-marker-green {
+        background-color: var(--srk-color-marker-green);
+      }
+
+      &.srk-preset-marker-blue {
+        background-color: var(--srk-color-marker-blue);
+      }
+
+      &.srk-preset-marker-purple {
+        background-color: var(--srk-color-marker-purple);
+      }
+
+      &.srk-preset-marker-pink {
+        background-color: var(--srk-color-marker-pink);
+      }
+    }
   }
   & &-team-members {
     border-top: 1px solid var(--divider-color);
     font-size: 16px;
-    margin-top: 12px;
+    margin-top: 16px;
+    margin-bottom: 2px;
     padding-top: 6px;
     &-slash {
       opacity: 0.5;
