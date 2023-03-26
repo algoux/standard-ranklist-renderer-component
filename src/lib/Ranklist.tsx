@@ -6,11 +6,13 @@ import TEXTColor from 'textcolor';
 import BigNumber from 'bignumber.js';
 import type * as srk from '@algoux/standard-ranklist';
 import SolutionsModalSingleton from '../components/SolutionsModalSingleton';
+import UserModalSingleton from '../components/UserModalSingleton';
 import { formatTimeDuration, resolveText, numberToAlphabet, secToTimeStr } from './utils';
 import { caniuse, srkSupportedVersions } from './caniuse';
 import './Ranklist.less';
 
 const solutionsModal = SolutionsModalSingleton.getInstance();
+const userModal = UserModalSingleton.getInstance();
 
 export enum EnumTheme {
   light = 'light',
@@ -239,14 +241,43 @@ export class Ranklist extends React.Component<RanklistProps, State> {
         bodyStyle.backgroundImage = `linear-gradient(90deg, transparent 0%, ${backgroundColor[theme]} 100%)`;
       }
     }
+
+    const hasMembers = !!user.teamMembers && user.teamMembers.length > 0;
+    const onClick = (e: React.MouseEvent) =>
+      userModal.modal(
+        {
+          title: `User Info`,
+          content: (
+            <div className="srk-user-modal-info">
+              <h3 className="srk-user-modal-info-user-name">{resolveText(user.name)}</h3>
+              {!!user.organization && (
+                <p className="srk-user-modal-info-user-second-name">{resolveText(user.organization)}</p>
+              )}
+              {hasMembers && (
+                <div className="srk-user-modal-info-team-members">
+                  {user.teamMembers!.map((m, mIndex) => (
+                    <span key={resolveText(m.name)}>
+                      {mIndex > 0 && <span className="srk-user-modal-info-team-members-slash"> / </span>}
+                      <span>{resolveText(m.name)}</span>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          ),
+        },
+        e,
+      );
+
     return (
       <td
-        className={classnames('-text-left -nowrap user srk-marker-bg', className)}
+        className={classnames('-text-left -nowrap user srk-marker-bg', className, { '-cursor-pointer': hasMembers })}
         style={bodyStyle}
         title={bodyLabel}
+        onClick={onClick}
       >
         {this.renderUserName(user)}
-        {user.organization && (
+        {!!user.organization && (
           <p className="user-second-name" title="">
             {resolveText(user.organization)}
           </p>

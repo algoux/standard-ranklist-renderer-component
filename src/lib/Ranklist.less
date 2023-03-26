@@ -453,7 +453,36 @@
   }
 }
 
-.srk-solutions-modal-root {
+.srk-user-modal-info {
+  --divider-color: #ececec;
+
+  @media screen and (prefers-color-scheme: dark) {
+    --divider-color: #3e3e3e;
+  }
+
+  & &-user-name {
+    margin: 0 0 6px;
+    font-size: 18px;
+    font-weight: bolder;
+  }
+  & &-user-second-name {
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.75;
+  }
+  & &-team-members {
+    border-top: 1px solid var(--divider-color);
+    font-size: 16px;
+    margin-top: 12px;
+    padding-top: 6px;
+    &-slash {
+      opacity: 0.5;
+      font-size: 80%;
+    }
+  }
+}
+
+.srk-general-modal-root {
   --mask-bg: rgba(55, 55, 55, 0.6);
   --content-bg: #fff;
   --header-bg: #fff;

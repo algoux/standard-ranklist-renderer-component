@@ -3,12 +3,12 @@ import ReactDOM, { unmountComponentAtNode } from 'react-dom';
 import GeneralModal from './GeneralModal';
 import type { GeneralModalProps } from './GeneralModal';
 
-export interface SolutionsModalOptions {
+export interface UserModalOptions {
   title: string;
   content: React.ReactNode;
 }
 
-export default class SolutionsModalSingleton {
+export default class UserModalSingleton {
   dom: Element | null;
   ref: GeneralModal | null;
 
@@ -20,7 +20,7 @@ export default class SolutionsModalSingleton {
   mountToDom() {
     if (!this.dom) {
       this.dom = document.createElement('div');
-      this.dom.id = 'srk-solution-modal';
+      this.dom.id = 'srk-user-modal';
       document.body.appendChild(this.dom);
     }
     ReactDOM.render(
@@ -29,7 +29,7 @@ export default class SolutionsModalSingleton {
     );
   }
 
-  modal(options: SolutionsModalOptions, e?: React.MouseEvent) {
+  modal(options: UserModalOptions, e?: React.MouseEvent) {
     if (!this.ref) {
       this.mountToDom();
     }
@@ -48,14 +48,14 @@ export default class SolutionsModalSingleton {
   }
 
   static getInstance = (function () {
-    let instance: SolutionsModalSingleton;
+    let instance: UserModalSingleton;
     return function () {
       if (!instance) {
-        instance = new SolutionsModalSingleton({
+        instance = new UserModalSingleton({
           rootClassName: 'srk-general-modal-root',
-          wrapClassName: 'srk-solutions-modal',
+          wrapClassName: 'srk-user-modal',
           style: {
-            width: '320px',
+            width: '360px',
           },
         });
       }

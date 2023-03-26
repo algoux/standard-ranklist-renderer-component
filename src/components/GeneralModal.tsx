@@ -2,7 +2,7 @@ import React from 'react';
 import Dialog from 'rc-dialog';
 // import 'rc-dialog/assets/index.css';
 
-export interface SolutionsModalProps {
+export interface GeneralModalProps {
   rootClassName?: string;
   wrapClassName?: string;
   style?: React.CSSProperties;
@@ -18,8 +18,8 @@ interface State {
   visible: boolean;
 }
 
-export default class SolutionsModal extends React.Component<SolutionsModalProps, State> {
-  constructor(props: SolutionsModalProps) {
+export default class GeneralModal extends React.Component<GeneralModalProps, State> {
+  constructor(props: GeneralModalProps) {
     super(props);
     this.state = {
       title: '',
