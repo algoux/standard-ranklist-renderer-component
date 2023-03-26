@@ -538,13 +538,13 @@ function genSeriesCalcFns(
       case 'ICPC': {
         const options = rule.options as srk.RankSeriesRulePresetICPC['options'];
         const usingEndpointRules: number[][] = [];
+        let noTied = false;
         if (options.ratio) {
           const { value, rounding = 'ceil', denominator = 'all' } = options.ratio;
           let total =
             denominator === 'submitted'
               ? rows.filter((row) => !row.statuses.every((s) => s.result === null)).length
               : rows.length;
-          total = 240;
           const accValues: BigNumber[] = [];
           for (let i = 0; i < value.length; i++) {
             if (i === 0) {
@@ -559,6 +559,9 @@ function genSeriesCalcFns(
               return rounding === 'floor' ? Math.floor(v) : rounding === 'round' ? Math.round(v) : Math.ceil(v);
             }),
           );
+          if (options.ratio.noTied) {
+            noTied = true;
+          }
         }
         if (options.count) {
           const { value } = options.count;
@@ -567,6 +570,14 @@ function genSeriesCalcFns(
             accValues[i] = (i > 0 ? accValues[i - 1] : 0) + value[i];
           }
           usingEndpointRules.push(accValues);
+          if (options.count.noTied) {
+            noTied = true;
+          }
+        }
+        const officialRanksNoTied: typeof officialRanks = [];
+        let currentOfficialRank = 0;
+        for (let i = 0; i < officialRanks.length; i++) {
+          officialRanksNoTied.push(officialRanks[i] === null ? null : ++currentOfficialRank);
         }
         return (row, index) => {
           if (row.user.official === false) {
@@ -576,7 +587,9 @@ function genSeriesCalcFns(
             };
           }
           const usingSegmentIndex = (seriesConfig.segments || []).findIndex((_, segIndex) => {
-            return usingEndpointRules.map((e) => e[segIndex]).every((endpoints) => officialRanks[index]! <= endpoints);
+            return usingEndpointRules
+              .map((e) => e[segIndex])
+              .every((endpoints) => (noTied ? officialRanksNoTied : officialRanks)[index]! <= endpoints);
           });
           return {
             rank: officialRanks[index],
