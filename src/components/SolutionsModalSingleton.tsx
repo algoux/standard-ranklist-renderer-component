@@ -4,7 +4,7 @@ import GeneralModal from './GeneralModal';
 import type { GeneralModalProps } from './GeneralModal';
 
 export interface SolutionsModalOptions {
-  title: string;
+  title: React.ReactNode;
   content: React.ReactNode;
 }
 
@@ -55,7 +55,7 @@ export default class SolutionsModalSingleton {
           rootClassName: 'srk-general-modal-root',
           wrapClassName: 'srk-solutions-modal',
           style: {
-            width: '320px',
+            // width: '320px',
           },
         });
       }

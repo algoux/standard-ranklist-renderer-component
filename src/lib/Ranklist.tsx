@@ -47,6 +47,17 @@ export interface RanklistProps {
    * @default 'light'
    */
   theme?: EnumTheme;
+
+  renderUserModal?: (
+    user: srk.User,
+    row: srk.RanklistRow,
+    index: number,
+    ranklist: srk.Ranklist,
+  ) => {
+    title: React.ReactNode;
+    content: React.ReactNode;
+    width?: number;
+  };
 }
 
 interface State {
@@ -217,9 +228,10 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     return <span title={name}>{name}</span>;
   };
 
-  renderUserBody = (user: srk.User) => {
+  renderUserBody = (user: srk.User, row: srk.RanklistRow, index: number, ranklist: srk.Ranklist) => {
     const {
       data: { markers = [] },
+      renderUserModal,
     } = this.props;
     const theme = this.props.theme!;
     let className = '';
@@ -246,6 +258,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     const hasMembers = !!user.teamMembers && user.teamMembers.length > 0;
     const onClick = (e: React.MouseEvent) =>
       userModal.modal(
+        renderUserModal?.(user, row, index, ranklist) ||
         {
           title: `User Info`,
           content: (
@@ -279,13 +292,14 @@ export class Ranklist extends React.Component<RanklistProps, State> {
               )}
             </div>
           ),
+          width: 360,
         },
         e,
       );
 
     return (
       <td
-        className={classnames('-text-left -nowrap user srk-marker-bg', className, { '-cursor-pointer': hasMembers })}
+        className={classnames('-text-left -nowrap -cursor-pointer user srk-marker-bg', className)}
         style={bodyStyle}
         title={bodyLabel}
         onClick={onClick}
@@ -456,7 +470,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
               return (
                 <tr key={r.user.id || resolveText(r.user.name)}>
                   {rankValues.map((rk, index) => this.renderSingleSeriesBody(rk, series[index], r))}
-                  {this.renderUserBody(r.user)}
+                  {this.renderUserBody(r.user, r, index, data)}
                   <td className="-text-right -nowrap">{r.score.value}</td>
                   <td className="-text-right -nowrap">
                     {r.score.time ? formatTimeDuration(r.score.time, 'min', Math.floor) : '-'}

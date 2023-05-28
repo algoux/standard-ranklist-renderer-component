@@ -9,13 +9,14 @@ export interface GeneralModalProps {
 }
 
 interface State {
-  title: string;
+  title: React.ReactNode;
   content: React.ReactNode;
   mousePosition?: {
     x: number;
     y: number;
   };
   visible: boolean;
+  width?: number;
 }
 
 export default class GeneralModal extends React.Component<GeneralModalProps, State> {
@@ -26,6 +27,7 @@ export default class GeneralModal extends React.Component<GeneralModalProps, Sta
       content: null,
       mousePosition: undefined,
       visible: false,
+      width: 320,
     };
   }
 
@@ -48,6 +50,7 @@ export default class GeneralModal extends React.Component<GeneralModalProps, Sta
         title={title}
         onClose={this.onClose}
         mousePosition={mousePosition}
+        width={this.state.width}
         style={style}
       >
         {content}

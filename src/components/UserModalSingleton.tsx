@@ -4,8 +4,9 @@ import GeneralModal from './GeneralModal';
 import type { GeneralModalProps } from './GeneralModal';
 
 export interface UserModalOptions {
-  title: string;
+  title: React.ReactNode;
   content: React.ReactNode;
+  width?: number;
 }
 
 export default class UserModalSingleton {
@@ -40,6 +41,7 @@ export default class UserModalSingleton {
         y: e.pageY,
       },
       visible: true,
+      width: options.width,
     });
   }
 
@@ -55,7 +57,7 @@ export default class UserModalSingleton {
           rootClassName: 'srk-general-modal-root',
           wrapClassName: 'srk-user-modal',
           style: {
-            width: '360px',
+            // width: '360px',
           },
         });
       }
