@@ -258,8 +258,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     const hasMembers = !!user.teamMembers && user.teamMembers.length > 0;
     const onClick = (e: React.MouseEvent) =>
       userModal.modal(
-        renderUserModal?.(user, row, index, ranklist) ||
-        {
+        renderUserModal?.(user, row, index, ranklist) || {
           title: `User Info`,
           content: (
             <div className="srk-user-modal-info">
@@ -555,10 +554,11 @@ function genSeriesCalcFns(
         let noTied = false;
         if (options.ratio) {
           const { value, rounding = 'ceil', denominator = 'all' } = options.ratio;
+          const officialRows = rows.filter((row) => row.user.official === undefined || row.user.official === true);
           let total =
             denominator === 'submitted'
-              ? rows.filter((row) => !row.statuses.every((s) => s.result === null)).length
-              : rows.length;
+              ? officialRows.filter((row) => !row.statuses.every((s) => s.result === null)).length
+              : officialRows.length;
           const accValues: BigNumber[] = [];
           for (let i = 0; i < value.length; i++) {
             if (i === 0) {
