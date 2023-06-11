@@ -282,6 +282,7 @@ export function regenerateRanklistBySolutions(
   const sorterConfig: srk.SorterICPC['config'] = {
     penalty: [20, 'min'],
     noPenaltyResults: ['FB', 'AC', '?', 'CE', 'UKE', null],
+    timeRounding: 'floor',
     ...JSON.parse(JSON.stringify(originalRanklist.sorter?.config || {})),
   };
   const ranklist: srk.Ranklist = {
@@ -350,9 +351,21 @@ export function regenerateRanklistBySolutions(
         problemSubmittedCount[i] += 1;
       }
       if (status.result === 'AC' || status.result === 'FB') {
+        const targetTime: srk.TimeDuration = [
+          formatTimeDuration(
+            status.time!,
+            sorterConfig.timePrecision || 'ms',
+            sorterConfig.timeRounding === 'ceil'
+              ? Math.ceil
+              : sorterConfig.timeRounding === 'round'
+              ? Math.round
+              : Math.floor,
+          ),
+          sorterConfig.timePrecision || 'ms',
+        ];
         scoreValue += 1;
         totalTimeMs +=
-          formatTimeDuration(status.time!, 'ms') +
+          formatTimeDuration(targetTime, 'ms') +
           (status.tries! - 1) * formatTimeDuration(sorterConfig.penalty!, 'ms');
       }
     }

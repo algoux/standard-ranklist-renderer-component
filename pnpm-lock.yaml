@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@algoux/standard-ranklist': 0.3.1
+  '@algoux/standard-ranklist': 0.3.2
   '@types/classnames': ^2.3.1
   '@types/color': ^3.0.3
   '@types/node': ^14.18.22
@@ -37,7 +37,7 @@ dependencies:
   textcolor: 1.0.2
 
 devDependencies:
-  '@algoux/standard-ranklist': 0.3.1
+  '@algoux/standard-ranklist': 0.3.2
   '@types/classnames': 2.3.1
   '@types/color': 3.0.3
   '@types/node': 14.18.22
@@ -58,8 +58,8 @@ devDependencies:
 
 packages:
 
-  /@algoux/standard-ranklist/0.3.1:
-    resolution: {integrity: sha512-6BoCZLF9M4CjF13E3earxcsEmqKe9Bu71ID7Xx3/rd7yCuD6qFPWRhxZIVoVuTSiz3tjuqOePcKcZ/rM7Zz20A==}
+  /@algoux/standard-ranklist/0.3.2:
+    resolution: {integrity: sha512-YxNzYjJZ6vTARI2tElm+u27BBg2TgsMFkTiHDax26YGk6fsDWzDoKPGUAfvnizpEsyOj71jWXG6rH+gJnp4Mig==}
     dev: true
 
   /@ampproject/remapping/2.2.0:
