@@ -263,10 +263,14 @@ export function filterSolutionsUntil(
 }
 
 export function canRegenerateRanklist(ranklist: srk.Ranklist): boolean {
-  if (!semver.gte(ranklist.version, MIN_REGEN_SUPPORTED_VERSION)) {
-    return false;
-  }
-  if (ranklist.sorter?.algorithm !== 'ICPC') {
+  try {
+    if (!semver.gte(ranklist.version, MIN_REGEN_SUPPORTED_VERSION)) {
+      return false;
+    }
+    if (ranklist.sorter?.algorithm !== 'ICPC') {
+      return false;
+    }
+  } catch (e) {
     return false;
   }
   return true;
