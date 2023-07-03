@@ -58,6 +58,7 @@ export interface RanklistProps {
     content: React.ReactNode;
     width?: number;
   };
+  onUserModalOpen?: (user: srk.User, row: srk.RanklistRow, index: number, ranklist: srk.Ranklist) => void | Promise<void>;
 }
 
 interface State {
@@ -232,6 +233,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     const {
       data: { markers = [] },
       renderUserModal,
+      onUserModalOpen,
     } = this.props;
     const theme = this.props.theme!;
     let className = '';
@@ -256,7 +258,8 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     }
 
     const hasMembers = !!user.teamMembers && user.teamMembers.length > 0;
-    const onClick = (e: React.MouseEvent) =>
+    const onClick = (e: React.MouseEvent) => {
+      onUserModalOpen?.(user, row, index, ranklist);
       userModal.modal(
         renderUserModal?.(user, row, index, ranklist) || {
           title: `User Info`,
@@ -295,6 +298,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
         },
         e,
       );
+    }
 
     return (
       <td
