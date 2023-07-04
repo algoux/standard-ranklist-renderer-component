@@ -19,6 +19,12 @@ interface State {
   width?: number;
 }
 
+export interface ModalOptions {
+  title: React.ReactNode;
+  content: React.ReactNode;
+  width?: number;
+}
+
 export default class GeneralModal extends React.Component<GeneralModalProps, State> {
   constructor(props: GeneralModalProps) {
     super(props);
@@ -30,6 +36,18 @@ export default class GeneralModal extends React.Component<GeneralModalProps, Sta
       width: 320,
     };
   }
+
+  modal = (options: ModalOptions, e?: React.MouseEvent) => {
+    this.setState({
+      ...options,
+      mousePosition: e && {
+        x: e.pageX,
+        y: e.pageY,
+      },
+      visible: true,
+      width: options.width,
+    });
+  };
 
   onClose = (e: React.SyntheticEvent) => {
     this.setState({
