@@ -69,6 +69,7 @@ export default class GeneralModal extends React.Component<GeneralModalProps, Sta
         onClose={this.onClose}
         mousePosition={mousePosition}
         width={this.state.width}
+        destroyOnClose
         style={style}
       >
         {content}

@@ -1,4 +1,6 @@
 import type * as srk from '@algoux/standard-ranklist';
+// @ts-ignore
+import TEXTColor from 'textcolor';
 import { lookup as langLookup } from 'bcp-47-match';
 import semver from 'semver';
 
@@ -190,6 +192,57 @@ export function resolveContributor(
   return { name, email, url };
 }
 
+export enum EnumTheme {
+  light = 'light',
+  dark = 'dark',
+}
+
+export interface ThemeColor {
+  [EnumTheme.light]: string | undefined;
+  [EnumTheme.dark]: string | undefined;
+}
+
+export function resolveColor(color: srk.Color) {
+  if (Array.isArray(color)) {
+    return `rgba(${color[0]},${color[1]},${color[2]},${color[3]})`;
+  } else if (color) {
+    return color;
+  }
+  return undefined;
+}
+
+export function resolveThemeColor(themeColor: srk.ThemeColor): ThemeColor {
+  let light = resolveColor(typeof themeColor === 'string' ? themeColor : themeColor.light);
+  let dark = resolveColor(typeof themeColor === 'string' ? themeColor : themeColor.dark);
+  return {
+    [EnumTheme.light]: light,
+    [EnumTheme.dark]: dark,
+  };
+}
+
+export function resolveStyle(style: srk.Style) {
+  const { textColor, backgroundColor } = style;
+  let usingTextColor: typeof textColor = textColor;
+  // 未指定前景色时，尝试自动适配
+  if (backgroundColor && !textColor) {
+    if (typeof backgroundColor === 'string') {
+      usingTextColor = TEXTColor.findTextColor(backgroundColor);
+    } else {
+      const { light, dark } = backgroundColor;
+      usingTextColor = {
+        light: light && TEXTColor.findTextColor(light),
+        dark: dark && TEXTColor.findTextColor(dark),
+      };
+    }
+  }
+  const textThemeColor = resolveThemeColor(usingTextColor || '');
+  const backgroundThemeColor = resolveThemeColor(backgroundColor || '');
+  return {
+    textColor: textThemeColor,
+    backgroundColor: backgroundThemeColor,
+  };
+}
+
 export type CalculatedSolutionTetrad = [
   /** user id */ string,
   /** problem index */ number,
@@ -274,6 +327,16 @@ export function canRegenerateRanklist(ranklist: srk.Ranklist): boolean {
     return false;
   }
   return true;
+}
+
+export function sortRows(rows: srk.RanklistRow[]): srk.RanklistRow[] {
+  rows.sort((a, b) => {
+    if (a.score.value !== b.score.value) {
+      return b.score.value - a.score.value;
+    }
+    return formatTimeDuration(a.score.time!) - formatTimeDuration(b.score.time!);
+  });
+  return rows;
 }
 
 export function regenerateRanklistBySolutions(
@@ -369,8 +432,7 @@ export function regenerateRanklistBySolutions(
         ];
         scoreValue += 1;
         totalTimeMs +=
-          formatTimeDuration(targetTime, 'ms') +
-          (status.tries! - 1) * formatTimeDuration(sorterConfig.penalty!, 'ms');
+          formatTimeDuration(targetTime, 'ms') + (status.tries! - 1) * formatTimeDuration(sorterConfig.penalty!, 'ms');
       }
     }
     row.score = {
@@ -379,13 +441,7 @@ export function regenerateRanklistBySolutions(
     };
     rows.push(row);
   }
-  rows.sort((a, b) => {
-    if (a.score.value !== b.score.value) {
-      return b.score.value - a.score.value;
-    }
-    return formatTimeDuration(a.score.time!) - formatTimeDuration(b.score.time!);
-  });
-  ranklist.rows = rows;
+  ranklist.rows = sortRows(rows);
   ranklist.problems.forEach((problem, index) => {
     if (!problem.statistics) {
       problem.statistics = {
@@ -397,4 +453,93 @@ export function regenerateRanklistBySolutions(
     problem.statistics.submitted = problemSubmittedCount[index];
   });
   return ranklist;
+}
+
+export function regenerateRowsByIncrementalSolutions(
+  originalRanklist: srk.Ranklist,
+  solutions: CalculatedSolutionTetrad[],
+) {
+  if (!canRegenerateRanklist(originalRanklist)) {
+    throw new Error('The ranklist is not supported to regenerate');
+  }
+  const sorterConfig: srk.SorterICPC['config'] = {
+    penalty: [20, 'min'],
+    noPenaltyResults: ['FB', 'AC', '?', 'CE', 'UKE', null],
+    timeRounding: 'floor',
+    ...JSON.parse(JSON.stringify(originalRanklist.sorter?.config || {})),
+  };
+  const userRowIndexMap = new Map<string,number>();
+  const rows = [...originalRanklist.rows];
+  rows.forEach((row, index) => {
+    const userId =
+      (row.user.id && `${row.user.id}`) ||
+      `${typeof row.user.name === 'string' ? row.user.name : JSON.stringify(row.user.name)}`;
+      userRowIndexMap.set(userId, index);
+  });
+  const clonedRowMap = new Set<string>();
+  const clonedRowStatusMap = new Set</** `${userId}_${problemIndex}` */ string>();
+  for (const tetrad of solutions) {
+    const [userId, problemIndex, result, time] = tetrad;
+    let rowIndex = userRowIndexMap.get(userId);
+    if (rowIndex === undefined) {
+      console.error(`Invalid user id ${userId} found when regenerating ranklist`);
+      break;
+    }
+    let row = rows[rowIndex];
+    if (!clonedRowMap.has(userId)) {
+      row = { ...row };
+      row.score = { ...row.score };
+      row.statuses = [...row.statuses];
+      rows[rowIndex] = row;
+      clonedRowMap.add(userId);
+    }
+    if (!clonedRowStatusMap.has(`${userId}_${problemIndex}`)) {
+      row.statuses[problemIndex] = { ...row.statuses[problemIndex] };
+      row.statuses[problemIndex].solutions = [...row.statuses[problemIndex].solutions!];
+      clonedRowStatusMap.add(`${userId}_${problemIndex}`);
+    }
+    const status = row.statuses[problemIndex];
+    status.solutions!.push({ result, time });
+    if (status.result === 'AC' || status.result === 'FB') {
+      continue;
+    }
+    if (result === '?') {
+      status.result = result;
+      status.tries = (status.tries || 0) + 1;
+      continue;
+    }
+    if (result === 'AC' || result === 'FB') {
+      status.result = result;
+      status.time = time;
+      status.tries = (status.tries || 0) + 1;
+      row.score.value += 1;
+      const targetTime: srk.TimeDuration = [
+        formatTimeDuration(
+          status.time!,
+          sorterConfig.timePrecision || 'ms',
+          sorterConfig.timeRounding === 'ceil'
+            ? Math.ceil
+            : sorterConfig.timeRounding === 'round'
+            ? Math.round
+            : Math.floor,
+        ),
+        sorterConfig.timePrecision || 'ms',
+      ];
+      const totalTime = formatTimeDuration(row.score.time!, 'ms') || 0;
+      row.score.time = [
+        totalTime +
+          formatTimeDuration(targetTime, 'ms') +
+          (status.tries! - 1) * formatTimeDuration(sorterConfig.penalty!, 'ms'),
+        'ms',
+      ];
+      continue;
+    }
+    // @ts-ignore
+    if ((sorterConfig.noPenaltyResults || []).includes(result)) {
+      continue;
+    }
+    status.result = 'RJ';
+    status.tries = (status.tries || 0) + 1;
+  }
+  return sortRows(rows);
 }

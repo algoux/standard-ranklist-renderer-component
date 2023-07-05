@@ -2,23 +2,13 @@ import classnames from 'classnames';
 import Color from 'color';
 import React from 'react';
 // @ts-ignore
-import TEXTColor from 'textcolor';
 import BigNumber from 'bignumber.js';
 import type * as srk from '@algoux/standard-ranklist';
 import GeneralModal from '../components/GeneralModal';
-import { formatTimeDuration, resolveText, numberToAlphabet, secToTimeStr } from './utils';
+import { formatTimeDuration, resolveText, numberToAlphabet, secToTimeStr, EnumTheme, resolveStyle } from './utils';
+import type { ThemeColor } from './utils';
 import { caniuse, srkSupportedVersions } from './caniuse';
 import './Ranklist.less';
-
-export enum EnumTheme {
-  light = 'light',
-  dark = 'dark',
-}
-
-interface ThemeColor {
-  [EnumTheme.light]: string | undefined;
-  [EnumTheme.dark]: string | undefined;
-}
 
 interface RankValue {
   /** Rank value initially. If the user is unofficial and rank value equals null, it will be rendered as unofficial mark such as '*'. */
@@ -88,47 +78,6 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     };
   }
 
-  resolveColor(color: srk.Color) {
-    if (Array.isArray(color)) {
-      return `rgba(${color[0]},${color[1]},${color[2]},${color[3]})`;
-    } else if (color) {
-      return color;
-    }
-    return undefined;
-  }
-
-  resolveThemeColor(themeColor: srk.ThemeColor): ThemeColor {
-    let light = this.resolveColor(typeof themeColor === 'string' ? themeColor : themeColor.light);
-    let dark = this.resolveColor(typeof themeColor === 'string' ? themeColor : themeColor.dark);
-    return {
-      [EnumTheme.light]: light,
-      [EnumTheme.dark]: dark,
-    };
-  }
-
-  resolveStyle(style: srk.Style) {
-    const { textColor, backgroundColor } = style;
-    let usingTextColor: typeof textColor = textColor;
-    // 未指定前景色时，尝试自动适配
-    if (backgroundColor && !textColor) {
-      if (typeof backgroundColor === 'string') {
-        usingTextColor = TEXTColor.findTextColor(backgroundColor);
-      } else {
-        const { light, dark } = backgroundColor;
-        usingTextColor = {
-          light: light && TEXTColor.findTextColor(light),
-          dark: dark && TEXTColor.findTextColor(dark),
-        };
-      }
-    }
-    const textThemeColor = this.resolveThemeColor(usingTextColor || '');
-    const backgroundThemeColor = this.resolveThemeColor(backgroundColor || '');
-    return {
-      textColor: textThemeColor,
-      backgroundColor: backgroundThemeColor,
-    };
-  }
-
   genExternalLink(link: string, children: React.ReactNode) {
     return (
       <a href={link} target="_blank" rel="noopener noreferrer" style={{ color: 'unset' }}>
@@ -162,7 +111,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     const theme = this.props.theme!;
     const alias = p.alias ? p.alias : numberToAlphabet(index);
     const stat = p.statistics;
-    const { textColor, backgroundColor } = this.resolveStyle(p.style || {});
+    const { backgroundColor } = resolveStyle(p.style || {});
     const statDesc = stat
       ? `${stat.accepted} / ${stat.submitted} (${
           stat.submitted ? ((stat.accepted / stat.submitted) * 100).toFixed(1) : 0
@@ -208,7 +157,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     if (typeof segmentStyle === 'string') {
       className = `srk-preset-series-segment-${segmentStyle}`;
     } else if (segmentStyle) {
-      const style = this.resolveStyle(segmentStyle);
+      const style = resolveStyle(segmentStyle);
       textColor = style.textColor;
       backgroundColor = style.backgroundColor;
     }
@@ -255,7 +204,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
       if (typeof markerStyle === 'string') {
         className = markerClassName = `srk-preset-marker-${markerStyle}`;
       } else if (markerStyle) {
-        const style = this.resolveStyle(markerStyle);
+        const style = resolveStyle(markerStyle);
         markerBackgroundColor = style.backgroundColor;
         bodyStyle.backgroundImage = `linear-gradient(90deg, transparent 0%, ${markerBackgroundColor[theme]} 100%)`;
       }
