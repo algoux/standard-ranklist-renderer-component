@@ -3,7 +3,7 @@ import data from '../demo.json';
 import { Ranklist, convertToStaticRanklist } from './lib/main';
 // import './lib/Ranklist.less';
 import 'rc-dialog/assets/index.css';
-import * as Utils from './lib/utils';
+import * as Utils from '@algoux/standard-ranklist-utils';
 import { ProgressBar } from './lib/ProgressBar';
 
 export default class App extends React.Component {

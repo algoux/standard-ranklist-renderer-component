@@ -5,8 +5,8 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/index.cjs.js",
-  "module": "./dist/index.es.js",
+  "type": "module",
+  "main": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "dev": "vite",
@@ -14,6 +14,11 @@
     "serve": "vite preview"
   },
   "author": "bLue",
+  "keywords": [
+    "standard ranklist",
+    "srk",
+    "renderer component"
+  ],
   "homepage": "https://github.com/algoux/standard-ranklist-renderer-component",
   "repository": {
     "type": "git",
@@ -23,13 +28,11 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "bcp-47-match": "^2.0.2",
-    "bignumber.js": "^9.1.1",
+    "@algoux/standard-ranklist-utils": "^0.1.0",
     "classnames": "^2.3.1",
     "color": "^4.2.3",
     "rc-slider": "^9.7.5",
-    "semver": "^7.3.7",
-    "textcolor": "^1.0.2"
+    "semver": "^7.3.7"
   },
   "devDependencies": {
     "@algoux/standard-ranklist": "0.3.2",

@@ -3,7 +3,7 @@ import type * as srk from '@algoux/standard-ranklist';
 import Slider, { SliderTooltip } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import './ProgressBar.less';
-import { canRegenerateRanklist, formatTimeDuration, secToTimeStr } from './utils';
+import { canRegenerateRanklist, formatTimeDuration, secToTimeStr } from '@algoux/standard-ranklist-utils';
 
 export interface ProgressBarProps {
   data: srk.Ranklist;
