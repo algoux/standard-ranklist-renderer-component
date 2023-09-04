@@ -23,18 +23,24 @@ export default class App extends React.Component {
       return;
     }
     // @ts-ignore
-    const filteredSolutions = Utils.filterSolutionsUntil(this.state.solutions, [time, 'ms'])
+    const filteredSolutions = Utils.filterSolutionsUntil(this.state.solutions, [time, 'ms']);
     // @ts-ignore
     const newSrk = Utils.regenerateRanklistBySolutions(data, filteredSolutions);
     this.setState({ data: newSrk });
-  }
-  
+  };
+
   render() {
     return (
       <div className="app">
         <div style={{ height: '40px' }}></div>
         {/* @ts-ignore */}
-        <ProgressBar data={data} td={Date.now() - new Date(data._now).getTime()} live enableTimeTravel onTimeTravel={this.handleTimeTravel} />
+        <ProgressBar
+          data={data}
+          td={data._now ? Date.now() - new Date(data._now).getTime() : 0}
+          live
+          enableTimeTravel
+          onTimeTravel={this.handleTimeTravel}
+        />
         <div style={{ height: '20px' }}></div>
         {/* @ts-ignore */}
         <Ranklist data={convertToStaticRanklist(this.state.data)} theme="light" />

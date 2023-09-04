@@ -1,7 +1,7 @@
 {
   "name": "@algoux/standard-ranklist-renderer-component",
   "description": "Standard Ranklist Renderer Component",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "files": [
     "dist"
   ],
@@ -28,14 +28,14 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@algoux/standard-ranklist-utils": "^0.1.0",
+    "@algoux/standard-ranklist-utils": "^0.1.1",
     "classnames": "^2.3.1",
     "color": "^4.2.3",
     "rc-slider": "^9.7.5",
     "semver": "^7.3.7"
   },
   "devDependencies": {
-    "@algoux/standard-ranklist": "0.3.2",
+    "@algoux/standard-ranklist": "0.3.3",
     "@types/classnames": "^2.3.1",
     "@types/color": "^3.0.3",
     "@types/node": "^14.18.22",
@@ -61,5 +61,5 @@
     "react-dom": ">=16.9.0"
   },
   "license": "MIT",
-  "srkSupportedVersions": ">=0.3.0 <=0.3.2"
+  "srkSupportedVersions": ">=0.3.0 <=0.3.3"
 }

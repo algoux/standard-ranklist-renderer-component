@@ -17,11 +17,11 @@ export default defineConfig({
       name: 'StandardRanklistRendererComponent',
       // the proper extensions will be added
       fileName: 'index',
-      formats: ['es', 'cjs'],
+      formats: ['es'],
     },
     rollupOptions: {
       // 确保外部化处理那些你不想打包进库的依赖
-      external: ['react', 'react-dom', 'classnames', 'color', 'semver', 'textcolor', 'bcp-47-match', 'bignumber.js', 'rc-slider'],
+      external: ['react', 'react-dom', 'classnames', 'color', 'semver', 'rc-slider', '@algoux/standard-ranklist-utils'],
       // output: {
       //   // 在 UMD 构建模式下为这些外部化的依赖提供一个全局变量
       //   globals: {
