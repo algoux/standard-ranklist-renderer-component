@@ -2,7 +2,14 @@ import classnames from 'classnames';
 import Color from 'color';
 import React from 'react';
 import type * as srk from '@algoux/standard-ranklist';
-import { formatTimeDuration, resolveText, numberToAlphabet, secToTimeStr, EnumTheme, resolveStyle } from '@algoux/standard-ranklist-utils';
+import {
+  formatTimeDuration,
+  resolveText,
+  numberToAlphabet,
+  secToTimeStr,
+  EnumTheme,
+  resolveStyle,
+} from '@algoux/standard-ranklist-utils';
 import type { ThemeColor } from '@algoux/standard-ranklist-utils';
 import { caniuse, srkSupportedVersions } from './caniuse';
 import GeneralModal from '../components/GeneralModal';
@@ -301,12 +308,27 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     }
   };
 
+  renderACSingleStatusBody = (st: srk.RankProblemStatus) => {
+    const details = `${st.tries}/${st.time ? formatTimeDuration(st.time, 'min', Math.floor) : '-'}`;
+
+    if (typeof st.score === 'number') {
+      return (
+        <>
+          {typeof st.score === 'number' ? <span className="srk-prest-status-block-score">{st.score}</span> : null}
+          <span className="srk-prest-status-block-score-details">{details}</span>
+        </>
+      );
+    }
+
+    return <>{details}</>;
+  };
+
   renderSingleStatusBody = (st: srk.RankProblemStatus, problemIndex: number, user: srk.User) => {
     const {
       data: { problems },
     } = this.props;
     const result = st.result;
-    let commonClassName = '-text-center -nowrap';
+    let commonClassName = 'srk-prest-status-block -text-center -nowrap';
     const problem = problems[problemIndex] || {};
     const key = problem.alias || resolveText(problem.title) || problemIndex;
     const solutions = [...(st.solutions || [])].reverse();
@@ -346,13 +368,13 @@ export class Ranklist extends React.Component<RanklistProps, State> {
       case 'FB':
         return (
           <td key={key} onClick={onClick} className={classnames(commonClassName, 'srk-prest-status-block-fb')}>
-            {st.tries}/{st.time ? formatTimeDuration(st.time, 'min', Math.floor) : '-'}
+            {this.renderACSingleStatusBody(st)}
           </td>
         );
       case 'AC':
         return (
           <td key={key} onClick={onClick} className={classnames(commonClassName, 'srk-prest-status-block-accepted')}>
-            {st.tries}/{st.time ? formatTimeDuration(st.time, 'min', Math.floor) : '-'}
+            {this.renderACSingleStatusBody(st)}
           </td>
         );
       case '?':
@@ -397,6 +419,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
         </div>
       );
     }
+    const showTimeColumn = !!rows.find((r) => r.score?.time);
 
     return (
       <>
@@ -411,7 +434,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
                 ))}
                 <th className="-text-left -nowrap">Name</th>
                 <th className="-nowrap">Score</th>
-                <th className="-nowrap">Time</th>
+                {showTimeColumn && <th className="-nowrap">Time</th>}
                 {problems.map((p, index) => this.renderSingleProblemHeader(p, index))}
               </tr>
             </thead>
@@ -428,9 +451,11 @@ export class Ranklist extends React.Component<RanklistProps, State> {
                     {rankValues.map((rk, index) => this.renderSingleSeriesBody(rk, series[index], r))}
                     {this.renderUserBody(r.user, r, index, data)}
                     <td className="-text-right -nowrap">{r.score.value}</td>
-                    <td className="-text-right -nowrap">
-                      {r.score.time ? formatTimeDuration(r.score.time, 'min', Math.floor) : '-'}
-                    </td>
+                    {showTimeColumn && (
+                      <td className="-text-right -nowrap">
+                        {r.score.time ? formatTimeDuration(r.score.time, 'min', Math.floor) : '-'}
+                      </td>
+                    )}
                     {r.statuses.map((st, index) => this.renderSingleStatusBody(st, index, r.user))}
                   </tr>
                 );

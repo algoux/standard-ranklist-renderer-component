@@ -1,11 +1,18 @@
 {
   "type": "general",
-  "version": "0.3.0",
+  "version": "0.3.4",
+  "contributors": [
+    "algoUX (https://algoux.org)"
+  ],
   "contest": {
     "title": "2020 China Collegiate Programming Contest Changchun Site",
     "startAt": "2020-11-08T09:00:00+08:00",
     "duration": [
       5,
+      "h"
+    ],
+    "frozenDuration": [
+      1,
       "h"
     ]
   },
@@ -30,7 +37,11 @@
         "preset": "ICPC",
         "options": {
           "count": {
-            "value": [24, 48, 74]
+            "value": [
+              24,
+              48,
+              74
+            ]
           }
         }
       }
@@ -81,7 +92,6 @@
     {
       "alias": "C",
       "style": {
-        "textColor": "#000000",
         "backgroundColor": "#ffffff"
       },
       "statistics": {
@@ -92,7 +102,6 @@
     {
       "alias": "D",
       "style": {
-        "textColor": "#ffffff",
         "backgroundColor": "#26b93c"
       },
       "statistics": {
@@ -103,7 +112,6 @@
     {
       "alias": "E",
       "style": {
-        "textColor": "#000000",
         "backgroundColor": "#efd909"
       },
       "statistics": {
@@ -114,7 +122,6 @@
     {
       "alias": "F",
       "style": {
-        "textColor": "#ffffff",
         "backgroundColor": "#f35814"
       },
       "statistics": {
@@ -125,7 +132,6 @@
     {
       "alias": "G",
       "style": {
-        "textColor": "#ffffff",
         "backgroundColor": "#0c4c8a"
       },
       "statistics": {
@@ -136,7 +142,6 @@
     {
       "alias": "H",
       "style": {
-        "textColor": "#ffffff",
         "backgroundColor": "#9c9b9b"
       },
       "statistics": {
@@ -147,7 +152,6 @@
     {
       "alias": "I",
       "style": {
-        "textColor": "#ffffff",
         "backgroundColor": "#049a73"
       },
       "statistics": {
@@ -158,7 +162,6 @@
     {
       "alias": "J",
       "style": {
-        "textColor": "#ffffff",
         "backgroundColor": "#9f13ec"
       },
       "statistics": {
@@ -169,7 +172,6 @@
     {
       "alias": "K",
       "style": {
-        "textColor": "#ffffff",
         "backgroundColor": "#2ac5ca"
       },
       "statistics": {
@@ -180,7 +182,6 @@
     {
       "alias": "L",
       "style": {
-        "textColor": "#ffffff",
         "backgroundColor": "#8e3836"
       },
       "statistics": {
@@ -211,20 +212,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 1,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 1,
-          "segmentIndex": null
-        },
-        {
-          "rank": 1,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -515,20 +502,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 2,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 2,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -817,20 +790,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 3,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 3,
-          "segmentIndex": null
-        },
-        {
-          "rank": 2,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -1148,20 +1107,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 4,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 4,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -1421,20 +1366,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 5,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 5,
-          "segmentIndex": null
-        },
-        {
-          "rank": 3,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -1742,20 +1673,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 6,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 6,
-          "segmentIndex": null
-        },
-        {
-          "rank": 4,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -1971,20 +1888,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 7,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 7,
-          "segmentIndex": null
-        },
-        {
-          "rank": 5,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -2186,20 +2089,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 8,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 8,
-          "segmentIndex": null
-        },
-        {
-          "rank": 6,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -2422,20 +2311,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 9,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 9,
-          "segmentIndex": null
-        },
-        {
-          "rank": 7,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -2715,20 +2590,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 10,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 10,
-          "segmentIndex": null
-        },
-        {
-          "rank": 8,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -3021,20 +2882,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 11,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 11,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -3377,20 +3224,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 12,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 12,
-          "segmentIndex": null
-        },
-        {
-          "rank": 9,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -3627,20 +3460,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 13,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -3898,20 +3717,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 13,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 14,
-          "segmentIndex": null
-        },
-        {
-          "rank": 10,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -4170,20 +3975,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 14,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 15,
-          "segmentIndex": null
-        },
-        {
-          "rank": 11,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -4370,20 +4161,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 15,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 16,
-          "segmentIndex": null
-        },
-        {
-          "rank": 12,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -4620,20 +4397,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 16,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 17,
-          "segmentIndex": null
-        },
-        {
-          "rank": 13,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -5024,20 +4787,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 17,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 18,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -5304,20 +5053,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 18,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 19,
-          "segmentIndex": null
-        },
-        {
-          "rank": 14,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -5582,20 +5317,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 19,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 20,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -5810,20 +5531,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 21,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -6158,20 +5865,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 22,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -6450,20 +6143,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 20,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 23,
-          "segmentIndex": null
-        },
-        {
-          "rank": 15,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -6692,20 +6371,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 21,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 24,
-          "segmentIndex": null
-        },
-        {
-          "rank": 16,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -6997,20 +6662,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 22,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 25,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -7303,20 +6954,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 23,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 26,
-          "segmentIndex": null
-        },
-        {
-          "rank": 17,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -7552,20 +7189,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 24,
-          "segmentIndex": 0
-        },
-        {
-          "rank": 27,
-          "segmentIndex": null
-        },
-        {
-          "rank": 18,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -7744,20 +7367,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 25,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 28,
-          "segmentIndex": null
-        },
-        {
-          "rank": 19,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -8015,20 +7624,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 26,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 29,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -8285,20 +7880,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 27,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 30,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -8612,20 +8193,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 31,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -8847,20 +8414,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 28,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 32,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -9046,20 +8599,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 29,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 33,
-          "segmentIndex": null
-        },
-        {
-          "rank": 20,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -9268,20 +8807,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 30,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 34,
-          "segmentIndex": null
-        },
-        {
-          "rank": 21,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -9517,20 +9042,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 31,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 35,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -9738,20 +9249,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 32,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 36,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -9930,20 +9427,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 33,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 37,
-          "segmentIndex": null
-        },
-        {
-          "rank": 22,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -10151,20 +9634,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 34,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 38,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -10457,20 +9926,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 35,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 39,
-          "segmentIndex": null
-        },
-        {
-          "rank": 23,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -10663,20 +10118,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 36,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 40,
-          "segmentIndex": null
-        },
-        {
-          "rank": 24,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -10976,20 +10417,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 37,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 41,
-          "segmentIndex": null
-        },
-        {
-          "rank": 25,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -11183,20 +10610,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 38,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 42,
-          "segmentIndex": null
-        },
-        {
-          "rank": 26,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -11474,20 +10887,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 39,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 43,
-          "segmentIndex": null
-        },
-        {
-          "rank": 27,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -11709,20 +11108,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 40,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 44,
-          "segmentIndex": null
-        },
-        {
-          "rank": 28,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -11936,20 +11321,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 41,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 45,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -12170,20 +11541,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 42,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 46,
-          "segmentIndex": null
-        },
-        {
-          "rank": 29,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -12376,20 +11733,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 43,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 47,
-          "segmentIndex": null
-        },
-        {
-          "rank": 30,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -12617,20 +11960,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 44,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 48,
-          "segmentIndex": null
-        },
-        {
-          "rank": 31,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -12893,20 +12222,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 49,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -13141,20 +12456,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 50,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -13446,20 +12747,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 45,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 51,
-          "segmentIndex": null
-        },
-        {
-          "rank": 32,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -13673,20 +12960,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 46,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 52,
-          "segmentIndex": null
-        },
-        {
-          "rank": 33,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -13950,20 +13223,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 47,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 53,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -14262,20 +13521,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 48,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 54,
-          "segmentIndex": null
-        },
-        {
-          "rank": 34,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -14566,20 +13811,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 49,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 55,
-          "segmentIndex": null
-        },
-        {
-          "rank": 35,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -14800,20 +14031,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 50,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 56,
-          "segmentIndex": null
-        },
-        {
-          "rank": 36,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -14984,20 +14201,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 51,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 57,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -15211,20 +14414,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 52,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 58,
-          "segmentIndex": null
-        },
-        {
-          "rank": 37,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -15395,20 +14584,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 53,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 59,
-          "segmentIndex": null
-        },
-        {
-          "rank": 38,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -15601,20 +14776,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 53,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 59,
-          "segmentIndex": null
-        },
-        {
-          "rank": 38,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -15807,20 +14968,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 55,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 61,
-          "segmentIndex": null
-        },
-        {
-          "rank": 40,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -15999,20 +15146,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 56,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 62,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -16212,20 +15345,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 57,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 63,
-          "segmentIndex": null
-        },
-        {
-          "rank": 41,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -16425,20 +15544,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 58,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 64,
-          "segmentIndex": null
-        },
-        {
-          "rank": 42,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -16631,20 +15736,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 59,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 65,
-          "segmentIndex": null
-        },
-        {
-          "rank": 43,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -16866,20 +15957,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 60,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 66,
-          "segmentIndex": null
-        },
-        {
-          "rank": 44,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -17086,20 +16163,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 61,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 67,
-          "segmentIndex": null
-        },
-        {
-          "rank": 45,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -17285,20 +16348,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 62,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 68,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -17513,20 +16562,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 63,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 69,
-          "segmentIndex": null
-        },
-        {
-          "rank": 46,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -17747,20 +16782,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 64,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 70,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -18026,20 +17047,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 71,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -18232,20 +17239,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 72,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -18438,20 +17431,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 65,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 72,
-          "segmentIndex": null
-        },
-        {
-          "rank": 47,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -18658,20 +17637,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 66,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 74,
-          "segmentIndex": null
-        },
-        {
-          "rank": 48,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -18864,20 +17829,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 67,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 75,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -19077,20 +18028,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 68,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 76,
-          "segmentIndex": null
-        },
-        {
-          "rank": 49,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -19382,20 +18319,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 69,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 77,
-          "segmentIndex": null
-        },
-        {
-          "rank": 50,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -19609,20 +18532,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 69,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 77,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -19801,20 +18710,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 71,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 79,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -20029,20 +18924,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 80,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -20263,20 +19144,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 72,
-          "segmentIndex": 1
-        },
-        {
-          "rank": 81,
-          "segmentIndex": null
-        },
-        {
-          "rank": 51,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -20539,20 +19406,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 73,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 82,
-          "segmentIndex": null
-        },
-        {
-          "rank": 52,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -20723,20 +19576,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 74,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 83,
-          "segmentIndex": null
-        },
-        {
-          "rank": 53,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -20985,20 +19824,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 75,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 84,
-          "segmentIndex": null
-        },
-        {
-          "rank": 54,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -21318,20 +20143,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 76,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 85,
-          "segmentIndex": null
-        },
-        {
-          "rank": 55,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -21567,20 +20378,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 77,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 86,
-          "segmentIndex": null
-        },
-        {
-          "rank": 56,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -21758,20 +20555,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 78,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 87,
-          "segmentIndex": null
-        },
-        {
-          "rank": 57,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -22020,20 +20803,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 79,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 88,
-          "segmentIndex": null
-        },
-        {
-          "rank": 58,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -22225,20 +20994,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 89,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -22431,20 +21186,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 90,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -22636,20 +21377,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 80,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 91,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -22899,20 +21626,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 81,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 92,
-          "segmentIndex": null
-        },
-        {
-          "rank": 59,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -23162,20 +21875,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 82,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 93,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -23360,20 +22059,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 83,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 94,
-          "segmentIndex": null
-        },
-        {
-          "rank": 60,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -23572,20 +22257,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 84,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 95,
-          "segmentIndex": null
-        },
-        {
-          "rank": 61,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -23757,20 +22428,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 85,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 96,
-          "segmentIndex": null
-        },
-        {
-          "rank": 62,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -23955,20 +22612,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 86,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 97,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -24154,20 +22797,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 87,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 98,
-          "segmentIndex": null
-        },
-        {
-          "rank": 63,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -24395,20 +23024,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 88,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 99,
-          "segmentIndex": null
-        },
-        {
-          "rank": 64,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -24608,20 +23223,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 100,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -24792,20 +23393,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 89,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 101,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -25004,20 +23591,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 89,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 101,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -25273,20 +23846,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 91,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 103,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -25579,20 +24138,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 92,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 104,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -25820,20 +24365,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 93,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 105,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -26053,20 +24584,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 94,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 106,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -26280,20 +24797,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 95,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 107,
-          "segmentIndex": null
-        },
-        {
-          "rank": 65,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -26485,20 +24988,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 96,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 108,
-          "segmentIndex": null
-        },
-        {
-          "rank": 66,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -26761,20 +25250,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 97,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 109,
-          "segmentIndex": null
-        },
-        {
-          "rank": 67,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -26973,20 +25448,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 98,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 110,
-          "segmentIndex": null
-        },
-        {
-          "rank": 68,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -27221,20 +25682,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 99,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 111,
-          "segmentIndex": null
-        },
-        {
-          "rank": 69,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -27426,20 +25873,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 100,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 112,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -27759,20 +26192,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 101,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 113,
-          "segmentIndex": null
-        },
-        {
-          "rank": 70,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -27985,20 +26404,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 102,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 114,
-          "segmentIndex": null
-        },
-        {
-          "rank": 71,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -28183,20 +26588,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 103,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 115,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -28395,20 +26786,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 104,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 116,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -28629,20 +27006,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 117,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -28891,20 +27254,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 105,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 118,
-          "segmentIndex": null
-        },
-        {
-          "rank": 72,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -29138,20 +27487,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 119,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -29378,20 +27713,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 106,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 120,
-          "segmentIndex": null
-        },
-        {
-          "rank": 73,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -29625,20 +27946,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 107,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 121,
-          "segmentIndex": null
-        },
-        {
-          "rank": 74,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -29887,20 +28194,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 108,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 122,
-          "segmentIndex": null
-        },
-        {
-          "rank": 75,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -30176,20 +28469,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 109,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 123,
-          "segmentIndex": null
-        },
-        {
-          "rank": 76,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -30402,20 +28681,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 110,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 124,
-          "segmentIndex": null
-        },
-        {
-          "rank": 77,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -30733,20 +28998,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 111,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 125,
-          "segmentIndex": null
-        },
-        {
-          "rank": 78,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -31239,20 +29490,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 126,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -31452,20 +29689,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 112,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 127,
-          "segmentIndex": null
-        },
-        {
-          "rank": 79,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -31763,20 +29986,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 113,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 128,
-          "segmentIndex": null
-        },
-        {
-          "rank": 80,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -32018,20 +30227,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 114,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 129,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -32323,20 +30518,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 115,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 130,
-          "segmentIndex": null
-        },
-        {
-          "rank": 81,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -32507,20 +30688,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 131,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -32719,20 +30886,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 116,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 132,
-          "segmentIndex": null
-        },
-        {
-          "rank": 82,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -32911,20 +31064,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 117,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 133,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -33151,20 +31290,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 117,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 133,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -33356,20 +31481,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 117,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 133,
-          "segmentIndex": null
-        },
-        {
-          "rank": 83,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -33646,20 +31757,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 120,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 136,
-          "segmentIndex": null
-        },
-        {
-          "rank": 84,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -33879,20 +31976,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 121,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 137,
-          "segmentIndex": null
-        },
-        {
-          "rank": 85,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -34134,20 +32217,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 121,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 137,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -34396,20 +32465,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 123,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 139,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -34658,20 +32713,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 139,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -34835,20 +32876,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 124,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 141,
-          "segmentIndex": null
-        },
-        {
-          "rank": 86,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -35012,20 +33039,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 124,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 141,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -35239,20 +33252,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 126,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 143,
-          "segmentIndex": null
-        },
-        {
-          "rank": 87,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -35430,20 +33429,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 127,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 144,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -35874,20 +33859,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 127,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 144,
-          "segmentIndex": null
-        },
-        {
-          "rank": 88,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -36065,20 +34036,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 129,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 146,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -36242,20 +34199,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 130,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 147,
-          "segmentIndex": null
-        },
-        {
-          "rank": 89,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -36497,20 +34440,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 131,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 148,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -36737,20 +34666,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 131,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 148,
-          "segmentIndex": null
-        },
-        {
-          "rank": 90,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -36935,20 +34850,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 133,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 150,
-          "segmentIndex": null
-        },
-        {
-          "rank": 91,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -37104,20 +35005,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 134,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 151,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -37345,20 +35232,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 134,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 151,
-          "segmentIndex": null
-        },
-        {
-          "rank": 92,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -37593,20 +35466,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 134,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 151,
-          "segmentIndex": null
-        },
-        {
-          "rank": 92,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -38169,20 +36028,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 137,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 154,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -38381,20 +36226,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 137,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 154,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -38656,20 +36487,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 139,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 156,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -38904,20 +36721,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 139,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 156,
-          "segmentIndex": null
-        },
-        {
-          "rank": 94,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -39187,20 +36990,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 156,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -39371,20 +37160,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 141,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 159,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -39548,20 +37323,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 142,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 160,
-          "segmentIndex": null
-        },
-        {
-          "rank": 95,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -39746,20 +37507,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 161,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -39944,20 +37691,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 143,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 162,
-          "segmentIndex": null
-        },
-        {
-          "rank": 96,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -40142,20 +37875,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 144,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 163,
-          "segmentIndex": null
-        },
-        {
-          "rank": 97,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -40333,20 +38052,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 144,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 163,
-          "segmentIndex": null
-        },
-        {
-          "rank": 97,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -40517,20 +38222,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 144,
-          "segmentIndex": 2
-        },
-        {
-          "rank": 163,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -40919,20 +38610,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 166,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -41160,20 +38837,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 147,
-          "segmentIndex": null
-        },
-        {
-          "rank": 166,
-          "segmentIndex": null
-        },
-        {
-          "rank": 99,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -41470,20 +39133,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 148,
-          "segmentIndex": null
-        },
-        {
-          "rank": 168,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -41646,20 +39295,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 149,
-          "segmentIndex": null
-        },
-        {
-          "rank": 169,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -41887,20 +39522,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 149,
-          "segmentIndex": null
-        },
-        {
-          "rank": 169,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -42205,20 +39826,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 151,
-          "segmentIndex": null
-        },
-        {
-          "rank": 171,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -42389,20 +39996,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 152,
-          "segmentIndex": null
-        },
-        {
-          "rank": 172,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -42693,20 +40286,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 153,
-          "segmentIndex": null
-        },
-        {
-          "rank": 173,
-          "segmentIndex": null
-        },
-        {
-          "rank": 100,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "FB",
@@ -42862,20 +40441,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 173,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -43061,20 +40626,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 175,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -43280,20 +40831,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 154,
-          "segmentIndex": null
-        },
-        {
-          "rank": 176,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -43449,20 +40986,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 154,
-          "segmentIndex": null
-        },
-        {
-          "rank": 176,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -43618,20 +41141,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 178,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -43816,20 +41325,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 178,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -44103,20 +41598,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 156,
-          "segmentIndex": null
-        },
-        {
-          "rank": 180,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -44280,20 +41761,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 181,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -44534,20 +42001,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 157,
-          "segmentIndex": null
-        },
-        {
-          "rank": 181,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -44746,20 +42199,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 181,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -45000,20 +42439,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 158,
-          "segmentIndex": null
-        },
-        {
-          "rank": 184,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -45240,20 +42665,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 159,
-          "segmentIndex": null
-        },
-        {
-          "rank": 185,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -45417,20 +42828,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 160,
-          "segmentIndex": null
-        },
-        {
-          "rank": 186,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -45623,20 +43020,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 161,
-          "segmentIndex": null
-        },
-        {
-          "rank": 187,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -45877,20 +43260,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 162,
-          "segmentIndex": null
-        },
-        {
-          "rank": 188,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -46104,20 +43473,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 189,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -46288,20 +43643,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 163,
-          "segmentIndex": null
-        },
-        {
-          "rank": 189,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -46500,20 +43841,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 191,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -46726,20 +44053,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 164,
-          "segmentIndex": null
-        },
-        {
-          "rank": 192,
-          "segmentIndex": null
-        },
-        {
-          "rank": 101,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -46895,20 +44208,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 164,
-          "segmentIndex": null
-        },
-        {
-          "rank": 192,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -47114,20 +44413,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 166,
-          "segmentIndex": null
-        },
-        {
-          "rank": 194,
-          "segmentIndex": null
-        },
-        {
-          "rank": 102,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -47333,20 +44618,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 166,
-          "segmentIndex": null
-        },
-        {
-          "rank": 194,
-          "segmentIndex": null
-        },
-        {
-          "rank": 102,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -47540,20 +44811,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 168,
-          "segmentIndex": null
-        },
-        {
-          "rank": 196,
-          "segmentIndex": null
-        },
-        {
-          "rank": 104,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -47732,20 +44989,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 168,
-          "segmentIndex": null
-        },
-        {
-          "rank": 196,
-          "segmentIndex": null
-        },
-        {
-          "rank": 104,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -47915,20 +45158,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 170,
-          "segmentIndex": null
-        },
-        {
-          "rank": 198,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -48099,20 +45328,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 171,
-          "segmentIndex": null
-        },
-        {
-          "rank": 199,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -48319,20 +45534,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 172,
-          "segmentIndex": null
-        },
-        {
-          "rank": 200,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -48502,20 +45703,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 173,
-          "segmentIndex": null
-        },
-        {
-          "rank": 201,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -48700,20 +45887,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 174,
-          "segmentIndex": null
-        },
-        {
-          "rank": 202,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -48883,20 +46056,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 174,
-          "segmentIndex": null
-        },
-        {
-          "rank": 202,
-          "segmentIndex": null
-        },
-        {
-          "rank": 106,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -49074,20 +46233,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 176,
-          "segmentIndex": null
-        },
-        {
-          "rank": 204,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -49301,20 +46446,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 177,
-          "segmentIndex": null
-        },
-        {
-          "rank": 205,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -49513,20 +46644,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 178,
-          "segmentIndex": null
-        },
-        {
-          "rank": 206,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -49703,20 +46820,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 178,
-          "segmentIndex": null
-        },
-        {
-          "rank": 206,
-          "segmentIndex": null
-        },
-        {
-          "rank": 107,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -49915,20 +47018,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 180,
-          "segmentIndex": null
-        },
-        {
-          "rank": 208,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -50121,20 +47210,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 209,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -50297,20 +47372,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 181,
-          "segmentIndex": null
-        },
-        {
-          "rank": 210,
-          "segmentIndex": null
-        },
-        {
-          "rank": 108,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -50480,20 +47541,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 181,
-          "segmentIndex": null
-        },
-        {
-          "rank": 210,
-          "segmentIndex": null
-        },
-        {
-          "rank": 108,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -50840,20 +47887,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 181,
-          "segmentIndex": null
-        },
-        {
-          "rank": 210,
-          "segmentIndex": null
-        },
-        {
-          "rank": 108,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -51045,20 +48078,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 184,
-          "segmentIndex": null
-        },
-        {
-          "rank": 213,
-          "segmentIndex": null
-        },
-        {
-          "rank": 111,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -51299,20 +48318,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 185,
-          "segmentIndex": null
-        },
-        {
-          "rank": 214,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -51497,20 +48502,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 185,
-          "segmentIndex": null
-        },
-        {
-          "rank": 214,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -51673,20 +48664,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 216,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -51849,20 +48826,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 216,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -52110,20 +49073,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 218,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -52308,20 +49257,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 187,
-          "segmentIndex": null
-        },
-        {
-          "rank": 218,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -52570,20 +49505,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 188,
-          "segmentIndex": null
-        },
-        {
-          "rank": 220,
-          "segmentIndex": null
-        },
-        {
-          "rank": 112,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -52782,20 +49703,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 221,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -53057,20 +49964,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 222,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -53269,20 +50162,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 189,
-          "segmentIndex": null
-        },
-        {
-          "rank": 222,
-          "segmentIndex": null
-        },
-        {
-          "rank": 113,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -53467,20 +50346,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 190,
-          "segmentIndex": null
-        },
-        {
-          "rank": 224,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -53652,20 +50517,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 191,
-          "segmentIndex": null
-        },
-        {
-          "rank": 225,
-          "segmentIndex": null
-        },
-        {
-          "rank": 114,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -53821,20 +50672,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 192,
-          "segmentIndex": null
-        },
-        {
-          "rank": 226,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -54012,20 +50849,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 192,
-          "segmentIndex": null
-        },
-        {
-          "rank": 226,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -54195,20 +51018,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 194,
-          "segmentIndex": null
-        },
-        {
-          "rank": 228,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -54385,20 +51194,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 195,
-          "segmentIndex": null
-        },
-        {
-          "rank": 229,
-          "segmentIndex": null
-        },
-        {
-          "rank": 115,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -54626,20 +51421,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 196,
-          "segmentIndex": null
-        },
-        {
-          "rank": 230,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -54838,20 +51619,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 197,
-          "segmentIndex": null
-        },
-        {
-          "rank": 231,
-          "segmentIndex": null
-        },
-        {
-          "rank": 116,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -55022,20 +51789,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 198,
-          "segmentIndex": null
-        },
-        {
-          "rank": 232,
-          "segmentIndex": null
-        },
-        {
-          "rank": 117,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -55298,20 +52051,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 233,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -55489,20 +52228,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 234,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -55729,20 +52454,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 199,
-          "segmentIndex": null
-        },
-        {
-          "rank": 235,
-          "segmentIndex": null
-        },
-        {
-          "rank": 118,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -55983,20 +52694,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 200,
-          "segmentIndex": null
-        },
-        {
-          "rank": 236,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -56251,20 +52948,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 237,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -56477,20 +53160,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 238,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -56660,20 +53329,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 201,
-          "segmentIndex": null
-        },
-        {
-          "rank": 239,
-          "segmentIndex": null
-        },
-        {
-          "rank": 119,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -56900,20 +53555,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 240,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -57091,20 +53732,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 202,
-          "segmentIndex": null
-        },
-        {
-          "rank": 241,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -57275,20 +53902,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 202,
-          "segmentIndex": null
-        },
-        {
-          "rank": 241,
-          "segmentIndex": null
-        },
-        {
-          "rank": 120,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -57451,20 +54064,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 202,
-          "segmentIndex": null
-        },
-        {
-          "rank": 241,
-          "segmentIndex": null
-        },
-        {
-          "rank": 120,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -57650,20 +54249,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 205,
-          "segmentIndex": null
-        },
-        {
-          "rank": 244,
-          "segmentIndex": null
-        },
-        {
-          "rank": 122,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -57848,20 +54433,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 206,
-          "segmentIndex": null
-        },
-        {
-          "rank": 245,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -58069,20 +54640,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 207,
-          "segmentIndex": null
-        },
-        {
-          "rank": 246,
-          "segmentIndex": null
-        },
-        {
-          "rank": 123,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -58252,20 +54809,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 208,
-          "segmentIndex": null
-        },
-        {
-          "rank": 247,
-          "segmentIndex": null
-        },
-        {
-          "rank": 124,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -58521,20 +55064,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 209,
-          "segmentIndex": null
-        },
-        {
-          "rank": 248,
-          "segmentIndex": null
-        },
-        {
-          "rank": 125,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -58796,20 +55325,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 210,
-          "segmentIndex": null
-        },
-        {
-          "rank": 249,
-          "segmentIndex": null
-        },
-        {
-          "rank": 126,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -59043,20 +55558,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 211,
-          "segmentIndex": null
-        },
-        {
-          "rank": 250,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -59325,20 +55826,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 212,
-          "segmentIndex": null
-        },
-        {
-          "rank": 251,
-          "segmentIndex": null
-        },
-        {
-          "rank": 127,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -59530,20 +56017,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 213,
-          "segmentIndex": null
-        },
-        {
-          "rank": 252,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -59720,20 +56193,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 213,
-          "segmentIndex": null
-        },
-        {
-          "rank": 252,
-          "segmentIndex": null
-        },
-        {
-          "rank": 128,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -60016,20 +56475,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 215,
-          "segmentIndex": null
-        },
-        {
-          "rank": 254,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -60229,20 +56674,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 215,
-          "segmentIndex": null
-        },
-        {
-          "rank": 254,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -60419,20 +56850,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 215,
-          "segmentIndex": null
-        },
-        {
-          "rank": 254,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -60638,20 +57055,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 218,
-          "segmentIndex": null
-        },
-        {
-          "rank": 257,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -60843,20 +57246,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 219,
-          "segmentIndex": null
-        },
-        {
-          "rank": 258,
-          "segmentIndex": null
-        },
-        {
-          "rank": 129,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -61280,20 +57669,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 220,
-          "segmentIndex": null
-        },
-        {
-          "rank": 259,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -61521,20 +57896,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 221,
-          "segmentIndex": null
-        },
-        {
-          "rank": 260,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -61761,20 +58122,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 261,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -61965,20 +58312,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 222,
-          "segmentIndex": null
-        },
-        {
-          "rank": 262,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -62163,20 +58496,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 223,
-          "segmentIndex": null
-        },
-        {
-          "rank": 263,
-          "segmentIndex": null
-        },
-        {
-          "rank": 130,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -62353,20 +58672,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 224,
-          "segmentIndex": null
-        },
-        {
-          "rank": 264,
-          "segmentIndex": null
-        },
-        {
-          "rank": 131,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -62544,20 +58849,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 225,
-          "segmentIndex": null
-        },
-        {
-          "rank": 265,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -62826,20 +59117,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 226,
-          "segmentIndex": null
-        },
-        {
-          "rank": 266,
-          "segmentIndex": null
-        },
-        {
-          "rank": 132,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -63066,20 +59343,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 267,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -63256,20 +59519,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 227,
-          "segmentIndex": null
-        },
-        {
-          "rank": 268,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -63439,20 +59688,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 268,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -63643,20 +59878,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 228,
-          "segmentIndex": null
-        },
-        {
-          "rank": 270,
-          "segmentIndex": null
-        },
-        {
-          "rank": 133,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -63819,20 +60040,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 229,
-          "segmentIndex": null
-        },
-        {
-          "rank": 271,
-          "segmentIndex": null
-        },
-        {
-          "rank": 134,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -64046,20 +60253,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 230,
-          "segmentIndex": null
-        },
-        {
-          "rank": 272,
-          "segmentIndex": null
-        },
-        {
-          "rank": 135,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -64229,20 +60422,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 231,
-          "segmentIndex": null
-        },
-        {
-          "rank": 273,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -64462,20 +60641,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 232,
-          "segmentIndex": null
-        },
-        {
-          "rank": 274,
-          "segmentIndex": null
-        },
-        {
-          "rank": 136,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -64674,20 +60839,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 275,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -65020,20 +61171,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 233,
-          "segmentIndex": null
-        },
-        {
-          "rank": 276,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -65211,20 +61348,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 234,
-          "segmentIndex": null
-        },
-        {
-          "rank": 277,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -65444,20 +61567,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 235,
-          "segmentIndex": null
-        },
-        {
-          "rank": 278,
-          "segmentIndex": null
-        },
-        {
-          "rank": 137,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -65677,20 +61786,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 279,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -65868,20 +61963,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 236,
-          "segmentIndex": null
-        },
-        {
-          "rank": 280,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -66072,20 +62153,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 281,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -66291,20 +62358,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 237,
-          "segmentIndex": null
-        },
-        {
-          "rank": 282,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -66525,20 +62578,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 238,
-          "segmentIndex": null
-        },
-        {
-          "rank": 283,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -66744,20 +62783,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 239,
-          "segmentIndex": null
-        },
-        {
-          "rank": 284,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -66991,20 +63016,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 285,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -67174,20 +63185,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 240,
-          "segmentIndex": null
-        },
-        {
-          "rank": 286,
-          "segmentIndex": null
-        },
-        {
-          "rank": 138,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -67371,20 +63368,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 241,
-          "segmentIndex": null
-        },
-        {
-          "rank": 287,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -67610,20 +63593,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 242,
-          "segmentIndex": null
-        },
-        {
-          "rank": 288,
-          "segmentIndex": null
-        },
-        {
-          "rank": 139,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -67856,20 +63825,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 289,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -68151,20 +64106,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 243,
-          "segmentIndex": null
-        },
-        {
-          "rank": 290,
-          "segmentIndex": null
-        },
-        {
-          "rank": 140,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -68320,20 +64261,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 244,
-          "segmentIndex": null
-        },
-        {
-          "rank": 291,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -68481,20 +64408,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 245,
-          "segmentIndex": null
-        },
-        {
-          "rank": 292,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -68671,20 +64584,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 293,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -68861,20 +64760,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 294,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -69058,20 +64943,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 295,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -69219,20 +65090,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 246,
-          "segmentIndex": null
-        },
-        {
-          "rank": 296,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -69403,20 +65260,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 247,
-          "segmentIndex": null
-        },
-        {
-          "rank": 297,
-          "segmentIndex": null
-        },
-        {
-          "rank": 141,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -69705,20 +65548,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 248,
-          "segmentIndex": null
-        },
-        {
-          "rank": 298,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -69874,20 +65703,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 298,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -70058,20 +65873,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 249,
-          "segmentIndex": null
-        },
-        {
-          "rank": 300,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -70227,20 +66028,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 250,
-          "segmentIndex": null
-        },
-        {
-          "rank": 301,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -70389,20 +66176,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 250,
-          "segmentIndex": null
-        },
-        {
-          "rank": 301,
-          "segmentIndex": null
-        },
-        {
-          "rank": 142,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -70608,20 +66381,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 252,
-          "segmentIndex": null
-        },
-        {
-          "rank": 303,
-          "segmentIndex": null
-        },
-        {
-          "rank": 143,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -70783,20 +66542,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 304,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -71010,20 +66755,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 253,
-          "segmentIndex": null
-        },
-        {
-          "rank": 305,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -71178,20 +66909,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 254,
-          "segmentIndex": null
-        },
-        {
-          "rank": 306,
-          "segmentIndex": null
-        },
-        {
-          "rank": 144,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -71446,20 +67163,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 255,
-          "segmentIndex": null
-        },
-        {
-          "rank": 307,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -71961,20 +67664,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 256,
-          "segmentIndex": null
-        },
-        {
-          "rank": 308,
-          "segmentIndex": null
-        },
-        {
-          "rank": 145,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -72243,20 +67932,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 257,
-          "segmentIndex": null
-        },
-        {
-          "rank": 309,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -72476,20 +68151,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 258,
-          "segmentIndex": null
-        },
-        {
-          "rank": 310,
-          "segmentIndex": null
-        },
-        {
-          "rank": 146,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -72659,20 +68320,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 259,
-          "segmentIndex": null
-        },
-        {
-          "rank": 311,
-          "segmentIndex": null
-        },
-        {
-          "rank": 147,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -72834,20 +68481,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 312,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -73023,20 +68656,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 313,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -73213,20 +68832,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 314,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -73382,20 +68987,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 260,
-          "segmentIndex": null
-        },
-        {
-          "rank": 315,
-          "segmentIndex": null
-        },
-        {
-          "rank": 148,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -73571,20 +69162,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 261,
-          "segmentIndex": null
-        },
-        {
-          "rank": 316,
-          "segmentIndex": null
-        },
-        {
-          "rank": 149,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -73761,20 +69338,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 262,
-          "segmentIndex": null
-        },
-        {
-          "rank": 317,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -74050,20 +69613,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 263,
-          "segmentIndex": null
-        },
-        {
-          "rank": 318,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -74297,20 +69846,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 319,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -74529,20 +70064,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 264,
-          "segmentIndex": null
-        },
-        {
-          "rank": 320,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "AC",
@@ -74747,20 +70268,6 @@
         ],
         "official": true
       },
-      "ranks": [
-        {
-          "rank": 265,
-          "segmentIndex": null
-        },
-        {
-          "rank": 321,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": null,
@@ -74901,20 +70408,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 265,
-          "segmentIndex": null
-        },
-        {
-          "rank": 321,
-          "segmentIndex": null
-        },
-        {
-          "rank": 150,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "RJ",
@@ -75127,20 +70620,6 @@
         "official": true,
         "marker": "female"
       },
-      "ranks": [
-        {
-          "rank": 265,
-          "segmentIndex": null
-        },
-        {
-          "rank": 321,
-          "segmentIndex": null
-        },
-        {
-          "rank": 150,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "RJ",
@@ -75337,20 +70816,6 @@
         ],
         "official": false
       },
-      "ranks": [
-        {
-          "rank": null,
-          "segmentIndex": null
-        },
-        {
-          "rank": 321,
-          "segmentIndex": null
-        },
-        {
-          "rank": null,
-          "segmentIndex": null
-        }
-      ],
       "statuses": [
         {
           "result": "RJ",

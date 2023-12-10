@@ -35,7 +35,7 @@
     "semver": "^7.3.7"
   },
   "devDependencies": {
-    "@algoux/standard-ranklist": "0.3.3",
+    "@algoux/standard-ranklist": "0.3.4",
     "@types/classnames": "^2.3.1",
     "@types/color": "^3.0.3",
     "@types/node": "^14.18.22",
@@ -61,5 +61,5 @@
     "react-dom": ">=16.9.0"
   },
   "license": "MIT",
-  "srkSupportedVersions": ">=0.3.0 <=0.3.3"
+  "srkSupportedVersions": ">=0.3.0 <=0.3.4"
 }
