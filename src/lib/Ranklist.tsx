@@ -297,6 +297,8 @@ export class Ranklist extends React.Component<RanklistProps, State> {
         return <span className="srk-solution-result-text srk-preset-result-rj">Output Limit Exceeded</span>;
       case 'RTE':
         return <span className="srk-solution-result-text srk-preset-result-rj">Runtime Error</span>;
+      case 'NOUT':
+        return <span className="srk-solution-result-text">No Output</span>;
       case 'CE':
         return <span className="srk-solution-result-text">Compile Error</span>;
       case 'UKE':
