@@ -1,6 +1,6 @@
 {
   "type": "general",
-  "version": "0.3.4",
+  "version": "0.3.6",
   "contributors": [
     "algoUX (https://algoux.org)"
   ],
@@ -69,6 +69,11 @@
       "id": "female",
       "label": "女队",
       "style": "pink"
+    },
+    {
+      "id": "another",
+      "label": "另一 Demo 组",
+      "style": "blue"
     }
   ],
   "problems": [
@@ -500,7 +505,8 @@
             "name": "许晟伟"
           }
         ],
-        "official": true
+        "official": true,
+        "markers": ["another"]
       },
       "statuses": [
         {
@@ -50498,8 +50504,8 @@
     {
       "user": {
         "id": "T228",
-        "name": "我做的都队",
-        "organization": "西安理工大学",
+        "name": "我做的都队我做的都队我做的都队我做的都队我做的都队我做的都队",
+        "organization": "西安理工大学西安理工大学西安理工大学西安理工大学西安理工大学",
         "teamMembers": [
           {
             "name": "赵金伟(教练)"
@@ -50515,7 +50521,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female", "another"]
       },
       "statuses": [
         {
@@ -54638,7 +54644,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -56015,7 +56021,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -56672,7 +56678,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -61169,7 +61175,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -61346,7 +61352,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -61961,7 +61967,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -62356,7 +62362,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -62576,7 +62582,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -65871,7 +65877,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -66026,7 +66032,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -66174,7 +66180,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -66379,7 +66385,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -66753,7 +66759,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -67161,7 +67167,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -67662,7 +67668,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -68149,7 +68155,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -68318,7 +68324,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -68985,7 +68991,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -69336,7 +69342,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -70406,7 +70412,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {
@@ -70618,7 +70624,7 @@
           }
         ],
         "official": true,
-        "marker": "female"
+        "markers": ["female"]
       },
       "statuses": [
         {

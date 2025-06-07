@@ -184,7 +184,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     // const { teamMembers = [] } = user;
     // const memberStr = teamMembers.map((m) => resolveText(m.name)).join(' / ');
     const name = resolveText(user.name);
-    return <span title={name}>{name}</span>;
+    return <span className="user-name-text" title={name}>{name}</span>;
   };
 
   renderUserBody = (user: srk.User, row: srk.RanklistRow, index: number, ranklist: srk.Ranklist) => {
@@ -197,23 +197,23 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     let className = '';
     let bodyStyle: React.CSSProperties = {};
     let bodyLabel = '';
-    const marker = markers.find((m) => m.id === user.marker);
-    let markerClassName = '';
-    let markerBackgroundColor: ThemeColor = {
-      [EnumTheme.light]: undefined,
-      [EnumTheme.dark]: undefined,
-    };
-    if (marker) {
-      bodyLabel = resolveText(marker.label);
-      const markerStyle = marker.style;
-      if (typeof markerStyle === 'string') {
-        className = markerClassName = `srk-preset-marker-${markerStyle}`;
-      } else if (markerStyle) {
-        const style = resolveStyle(markerStyle);
-        markerBackgroundColor = style.backgroundColor;
-        bodyStyle.backgroundImage = `linear-gradient(90deg, transparent 0%, ${markerBackgroundColor[theme]} 100%)`;
+
+    const userMarkers = (user.markers || [user.marker])
+      .map((marker) => markers.find((m) => m.id === marker))
+      .filter(Boolean) as srk.Marker[];
+    const markerCalcStyles = userMarkers.map((marker) => {
+      if (typeof marker.style === 'string') {
+        return { className: `srk-preset-marker-${marker.style}` };
+      } else if (marker.style) {
+        const style = resolveStyle(marker.style);
+        return {
+          style: {
+            backgroundColor: style.backgroundColor[theme],
+          },
+        };
       }
-    }
+      return {};
+    });
 
     const hasMembers = !!user.teamMembers && user.teamMembers.length > 0;
     const onClick = (e: React.MouseEvent) => {
@@ -231,14 +231,15 @@ export class Ranklist extends React.Component<RanklistProps, State> {
                 <span className="srk-user-modal-info-labels-label srk-user-modal-info-labels-label-preset-general">
                   {user.official === false ? '* 非正式参加者' : '正式参加者'}
                 </span>
-                {!!marker && (
+                {userMarkers.map((marker, index) => (
                   <span
-                    className={classnames('srk-user-modal-info-labels-label', markerClassName)}
-                    style={{ backgroundColor: markerBackgroundColor[theme] }}
+                    key={index}
+                    className={classnames('srk-user-modal-info-labels-label', markerCalcStyles[index].className)}
+                    style={markerCalcStyles[index].style}
                   >
-                    {marker.label}
+                    {resolveText(marker.label)}
                   </span>
-                )}
+                ))}
               </div>
               {hasMembers && (
                 <div className="srk-user-modal-info-team-members">
@@ -260,14 +261,26 @@ export class Ranklist extends React.Component<RanklistProps, State> {
 
     return (
       <td
-        className={classnames('-text-left -nowrap -cursor-pointer user srk-marker-bg', className)}
+        className={classnames('-text-left -nowrap -cursor-pointer user', className)}
         style={bodyStyle}
         title={bodyLabel}
         onClick={onClick}
       >
-        {this.renderUserName(user)}
+        <div className="user-name">
+          {this.renderUserName(user)}
+          <span className="srk-marker-dot-group">
+            {markerCalcStyles.map((markerStyle, index) => (
+              <span
+                key={userMarkers[index].id}
+                className={classnames('srk-marker srk-marker-dot', markerStyle.className)}
+                style={markerStyle.style}
+                title={resolveText(userMarkers[index].label)}
+              ></span>
+            ))}
+          </span>
+        </div>
         {!!user.organization && (
-          <p className="user-second-name" title="">
+          <p className="user-second-name -text-ellipsis" title="">
             {resolveText(user.organization)}
           </p>
         )}

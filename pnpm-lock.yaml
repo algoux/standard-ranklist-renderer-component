@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@algoux/standard-ranklist-utils':
-    specifier: ^0.1.1
-    version: 0.1.1(@algoux/standard-ranklist@0.3.4)
+    specifier: ^0.2.2
+    version: 0.2.2(@algoux/standard-ranklist@0.3.6)
   classnames:
     specifier: ^2.3.1
     version: 2.3.1
@@ -23,8 +23,8 @@ dependencies:
 
 devDependencies:
   '@algoux/standard-ranklist':
-    specifier: 0.3.4
-    version: 0.3.4
+    specifier: 0.3.6
+    version: 0.3.6
   '@types/classnames':
     specifier: ^2.3.1
     version: 2.3.1
@@ -84,20 +84,21 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /@algoux/standard-ranklist-utils@0.1.1(@algoux/standard-ranklist@0.3.4):
-    resolution: {integrity: sha512-MBsn5NPPtN68bv/mYEVz8z11nZ5tlCcICSaqWQYpADHP9CTBFgNaRdPXm5OFLm6ivC4MNyw6F+Sny73HWIPxbw==}
+  /@algoux/standard-ranklist-utils@0.2.2(@algoux/standard-ranklist@0.3.6):
+    resolution: {integrity: sha512-T8GfYPh3dHtCAePSqm+ZwUSPy0vjI7Mlzdk/aBBRYH4Q8sDIsTxFXnbcNOfop5nVhitsTZTRyUcjgugpWMYfiA==}
     peerDependencies:
       '@algoux/standard-ranklist': '*'
     dependencies:
-      '@algoux/standard-ranklist': 0.3.4
+      '@algoux/standard-ranklist': 0.3.6
+      '@types/semver': 7.7.0
       bcp-47-match: 2.0.2
       bignumber.js: 9.1.1
       semver: 7.5.4
       textcolor: 1.0.2
     dev: false
 
-  /@algoux/standard-ranklist@0.3.4:
-    resolution: {integrity: sha512-zXQNcejFMaa6F1GsIPrEoFVGkBKKN2bPfawrX5M7Grgjag1YM9MZsxy9KxRYVhu4LDKd0PjvLr32C3hGLeiDUg==}
+  /@algoux/standard-ranklist@0.3.6:
+    resolution: {integrity: sha512-ImomxTko8f076XCyWIWi+S1OsnKL+ZiTQ1mGGBR+BXOdi+unUpg7HjppjumbCbTQK+0BsaAkMC2YdWqZTo/3ug==}
 
   /@ampproject/remapping@2.2.0:
     resolution: {integrity: sha512-qRmjj8nj9qmLTQXXmaR1cck3UXSRMPrbsLJAasZpF+t3riI71BXed5ebIOYwQntykeZuhjsdweEc9BxH5Jc26w==}
@@ -406,6 +407,7 @@ packages:
   /@humanwhocodes/config-array@0.11.13:
     resolution: {integrity: sha512-JSBDMiDKSzQVngfRjOdFXgFfklaXI4K9nLF49Auh21lmBWRLIK3+xTErTWD4KU54pb6coM6ESE7Awz/FNU3zgQ==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
     dependencies:
       '@humanwhocodes/object-schema': 2.0.1
       debug: 4.3.4
@@ -421,6 +423,7 @@ packages:
 
   /@humanwhocodes/object-schema@2.0.1:
     resolution: {integrity: sha512-dvuCeX5fC9dXgJn9t+X5atfmgQAzUOWqS1254Gh0m6i8wKd10ebXkfNKiRK+1GWi/yTvvLDHpoxLr0xxxeslWw==}
+    deprecated: Use @eslint/object-schema instead
     dev: true
 
   /@jridgewell/gen-mapping@0.1.1:
@@ -632,6 +635,10 @@ packages:
   /@types/semver@7.3.10:
     resolution: {integrity: sha512-zsv3fsC7S84NN6nPK06u79oWgrPVd0NvOyqgghV1haPaFcVxIrP4DLomRwGAXk0ui4HZA7mOcSFL98sMVW9viw==}
     dev: true
+
+  /@types/semver@7.7.0:
+    resolution: {integrity: sha512-k107IF4+Xr7UHjwDc7Cfd6PRQfbdkiRabXGRjo07b4WyPahFBZCZ1sE+BNxYIJPPg73UkfOsVOLwqVc/6ETrIA==}
+    dev: false
 
   /@typescript-eslint/eslint-plugin@5.30.7(@typescript-eslint/parser@5.30.7)(eslint@8.55.0)(typescript@4.7.4):
     resolution: {integrity: sha512-l4L6Do+tfeM2OK0GJsU7TUcM/1oN/N25xHm3Jb4z3OiDU4Lj8dIuxX9LpVMS9riSXQs42D1ieX7b85/r16H9Fw==}
@@ -1300,6 +1307,7 @@ packages:
   /eslint@8.55.0:
     resolution: {integrity: sha512-iyUUAM0PCKj5QpwGfmCAG9XXbZCWsqP/eWAWrG/W0umvjuLRBECwSFdt+rCntju0xEH7teIABPwXpahftIaTdA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     dependencies:
       '@eslint-community/eslint-utils': 4.4.0(eslint@8.55.0)
@@ -1509,6 +1517,7 @@ packages:
 
   /glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
+    deprecated: Glob versions prior to v9 are no longer supported
     dependencies:
       fs.realpath: 1.0.0
       inflight: 1.0.6
@@ -1576,6 +1585,7 @@ packages:
   /iconv-lite@0.6.3:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
     engines: {node: '>=0.10.0'}
+    requiresBuild: true
     dependencies:
       safer-buffer: 2.1.2
     dev: true
@@ -1619,6 +1629,7 @@ packages:
 
   /inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
+    deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
     dependencies:
       once: 1.4.0
       wrappy: 1.0.2
@@ -1954,6 +1965,7 @@ packages:
   /pify@4.0.1:
     resolution: {integrity: sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==}
     engines: {node: '>=6'}
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -1986,6 +1998,7 @@ packages:
 
   /prr@1.0.1:
     resolution: {integrity: sha512-yPw4Sng1gWghHQWj0B3ZggWUm4qVbPwPFcRG8KyxiU7J2OHFSoEHKS+EZ3fv5l1t9CyCiop6l/ZYeWbrgoQejw==}
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -2181,6 +2194,7 @@ packages:
 
   /rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
     dependencies:
       glob: 7.2.3
@@ -2206,11 +2220,13 @@ packages:
 
   /safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
+    requiresBuild: true
     dev: true
     optional: true
 
   /sax@1.2.4:
     resolution: {integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==}
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -2223,6 +2239,7 @@ packages:
   /semver@5.7.1:
     resolution: {integrity: sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==}
     hasBin: true
+    requiresBuild: true
     dev: true
     optional: true
 

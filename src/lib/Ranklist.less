@@ -130,6 +130,15 @@
   white-space: nowrap;
 }
 
+.-text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
 .-cursor-pointer {
   cursor: pointer;
 }
@@ -309,9 +318,18 @@
       &.user {
         max-width: var(--srk-table-body-user-max-width);
         height: 100%;
-        white-space: nowrap;
-        text-overflow: ellipsis;
+      }
+      .user-name {
+        display: flex;
+        align-items: center;
         overflow: hidden;
+
+        .user-name-text {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          flex: 0 1 auto;
+        }
       }
       .user-second-name {
         margin: 0;
@@ -325,11 +343,26 @@
     max-width: 100%;
   }
 
+  .srk-marker-dot-group {
+    margin-left: 4px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
   .srk-marker {
     display: inline-block;
     border-radius: 100%;
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
+
+    &.srk-marker-dot {
+      border: 1px solid #999999;
+      margin-left: 4px;
+
+      @media screen and (prefers-color-scheme: dark) {
+        border: 1px solid #696969;
+      }
+    }
 
     &.srk-preset-marker-red {
       background-color: var(--srk-color-marker-red);
