@@ -1,7 +1,7 @@
 {
   "name": "@algoux/standard-ranklist-renderer-component",
   "description": "Standard Ranklist Renderer Component",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "files": [
     "dist"
   ],
