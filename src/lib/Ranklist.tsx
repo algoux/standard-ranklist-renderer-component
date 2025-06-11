@@ -14,6 +14,7 @@ import {
 import type { ThemeColor } from '@algoux/standard-ranklist-utils';
 import { caniuse, srkSupportedVersions } from './caniuse';
 import GeneralModal from '../components/GeneralModal';
+import { MarkerLabel } from './MarkerLabel';
 import './Ranklist.less';
 
 interface RankValue {
@@ -185,7 +186,11 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     // const { teamMembers = [] } = user;
     // const memberStr = teamMembers.map((m) => resolveText(m.name)).join(' / ');
     const name = resolveText(user.name);
-    return <span className="user-name-text" title={name}>{name}</span>;
+    return (
+      <span className="user-name-text" title={name}>
+        {name}
+      </span>
+    );
   };
 
   renderUserBody = (user: srk.User, row: srk.RanklistRow, index: number, ranklist: srk.Ranklist) => {
@@ -231,13 +236,12 @@ export class Ranklist extends React.Component<RanklistProps, State> {
                   {user.official === false ? '* 非正式参加者' : '正式参加者'}
                 </span>
                 {userMarkers.map((marker, index) => (
-                  <span
+                  <MarkerLabel
                     key={index}
-                    className={classnames('srk-user-modal-info-labels-label', markerCalcStyles[index].className)}
-                    style={markerCalcStyles[index].style}
-                  >
-                    {resolveText(marker.label)}
-                  </span>
+                    marker={marker}
+                    theme={theme}
+                    className="srk-user-modal-info-labels-label"
+                  />
                 ))}
               </div>
               {hasMembers && (
