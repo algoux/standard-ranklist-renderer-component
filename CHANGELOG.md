@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 0.4.6
+
+- Optimize marker dots tooltip.
+
+## 0.4.5
+
+- Supported srk@0.3.7.
+
+## 0.4.4
+
+- Supported srk@0.3.6.
+
 ## 0.4.3
 
 - Supported srk@0.3.4.
