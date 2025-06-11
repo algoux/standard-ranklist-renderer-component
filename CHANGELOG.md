@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.4.7
+
+- Export `MarkerLabel` component.
+
 ## 0.4.6
 
 - Optimize marker dots tooltip.
