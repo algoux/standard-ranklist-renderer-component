@@ -1,6 +1,6 @@
 {
   "type": "general",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "contributors": [
     "algoUX (https://algoux.org)"
   ],
@@ -195,6 +195,23 @@
       }
     }
   ],
+  "sorter": {
+    "algorithm": "ICPC",
+    "config": {
+      "noPenaltyResults": [
+        "FB",
+        "AC",
+        "?",
+        "CE",
+        "UKE",
+        null
+      ],
+      "penalty": [
+        20,
+        "min"
+      ]
+    }
+  },
   "rows": [
     {
       "user": {
@@ -506,7 +523,9 @@
           }
         ],
         "official": true,
-        "markers": ["another"]
+        "markers": [
+          "another"
+        ]
       },
       "statuses": [
         {
@@ -50521,7 +50540,10 @@
           }
         ],
         "official": true,
-        "markers": ["female", "another"]
+        "markers": [
+          "female",
+          "another"
+        ]
       },
       "statuses": [
         {
@@ -54644,7 +54666,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -56021,7 +56045,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -56678,7 +56704,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -61175,7 +61203,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -61352,7 +61382,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -61967,7 +61999,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -62362,7 +62396,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -62582,7 +62618,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -65877,7 +65915,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -66032,7 +66072,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -66180,7 +66222,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -66385,7 +66429,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -66759,7 +66805,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -67167,7 +67215,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -67668,7 +67718,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -68155,7 +68207,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -68324,7 +68378,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -68991,7 +69047,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -69342,7 +69400,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -70412,7 +70472,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
@@ -70624,7 +70686,9 @@
           }
         ],
         "official": true,
-        "markers": ["female"]
+        "markers": [
+          "female"
+        ]
       },
       "statuses": [
         {
