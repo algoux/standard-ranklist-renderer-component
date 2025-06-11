@@ -1,7 +1,7 @@
 {
   "name": "@algoux/standard-ranklist-renderer-component",
   "description": "Standard Ranklist Renderer Component",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "files": [
     "dist"
   ],
@@ -11,7 +11,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "prepublish": "npm run build"
   },
   "author": "bLue",
   "keywords": [
