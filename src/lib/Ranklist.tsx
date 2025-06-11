@@ -9,6 +9,7 @@ import {
   secToTimeStr,
   EnumTheme,
   resolveStyle,
+  resolveUserMarkers,
 } from '@algoux/standard-ranklist-utils';
 import type { ThemeColor } from '@algoux/standard-ranklist-utils';
 import { caniuse, srkSupportedVersions } from './caniuse';
@@ -198,9 +199,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     let bodyStyle: React.CSSProperties = {};
     let bodyLabel = '';
 
-    const userMarkers = (user.markers || [user.marker])
-      .map((marker) => markers.find((m) => m.id === marker))
-      .filter(Boolean) as srk.Marker[];
+    const userMarkers = resolveUserMarkers(user, markers);
     const markerCalcStyles = userMarkers.map((marker) => {
       if (typeof marker.style === 'string') {
         return { className: `srk-preset-marker-${marker.style}` };
@@ -272,9 +271,9 @@ export class Ranklist extends React.Component<RanklistProps, State> {
             {markerCalcStyles.map((markerStyle, index) => (
               <span
                 key={userMarkers[index].id}
-                className={classnames('srk-marker srk-marker-dot', markerStyle.className)}
+                className={classnames('srk-marker srk-marker-dot -c-tooltip', markerStyle.className)}
                 style={markerStyle.style}
-                title={resolveText(userMarkers[index].label)}
+                data-tooltip={resolveText(userMarkers[index].label)}
               ></span>
             ))}
           </span>

@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@algoux/standard-ranklist-utils':
-    specifier: ^0.2.3
-    version: 0.2.3(@algoux/standard-ranklist@0.3.7)
+    specifier: ^0.2.4
+    version: 0.2.4(@algoux/standard-ranklist@0.3.7)
   classnames:
     specifier: ^2.3.1
     version: 2.3.1
@@ -84,8 +84,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /@algoux/standard-ranklist-utils@0.2.3(@algoux/standard-ranklist@0.3.7):
-    resolution: {integrity: sha512-+MwwpgrG+74fKyPUm4HUT4QfI+G/36swAwT0HX+92UsLOQX6MhRj6O1yKuXKgSlb2lDbDn+UOKhvyjSi5/G9bw==}
+  /@algoux/standard-ranklist-utils@0.2.4(@algoux/standard-ranklist@0.3.7):
+    resolution: {integrity: sha512-Al+YfH3AAQrc5kDFmeqYwTv4ld82USiB8bFbzac9CDgo0n1826NQ4tmFk/3Egv42muYryERbbx5vdTs/X30msA==}
     peerDependencies:
       '@algoux/standard-ranklist': '*'
     dependencies:

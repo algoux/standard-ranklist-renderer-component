@@ -143,6 +143,34 @@
   cursor: pointer;
 }
 
+.-c-tooltip {
+  position: relative;
+  cursor: pointer;
+
+  &::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: saturate(180%) blur(20px);
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 1000;
+  }
+
+  &:hover::after {
+    opacity: 1;
+    transition: opacity 0.15s ease-in-out;
+  }
+}
+
 :root {
   --srk-color-user-second-name: #828282;
   --srk-color-accepted-bg: #99ff99;
@@ -322,7 +350,6 @@
       .user-name {
         display: flex;
         align-items: center;
-        overflow: hidden;
 
         .user-name-text {
           overflow: hidden;
