@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.4.9
+
+- Supported srk@0.3.8.
+
 ## 0.4.8
 
 - Export `MarkerLabel` component.
