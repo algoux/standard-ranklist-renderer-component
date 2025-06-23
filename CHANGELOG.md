@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.4.10
+
+- Supported srk@0.3.9.
+
 ## 0.4.9
 
 - Supported srk@0.3.8.
