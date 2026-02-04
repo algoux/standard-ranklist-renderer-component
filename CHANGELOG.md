@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 0.4.14
+
+- Supported srk@0.3.12.
+- Supported `user.avatar` and `team.photo` fields.
+- Added `formatSrkAssetUrl` prop to custom how to format srk asset URLs.
+
+## 0.4.12
+
+- Supported srk@0.3.11.
+
 ## 0.4.11
 
 - Supported srk@0.3.10.
