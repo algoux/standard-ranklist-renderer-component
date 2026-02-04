@@ -29,7 +29,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@algoux/standard-ranklist-utils": "^0.2.6",
+    "@algoux/standard-ranklist-utils": "^0.2.11",
     "classnames": "^2.3.1",
     "color": "^4.2.3",
     "rc-slider": "^9.7.5",

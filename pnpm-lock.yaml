@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@algoux/standard-ranklist-utils':
-    specifier: ^0.2.6
-    version: 0.2.6(@algoux/standard-ranklist@0.3.12)
+    specifier: ^0.2.11
+    version: 0.2.11(@algoux/standard-ranklist@0.3.12)
   classnames:
     specifier: ^2.3.1
     version: 2.3.1
@@ -84,8 +84,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /@algoux/standard-ranklist-utils@0.2.6(@algoux/standard-ranklist@0.3.12):
-    resolution: {integrity: sha512-B0QyojNN1i4MGKRDmixCYTGrG31EM/Q4fh7tE+tdSWO7vnS8H9nnIAhUDYOG5AFSWr9Wb+PJZGICz+D5oyM/Bw==}
+  /@algoux/standard-ranklist-utils@0.2.11(@algoux/standard-ranklist@0.3.12):
+    resolution: {integrity: sha512-xAOaGcaImfYzN+gfIxxZj9km2VOrPTQPgE8cqooCCFvCYWfsgy/rrSJXPK8bTceEc0h94Ky5qbDqz9Dic5JBVg==}
     peerDependencies:
       '@algoux/standard-ranklist': '*'
     dependencies:
@@ -1517,7 +1517,7 @@ packages:
 
   /glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     dependencies:
       fs.realpath: 1.0.0
       inflight: 1.0.6

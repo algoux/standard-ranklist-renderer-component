@@ -346,22 +346,43 @@
       &.user {
         max-width: var(--srk-table-body-user-max-width);
         height: 100%;
-      }
-      .user-name {
-        display: flex;
-        align-items: center;
 
-        .user-name-text {
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          flex: 0 1 auto;
+        .user-col {
+          display: flex;
+          align-items: center;
+
+          .user-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            img {
+              max-height: 36px;
+              width: auto;
+              border-radius: 100%;
+              object-fit: cover;
+              margin-right: 8px;
+            }
+          }
+
+          .user-body {
+            .user-name {
+              display: flex;
+              align-items: center;
+
+              .user-name-text {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                flex: 0 1 auto;
+              }
+            }
+            .user-second-name {
+              margin: 0;
+              font-size: 12px;
+              color: var(--srk-color-user-second-name);
+            }
+          }
         }
-      }
-      .user-second-name {
-        margin: 0;
-        font-size: 12px;
-        color: var(--srk-color-user-second-name);
       }
     }
   }
@@ -603,6 +624,12 @@
     &-slash {
       opacity: 0.5;
       font-size: 80%;
+    }
+  }
+  & &-photo {
+    margin-top: 16px;
+    &-img {
+      width: 100%;
     }
   }
 }

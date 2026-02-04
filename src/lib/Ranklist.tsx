@@ -41,6 +41,7 @@ export interface RanklistProps {
    */
   theme?: EnumTheme;
 
+  formatSrkAssetUrl?: (url: string, field: string) => string;
   renderUserModal?: (
     user: srk.User,
     row: srk.RanklistRow,
@@ -93,6 +94,26 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     );
   }
 
+  formatSrkAssetUrl = (url: string, field: string) => {
+    if (typeof this.props.formatSrkAssetUrl === 'function') {
+      return this.props.formatSrkAssetUrl(url, field);
+    }
+    if (url.startsWith('//')) {
+      return url;
+    }
+    const protocolMatch = url.match(/^([a-zA-Z][a-zA-Z0-9+.-]*):/);
+    if (protocolMatch) {
+      const protocol = protocolMatch[1].toLowerCase();
+      if (protocol === 'http' || protocol === 'https' || protocol === 'data') {
+        return url;
+      }
+      console.warn(`unsupported protocol "${protocol}" in srk asset url:`, url);
+      return '';
+    }
+    console.warn('unsupported srk asset url:', url);
+    return '';
+  };
+
   renderContestBanner = () => {
     const banner = this.props.data.contest.banner;
     if (!banner) {
@@ -106,7 +127,9 @@ export class Ranklist extends React.Component<RanklistProps, State> {
       imgSrc = banner.image;
       link = banner.link;
     }
-    const imgComp = <img src={imgSrc} alt="Contest Banner" className="-full-width" />;
+    const imgComp = (
+      <img src={this.formatSrkAssetUrl(imgSrc, 'contest.banner')} alt="Contest Banner" className="-full-width" />
+    );
     if (link) {
       return this.genExternalLink(link, imgComp);
     } else {
@@ -149,7 +172,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
 
   renderSingleSeriesBody = (rk: RankValue, series: srk.RankSeries, row: srk.RanklistRow) => {
     const theme = this.props.theme!;
-    const innerComp: React.ReactNode = rk.rank ? rk.rank : row.user.official === false ? '*' : '';
+    const innerComp: React.ReactNode = rk.rank ? rk.rank : row.user.official === false ? '＊' : '';
     const segment = (series.segments || [])[rk.segmentIndex || rk.segmentIndex === 0 ? rk.segmentIndex : -1] || {};
     const segmentStyle = segment.style;
     let className = '';
@@ -233,15 +256,10 @@ export class Ranklist extends React.Component<RanklistProps, State> {
               )}
               <div className="srk-user-modal-info-labels">
                 <span className="srk-user-modal-info-labels-label srk-user-modal-info-labels-label-preset-general">
-                  {user.official === false ? '* 非正式参加者' : '正式参加者'}
+                  {user.official === false ? '＊ 非正式参加者' : '正式参加者'}
                 </span>
                 {userMarkers.map((marker, index) => (
-                  <MarkerLabel
-                    key={index}
-                    marker={marker}
-                    theme={theme}
-                    className="srk-user-modal-info-labels-label"
-                  />
+                  <MarkerLabel key={index} marker={marker} theme={theme} className="srk-user-modal-info-labels-label" />
                 ))}
               </div>
               {hasMembers && (
@@ -254,9 +272,18 @@ export class Ranklist extends React.Component<RanklistProps, State> {
                   ))}
                 </div>
               )}
+              {user.photo && (
+                <div className="srk-user-modal-info-photo">
+                  <img
+                    src={this.formatSrkAssetUrl(user.photo, 'user.photo')}
+                    alt="User Photo"
+                    className="srk-user-modal-info-photo-img"
+                  />
+                </div>
+              )}
             </div>
           ),
-          width: 360,
+          width: 420,
         },
         e,
       );
@@ -269,24 +296,33 @@ export class Ranklist extends React.Component<RanklistProps, State> {
         title={bodyLabel}
         onClick={onClick}
       >
-        <div className="user-name">
-          {this.renderUserName(user)}
-          <span className="srk-marker-dot-group">
-            {markerCalcStyles.map((markerStyle, index) => (
-              <span
-                key={userMarkers[index].id}
-                className={classnames('srk-marker srk-marker-dot -c-tooltip', markerStyle.className)}
-                style={markerStyle.style}
-                data-tooltip={resolveText(userMarkers[index].label)}
-              ></span>
-            ))}
-          </span>
+        <div className="user-col">
+          {user.avatar && (
+            <div className="user-avatar">
+              <img src={this.formatSrkAssetUrl(user.avatar, 'user.avatar')} alt="User Avatar" />
+            </div>
+          )}
+          <div className="user-body">
+            <div className="user-name">
+              {this.renderUserName(user)}
+              <span className="srk-marker-dot-group">
+                {markerCalcStyles.map((markerStyle, index) => (
+                  <span
+                    key={userMarkers[index].id}
+                    className={classnames('srk-marker srk-marker-dot -c-tooltip', markerStyle.className)}
+                    style={markerStyle.style}
+                    data-tooltip={resolveText(userMarkers[index].label)}
+                  ></span>
+                ))}
+              </span>
+            </div>
+            {!!user.organization && (
+              <p className="user-second-name -text-ellipsis" title="">
+                {resolveText(user.organization)}
+              </p>
+            )}
+          </div>
         </div>
-        {!!user.organization && (
-          <p className="user-second-name -text-ellipsis" title="">
-            {resolveText(user.organization)}
-          </p>
-        )}
       </td>
     );
   };
