@@ -7,7 +7,7 @@
 @media screen and (prefers-color-scheme: dark) {
   :root {
     --body-text: rgb(223, 223, 223);
-    --body-bg: rgb(25, 25, 25);
+    --body-bg: rgb(0, 0, 0);
     --a: #0884fe;
   }
 }

@@ -223,12 +223,6 @@
 }
 
 .srk-common-table {
-  --srk-table-border: #ddd;
-
-  @media screen and (prefers-color-scheme: dark) {
-    --srk-table-border: #3b3b3b;
-  }
-
   border-spacing: 0;
   border-collapse: collapse;
 
@@ -250,15 +244,28 @@
   --srk-table-head-backdrop-filter: saturate(180%) blur(20px);
   --srk-table-body-user-max-width: 300px;
   --srk-table-border: #ddd;
+  --srk-table-row-border: transparent;
   --srk-body-color: inherit;
   --srk-body-bg: inherit;
+  --srk-table-striped-bg: rgba(30, 30, 30, 0.06);
   --srk-series-segment-border-width: 8px;
 
   @media screen and (prefers-color-scheme: dark) {
     --srk-table-head-bg: rgba(25, 25, 25, 0.75);
-    --srk-table-border: #3b3b3b;
+    --srk-table-border: #3a3a3a;
+    --srk-table-striped-bg: rgba(215, 215, 215, 0.08);
     // --srk-body-color: rgb(223, 223, 223);
     // --srk-body-bg: rgb(25, 25, 25);
+  }
+
+  .srk-table-row-bordered {
+    --srk-table-row-border: var(--srk-table-border);
+  }
+
+  .srk-table-row-striped {
+    tbody > tr:nth-child(even) {
+      background-color: var(--srk-table-striped-bg);
+    }
   }
 
   color: var(--srk-body-color);
@@ -339,7 +346,7 @@
 
     tbody > tr > td {
       padding: 8px;
-      border-bottom: 1px solid var(--srk-table-border);
+      border-bottom: 1px solid var(--srk-table-row-border);
       vertical-align: middle;
       height: 40px;
 
@@ -355,6 +362,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
             img {
               max-height: 36px;
               width: auto;
@@ -365,6 +373,8 @@
           }
 
           .user-body {
+            flex-grow: 1;
+            min-width: 0;
             .user-name {
               display: flex;
               align-items: center;

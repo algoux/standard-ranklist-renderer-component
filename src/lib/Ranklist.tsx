@@ -37,9 +37,21 @@ export interface RanklistProps {
 
   /**
    * Theme
-   * @default 'light'
+   * @defaultValue 'light'
    */
   theme?: EnumTheme;
+
+  /**
+   * Enable border between rows in the table.
+   * @defaultValue false
+   */
+  borderedRows?: boolean;
+
+  /**
+   * Enable striped rows style in the table.
+   * @defaultValue false
+   */
+  stripedRows?: boolean;
 
   formatSrkAssetUrl?: (url: string, field: string) => string;
   renderUserModal?: (
@@ -73,6 +85,8 @@ const defaultBackgroundColor = {
 export class Ranklist extends React.Component<RanklistProps, State> {
   static defaultProps: Partial<RanklistProps> = {
     theme: EnumTheme.light,
+    borderedRows: false,
+    stripedRows: false,
   };
 
   private userModalRef: GeneralModal | null = null;
@@ -461,7 +475,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
         </div>
       );
     }
-    const { data } = this.props;
+    const { data, borderedRows, stripedRows } = this.props;
     const { type, version, problems, series, rows } = data;
     if (type !== 'general') {
       return <div>srk type "{type}" is not supported</div>;
@@ -478,7 +492,9 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     return (
       <>
         <div className="srk-common-table srk-main">
-          <table>
+          <table
+            className={classnames({ 'srk-table-row-bordered': borderedRows, 'srk-table-row-striped': stripedRows })}
+          >
             <thead>
               <tr>
                 {series.map((s) => (

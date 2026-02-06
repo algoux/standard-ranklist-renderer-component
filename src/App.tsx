@@ -43,7 +43,7 @@ export default class App extends React.Component {
         />
         <div style={{ height: '20px' }}></div>
         {/* @ts-ignore */}
-        <Ranklist data={convertToStaticRanklist(this.state.data)} theme="light" />
+        <Ranklist data={convertToStaticRanklist(this.state.data)} theme="light" stripedRows />
       </div>
     );
   }
