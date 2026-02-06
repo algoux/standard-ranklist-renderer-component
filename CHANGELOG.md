@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.4.15
+
+- Added `borderedRows` prop to enable borders between rows in the table.
+- Added `stripedRows` prop to enable striped rows style in the table.
+- Fixed text overflow issue in the Name column.
+
 ## 0.4.14
 
 - Supported srk@0.3.12.
