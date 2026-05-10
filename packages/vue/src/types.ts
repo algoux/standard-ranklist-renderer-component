@@ -1,0 +1,101 @@
+import type * as srk from '@algoux/standard-ranklist';
+import type { CSSProperties } from 'vue';
+import type { EnumTheme } from '@algoux/standard-ranklist-utils';
+import type {
+  SolutionClickPayload,
+  StaticRanklist,
+  StaticRanklistRow,
+  UserClickPayload,
+} from '@algoux/standard-ranklist-renderer-component-core';
+
+export type ModalCloseReason = 'mask' | 'close-button' | 'escape';
+
+export interface RanklistProps {
+  data: StaticRanklist;
+  theme?: EnumTheme;
+  borderedRows?: boolean;
+  stripedRows?: boolean;
+  formatSrkAssetUrl?: (url: string, field: string) => string;
+}
+
+export interface ProblemHeaderCellSlotProps {
+  problem: srk.Problem;
+  problemIndex: number;
+  index: number;
+  theme?: EnumTheme;
+}
+
+export interface UserCellSlotProps {
+  user: srk.User;
+  row: StaticRanklistRow;
+  rowIndex: number;
+  ranklist: StaticRanklist;
+  markers?: srk.Marker[];
+  theme?: EnumTheme;
+  onClick: (event?: MouseEvent) => void;
+}
+
+export interface StatusCellSlotProps {
+  status: srk.RankProblemStatus;
+  problem: srk.Problem | undefined;
+  problemIndex: number;
+  user: srk.User;
+  row: StaticRanklistRow;
+  rowIndex: number;
+  ranklist: StaticRanklist;
+  solutions: srk.Solution[];
+  onClick: (event?: MouseEvent) => void;
+}
+
+export interface ProgressBarProps {
+  data: srk.Ranklist;
+  enableTimeTravel?: boolean;
+  live?: boolean;
+  td?: number;
+}
+
+export interface ModalProps {
+  open: boolean;
+  title?: string;
+  width?: number;
+  rootClassName?: string;
+  wrapClassName?: string;
+  style?: CSSProperties;
+  closeOnEsc?: boolean;
+  closeOnMaskClick?: boolean;
+}
+
+export interface DefaultUserModalProps extends Pick<ModalProps, 'open' | 'rootClassName' | 'wrapClassName' | 'style'> {
+  user?: srk.User | null;
+  markers?: srk.Marker[];
+  theme?: EnumTheme;
+  title?: string;
+  width?: number;
+  formatSrkAssetUrl?: (url: string, field: string) => string;
+}
+
+export interface DefaultSolutionModalProps
+  extends Pick<ModalProps, 'open' | 'rootClassName' | 'wrapClassName' | 'style'> {
+  user?: srk.User | null;
+  problem?: srk.Problem;
+  problemIndex: number;
+  solutions: srk.Solution[];
+  title?: string;
+  width?: number;
+}
+
+export type RanklistEvents = {
+  userClick: UserClickPayload;
+  solutionClick: SolutionClickPayload;
+};
+
+export type ProgressBarEvents = {
+  timeTravel: number | null;
+};
+
+export type ModalEvents = {
+  close: ModalCloseReason;
+  'update:open': boolean;
+};
+
+export type { SolutionClickPayload, StaticRanklist, StaticRanklistRow, UserClickPayload };

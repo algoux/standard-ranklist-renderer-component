@@ -14,7 +14,8 @@
     "frozenDuration": [
       1,
       "h"
-    ]
+    ],
+    "banner": "https://cdn.algoux.cn/srk-storage/icpc49th2025worldfinals/assets/banner.svg"
   },
   "series": [
     {
@@ -215,9 +216,15 @@
   "rows": [
     {
       "user": {
-        "id": "T010",
-        "name": "逆十字",
-        "organization": "北京大学",
+        "id": "清华大学_中二之力",
+        "name": {
+          "zh-CN": "中二之力",
+          "en": "Power of Two",
+          "fallback": "Power of Two"
+        },
+        "organization": "清华大学",
+        "avatar": "https://cdn.algoux.cn/srk-storage/icpc49th2025worldfinals/assets/o.png",
+        "photo": "https://cdn.algoux.cn/srk-storage/icpc2025xi_an/assets/team242.jpg",
         "teamMembers": [
           {
             "name": "罗国杰(教练)"
@@ -525,7 +532,8 @@
         "official": true,
         "markers": [
           "another"
-        ]
+        ],
+        "avatar": "https://cdn.algoux.cn/srk-storage/icpc49th2025worldfinals/assets/c.jpg"
       },
       "statuses": [
         {
@@ -50543,7 +50551,8 @@
         "markers": [
           "female",
           "another"
-        ]
+        ],
+        "avatar": "https://cdn.algoux.cn/srk-storage/icpc49th2025worldfinals/assets/c.jpg"
       },
       "statuses": [
         {
@@ -50682,8 +50691,8 @@
     {
       "user": {
         "id": "T137",
-        "name": "想去决赛圈看看",
-        "organization": "华南理工大学",
+        "name": "想去决赛圈看看想去决赛圈看看想去决赛圈看看想去决赛圈看看想去决赛圈看看",
+        "organization": "华南理工大学华南理工大学华南理工大学华南理工大学华南理工大学",
         "teamMembers": [
           {
             "name": "池品优(教练)"

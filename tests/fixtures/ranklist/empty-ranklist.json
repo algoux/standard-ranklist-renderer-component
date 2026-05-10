@@ -1,0 +1,13 @@
+{
+  "type": "general",
+  "version": "0.3.12",
+  "contest": {
+    "title": "Empty Contest",
+    "startAt": "2026-04-23T10:00:00+08:00",
+    "duration": [5, "h"]
+  },
+  "series": [],
+  "markers": [],
+  "problems": [],
+  "rows": []
+}

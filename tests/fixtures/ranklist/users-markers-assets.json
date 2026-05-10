@@ -1,0 +1,79 @@
+{
+  "type": "general",
+  "version": "0.3.12",
+  "contest": {
+    "title": {
+      "fallback": "Users And Markers Contest"
+    },
+    "startAt": "2026-04-23T10:00:00+08:00",
+    "duration": [5, "h"]
+  },
+  "series": [],
+  "markers": [
+    {
+      "id": "girls",
+      "label": "Girls Team",
+      "style": "pink"
+    },
+    {
+      "id": "guest",
+      "label": {
+        "fallback": "Guest Marker"
+      },
+      "style": {
+        "textColor": "#ffffff",
+        "backgroundColor": "#4caf50"
+      }
+    }
+  ],
+  "problems": [
+    { "alias": "A" }
+  ],
+  "rows": [
+    {
+      "user": {
+        "id": "team-alpha",
+        "name": {
+          "fallback": "Team Alpha"
+        },
+        "organization": {
+          "fallback": "Alpha Org"
+        },
+        "avatar": "https://cdn.example.com/alpha.png",
+        "markers": ["girls", "guest"]
+      },
+      "score": {
+        "value": 1
+      },
+      "statuses": [
+        { "result": "AC", "time": [10, "min"], "tries": 1 }
+      ]
+    },
+    {
+      "user": {
+        "id": "team-beta",
+        "name": "Deprecated Marker Team",
+        "marker": "girls"
+      },
+      "score": {
+        "value": 0
+      },
+      "statuses": [
+        { "result": "RJ", "time": [20, "min"], "tries": 1 }
+      ]
+    },
+    {
+      "user": {
+        "id": "team-gamma",
+        "name": "Missing Marker Team",
+        "markers": ["missing-marker"]
+      },
+      "score": {
+        "value": 0
+      },
+      "statuses": [
+        { "result": null, "tries": 0, "solutions": [] }
+      ]
+    }
+  ]
+}

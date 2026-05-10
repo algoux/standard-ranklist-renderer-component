@@ -1,0 +1,73 @@
+{
+  "type": "general",
+  "version": "0.3.12",
+  "contest": {
+    "title": "Series Segment Contest",
+    "startAt": "2026-04-23T10:00:00+08:00",
+    "duration": [5, "h"]
+  },
+  "series": [
+    {
+      "title": "#",
+      "segments": [
+        { "title": "Gold", "style": "gold" },
+        { "title": "Silver", "style": "silver" },
+        { "title": "Bronze", "style": "bronze" },
+        {
+          "title": "Custom",
+          "style": {
+            "textColor": "#ffffff",
+            "backgroundColor": "#334455"
+          }
+        }
+      ],
+      "rule": {
+        "preset": "ICPC",
+        "options": {
+          "count": {
+            "value": [1, 1, 1, 1],
+            "noTied": true
+          }
+        }
+      }
+    }
+  ],
+  "markers": [],
+  "problems": [
+    { "alias": "A" }
+  ],
+  "sorter": {
+    "algorithm": "ICPC",
+    "config": {
+      "penalty": [20, "min"],
+      "noPenaltyResults": ["FB", "AC", "?", "CE", "UKE", null]
+    }
+  },
+  "rows": [
+    {
+      "user": { "id": "team-gold", "name": "Gold Team" },
+      "score": { "value": 4, "time": [10, "min"] },
+      "statuses": [{ "result": "AC", "time": [10, "min"], "tries": 1 }]
+    },
+    {
+      "user": { "id": "team-silver", "name": "Silver Team" },
+      "score": { "value": 3, "time": [20, "min"] },
+      "statuses": [{ "result": "AC", "time": [20, "min"], "tries": 1 }]
+    },
+    {
+      "user": { "id": "team-bronze", "name": "Bronze Team" },
+      "score": { "value": 2, "time": [30, "min"] },
+      "statuses": [{ "result": "AC", "time": [30, "min"], "tries": 1 }]
+    },
+    {
+      "user": { "id": "team-custom", "name": "Custom Segment Team" },
+      "score": { "value": 1, "time": [40, "min"] },
+      "statuses": [{ "result": "AC", "time": [40, "min"], "tries": 1 }]
+    },
+    {
+      "user": { "id": "team-unofficial", "name": "Unofficial Team", "official": false },
+      "score": { "value": 0 },
+      "statuses": [{ "result": null, "tries": 0, "solutions": [] }]
+    }
+  ]
+}

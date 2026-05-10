@@ -1,0 +1,49 @@
+{
+  "type": "general",
+  "version": "0.3.12",
+  "contest": {
+    "title": "Problem Header Contest",
+    "startAt": "2026-04-23T10:00:00+08:00",
+    "duration": [5, "h"]
+  },
+  "series": [],
+  "markers": [],
+  "problems": [
+    {
+      "title": "Fallback Alias Problem",
+      "link": "https://example.com/problems/a",
+      "statistics": {
+        "accepted": 3,
+        "submitted": 6
+      },
+      "style": {
+        "backgroundColor": "#58a2d1"
+      }
+    },
+    {
+      "alias": "Z",
+      "title": {
+        "fallback": "Explicit Alias Problem"
+      },
+      "statistics": {
+        "accepted": 0,
+        "submitted": 0
+      }
+    }
+  ],
+  "rows": [
+    {
+      "user": {
+        "id": "team-header",
+        "name": "Header Team"
+      },
+      "score": {
+        "value": 0
+      },
+      "statuses": [
+        { "result": null, "tries": 0, "solutions": [] },
+        { "result": null, "tries": 0, "solutions": [] }
+      ]
+    }
+  ]
+}

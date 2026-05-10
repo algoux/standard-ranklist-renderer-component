@@ -1,0 +1,15 @@
+{
+  "type": "score",
+  "version": "0.3.9",
+  "contributors": ["algoUX"],
+  "contest": {
+    "title": "Mini SRK Contest",
+    "startAt": "2026-04-23T10:00:00+08:00",
+    "duration": [5, "h"],
+    "frozenDuration": [1, "h"]
+  },
+  "series": [],
+  "markers": [],
+  "problems": [],
+  "rows": []
+}

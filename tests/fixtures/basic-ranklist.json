@@ -1,0 +1,123 @@
+{
+  "type": "general",
+  "version": "0.3.9",
+  "contributors": ["algoUX"],
+  "contest": {
+    "title": "Mini SRK Contest",
+    "startAt": "2026-04-23T10:00:00+08:00",
+    "duration": [5, "h"],
+    "frozenDuration": [1, "h"]
+  },
+  "series": [
+    {
+      "title": "#",
+      "segments": [
+        {
+          "title": "Gold Medalist",
+          "style": "gold"
+        },
+        {
+          "title": "Silver Medalist",
+          "style": "silver"
+        }
+      ],
+      "rule": {
+        "preset": "ICPC",
+        "options": {
+          "count": {
+            "value": [1, 2]
+          }
+        }
+      }
+    },
+    {
+      "title": "R#",
+      "rule": {
+        "preset": "Normal",
+        "options": {}
+      }
+    }
+  ],
+  "markers": [
+    {
+      "id": "girls",
+      "label": "Girls Team",
+      "style": "pink"
+    }
+  ],
+  "problems": [
+    {
+      "alias": "A",
+      "statistics": {
+        "accepted": 1,
+        "submitted": 2
+      },
+      "style": {
+        "backgroundColor": "#bd0e0e"
+      }
+    },
+    {
+      "alias": "B",
+      "statistics": {
+        "accepted": 0,
+        "submitted": 2
+      }
+    }
+  ],
+  "sorter": {
+    "algorithm": "ICPC",
+    "config": {
+      "penalty": [20, "min"],
+      "noPenaltyResults": ["FB", "AC", "?", "CE", "UKE", null]
+    }
+  },
+  "rows": [
+    {
+      "user": {
+        "id": "team-alpha",
+        "name": "Team Alpha",
+        "organization": "Alpha University",
+        "avatar": "https://cdn.example.com/avatar.png",
+        "photo": "https://cdn.example.com/photo.png",
+        "teamMembers": [
+          { "name": "Alice" },
+          { "name": "Bob" }
+        ],
+        "markers": ["girls"],
+        "official": true
+      },
+      "score": {
+        "value": 1,
+        "time": [75, "min"]
+      },
+      "statuses": [
+        {
+          "result": "AC",
+          "time": [75, "min"],
+          "tries": 2,
+          "solutions": [
+            {
+              "result": "WA",
+              "time": [30, "min"]
+            },
+            {
+              "result": "AC",
+              "time": [75, "min"]
+            }
+          ]
+        },
+        {
+          "result": "RJ",
+          "time": [120, "min"],
+          "tries": 1,
+          "solutions": [
+            {
+              "result": "RJ",
+              "time": [120, "min"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

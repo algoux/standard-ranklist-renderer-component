@@ -1,0 +1,153 @@
+.srk-progress-bar-container {
+  --color-progress-bar-normal-bg: #14c514;
+  --color-progress-bar-frozen-bg: #648fff;
+  --color-progress-bar-border-color: #cacaca;
+  --color-progress-bar-slider-bg: #eee;
+  --color-progress-bar-slider-border-color: #d2d2d2;
+  --color-progress-bar-live-text: #0faa0f;
+  --color-progress-bar-time-machine-text-color: #2e68ff;
+  --color-progress-bar-time-machine-text-shadow: 0 0 5px #f2f7ff, 0 0 10px #aec5ff, 0 0 15px #a0bbff, 0 0 20px white;
+  @media screen and (prefers-color-scheme: dark) {
+    --color-progress-bar-normal-bg: #1a740f;
+    --color-progress-bar-frozen-bg: #1440ab;
+    --color-progress-bar-border-color: #666;
+    --color-progress-bar-slider-bg: #bfbfbf;
+    --color-progress-bar-slider-border-color: #eee;
+    --color-progress-bar-live-text: #15d415;
+    --color-progress-bar-time-machine-text-color: #8fb1ff;
+    --color-progress-bar-time-machine-text-shadow: 0 0 5px #0058ff, 0 0 10px #0942d2, 0 0 15px #004aff, 0 0 20px white;
+  }
+
+  .srk-progress-bar {
+    border: 0.5px solid var(--color-progress-bar-border-color);
+    line-height: 0;
+    height: 10px;
+    position: relative;
+    margin: 5px 0;
+    .srk-progress-bar-body {
+      position: absolute;
+      width: 100%;
+      display: flex;
+      .srk-progress-bar-segment {
+        display: block;
+        flex: 0 0 auto;
+        .srk-progress-bar-fill {
+          height: 10px;
+          transition: width 0.3s;
+        }
+        &.srk-progress-bar-normal .srk-progress-bar-fill {
+          background: var(--color-progress-bar-normal-bg);
+        }
+        &.srk-progress-bar-frozen .srk-progress-bar-fill {
+          background: var(--color-progress-bar-frozen-bg);
+        }
+      }
+    }
+
+    .srk-progress-slider-layer {
+      position: absolute;
+      inset: 0;
+    }
+
+    .srk-progress-slider {
+      position: absolute;
+      left: 0;
+      top: -5px;
+      width: 100%;
+      height: 20px;
+      margin: 0;
+      background: transparent;
+      appearance: none;
+      cursor: ew-resize;
+
+      &::-webkit-slider-runnable-track {
+        height: 10px;
+        background: transparent;
+      }
+
+      &::-moz-range-track {
+        height: 10px;
+        background: transparent;
+        border: none;
+      }
+
+      &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 10px;
+        height: 20px;
+        margin-top: -5px;
+        background: var(--color-progress-bar-slider-bg);
+        border: 1px solid var(--color-progress-bar-slider-border-color);
+        border-radius: 0;
+      }
+
+      &::-moz-range-thumb {
+        width: 10px;
+        height: 20px;
+        background: var(--color-progress-bar-slider-bg);
+        border: 1px solid var(--color-progress-bar-slider-border-color);
+        border-radius: 0;
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--color-progress-bar-time-machine-text-color);
+        outline-offset: 4px;
+      }
+    }
+
+    .srk-progress-slider-tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      line-height: 1;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+  }
+
+  .srk-progress-secondary-area {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    .srk-progress-secondary-area-left {
+      min-width: 180px;
+    }
+    .srk-progress-secondary-area-center {
+    }
+    .srk-progress-secondary-area-right {
+      min-width: 180px;
+      text-align: right;
+    }
+  }
+
+  .srk-progress-live-text {
+    color: var(--color-progress-bar-live-text)
+  }
+
+  .srk-progress-time-machine-status {
+    @keyframes text-blink {
+      0% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.7;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .srk-progress-time-machine-text {
+      color: var(--color-progress-bar-time-machine-text-color);
+      text-shadow: var(--color-progress-bar-time-machine-text-shadow);
+      animation: text-blink 1.5s ease-in-out infinite;
+    }
+  }
+}

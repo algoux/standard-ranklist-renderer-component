@@ -1,0 +1,36 @@
+{
+  "name": "@algoux/standard-ranklist-renderer-component-core",
+  "version": "0.4.15",
+  "description": "Core helpers and shared types for Standard Ranklist Renderer Component",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    }
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "vite build --config vite.config.ts"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "@algoux/standard-ranklist-utils": "^0.2.11",
+    "color": "^4.2.3",
+    "semver": "^7.3.7"
+  },
+  "peerDependencies": {
+    "@algoux/standard-ranklist": "*"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "name": "@algoux/standard-ranklist-renderer-component-angular",
+  "version": "0.4.15",
+  "description": "Angular components for Standard Ranklist Renderer Component",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/fesm2022/algoux-standard-ranklist-renderer-component-angular.mjs",
+  "module": "./dist/fesm2022/algoux-standard-ranklist-renderer-component-angular.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "esm2022": "./dist/esm2022/algoux-standard-ranklist-renderer-component-angular.mjs",
+      "esm": "./dist/esm2022/algoux-standard-ranklist-renderer-component-angular.mjs",
+      "default": "./dist/fesm2022/algoux-standard-ranklist-renderer-component-angular.mjs"
+    }
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "node ./scripts/build.mjs",
+    "dev": "vite --config vite.config.ts",
+    "preview": "vite preview --config vite.config.ts",
+    "test": "vitest run --config ../../vitest.angular.config.ts"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "@algoux/standard-ranklist-renderer-component-core": "workspace:*",
+    "@algoux/standard-ranklist-utils": "^0.2.11",
+    "tslib": "^2.3.0"
+  },
+  "peerDependencies": {
+    "@algoux/standard-ranklist": "*",
+    "@angular/common": ">=17.0.0",
+    "@angular/core": ">=17.0.0"
+  },
+  "devDependencies": {
+    "@algoux/standard-ranklist-renderer-component-styles": "workspace:*",
+    "@angular/common": "17.3.12",
+    "@angular/compiler": "17.3.12",
+    "@angular/compiler-cli": "17.3.12",
+    "@angular/core": "17.3.12",
+    "@angular/platform-browser": "17.3.12",
+    "ng-packagr": "17.3.0",
+    "rollup": "4.60.2",
+    "rxjs": "^7.8.1",
+    "typescript": "~5.4.5",
+    "zone.js": "~0.14.10"
+  }
+}

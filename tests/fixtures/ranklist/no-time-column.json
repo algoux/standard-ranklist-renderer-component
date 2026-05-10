@@ -1,0 +1,28 @@
+{
+  "type": "general",
+  "version": "0.3.12",
+  "contest": {
+    "title": "No Time Column Contest",
+    "startAt": "2026-04-23T10:00:00+08:00",
+    "duration": [5, "h"]
+  },
+  "series": [],
+  "markers": [],
+  "problems": [
+    { "alias": "A" }
+  ],
+  "rows": [
+    {
+      "user": {
+        "id": "team-no-time",
+        "name": "No Time Team"
+      },
+      "score": {
+        "value": 0
+      },
+      "statuses": [
+        { "result": null, "tries": 0, "solutions": [] }
+      ]
+    }
+  ]
+}

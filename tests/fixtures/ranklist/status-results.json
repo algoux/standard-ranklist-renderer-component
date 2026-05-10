@@ -1,0 +1,80 @@
+{
+  "type": "general",
+  "version": "0.3.12",
+  "contest": {
+    "title": "Status Matrix Contest",
+    "startAt": "2026-04-23T10:00:00+08:00",
+    "duration": [5, "h"],
+    "frozenDuration": [1, "h"]
+  },
+  "series": [],
+  "markers": [],
+  "problems": [
+    { "alias": "A", "title": "First Blood" },
+    { "alias": "B", "title": "Accepted" },
+    { "alias": "C", "title": "Rejected" },
+    { "alias": "D", "title": "Frozen" },
+    { "alias": "E", "title": "No Submission" }
+  ],
+  "sorter": {
+    "algorithm": "ICPC",
+    "config": {
+      "penalty": [20, "min"],
+      "noPenaltyResults": ["FB", "AC", "?", "CE", "UKE", null]
+    }
+  },
+  "rows": [
+    {
+      "user": {
+        "id": "team-status",
+        "name": "Status Matrix",
+        "official": true
+      },
+      "score": {
+        "value": 2,
+        "time": [46, "min"]
+      },
+      "statuses": [
+        {
+          "result": "FB",
+          "score": 100,
+          "time": [12, "min"],
+          "tries": 1,
+          "solutions": [
+            { "result": "FB", "score": 100, "time": [12, "min"] }
+          ]
+        },
+        {
+          "result": "AC",
+          "time": [34, "min"],
+          "tries": 2,
+          "solutions": [
+            { "result": "WA", "time": [10, "min"] },
+            { "result": "AC", "time": [34, "min"] }
+          ]
+        },
+        {
+          "result": "RJ",
+          "time": [45, "min"],
+          "tries": 3,
+          "solutions": [
+            { "result": "RJ", "time": [45, "min"] }
+          ]
+        },
+        {
+          "result": "?",
+          "time": [55, "min"],
+          "tries": 4,
+          "solutions": [
+            { "result": "?", "time": [55, "min"] }
+          ]
+        },
+        {
+          "result": null,
+          "tries": 0,
+          "solutions": []
+        }
+      ]
+    }
+  ]
+}
