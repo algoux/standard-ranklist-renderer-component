@@ -1,28 +1,19 @@
 # @algoux/standard-ranklist-renderer-component
 
-The srk renderer component.
-
-This package only includes the implementation for React.
+Multi-package renderer components for [standard-ranklist](https://srk.algoux.org/) data.
 
 Supported srk versions: `>=0.3.0 && <=0.3.12`.
 
-For older srk version support, please install older version of this package.
+The repository now publishes framework-specific packages plus shared `core` and `styles` packages. The root package is kept as the monorepo coordinator and documentation entry; new consumers should install the framework package they use.
 
-## Installation
+## Packages
 
-```bash
-npm i -D @algoux/standard-ranklist
-npm i -S @algoux/standard-ranklist-renderer-component rc-dialog
-```
-
-## Usage
-
-```tsx
-import { Ranklist, convertToStaticRanklist } from '@algoux/standard-ranklist-renderer-component';
-import '@algoux/standard-ranklist-renderer-component/dist/style.css';
-import 'rc-dialog/assets/index.css';
-
-export default function RanklistPage() {
-  return <Ranklist data={convertToStaticRanklist(srkData)} />;
-}
-```
+| Package | Purpose |
+| --- | --- |
+| `@algoux/standard-ranklist-renderer-component-core` | Shared helpers, payload types, and SRK compatibility helpers |
+| `@algoux/standard-ranklist-renderer-component-styles` | Shared stylesheet package |
+| `@algoux/standard-ranklist-renderer-component-react` | React components |
+| `@algoux/standard-ranklist-renderer-component-vue` | Vue components and Vue-facing types |
+| `@algoux/standard-ranklist-renderer-component-solid` | Solid components and SSR entry |
+| `@algoux/standard-ranklist-renderer-component-svelte` | Svelte components and types |
+| `@algoux/standard-ranklist-renderer-component-angular` | Angular standalone components and template directives |
