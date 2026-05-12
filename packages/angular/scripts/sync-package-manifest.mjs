@@ -11,6 +11,7 @@ const builtPackage = JSON.parse(readFileSync(builtPackageJsonPath, 'utf8'));
 
 builtPackage.private = false;
 builtPackage.description = sourcePackage.description;
+builtPackage.license = sourcePackage.license;
 builtPackage.main = './fesm2022/algoux-standard-ranklist-renderer-component-angular.mjs';
 builtPackage.module = './fesm2022/algoux-standard-ranklist-renderer-component-angular.mjs';
 builtPackage.types = './index.d.ts';
