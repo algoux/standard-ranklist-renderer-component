@@ -1,6 +1,6 @@
 {
   "name": "@algoux/standard-ranklist-renderer-component-styles",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Shared styles for Standard Ranklist Renderer Component packages",
   "license": "MIT",
   "type": "module",

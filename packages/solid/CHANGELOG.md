@@ -1,5 +1,14 @@
 # @algoux/standard-ranklist-renderer-component-solid
 
+## 0.5.1
+
+### Patch Changes
+
+- 3b3aba1: Declare the MIT license in each package manifest so npm displays the package license correctly.
+- Updated dependencies [3b3aba1]
+  - @algoux/standard-ranklist-renderer-component-core@0.5.1
+  - @algoux/standard-ranklist-renderer-component-styles@0.5.1
+
 ## 0.5.0
 
 ### Minor Changes
