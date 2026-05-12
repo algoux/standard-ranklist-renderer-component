@@ -55,7 +55,16 @@ jobs:
         run: pnpm -w run test:release
 
       - name: Configure npm token
-        run: printf '//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" > "$HOME/.npmrc"
+        run: |
+          set -euo pipefail
+
+          if [ -z "${NPM_TOKEN:-}" ]; then
+            echo "NPM_TOKEN is not available to this workflow. Check repository/org secret name and repository access." >&2
+            exit 1
+          fi
+
+          printf '//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" > "$HOME/.npmrc"
+          npm whoami --registry https://registry.npmjs.org/
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -70,6 +79,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create repository release baseline tag
         if: steps.changesets.outputs.published == 'true'
