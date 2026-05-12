@@ -1,6 +1,6 @@
 {
   "name": "@algoux/standard-ranklist-renderer-component-react",
-  "version": "0.4.15",
+  "version": "0.5.0",
   "description": "React components for Standard Ranklist Renderer Component",
   "type": "module",
   "files": [
