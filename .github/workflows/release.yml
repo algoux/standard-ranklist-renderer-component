@@ -66,10 +66,11 @@ jobs:
           echo "NPM_TOKEN length: ${#NPM_TOKEN}"
           printf '%s' "$NPM_TOKEN" | sha256sum | cut -c1-12 | sed 's/^/NPM_TOKEN sha256: /'
 
-          printf '//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" > "$HOME/.npmrc"
+          echo "npm userconfig: $(npm config get userconfig)"
           npm whoami --registry https://registry.npmjs.org/
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create version PR or publish packages
         id: changesets
