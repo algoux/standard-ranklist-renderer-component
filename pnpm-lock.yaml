@@ -59,6 +59,9 @@ importers:
       '@vue/test-utils':
         specifier: ^2.4.6
         version: 2.4.6
+      classnames:
+        specifier: ^2.3.1
+        version: 2.3.1
       jsdom:
         specifier: ^21.1.2
         version: 21.1.2

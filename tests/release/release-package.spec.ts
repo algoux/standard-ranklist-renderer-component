@@ -143,6 +143,10 @@ describe('package publish contracts', () => {
       const pkg = readJson(packageJsonPath);
       expect(pkg.name).toBe(publishedPackage.name);
       expect(pkg.license).toBe('MIT');
+      expect(pkg.repository).toMatchObject({
+        type: 'git',
+        url: 'https://github.com/algoux/standard-ranklist-renderer-component',
+      });
       expect(pkg.private).not.toBe(true);
       expect(pkg.files).toContain('dist');
       expect(existsSync(join(packageRoot, publishedPackage.readme))).toBe(true);

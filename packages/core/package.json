@@ -3,6 +3,11 @@
   "version": "0.5.1",
   "description": "Core helpers and shared types for Standard Ranklist Renderer Component",
   "license": "MIT",
+  "homepage": "https://github.com/algoux/standard-ranklist-renderer-component",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/algoux/standard-ranklist-renderer-component"
+  },
   "type": "module",
   "files": [
     "dist"
