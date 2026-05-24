@@ -9,16 +9,26 @@ import {
 } from '@algoux/standard-ranklist-utils';
 import type { ThemeColor } from '@algoux/standard-ranklist-utils';
 import type { JSX } from 'solid-js';
-import { For, Show } from 'solid-js';
+import { createMemo, For, Show } from 'solid-js';
 import {
+  calculateDirtPercentage,
+  calculateProblemStatisticsFooter,
+  calculateSEValue,
   captureModalTriggerPointFromMouseEvent,
-  getAcceptedStatusDetails,
+  formatProblemStatisticsAcceptedMinute,
+  formatProblemStatisticsAverageHardness,
+  formatProblemStatisticsPercent,
   getMarkerPresentation,
   getProblemHeaderBackgroundImage,
+  getRankProblemStatusCellPresentation,
   resolveSrkAssetUrl,
   shouldShowTimeColumn,
 } from '@algoux/standard-ranklist-renderer-component-core';
 import type {
+  ProblemStatisticsFooter,
+  RanklistColumnTitles,
+  RanklistStatusCellPreset,
+  RanklistUserAvatarPlacement,
   RankValue,
   SolutionClickPayload,
   StaticRanklist,
@@ -36,6 +46,9 @@ export interface StatusCellPartProps {
   rowIndex: number;
   ranklist: StaticRanklist;
   solutions: srk.Solution[];
+  statusCellPreset?: RanklistStatusCellPreset;
+  statusColorAsText?: boolean;
+  emptyStatusPlaceholder?: string | null;
   onClick: (event?: MouseEvent) => void;
 }
 
@@ -53,6 +66,8 @@ export interface UserCellPartProps {
   ranklist: StaticRanklist;
   markers?: srk.Marker[];
   theme: EnumTheme;
+  hideOrganization?: boolean;
+  hideAvatar?: boolean;
   onClick: (event?: MouseEvent) => void;
 }
 
@@ -66,18 +81,32 @@ export interface RanklistProps {
   data: StaticRanklist;
   theme?: EnumTheme;
   borderedRows?: boolean;
+  rowBordered?: boolean;
+  columnBordered?: boolean;
   stripedRows?: boolean;
   formatSrkAssetUrl?: (url: string, field: string) => string;
   onUserClick?: (payload: UserClickPayload) => void | Promise<void>;
   onSolutionClick?: (payload: SolutionClickPayload) => void | Promise<void>;
   parts?: RanklistParts;
+  splitOrganization?: boolean;
+  columnTitles?: RanklistColumnTitles;
+  statusCellPreset?: RanklistStatusCellPreset;
+  statusColorAsText?: boolean;
+  showProblemStatisticsFooter?: boolean;
+  showDirtColumn?: boolean;
+  showSEColumn?: boolean;
+  emptyStatusPlaceholder?: string | null;
+  userAvatarPlacement?: RanklistUserAvatarPlacement;
 }
 
 export function Ranklist(props: RanklistProps) {
   const theme = () => props.theme || EnumTheme.light;
   const showTimeColumn = () => shouldShowTimeColumn(props.data.rows);
   const formatAssetUrl = (url: string, field: string) => resolveSrkAssetUrl(url, field, props.formatSrkAssetUrl);
-
+  const showAvatarInOrganization = () => !!props.splitOrganization && props.userAvatarPlacement === 'organization';
+  const problemStatistics = createMemo(() =>
+    props.showProblemStatisticsFooter || props.showSEColumn ? calculateProblemStatisticsFooter(props.data) : [],
+  );
   const emitUserClick = (event: MouseEvent | undefined, row: StaticRanklistRow, rowIndex: number) => {
     if (event) {
       captureModalTriggerPointFromMouseEvent(event, {
@@ -155,19 +184,32 @@ export function Ranklist(props: RanklistProps) {
         <div class="srk-common-table srk-main">
           <table
             classList={{
-              'srk-table-row-bordered': !!props.borderedRows,
+              'srk-table-row-bordered': !!props.borderedRows || !!props.rowBordered,
+              'srk-table-column-bordered': !!props.columnBordered,
               'srk-table-row-striped': !!props.stripedRows,
             }}
           >
             <thead>
               <tr>
                 <For each={props.data.series}>
-                  {(series) => <th class="srk-series-header srk--text-right srk--nowrap">{series.title}</th>}
+                  {(series, seriesIndex) => (
+                    <th
+                      class="srk-series-header srk--text-right srk--nowrap"
+                      classList={{ 'srk-series-segmented-column': isSeriesSegmentedColumn(series) }}
+                    >
+                      {resolveSeriesColumnTitle(series, seriesIndex(), props.columnTitles)}
+                    </th>
+                  )}
                 </For>
-                <th class="srk--text-left srk--nowrap">Name</th>
-                <th class="srk--nowrap">Score</th>
+                <Show when={props.splitOrganization}>
+                  <th class="srk-organization-header srk--text-left srk--nowrap">
+                    {resolveColumnTitle(props.columnTitles, 'organization', 'Organization')}
+                  </th>
+                </Show>
+                <th class="srk--text-left srk--nowrap">{resolveColumnTitle(props.columnTitles, 'user', 'Name')}</th>
+                <th class="srk--text-right srk--nowrap">{resolveColumnTitle(props.columnTitles, 'score', 'Score')}</th>
                 <Show when={showTimeColumn()}>
-                  <th class="srk--nowrap">Time</th>
+                  <th class="srk--text-right srk--nowrap">{resolveColumnTitle(props.columnTitles, 'time', 'Time')}</th>
                 </Show>
                 <For each={props.data.problems}>
                   {(problem, problemIndex) => {
@@ -199,6 +241,16 @@ export function Ranklist(props: RanklistProps) {
                     );
                   }}
                 </For>
+                <Show when={props.showDirtColumn}>
+                  <th class="srk-dirt-header srk--text-right srk--nowrap">
+                    {resolveColumnTitle(props.columnTitles, 'dirt', 'Dirt')}
+                  </th>
+                </Show>
+                <Show when={props.showSEColumn}>
+                  <th class="srk-se-header srk--text-right srk--nowrap">
+                    {resolveColumnTitle(props.columnTitles, 'se', 'SE')}
+                  </th>
+                </Show>
               </tr>
             </thead>
             <tbody>
@@ -212,12 +264,35 @@ export function Ranklist(props: RanklistProps) {
                             rankValue,
                             props.data.series[seriesIndex()],
                           )}`}
+                          classList={{ 'srk-series-segmented-column': isSeriesSegmentedColumn(props.data.series[seriesIndex()]) }}
                           style={getSeriesSegmentStyle(rankValue, props.data.series[seriesIndex()], theme())}
                         >
                           {getRankText(rankValue, row)}
                         </td>
                       )}
                     </For>
+                    <Show when={props.splitOrganization}>
+                      <td
+                        class="srk-organization-cell srk--text-left srk--nowrap"
+                        classList={{ 'srk-organization-cell-avatar': showAvatarInOrganization() && !!row.user.avatar }}
+                      >
+                        <div class="srk-organization-cell-content">
+                          <Show when={showAvatarInOrganization() && row.user.avatar}>
+                            {(avatar) => (
+                              <div class="srk-user-avatar">
+                                <img src={formatAssetUrl(avatar(), 'user.avatar')} alt="User Avatar" />
+                              </div>
+                            )}
+                          </Show>
+                          <span
+                            class="srk-organization-name-text"
+                            title={row.user.organization ? resolveText(row.user.organization) : ''}
+                          >
+                            {row.user.organization ? resolveText(row.user.organization) : ''}
+                          </span>
+                        </div>
+                      </td>
+                    </Show>
                     {(() => {
                       const UserCellPart = props.parts?.userCell;
                       return UserCellPart ? (
@@ -228,6 +303,8 @@ export function Ranklist(props: RanklistProps) {
                           ranklist={props.data}
                           markers={props.data.markers}
                           theme={theme()}
+                          hideOrganization={!!props.splitOrganization}
+                          hideAvatar={showAvatarInOrganization()}
                           onClick={(event) => emitUserClick(event, row, rowIndex())}
                         />
                       ) : (
@@ -240,7 +317,7 @@ export function Ranklist(props: RanklistProps) {
                           }}
                         >
                           <div class="srk-user-cell-content">
-                            <Show when={row.user.avatar}>
+                            <Show when={!showAvatarInOrganization() && row.user.avatar ? row.user.avatar : undefined}>
                               {(avatar) => (
                                 <div class="srk-user-avatar">
                                   <img src={formatAssetUrl(avatar(), 'user.avatar')} alt="User Avatar" />
@@ -266,7 +343,7 @@ export function Ranklist(props: RanklistProps) {
                                   </For>
                                 </span>
                               </div>
-                              <Show when={row.user.organization}>
+                              <Show when={!props.splitOrganization && row.user.organization ? row.user.organization : undefined}>
                                 {(organization) => (
                                   <p class="srk-user-secondary-text srk--text-ellipsis" title="">
                                     {resolveText(organization())}
@@ -286,32 +363,67 @@ export function Ranklist(props: RanklistProps) {
                     </Show>
                     <For each={row.statuses}>
                       {(status, problemIndex) => {
-                        const partProps: StatusCellPartProps = {
-                          status,
-                          problem: props.data.problems[problemIndex()],
-                          problemIndex: problemIndex(),
-                          user: row.user,
-                          row,
-                          rowIndex: rowIndex(),
-                          ranklist: props.data,
-                          solutions: getStatusSolutions(status),
-                          onClick: (event) => emitSolutionClick(event, row, rowIndex(), status, problemIndex()),
-                        };
                         const StatusCellPart = props.parts?.statusCell;
-                        return StatusCellPart ? (
-                          <StatusCellPart {...partProps} />
-                        ) : (
+
+                        if (StatusCellPart) {
+                          return (
+                            <StatusCellPart
+                              status={status}
+                              problem={props.data.problems[problemIndex()]}
+                              problemIndex={problemIndex()}
+                              user={row.user}
+                              row={row}
+                              rowIndex={rowIndex()}
+                              ranklist={props.data}
+                              solutions={getStatusSolutions(status)}
+                              statusCellPreset={props.statusCellPreset || 'classic'}
+                              statusColorAsText={!!props.statusColorAsText}
+                              emptyStatusPlaceholder={props.emptyStatusPlaceholder ?? null}
+                              onClick={(event) => emitSolutionClick(event, row, rowIndex(), status, problemIndex())}
+                            />
+                          );
+                        }
+
+                        return (
                           <StatusCell
-                            {...partProps}
+                            status={status}
+                            problem={props.data.problems[problemIndex()]}
+                            problemIndex={problemIndex()}
+                            user={row.user}
+                            row={row}
+                            rowIndex={rowIndex()}
+                            ranklist={props.data}
+                            solutions={getStatusSolutions(status)}
+                            statusCellPreset={props.statusCellPreset || 'classic'}
+                            statusColorAsText={!!props.statusColorAsText}
+                            emptyStatusPlaceholder={props.emptyStatusPlaceholder ?? null}
+                            onClick={(event) => emitSolutionClick(event, row, rowIndex(), status, problemIndex())}
                             onSolutionClick={props.onSolutionClick}
                           />
                         );
                       }}
                     </For>
+                    <Show when={props.showDirtColumn}>
+                      <td class="srk-dirt-cell srk--text-right srk--nowrap">{calculateDirtPercentage(row)}</td>
+                    </Show>
+                    <Show when={props.showSEColumn}>
+                      <td class="srk-se-cell srk--text-right srk--nowrap">{calculateSEValue(row, problemStatistics())}</td>
+                    </Show>
                   </tr>
                 )}
               </For>
             </tbody>
+            <Show when={props.showProblemStatisticsFooter}>
+              <ProblemStatisticsFooterRows
+                data={props.data}
+                theme={theme()}
+                showTimeColumn={showTimeColumn()}
+                splitOrganization={!!props.splitOrganization}
+                showDirtColumn={!!props.showDirtColumn}
+                showSEColumn={!!props.showSEColumn}
+                statistics={problemStatistics()}
+              />
+            </Show>
           </table>
         </div>
       </Show>
@@ -345,56 +457,85 @@ function StatusCell(
   },
 ) {
   const isClickable = () => props.solutions.length > 0 && !!props.onSolutionClick;
-  const commonClass = 'srk-prest-status-block srk--text-center srk--nowrap';
+  const commonClass = () =>
+    `srk-prest-status-block srk--text-center srk--nowrap${
+      props.statusColorAsText ? ' srk-prest-status-block-color-text' : ''
+    }`;
   const onClick = (event: MouseEvent) => {
     event.preventDefault();
     if (isClickable()) {
       props.onClick(event);
     }
   };
+  const body = () => (
+    <StatusBody
+      status={props.status}
+      ranklist={props.ranklist}
+      preset={props.statusCellPreset || 'classic'}
+    />
+  );
 
   if (props.status.result === 'FB') {
     return (
-      <td class={`${commonClass} srk-prest-status-block-fb`} classList={{ 'srk--cursor-pointer': isClickable() }} onClick={onClick}>
-        <AcceptedStatusBody status={props.status} />
+      <td class={`${commonClass()} srk-prest-status-block-fb`} classList={{ 'srk--cursor-pointer': isClickable() }} onClick={onClick}>
+        <Show when={props.statusColorAsText}>
+          <span class="srk-prest-status-block-fb-star">{'\u2605'}</span>
+        </Show>
+        {body}
       </td>
     );
   }
   if (props.status.result === 'AC') {
     return (
-      <td class={`${commonClass} srk-prest-status-block-accepted`} classList={{ 'srk--cursor-pointer': isClickable() }} onClick={onClick}>
-        <AcceptedStatusBody status={props.status} />
+      <td class={`${commonClass()} srk-prest-status-block-accepted`} classList={{ 'srk--cursor-pointer': isClickable() }} onClick={onClick}>
+        {body}
       </td>
     );
   }
   if (props.status.result === '?') {
     return (
-      <td class={`${commonClass} srk-prest-status-block-frozen`} classList={{ 'srk--cursor-pointer': isClickable() }} onClick={onClick}>
-        {props.status.tries}
+      <td class={`${commonClass()} srk-prest-status-block-frozen`} classList={{ 'srk--cursor-pointer': isClickable() }} onClick={onClick}>
+        {body}
       </td>
     );
   }
   if (props.status.result === 'RJ') {
     return (
-      <td class={`${commonClass} srk-prest-status-block-failed`} classList={{ 'srk--cursor-pointer': isClickable() }} onClick={onClick}>
-        {props.status.tries}
+      <td class={`${commonClass()} srk-prest-status-block-failed`} classList={{ 'srk--cursor-pointer': isClickable() }} onClick={onClick}>
+        {body}
       </td>
     );
   }
-  return <td></td>;
+  return <td class="srk-status-placeholder-cell srk--text-center srk--nowrap">{props.emptyStatusPlaceholder ?? ''}</td>;
 }
 
-function AcceptedStatusBody(props: { status: srk.RankProblemStatus }) {
-  const details = () => getAcceptedStatusDetails(props.status);
-  if (typeof props.status.score === 'number') {
-    return (
+function StatusBody(props: {
+  status: srk.RankProblemStatus;
+  ranklist: StaticRanklist;
+  preset: RanklistStatusCellPreset;
+}) {
+  const presentation = () => getRankProblemStatusCellPresentation(props.status, props.ranklist, props.preset);
+  return (
+    <Show
+      when={typeof presentation().score === 'number'}
+      fallback={
+        <Show
+          when={presentation().secondary !== undefined}
+          fallback={<>{presentation().primary}</>}
+        >
+          <>
+            <span class="srk-prest-status-block-primary">{presentation().primary || ''}</span>{' '}
+            <span class="srk-prest-status-block-secondary">{presentation().secondary}</span>
+          </>
+        </Show>
+      }
+    >
       <>
-        <span class="srk-prest-status-block-score">{props.status.score}</span>
-        <span class="srk-prest-status-block-score-details">{details()}</span>
+        <span class="srk-prest-status-block-score">{presentation().score}</span>
+        <span class="srk-prest-status-block-score-details">{presentation().scoreDetails}</span>
       </>
-    );
-  }
-  return <>{details()}</>;
+    </Show>
+  );
 }
 
 function getRankValues(row: StaticRanklistRow, series: srk.RankSeries[]): RankValue[] {
@@ -403,6 +544,25 @@ function getRankValues(row: StaticRanklistRow, series: srk.RankSeries[]): RankVa
 
 function getRankText(rankValue: RankValue, row: StaticRanklistRow) {
   return rankValue.rank ? rankValue.rank : row.user.official === false ? '＊' : '';
+}
+
+function resolveSeriesColumnTitle(series: srk.RankSeries, index: number, columnTitles?: RanklistColumnTitles) {
+  const seriesTitles = columnTitles?.series;
+  if (typeof seriesTitles === 'function') {
+    return seriesTitles(series, index) ?? series.title;
+  }
+  if (Array.isArray(seriesTitles)) {
+    return seriesTitles[index] ?? series.title;
+  }
+  return series.title;
+}
+
+function resolveColumnTitle(
+  columnTitles: RanklistColumnTitles | undefined,
+  key: Exclude<keyof RanklistColumnTitles, 'series'>,
+  fallback: string,
+) {
+  return columnTitles?.[key] ?? fallback;
 }
 
 function getStatusSolutions(status: srk.RankProblemStatus) {
@@ -424,6 +584,10 @@ function resolveSeriesSegment(rankValue: RankValue, series: srk.RankSeries | und
 function getSeriesSegmentClass(rankValue: RankValue, series: srk.RankSeries | undefined) {
   const segmentStyle = resolveSeriesSegment(rankValue, series).style;
   return typeof segmentStyle === 'string' ? `srk-preset-series-segment-${segmentStyle}` : '';
+}
+
+function isSeriesSegmentedColumn(series: srk.RankSeries | undefined) {
+  return (series?.segments || []).some((segment) => typeof segment.style === 'string');
 }
 
 function getSeriesSegmentStyle(
@@ -451,3 +615,155 @@ function getSeriesSegmentStyle(
 function getMarkerStyle(style: { backgroundColor?: string } | undefined): JSX.CSSProperties {
   return style?.backgroundColor ? { 'background-color': style.backgroundColor } : {};
 }
+
+function ProblemStatisticsFooterRows(props: {
+  data: StaticRanklist;
+  theme: EnumTheme;
+  showTimeColumn: boolean;
+  splitOrganization: boolean;
+  showDirtColumn: boolean;
+  showSEColumn: boolean;
+  statistics: ProblemStatisticsFooter[];
+}) {
+  const leftColumnCount = () =>
+    props.data.series.length + 1 + 1 + (props.showTimeColumn ? 1 : 0) + (props.splitOrganization ? 1 : 0);
+  const footerRows = [
+    {
+      key: 'accepted',
+      label: 'Accepted',
+      tooltip: 'Number of participants who solved this problem',
+    },
+    {
+      key: 'tried',
+      label: 'Tried',
+      tooltip: 'Number of participants who attempted this problem',
+    },
+    {
+      key: 'submitted',
+      label: 'Submitted',
+      tooltip: 'Total number of valid submissions for this problem',
+    },
+    {
+      key: 'dirt',
+      label: 'Dirt',
+      tooltip: 'Wrong submissions among participants who solved this problem',
+    },
+    {
+      key: 'se',
+      label: 'SE',
+      tooltip: 'Average hardness, calculated as (participants - accepted) / participants',
+    },
+    {
+      key: 'firstAccepted',
+      label: 'FB at',
+      tooltip: 'First Blood at, also known as first solve time, in minutes',
+    },
+    {
+      key: 'lastAccepted',
+      label: 'LB at',
+      tooltip: 'Last Blood at, also known as last solve time, in minutes',
+    },
+  ];
+
+  return (
+    <tfoot>
+      <For each={footerRows}>
+        {(row) => (
+          <tr class="srk-problem-statistics-footer-row">
+            <td class="srk-problem-statistics-footer-labels srk--text-right srk--nowrap" colSpan={leftColumnCount()}>
+              <span class="srk-problem-statistics-footer-label srk--c-tooltip" data-tooltip={row.tooltip}>
+                {row.label}
+              </span>
+            </td>
+            <For each={props.statistics}>
+              {(stat) => {
+                const secondary = footerCellSecondary(row.key, stat);
+                return (
+                  <td class="srk-problem-statistics-footer-cell srk--text-center srk--nowrap">
+                    <span class="srk-problem-statistics-footer-primary">{footerCellPrimary(row.key, stat)}</span>
+                    <Show when={secondary !== undefined}>
+                      {' '}
+                      <span class="srk-problem-statistics-footer-secondary">{secondary}</span>
+                    </Show>
+                  </td>
+                );
+              }}
+            </For>
+            <FooterExtraCells showDirtColumn={props.showDirtColumn} showSEColumn={props.showSEColumn} />
+          </tr>
+        )}
+      </For>
+      <tr class="srk-problem-statistics-footer-row srk-problem-statistics-footer-problem-label-row">
+        <td class="srk-problem-statistics-footer-labels srk--text-right srk--nowrap" colSpan={leftColumnCount()} />
+        <For each={props.data.problems}>
+          {(problem, problemIndex) => (
+            <td
+              class="srk-problem-statistics-footer-cell srk-problem-statistics-footer-problem-header srk-problem-header srk--text-center srk--nowrap"
+              style={{ 'background-image': getProblemHeaderBackgroundImage(problem.style, props.theme, 0) }}
+            >
+              <span class="srk--display-block">{problem.alias || numberToAlphabet(problemIndex())}</span>
+            </td>
+          )}
+        </For>
+        <FooterExtraCells showDirtColumn={props.showDirtColumn} showSEColumn={props.showSEColumn} />
+      </tr>
+    </tfoot>
+  );
+}
+
+function FooterExtraCells(props: { showDirtColumn: boolean; showSEColumn: boolean }) {
+  return (
+    <>
+      <Show when={props.showDirtColumn}>
+        <td class="srk-problem-statistics-footer-cell srk-extra-statistics-footer-cell srk-dirt-footer-cell srk--nowrap">
+          <span class="srk-problem-statistics-footer-primary" />
+        </td>
+      </Show>
+      <Show when={props.showSEColumn}>
+        <td class="srk-problem-statistics-footer-cell srk-extra-statistics-footer-cell srk-se-footer-cell srk--nowrap">
+          <span class="srk-problem-statistics-footer-primary" />
+        </td>
+      </Show>
+    </>
+  );
+}
+
+function footerCellPrimary(key: string, stat: ProblemStatisticsFooter) {
+  switch (key) {
+    case 'accepted':
+      return stat.accepted;
+    case 'tried':
+      return stat.tried;
+    case 'submitted':
+      return stat.submitted;
+    case 'dirt':
+      return stat.dirt;
+    case 'se':
+      return formatProblemStatisticsAverageHardness(stat);
+    case 'firstAccepted':
+      return formatProblemStatisticsAcceptedMinute(stat.firstAcceptedTime);
+    case 'lastAccepted':
+      return formatProblemStatisticsAcceptedMinute(stat.lastAcceptedTime);
+    default:
+      return '';
+  }
+}
+
+function footerCellSecondary(key: string, stat: ProblemStatisticsFooter) {
+  switch (key) {
+    case 'accepted':
+      return formatProblemStatisticsPercent(stat.accepted, stat.participantCount);
+    case 'tried':
+      return formatProblemStatisticsPercent(stat.tried, stat.participantCount);
+    case 'dirt':
+      return formatProblemStatisticsPercent(stat.dirt, stat.dirtSubmitted);
+    default:
+      return undefined;
+  }
+}
+
+export type {
+  RanklistColumnTitles,
+  RanklistStatusCellPreset,
+  RanklistUserAvatarPlacement,
+};
