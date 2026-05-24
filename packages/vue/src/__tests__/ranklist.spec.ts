@@ -9,6 +9,7 @@ import {
 import Ranklist from '../Ranklist.vue';
 import basicRanklistJson from '../../../../tests/fixtures/basic-ranklist.json';
 import { describeRanklistInteractionContract } from '../../../../tests/shared/ranklist-interaction-contract';
+import { makeRenderOptionsRanklist } from '../../../../tests/shared/ranklist-render-options-contract';
 
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value));
 
@@ -109,5 +110,36 @@ describe('Vue Ranklist', () => {
         userId: 'team-alpha',
       },
     });
+  });
+
+  it('passes render option context into scoped user-cell and status-cell slots', () => {
+    const data = makeRenderOptionsRanklist();
+    data.rows[0].user.avatar = 'https://example.com/team-alpha.png';
+
+    const wrapper = mount(Ranklist, {
+      props: {
+        data,
+        splitOrganization: true,
+        statusCellPreset: 'minimal',
+        statusColorAsText: true,
+        emptyStatusPlaceholder: '.',
+        userAvatarPlacement: 'organization',
+      } as any,
+      slots: {
+        'user-cell': `
+          <template #user-cell="{ user, hideOrganization, hideAvatar }">
+            <td data-testid="slot-user-context">{{ user.id }}|{{ hideOrganization }}|{{ hideAvatar }}</td>
+          </template>
+        `,
+        'status-cell': `
+          <template #status-cell="{ statusCellPreset, statusColorAsText, emptyStatusPlaceholder }">
+            <td data-testid="slot-status-context">{{ statusCellPreset }}|{{ statusColorAsText }}|{{ emptyStatusPlaceholder }}</td>
+          </template>
+        `,
+      },
+    });
+
+    expect(wrapper.find('[data-testid="slot-user-context"]').text()).toBe('team-alpha|true|true');
+    expect(wrapper.find('[data-testid="slot-status-context"]').text()).toBe('minimal|true|.');
   });
 });

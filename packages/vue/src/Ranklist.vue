@@ -4,15 +4,29 @@
     srk version "{{ data.version }}" is not supported (current supported: {{ supportedVersions }})
   </div>
   <div v-else class="srk-common-table srk-main">
-    <table :class="{ 'srk-table-row-bordered': borderedRows, 'srk-table-row-striped': stripedRows }">
+    <table
+      :class="{
+        'srk-table-row-bordered': borderedRows || rowBordered,
+        'srk-table-column-bordered': columnBordered,
+        'srk-table-row-striped': stripedRows,
+      }"
+    >
       <thead>
         <tr>
-          <th v-for="seriesItem in data.series" :key="seriesItem.title" class="srk-series-header srk--text-right srk--nowrap">
-            {{ seriesItem.title }}
+          <th
+            v-for="(seriesItem, seriesIndex) in data.series"
+            :key="seriesItem.title"
+            class="srk-series-header srk--text-right srk--nowrap"
+            :class="{ 'srk-series-segmented-column': isSeriesSegmentedColumn(seriesItem) }"
+          >
+            {{ resolveSeriesColumnTitle(seriesItem, seriesIndex) }}
           </th>
-          <th class="srk--text-left srk--nowrap">Name</th>
-          <th class="srk--nowrap">Score</th>
-          <th v-if="showTimeColumn" class="srk--nowrap">Time</th>
+          <th v-if="splitOrganization" class="srk-organization-header srk--text-left srk--nowrap">
+            {{ resolveColumnTitle('organization', 'Organization') }}
+          </th>
+          <th class="srk--text-left srk--nowrap">{{ resolveColumnTitle('user', 'Name') }}</th>
+          <th class="srk--text-right srk--nowrap">{{ resolveColumnTitle('score', 'Score') }}</th>
+          <th v-if="showTimeColumn" class="srk--text-right srk--nowrap">{{ resolveColumnTitle('time', 'Time') }}</th>
           <template v-for="(problem, problemIndex) in data.problems" :key="problem.alias || resolveText(problem.title) || problemIndex">
             <slot
               name="problem-header-cell"
@@ -21,6 +35,12 @@
               <ProblemHeaderCell :problem="problem" :index="problemIndex" :theme="resolvedTheme" />
             </slot>
           </template>
+          <th v-if="showDirtColumn" class="srk-dirt-header srk--text-right srk--nowrap">
+            {{ resolveColumnTitle('dirt', 'Dirt') }}
+          </th>
+          <th v-if="showSEColumn" class="srk-se-header srk--text-right srk--nowrap">
+            {{ resolveColumnTitle('se', 'SE') }}
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -29,10 +49,31 @@
             v-for="(rankValue, seriesIndex) in getRankValues(row)"
             :key="data.series[seriesIndex]?.title || seriesIndex"
             class="srk--text-right srk--nowrap"
-            :class="getSeriesSegmentClass(rankValue, data.series[seriesIndex])"
+            :class="[
+              getSeriesSegmentClass(rankValue, data.series[seriesIndex]),
+              { 'srk-series-segmented-column': isSeriesSegmentedColumn(data.series[seriesIndex]) },
+            ]"
             :style="getSeriesSegmentStyle(rankValue, data.series[seriesIndex])"
           >
             {{ getRankText(rankValue, row) }}
+          </td>
+
+          <td
+            v-if="splitOrganization"
+            class="srk-organization-cell srk--text-left srk--nowrap"
+            :class="{ 'srk-organization-cell-avatar': showAvatarInOrganization && !!row.user.avatar }"
+          >
+            <div class="srk-organization-cell-content">
+              <div v-if="showAvatarInOrganization && row.user.avatar" class="srk-user-avatar">
+                <img :src="formatAssetUrl(row.user.avatar, 'user.avatar')" alt="User Avatar" />
+              </div>
+              <span
+                class="srk-organization-name-text"
+                :title="row.user.organization ? resolveText(row.user.organization) : ''"
+              >
+                {{ row.user.organization ? resolveText(row.user.organization) : '' }}
+              </span>
+            </div>
           </td>
 
           <slot
@@ -44,6 +85,8 @@
               ranklist: data,
               markers: data.markers,
               theme: resolvedTheme,
+              hideOrganization: splitOrganization,
+              hideAvatar: showAvatarInOrganization,
               onClick: (event?: MouseEvent) => emitUserClick(row, rowIndex, event),
             }"
           >
@@ -56,6 +99,8 @@
               :theme="resolvedTheme"
               :format-srk-asset-url="formatAssetUrl"
               :on-user-click="emitUserClick"
+              :hide-organization="splitOrganization"
+              :hide-avatar="showAvatarInOrganization"
             />
           </slot>
 
@@ -76,6 +121,9 @@
                 rowIndex,
                 ranklist: data,
                 solutions: getStatusSolutions(status),
+                statusCellPreset,
+                statusColorAsText,
+                emptyStatusPlaceholder,
                 onClick: (event?: MouseEvent) => emitSolutionClick(row, rowIndex, status, problemIndex, event),
               }"
             >
@@ -88,11 +136,83 @@
                 :row-index="rowIndex"
                 :ranklist="data"
                 :on-solution-click="emitSolutionClick"
+                :status-cell-preset="statusCellPreset"
+                :status-color-as-text="statusColorAsText"
+                :empty-status-placeholder="emptyStatusPlaceholder"
               />
             </slot>
           </template>
+          <td v-if="showDirtColumn" class="srk-dirt-cell srk--text-right srk--nowrap">
+            {{ calculateDirtPercentage(row) }}
+          </td>
+          <td v-if="showSEColumn" class="srk-se-cell srk--text-right srk--nowrap">
+            {{ calculateSEValue(row, problemStatistics) }}
+          </td>
         </tr>
       </tbody>
+      <tfoot v-if="showProblemStatisticsFooter">
+        <tr
+          v-for="footerRow in problemStatisticsFooterRows"
+          :key="footerRow.key"
+          class="srk-problem-statistics-footer-row"
+        >
+          <td class="srk-problem-statistics-footer-labels srk--text-right srk--nowrap" :colspan="leftFooterColumnCount">
+            <span class="srk-problem-statistics-footer-label srk--c-tooltip" :data-tooltip="footerRow.tooltip">
+              {{ footerRow.label }}
+            </span>
+          </td>
+          <td
+            v-for="(stat, problemIndex) in problemStatistics"
+            :key="data.problems[problemIndex]?.alias || problemIndex"
+            class="srk-problem-statistics-footer-cell srk--text-center srk--nowrap"
+          >
+            <span class="srk-problem-statistics-footer-primary">
+              {{ getProblemStatisticsFooterCellPrimary(footerRow.key, stat) }}
+            </span>
+            <template v-if="getProblemStatisticsFooterCellSecondary(footerRow.key, stat) !== undefined">
+              {{ ' ' }}
+              <span class="srk-problem-statistics-footer-secondary">
+                {{ getProblemStatisticsFooterCellSecondary(footerRow.key, stat) }}
+              </span>
+            </template>
+          </td>
+          <td
+            v-if="showDirtColumn"
+            class="srk-problem-statistics-footer-cell srk-extra-statistics-footer-cell srk-dirt-footer-cell srk--nowrap"
+          >
+            <span class="srk-problem-statistics-footer-primary"></span>
+          </td>
+          <td
+            v-if="showSEColumn"
+            class="srk-problem-statistics-footer-cell srk-extra-statistics-footer-cell srk-se-footer-cell srk--nowrap"
+          >
+            <span class="srk-problem-statistics-footer-primary"></span>
+          </td>
+        </tr>
+        <tr class="srk-problem-statistics-footer-row srk-problem-statistics-footer-problem-label-row">
+          <td class="srk-problem-statistics-footer-labels srk--text-right srk--nowrap" :colspan="leftFooterColumnCount"></td>
+          <td
+            v-for="(problem, problemIndex) in data.problems"
+            :key="problem.alias || resolveText(problem.title) || problemIndex"
+            class="srk-problem-statistics-footer-cell srk-problem-statistics-footer-problem-header srk-problem-header srk--text-center srk--nowrap"
+            :style="{ backgroundImage: getProblemHeaderBackgroundImage(problem.style, resolvedTheme, 0) }"
+          >
+            <span class="srk--display-block">{{ problem.alias || numberToAlphabet(problemIndex) }}</span>
+          </td>
+          <td
+            v-if="showDirtColumn"
+            class="srk-problem-statistics-footer-cell srk-extra-statistics-footer-cell srk-dirt-footer-cell srk--nowrap"
+          >
+            <span class="srk-problem-statistics-footer-primary"></span>
+          </td>
+          <td
+            v-if="showSEColumn"
+            class="srk-problem-statistics-footer-cell srk-extra-statistics-footer-cell srk-se-footer-cell srk--nowrap"
+          >
+            <span class="srk-problem-statistics-footer-primary"></span>
+          </td>
+        </tr>
+      </tfoot>
     </table>
   </div>
 </template>
@@ -102,35 +222,74 @@ import type * as srk from '@algoux/standard-ranklist';
 import {
   EnumTheme,
   formatTimeDuration,
+  numberToAlphabet,
   resolveStyle,
   resolveText,
 } from '@algoux/standard-ranklist-utils';
 import type { ThemeColor } from '@algoux/standard-ranklist-utils';
 import { computed } from 'vue';
 import {
+  calculateDirtPercentage,
+  calculateProblemStatisticsFooter,
+  calculateSEValue,
   caniuse,
   captureModalTriggerPointFromMouseEvent,
+  formatProblemStatisticsAcceptedMinute,
+  formatProblemStatisticsAverageHardness,
+  formatProblemStatisticsPercent,
+  getProblemHeaderBackgroundImage,
   resolveSrkAssetUrl,
   shouldShowTimeColumn,
   srkSupportedVersions,
 } from '@algoux/standard-ranklist-renderer-component-core';
-import type { RankValue, SolutionClickPayload, StaticRanklistRow, UserClickPayload } from '@algoux/standard-ranklist-renderer-component-core';
+import type {
+  ProblemStatisticsFooter,
+  RanklistColumnTitles,
+  RanklistStatusCellPreset,
+  RanklistUserAvatarPlacement,
+  RankValue,
+  SolutionClickPayload,
+  StaticRanklist,
+  StaticRanklistRow,
+  UserClickPayload,
+} from '@algoux/standard-ranklist-renderer-component-core';
 import ProblemHeaderCell from './parts/ProblemHeaderCell.vue';
 import StatusCell from './parts/StatusCell.vue';
 import UserCell from './parts/UserCell.vue';
 
 const props = withDefaults(
   defineProps<{
-    data: srk.Ranklist & { rows: StaticRanklistRow[] };
+    data: StaticRanklist;
     theme?: EnumTheme;
     borderedRows?: boolean;
+    rowBordered?: boolean;
+    columnBordered?: boolean;
     stripedRows?: boolean;
     formatSrkAssetUrl?: (url: string, field: string) => string;
+    splitOrganization?: boolean;
+    columnTitles?: RanklistColumnTitles;
+    statusCellPreset?: RanklistStatusCellPreset;
+    statusColorAsText?: boolean;
+    showProblemStatisticsFooter?: boolean;
+    showDirtColumn?: boolean;
+    showSEColumn?: boolean;
+    emptyStatusPlaceholder?: string | null;
+    userAvatarPlacement?: RanklistUserAvatarPlacement;
   }>(),
   {
     theme: EnumTheme.light,
     borderedRows: false,
+    rowBordered: false,
+    columnBordered: false,
     stripedRows: false,
+    splitOrganization: false,
+    statusCellPreset: 'classic',
+    statusColorAsText: false,
+    showProblemStatisticsFooter: false,
+    showDirtColumn: false,
+    showSEColumn: false,
+    emptyStatusPlaceholder: null,
+    userAvatarPlacement: 'user',
   },
 );
 
@@ -143,6 +302,51 @@ const resolvedTheme = computed(() => props.theme);
 const supportedVersions = srkSupportedVersions;
 const isSupportedVersion = computed(() => caniuse(props.data.version));
 const showTimeColumn = computed(() => shouldShowTimeColumn(props.data.rows));
+const showAvatarInOrganization = computed(() => props.splitOrganization && props.userAvatarPlacement === 'organization');
+const problemStatistics = computed(() =>
+  props.showProblemStatisticsFooter || props.showSEColumn ? calculateProblemStatisticsFooter(props.data) : [],
+);
+const leftFooterColumnCount = computed(
+  () => props.data.series.length + 1 + 1 + (showTimeColumn.value ? 1 : 0) + (props.splitOrganization ? 1 : 0),
+);
+
+const problemStatisticsFooterRows = [
+  {
+    key: 'accepted',
+    label: 'Accepted',
+    tooltip: 'Number of participants who solved this problem',
+  },
+  {
+    key: 'tried',
+    label: 'Tried',
+    tooltip: 'Number of participants who attempted this problem',
+  },
+  {
+    key: 'submitted',
+    label: 'Submitted',
+    tooltip: 'Total number of valid submissions for this problem',
+  },
+  {
+    key: 'dirt',
+    label: 'Dirt',
+    tooltip: 'Wrong submissions among participants who solved this problem',
+  },
+  {
+    key: 'se',
+    label: 'SE',
+    tooltip: 'Average hardness, calculated as (participants - accepted) / participants',
+  },
+  {
+    key: 'firstAccepted',
+    label: 'FB at',
+    tooltip: 'First Blood at, also known as first solve time, in minutes',
+  },
+  {
+    key: 'lastAccepted',
+    label: 'LB at',
+    tooltip: 'Last Blood at, also known as last solve time, in minutes',
+  },
+];
 
 function formatAssetUrl(url: string, field: string) {
   return resolveSrkAssetUrl(url, field, props.formatSrkAssetUrl);
@@ -154,6 +358,25 @@ function getRankValues(row: StaticRanklistRow): RankValue[] {
 
 function getRankText(rankValue: RankValue, row: StaticRanklistRow) {
   return rankValue.rank ? rankValue.rank : row.user.official === false ? '＊' : '';
+}
+
+function isSeriesSegmentedColumn(series: srk.RankSeries | undefined) {
+  return (series?.segments || []).some((segment) => typeof segment.style === 'string');
+}
+
+function resolveSeriesColumnTitle(series: srk.RankSeries, index: number) {
+  const seriesTitles = props.columnTitles?.series;
+  if (typeof seriesTitles === 'function') {
+    return seriesTitles(series, index) ?? series.title;
+  }
+  if (Array.isArray(seriesTitles)) {
+    return seriesTitles[index] ?? series.title;
+  }
+  return series.title;
+}
+
+function resolveColumnTitle(key: Exclude<keyof RanklistColumnTitles, 'series'>, fallback: string) {
+  return props.columnTitles?.[key] ?? fallback;
 }
 
 function resolveSeriesSegment(rankValue: RankValue, series: srk.RankSeries | undefined) {
@@ -186,6 +409,40 @@ function getSeriesSegmentStyle(rankValue: RankValue, series: srk.RankSeries | un
 
 function getStatusSolutions(status: srk.RankProblemStatus) {
   return [...(status.solutions || [])].reverse();
+}
+
+function getProblemStatisticsFooterCellPrimary(key: string, stat: ProblemStatisticsFooter) {
+  switch (key) {
+    case 'accepted':
+      return stat.accepted;
+    case 'tried':
+      return stat.tried;
+    case 'submitted':
+      return stat.submitted;
+    case 'dirt':
+      return stat.dirt;
+    case 'se':
+      return formatProblemStatisticsAverageHardness(stat);
+    case 'firstAccepted':
+      return formatProblemStatisticsAcceptedMinute(stat.firstAcceptedTime);
+    case 'lastAccepted':
+      return formatProblemStatisticsAcceptedMinute(stat.lastAcceptedTime);
+    default:
+      return '';
+  }
+}
+
+function getProblemStatisticsFooterCellSecondary(key: string, stat: ProblemStatisticsFooter) {
+  switch (key) {
+    case 'accepted':
+      return formatProblemStatisticsPercent(stat.accepted, stat.participantCount);
+    case 'tried':
+      return formatProblemStatisticsPercent(stat.tried, stat.participantCount);
+    case 'dirt':
+      return formatProblemStatisticsPercent(stat.dirt, stat.dirtSubmitted);
+    default:
+      return undefined;
+  }
 }
 
 function emitUserClick(payloadOrRow: UserClickPayload | StaticRanklistRow, rowIndex?: number, event?: MouseEvent) {

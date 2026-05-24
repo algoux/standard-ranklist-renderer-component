@@ -2,6 +2,9 @@ import type * as srk from '@algoux/standard-ranklist';
 import type { CSSProperties } from 'vue';
 import type { EnumTheme } from '@algoux/standard-ranklist-utils';
 import type {
+  RanklistColumnTitles,
+  RanklistStatusCellPreset,
+  RanklistUserAvatarPlacement,
   SolutionClickPayload,
   StaticRanklist,
   StaticRanklistRow,
@@ -14,8 +17,19 @@ export interface RanklistProps {
   data: StaticRanklist;
   theme?: EnumTheme;
   borderedRows?: boolean;
+  rowBordered?: boolean;
+  columnBordered?: boolean;
   stripedRows?: boolean;
   formatSrkAssetUrl?: (url: string, field: string) => string;
+  splitOrganization?: boolean;
+  columnTitles?: RanklistColumnTitles;
+  statusCellPreset?: RanklistStatusCellPreset;
+  statusColorAsText?: boolean;
+  showProblemStatisticsFooter?: boolean;
+  showDirtColumn?: boolean;
+  showSEColumn?: boolean;
+  emptyStatusPlaceholder?: string | null;
+  userAvatarPlacement?: RanklistUserAvatarPlacement;
 }
 
 export interface ProblemHeaderCellSlotProps {
@@ -32,6 +46,8 @@ export interface UserCellSlotProps {
   ranklist: StaticRanklist;
   markers?: srk.Marker[];
   theme?: EnumTheme;
+  hideOrganization?: boolean;
+  hideAvatar?: boolean;
   onClick: (event?: MouseEvent) => void;
 }
 
@@ -44,6 +60,9 @@ export interface StatusCellSlotProps {
   rowIndex: number;
   ranklist: StaticRanklist;
   solutions: srk.Solution[];
+  statusCellPreset?: RanklistStatusCellPreset;
+  statusColorAsText?: boolean;
+  emptyStatusPlaceholder?: string | null;
   onClick: (event?: MouseEvent) => void;
 }
 
@@ -98,4 +117,12 @@ export type ModalEvents = {
   'update:open': boolean;
 };
 
-export type { SolutionClickPayload, StaticRanklist, StaticRanklistRow, UserClickPayload };
+export type {
+  RanklistColumnTitles,
+  RanklistStatusCellPreset,
+  RanklistUserAvatarPlacement,
+  SolutionClickPayload,
+  StaticRanklist,
+  StaticRanklistRow,
+  UserClickPayload,
+};
