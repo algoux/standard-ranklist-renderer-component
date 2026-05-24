@@ -17,6 +17,8 @@ export interface UserCellProps {
   theme: EnumTheme;
   formatSrkAssetUrl: (url: string, field: string) => string;
   onUserClick?: (payload: UserClickPayload) => void | Promise<void>;
+  hideOrganization?: boolean;
+  hideAvatar?: boolean;
 }
 
 export function UserCell({
@@ -28,6 +30,8 @@ export function UserCell({
   theme,
   formatSrkAssetUrl,
   onUserClick,
+  hideOrganization,
+  hideAvatar,
 }: UserCellProps) {
   const userMarkers = resolveUserMarkers(user, markers);
   const markerCalcStyles = userMarkers.map((marker) => getMarkerPresentation(marker, theme));
@@ -58,7 +62,7 @@ export function UserCell({
       }}
     >
       <div className="srk-user-cell-content">
-        {user.avatar && (
+        {user.avatar && !hideAvatar && (
           <div className="srk-user-avatar">
             <img src={formatSrkAssetUrl(user.avatar, 'user.avatar')} alt="User Avatar" />
           </div>
@@ -79,7 +83,7 @@ export function UserCell({
               ))}
             </span>
           </div>
-          {!!user.organization && (
+          {!!user.organization && !hideOrganization && (
             <p className="srk-user-secondary-text srk--text-ellipsis" title="">
               {resolveText(user.organization)}
             </p>

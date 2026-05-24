@@ -67,4 +67,50 @@ describe('Local demo app', () => {
       HTMLElement.prototype.getBoundingClientRect = originalGetBoundingClientRect;
     }
   });
+
+  it('renders interactive examples for the new Ranklist render option props', () => {
+    const { container } = render(<App />);
+
+    expect((screen.getByLabelText('Split organization') as HTMLInputElement).checked).toBe(true);
+    expect((screen.getByLabelText('Custom column titles') as HTMLInputElement).checked).toBe(true);
+    expect((screen.getByLabelText('Text status colors') as HTMLInputElement).checked).toBe(true);
+    expect((screen.getByLabelText('Problem statistics footer') as HTMLInputElement).checked).toBe(true);
+    expect((screen.getByLabelText('Dirt column') as HTMLInputElement).checked).toBe(true);
+    expect((screen.getByLabelText('SE column') as HTMLInputElement).checked).toBe(true);
+    expect((screen.getByLabelText('Row borders') as HTMLInputElement).checked).toBe(true);
+    expect((screen.getByLabelText('Column borders') as HTMLInputElement).checked).toBe(true);
+    expect((screen.getByLabelText('Status preset') as HTMLSelectElement).value).toBe('compact');
+    expect((screen.getByLabelText('Empty status placeholder') as HTMLSelectElement).value).toBe('·');
+    expect((screen.getByLabelText('User avatar placement') as HTMLSelectElement).value).toBe('organization');
+
+    expect(container.querySelector('th.srk-organization-header')?.textContent).toContain('School');
+    expect(container.querySelector('th.srk-dirt-header')?.textContent).toContain('Dirt');
+    expect(container.querySelector('th.srk-se-header')?.textContent).toContain('SE');
+    expect(container.querySelector('tfoot')).toBeTruthy();
+    expect(container.querySelector('td.srk-prest-status-block-color-text')).toBeTruthy();
+    expect(container.querySelector('table')?.classList.contains('srk-table-row-bordered')).toBe(true);
+    expect(container.querySelector('table')?.classList.contains('srk-table-column-bordered')).toBe(true);
+    expect(Array.from(container.querySelectorAll('tbody td')).some((cell) => cell.textContent === '·')).toBe(true);
+    expect(container.querySelector('td.srk-organization-cell-avatar .srk-user-avatar img')).toBeTruthy();
+
+    fireEvent.change(screen.getByLabelText('Status preset'), { target: { value: 'minimal' } });
+    expect((screen.getByLabelText('Status preset') as HTMLSelectElement).value).toBe('minimal');
+    fireEvent.change(screen.getByLabelText('Empty status placeholder'), { target: { value: '-' } });
+    expect((screen.getByLabelText('Empty status placeholder') as HTMLSelectElement).value).toBe('-');
+    fireEvent.change(screen.getByLabelText('User avatar placement'), { target: { value: 'user' } });
+    expect((screen.getByLabelText('User avatar placement') as HTMLSelectElement).value).toBe('user');
+
+    fireEvent.click(screen.getByText('Baseline'));
+    expect((screen.getByLabelText('Split organization') as HTMLInputElement).checked).toBe(false);
+    expect((screen.getByLabelText('Custom column titles') as HTMLInputElement).checked).toBe(false);
+    expect((screen.getByLabelText('Text status colors') as HTMLInputElement).checked).toBe(false);
+    expect((screen.getByLabelText('Problem statistics footer') as HTMLInputElement).checked).toBe(false);
+    expect((screen.getByLabelText('Dirt column') as HTMLInputElement).checked).toBe(false);
+    expect((screen.getByLabelText('SE column') as HTMLInputElement).checked).toBe(false);
+    expect((screen.getByLabelText('Row borders') as HTMLInputElement).checked).toBe(false);
+    expect((screen.getByLabelText('Column borders') as HTMLInputElement).checked).toBe(false);
+    expect((screen.getByLabelText('Status preset') as HTMLSelectElement).value).toBe('classic');
+    expect((screen.getByLabelText('Empty status placeholder') as HTMLSelectElement).value).toBe('');
+    expect((screen.getByLabelText('User avatar placement') as HTMLSelectElement).value).toBe('user');
+  });
 });
