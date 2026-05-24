@@ -77,6 +77,54 @@ describe('Angular dev app', () => {
     expect(hostElement.querySelector('srk-ranklist table')).not.toBeNull();
   });
 
+  it('renders interactive examples for the new Ranklist render option props', async () => {
+    const { componentRef, hostElement } = await renderDevApp();
+
+    expect(componentRef.instance.splitOrganization).toBe(true);
+    expect(componentRef.instance.useCustomColumnTitles).toBe(true);
+    expect(componentRef.instance.statusCellPreset).toBe('compact');
+    expect(componentRef.instance.statusColorAsText).toBe(true);
+    expect(componentRef.instance.showProblemStatisticsFooter).toBe(true);
+    expect(componentRef.instance.showDirtColumn).toBe(true);
+    expect(componentRef.instance.showSEColumn).toBe(true);
+    expect(componentRef.instance.rowBordered).toBe(true);
+    expect(componentRef.instance.columnBordered).toBe(true);
+    expect(componentRef.instance.emptyStatusPlaceholder).toBe('·');
+    expect(componentRef.instance.userAvatarPlacement).toBe('organization');
+
+    expect(hostElement.querySelector('th.srk-organization-header')?.textContent).toContain('School');
+    expect(hostElement.querySelector('th.srk-dirt-header')?.textContent).toContain('Dirt');
+    expect(hostElement.querySelector('th.srk-se-header')?.textContent).toContain('SE');
+    expect(hostElement.querySelector('tfoot')).toBeTruthy();
+    expect(hostElement.querySelector('td.srk-prest-status-block-color-text')).toBeTruthy();
+    expect(hostElement.querySelector('table')?.classList.contains('srk-table-row-bordered')).toBe(true);
+    expect(hostElement.querySelector('table')?.classList.contains('srk-table-column-bordered')).toBe(true);
+    expect(Array.from(hostElement.querySelectorAll('tbody td')).some((cell) => cell.textContent?.trim() === '·')).toBe(true);
+
+    componentRef.instance.statusCellPreset = 'minimal';
+    componentRef.instance.emptyStatusPlaceholder = '-';
+    componentRef.instance.userAvatarPlacement = 'user';
+    componentRef.changeDetectorRef.detectChanges();
+    expect(componentRef.instance.statusCellPreset).toBe('minimal');
+    expect(componentRef.instance.emptyStatusPlaceholder).toBe('-');
+    expect(componentRef.instance.userAvatarPlacement).toBe('user');
+
+    componentRef.instance.useBaselineOptions();
+    componentRef.changeDetectorRef.detectChanges();
+
+    expect(componentRef.instance.splitOrganization).toBe(false);
+    expect(componentRef.instance.useCustomColumnTitles).toBe(false);
+    expect(componentRef.instance.statusCellPreset).toBe('classic');
+    expect(componentRef.instance.statusColorAsText).toBe(false);
+    expect(componentRef.instance.showProblemStatisticsFooter).toBe(false);
+    expect(componentRef.instance.showDirtColumn).toBe(false);
+    expect(componentRef.instance.showSEColumn).toBe(false);
+    expect(componentRef.instance.rowBordered).toBe(false);
+    expect(componentRef.instance.columnBordered).toBe(false);
+    expect(componentRef.instance.emptyStatusPlaceholder).toBe(null);
+    expect(componentRef.instance.userAvatarPlacement).toBe('user');
+  });
+
   it('updates the preview modal from ranklist click events', async () => {
     const { componentRef, hostElement } = await renderDevApp();
 

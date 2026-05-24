@@ -15,11 +15,13 @@ import { caniuse as coreCaniuse } from '@algoux/standard-ranklist-renderer-compo
 import {
   RanklistComponent,
   SrkStatusCellTemplateDirective,
+  SrkUserCellTemplateDirective,
 } from '../index';
 import type { UserClickPayload } from '../types';
 import { caniuse as angularCaniuse } from '../ranklist/ranklist-utils';
 import basicRanklistJson from '../../../../../tests/fixtures/basic-ranklist.json';
 import { describeRanklistInteractionContract } from '../../../../../tests/shared/ranklist-interaction-contract';
+import { makeRenderOptionsRanklist } from '../../../../../tests/shared/ranklist-render-options-contract';
 
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value));
 const makeStaticRanklist = () =>
@@ -63,15 +65,51 @@ class DefaultHostComponent {
   solutionEvents: unknown[] = [];
 }
 
+@Component({
+  standalone: true,
+  imports: [CommonModule, RanklistComponent, SrkStatusCellTemplateDirective, SrkUserCellTemplateDirective],
+  template: `
+    <srk-ranklist
+      [data]="data"
+      [splitOrganization]="true"
+      [statusCellPreset]="'minimal'"
+      [statusColorAsText]="true"
+      [emptyStatusPlaceholder]="'.'"
+      [userAvatarPlacement]="'organization'"
+    >
+      <ng-template srkUserCell let-user="user" let-hideOrganization="hideOrganization" let-hideAvatar="hideAvatar">
+        <td data-testid="ng-user-context">{{ user.id }}|{{ hideOrganization }}|{{ hideAvatar }}</td>
+      </ng-template>
+      <ng-template
+        srkStatusCell
+        let-statusCellPreset="statusCellPreset"
+        let-statusColorAsText="statusColorAsText"
+        let-emptyStatusPlaceholder="emptyStatusPlaceholder"
+      >
+        <td data-testid="ng-status-context">
+          {{ statusCellPreset }}|{{ statusColorAsText }}|{{ emptyStatusPlaceholder }}
+        </td>
+      </ng-template>
+    </srk-ranklist>
+  `,
+})
+class SlotContextHostComponent {
+  data = makeRenderOptionsRanklist();
+
+  constructor() {
+    this.data.rows[0].user.avatar = 'https://example.com/team-alpha.png';
+  }
+}
+
 interface RenderedHost {
   appRef: ApplicationRef;
-  componentRef: ComponentRef<HostComponent | DefaultHostComponent>;
+  componentRef: ComponentRef<any>;
   hostElement: HTMLElement;
 }
 
 const renderedHosts: RenderedHost[] = [];
 
-async function renderComponentHost<T extends HostComponent | DefaultHostComponent>(component: new () => T) {
+async function renderComponentHost<T>(component: new () => T) {
   const hostElement = document.createElement('div');
   document.body.appendChild(hostElement);
   const appRef = await createApplication();
@@ -175,5 +213,16 @@ describe('Angular Ranklist', () => {
       rowIndex: 0,
       problemIndex: 0,
     });
+  });
+
+  it('passes render option context into user and status templates', async () => {
+    const { hostElement } = await renderComponentHost(SlotContextHostComponent);
+
+    expect(hostElement.querySelector('[data-testid="ng-user-context"]')?.textContent?.replace(/\s+/g, '')).toBe(
+      'team-alpha|true|true',
+    );
+    expect(hostElement.querySelector('[data-testid="ng-status-context"]')?.textContent?.replace(/\s+/g, '')).toBe(
+      'minimal|true|.',
+    );
   });
 });

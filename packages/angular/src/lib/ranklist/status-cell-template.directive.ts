@@ -1,6 +1,7 @@
 import type * as srk from '@algoux/standard-ranklist';
 import { Directive, TemplateRef, inject } from '@angular/core';
 import type {
+  RanklistStatusCellPreset,
   SolutionClickPayload,
   StaticRanklist,
   StaticRanklistRow,
@@ -16,6 +17,9 @@ export interface StatusCellTemplateContext {
   rowIndex: number;
   ranklist: StaticRanklist;
   solutions: srk.Solution[];
+  statusCellPreset?: RanklistStatusCellPreset;
+  statusColorAsText?: boolean;
+  emptyStatusPlaceholder?: string | null;
   onClick: (event?: MouseEvent) => void;
 }
 

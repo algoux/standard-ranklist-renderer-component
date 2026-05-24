@@ -13,6 +13,8 @@ export interface UserCellTemplateContext {
   rowIndex: number;
   ranklist: StaticRanklist;
   markers: srk.Marker[];
+  hideOrganization?: boolean;
+  hideAvatar?: boolean;
   onClick: (event?: MouseEvent) => void;
 }
 

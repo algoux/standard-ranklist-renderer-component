@@ -19,6 +19,9 @@ export {
   type UserCellTemplateContext,
 } from './ranklist/user-cell-template.directive';
 export type {
+  RanklistColumnTitles,
+  RanklistStatusCellPreset,
+  RanklistUserAvatarPlacement,
   RankValue,
   SolutionClickPayload,
   StaticRanklist,
