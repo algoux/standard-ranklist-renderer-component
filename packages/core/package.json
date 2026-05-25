@@ -1,6 +1,6 @@
 {
   "name": "@algoux/standard-ranklist-renderer-component-core",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Core helpers and shared types for Standard Ranklist Renderer Component",
   "license": "MIT",
   "homepage": "https://github.com/algoux/standard-ranklist-renderer-component",

@@ -1,5 +1,14 @@
 # @algoux/standard-ranklist-renderer-component-vue
 
+## 0.6.1
+
+### Patch Changes
+
+- 5814fe8: Republish packages with built distribution artifacts.
+- Updated dependencies [5814fe8]
+  - @algoux/standard-ranklist-renderer-component-core@0.6.1
+  - @algoux/standard-ranklist-renderer-component-styles@0.6.1
+
 ## 0.6.0
 
 ### Minor Changes
