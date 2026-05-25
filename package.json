@@ -79,5 +79,6 @@
     "vue": "^3.4.38"
   },
   "license": "MIT",
-  "srkSupportedVersions": ">=0.3.0 <=0.3.12"
+  "srkSupportedVersions": ">=0.3.0 <=0.3.12",
+  "packageManager": "pnpm@11.1.3"
 }
