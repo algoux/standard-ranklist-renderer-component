@@ -1,6 +1,6 @@
 {
   "name": "@algoux/standard-ranklist-renderer-component-vue",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Vue components for Standard Ranklist Renderer Component",
   "license": "MIT",
   "homepage": "https://github.com/algoux/standard-ranklist-renderer-component",
