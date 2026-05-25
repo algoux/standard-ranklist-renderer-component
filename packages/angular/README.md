@@ -52,7 +52,7 @@ import '@algoux/standard-ranklist-renderer-component-styles';
     ></srk-progress-bar>
     <srk-ranklist
       [data]="staticRanklist"
-      [stripedRows]="true"
+      [rowStriped]="true"
       (userClick)="handleUserClick($event)"
       (solutionClick)="handleSolutionClick($event)"
     ></srk-ranklist>
@@ -111,6 +111,7 @@ Use `ModalComponent` directly when you want custom modal content. `SrkUserCellTe
 - `showDirtColumn`: appends a Dirt percentage column after problem columns.
 - `showSEColumn`: appends a contestant SE column after problem columns, placed after Dirt when both are enabled.
 - `rowBordered`: adds row separators controlled by CSS variables.
+- `rowStriped`: adds striped body rows.
 - `columnBordered`: adds column separators controlled by CSS variables.
 - `emptyStatusPlaceholder`: renders a custom string in no-submission status cells.
 - `userAvatarPlacement`: chooses whether the default user avatar renders in the user column or, when `splitOrganization` is enabled, in the organization column.
@@ -140,6 +141,7 @@ export class BoardComponent {
   [statusCellPreset]="'compact'"
   [statusColorAsText]="true"
   [rowBordered]="true"
+  [rowStriped]="true"
   [columnBordered]="true"
   [emptyStatusPlaceholder]="'·'"
   [userAvatarPlacement]="'organization'"

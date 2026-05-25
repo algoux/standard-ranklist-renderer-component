@@ -26,7 +26,6 @@ import { RanklistComponent } from '../index';
       [showDirtColumn]="showDirtColumn"
       [showSEColumn]="showSEColumn"
       [rowBordered]="rowBordered"
-      [borderedRows]="borderedRows"
       [columnBordered]="columnBordered"
       [emptyStatusPlaceholder]="emptyStatusPlaceholder"
       [userAvatarPlacement]="userAvatarPlacement"
@@ -43,7 +42,6 @@ class RenderOptionsHostComponent {
   showDirtColumn?: RanklistRenderOptionsProps['showDirtColumn'];
   showSEColumn?: RanklistRenderOptionsProps['showSEColumn'];
   rowBordered?: RanklistRenderOptionsProps['rowBordered'];
-  borderedRows?: RanklistRenderOptionsProps['borderedRows'];
   columnBordered?: RanklistRenderOptionsProps['columnBordered'];
   emptyStatusPlaceholder?: RanklistRenderOptionsProps['emptyStatusPlaceholder'];
   userAvatarPlacement?: RanklistRenderOptionsProps['userAvatarPlacement'];

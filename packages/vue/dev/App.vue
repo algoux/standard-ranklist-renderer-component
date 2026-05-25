@@ -70,7 +70,7 @@
     <Ranklist
       :data="staticRanklist"
       :theme="preferredTheme"
-      striped-rows
+      row-striped
       :split-organization="splitOrganization"
       :column-titles="useCustomColumnTitles ? demoColumnTitles : undefined"
       :status-cell-preset="statusCellPreset"

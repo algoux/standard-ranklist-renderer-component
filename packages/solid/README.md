@@ -44,7 +44,7 @@ function Board(props: { ranklist: any }) {
       <ProgressBar data={props.ranklist} enableTimeTravel onTimeTravel={(time) => console.log(time)} />
       <Ranklist
         data={staticRanklist()}
-        stripedRows
+        rowStriped
         onUserClick={(payload) => {
           setActiveUser(payload);
           setActiveSolution(null);
@@ -87,6 +87,7 @@ Use `Modal` directly when you want custom modal content. `Ranklist` also accepts
 - `showDirtColumn`: appends a Dirt percentage column after problem columns.
 - `showSEColumn`: appends a contestant SE column after problem columns, placed after Dirt when both are enabled.
 - `rowBordered`: adds row separators controlled by CSS variables.
+- `rowStriped`: adds striped body rows.
 - `columnBordered`: adds column separators controlled by CSS variables.
 - `emptyStatusPlaceholder`: renders a custom string in no-submission status cells.
 - `userAvatarPlacement`: chooses whether the default user avatar renders in the user column or, when `splitOrganization` is enabled, in the organization column.
@@ -101,6 +102,7 @@ Use `Modal` directly when you want custom modal content. `Ranklist` also accepts
   statusCellPreset="compact"
   statusColorAsText
   rowBordered
+  rowStriped
   columnBordered
   emptyStatusPlaceholder="·"
   userAvatarPlacement="organization"

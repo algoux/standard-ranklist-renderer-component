@@ -22,8 +22,8 @@ import {
 } from './ranklist-dom-assertions';
 
 export interface RanklistDisplayRenderProps {
-  borderedRows?: boolean;
-  stripedRows?: boolean;
+  rowBordered?: boolean;
+  rowStriped?: boolean;
   formatSrkAssetUrl?: (url: string, field: string) => string;
 }
 
@@ -196,7 +196,7 @@ export function describeRanklistDisplayContract(adapter: RanklistDisplayAdapter)
           expect(getHeaderTexts(container)).toEqual(['Name', 'Score']);
           expect(getBodyRows(container)).toHaveLength(0);
         },
-        { borderedRows: true, stripedRows: true },
+        { rowBordered: true, rowStriped: true },
       );
     });
 

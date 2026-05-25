@@ -13,10 +13,9 @@ import type {
 export interface RanklistProps {
   data: StaticRanklist;
   theme?: EnumTheme;
-  borderedRows?: boolean;
   rowBordered?: boolean;
   columnBordered?: boolean;
-  stripedRows?: boolean;
+  rowStriped?: boolean;
   formatSrkAssetUrl?: (url: string, field: string) => string;
   splitOrganization?: boolean;
   columnTitles?: RanklistColumnTitles;

@@ -183,7 +183,7 @@ function resolvePreferredTheme() {
       <srk-ranklist
         [data]="staticRanklist"
         [theme]="preferredTheme"
-        [stripedRows]="true"
+        [rowStriped]="true"
         [splitOrganization]="splitOrganization"
         [columnTitles]="useCustomColumnTitles ? demoColumnTitles : undefined"
         [statusCellPreset]="statusCellPreset"

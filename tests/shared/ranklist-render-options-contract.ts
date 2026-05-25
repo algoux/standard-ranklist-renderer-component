@@ -15,7 +15,6 @@ export type RanklistRenderOptionsProps = {
   showDirtColumn?: boolean;
   showSEColumn?: boolean;
   rowBordered?: boolean;
-  borderedRows?: boolean;
   columnBordered?: boolean;
   emptyStatusPlaceholder?: string | null;
   userAvatarPlacement?: UserAvatarPlacement;
@@ -262,9 +261,6 @@ export function describeRanklistRenderOptionsContract(adapter: RanklistRenderOpt
       expect(textOf(alphaCells[7])).toBe('.');
       expect(alphaCells[7].classList.contains('srk-status-placeholder-cell')).toBe(true);
       expect(alphaCells[7].classList.contains('srk--text-center')).toBe(true);
-
-      const aliasRender = await renderRanklist({ borderedRows: true });
-      expect(aliasRender.container.querySelector('table')?.classList.contains('srk-table-row-bordered')).toBe(true);
     });
 
     it('applies segment marker spacing to the whole affected series column', async () => {

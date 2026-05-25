@@ -234,7 +234,7 @@ export default function App() {
       <Ranklist
         data={staticRanklist()}
         theme={preferredTheme}
-        stripedRows
+        rowStriped
         splitOrganization={splitOrganization()}
         columnTitles={useCustomColumnTitles() ? demoColumnTitles : undefined}
         statusCellPreset={statusCellPreset()}

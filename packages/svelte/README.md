@@ -42,7 +42,7 @@ $: staticRanklist = convertToStaticRanklist(ranklist);
 <ProgressBar data={ranklist} enableTimeTravel on:timeTravel={(event) => console.log(event.detail)} />
 <Ranklist
   data={staticRanklist}
-  stripedRows
+  rowStriped
   on:userClick={(event) => { activeUser = event.detail; activeSolution = null; }}
   on:solutionClick={(event) => { activeSolution = event.detail; activeUser = null; }}
 />
@@ -76,6 +76,7 @@ Use `Modal` directly when you want custom modal content. `Ranklist` exposes slot
 - `showDirtColumn`: appends a Dirt percentage column after problem columns.
 - `showSEColumn`: appends a contestant SE column after problem columns, placed after Dirt when both are enabled.
 - `rowBordered`: adds row separators controlled by CSS variables.
+- `rowStriped`: adds striped body rows.
 - `columnBordered`: adds column separators controlled by CSS variables.
 - `emptyStatusPlaceholder`: renders a custom string in no-submission status cells.
 - `userAvatarPlacement`: chooses whether the default user avatar renders in the user column or, when `splitOrganization` is enabled, in the organization column.
@@ -101,6 +102,7 @@ const columnTitles = {
   statusCellPreset="compact"
   statusColorAsText
   rowBordered
+  rowStriped
   columnBordered
   emptyStatusPlaceholder="·"
   userAvatarPlacement="organization"

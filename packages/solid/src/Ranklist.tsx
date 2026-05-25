@@ -80,10 +80,9 @@ export interface RanklistParts {
 export interface RanklistProps {
   data: StaticRanklist;
   theme?: EnumTheme;
-  borderedRows?: boolean;
   rowBordered?: boolean;
   columnBordered?: boolean;
-  stripedRows?: boolean;
+  rowStriped?: boolean;
   formatSrkAssetUrl?: (url: string, field: string) => string;
   onUserClick?: (payload: UserClickPayload) => void | Promise<void>;
   onSolutionClick?: (payload: SolutionClickPayload) => void | Promise<void>;
@@ -184,9 +183,9 @@ export function Ranklist(props: RanklistProps) {
         <div class="srk-common-table srk-main">
           <table
             classList={{
-              'srk-table-row-bordered': !!props.borderedRows || !!props.rowBordered,
+              'srk-table-row-bordered': !!props.rowBordered,
               'srk-table-column-bordered': !!props.columnBordered,
-              'srk-table-row-striped': !!props.stripedRows,
+              'srk-table-row-striped': !!props.rowStriped,
             }}
           >
             <thead>

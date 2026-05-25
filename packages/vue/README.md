@@ -55,7 +55,7 @@ function handleSolutionClick(payload: SolutionClickPayload) {
   <ProgressBar :data="props.ranklist" enable-time-travel @time-travel="(time) => console.log(time)" />
   <Ranklist
     :data="staticRanklist"
-    striped-rows
+    row-striped
     @user-click="handleUserClick"
     @solution-click="handleSolutionClick"
   />
@@ -90,6 +90,7 @@ Use `Modal` directly when you want custom modal content. `Ranklist` exposes scop
 - `showDirtColumn`: appends a Dirt percentage column after problem columns.
 - `showSEColumn`: appends a contestant SE column after problem columns, placed after Dirt when both are enabled.
 - `rowBordered`: adds row separators controlled by CSS variables.
+- `rowStriped`: adds striped body rows.
 - `columnBordered`: adds column separators controlled by CSS variables.
 - `emptyStatusPlaceholder`: renders a custom string in no-submission status cells.
 - `userAvatarPlacement`: chooses whether the default user avatar renders in the user column or, when `splitOrganization` is enabled, in the organization column.
@@ -116,6 +117,7 @@ const columnTitles = {
     status-cell-preset="compact"
     status-color-as-text
     row-bordered
+    row-striped
     column-bordered
     empty-status-placeholder="·"
     user-avatar-placement="organization"

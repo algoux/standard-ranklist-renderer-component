@@ -26,10 +26,9 @@
 
   export let data;
   export let theme = EnumTheme.light;
-  export let borderedRows = false;
   export let rowBordered = false;
   export let columnBordered = false;
-  export let stripedRows = false;
+  export let rowStriped = false;
   export let formatSrkAssetUrl = undefined;
   export let splitOrganization = false;
   export let columnTitles = undefined;
@@ -293,9 +292,9 @@
 {:else}
   <div class="srk-common-table srk-main">
     <table
-      class:srk-table-row-bordered={borderedRows || rowBordered}
+      class:srk-table-row-bordered={rowBordered}
       class:srk-table-column-bordered={columnBordered}
-      class:srk-table-row-striped={stripedRows}
+      class:srk-table-row-striped={rowStriped}
     >
       <thead>
         <tr>

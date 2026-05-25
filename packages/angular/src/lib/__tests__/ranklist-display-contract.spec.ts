@@ -21,8 +21,8 @@ import { RanklistComponent } from '../index';
   template: `
     <srk-ranklist
       [data]="data"
-      [borderedRows]="borderedRows"
-      [stripedRows]="stripedRows"
+      [rowBordered]="rowBordered"
+      [rowStriped]="rowStriped"
       [formatSrkAssetUrl]="formatSrkAssetUrl"
     />
   `,
@@ -41,8 +41,8 @@ class ContractHostComponent {
     problems: [],
     rows: [],
   };
-  borderedRows = false;
-  stripedRows = false;
+  rowBordered = false;
+  rowStriped = false;
   formatSrkAssetUrl?: (url: string, field: string) => string;
 }
 
@@ -62,8 +62,8 @@ async function renderHost(data: unknown, props: RanklistDisplayRenderProps = {})
   });
   Object.assign(componentRef.instance, {
     data,
-    borderedRows: !!props.borderedRows,
-    stripedRows: !!props.stripedRows,
+    rowBordered: !!props.rowBordered,
+    rowStriped: !!props.rowStriped,
     formatSrkAssetUrl: props.formatSrkAssetUrl,
   });
   appRef.attachView(componentRef.hostView);

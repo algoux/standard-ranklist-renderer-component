@@ -6,9 +6,9 @@
   <div v-else class="srk-common-table srk-main">
     <table
       :class="{
-        'srk-table-row-bordered': borderedRows || rowBordered,
+        'srk-table-row-bordered': rowBordered,
         'srk-table-column-bordered': columnBordered,
-        'srk-table-row-striped': stripedRows,
+        'srk-table-row-striped': rowStriped,
       }"
     >
       <thead>
@@ -261,10 +261,9 @@ const props = withDefaults(
   defineProps<{
     data: StaticRanklist;
     theme?: EnumTheme;
-    borderedRows?: boolean;
     rowBordered?: boolean;
     columnBordered?: boolean;
-    stripedRows?: boolean;
+    rowStriped?: boolean;
     formatSrkAssetUrl?: (url: string, field: string) => string;
     splitOrganization?: boolean;
     columnTitles?: RanklistColumnTitles;
@@ -278,10 +277,9 @@ const props = withDefaults(
   }>(),
   {
     theme: EnumTheme.light,
-    borderedRows: false,
     rowBordered: false,
     columnBordered: false,
-    stripedRows: false,
+    rowStriped: false,
     splitOrganization: false,
     statusCellPreset: 'classic',
     statusColorAsText: false,

@@ -196,7 +196,7 @@
   <Ranklist
     data={staticRanklist}
     theme={preferredTheme}
-    stripedRows
+    rowStriped
     {splitOrganization}
     columnTitles={useCustomColumnTitles ? demoColumnTitles : undefined}
     {statusCellPreset}

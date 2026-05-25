@@ -311,7 +311,7 @@ export default class App extends React.Component<Record<string, never>, AppState
         <Ranklist
           data={staticRanklist}
           theme={this.preferredTheme}
-          stripedRows
+          rowStriped
           onUserClick={this.handleUserClick}
           onSolutionClick={this.handleSolutionClick}
           splitOrganization={this.state.splitOrganization}

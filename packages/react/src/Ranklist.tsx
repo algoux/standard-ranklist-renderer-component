@@ -66,12 +66,6 @@ export interface RanklistProps {
    * Enable border between rows in the table.
    * @defaultValue false
    */
-  borderedRows?: boolean;
-
-  /**
-   * Enable border between rows in the table.
-   * @defaultValue false
-   */
   rowBordered?: boolean;
 
   /**
@@ -84,7 +78,7 @@ export interface RanklistProps {
    * Enable striped rows style in the table.
    * @defaultValue false
    */
-  stripedRows?: boolean;
+  rowStriped?: boolean;
 
   formatSrkAssetUrl?: (url: string, field: string) => string;
   onUserClick?: (payload: UserClickPayload) => void | Promise<void>;
@@ -109,10 +103,9 @@ interface State {
 export class Ranklist extends React.Component<RanklistProps, State> {
   static defaultProps: Partial<RanklistProps> = {
     theme: EnumTheme.light,
-    borderedRows: false,
     rowBordered: false,
     columnBordered: false,
-    stripedRows: false,
+    rowStriped: false,
     splitOrganization: false,
     statusCellPreset: 'classic',
     statusColorAsText: false,
@@ -396,10 +389,9 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     }
     const {
       data,
-      borderedRows,
       rowBordered,
       columnBordered,
-      stripedRows,
+      rowStriped,
       splitOrganization,
       statusCellPreset,
       statusColorAsText,
@@ -433,9 +425,9 @@ export class Ranklist extends React.Component<RanklistProps, State> {
         <div className="srk-common-table srk-main">
           <table
             className={classnames({
-              'srk-table-row-bordered': borderedRows || rowBordered,
+              'srk-table-row-bordered': rowBordered,
               'srk-table-column-bordered': columnBordered,
-              'srk-table-row-striped': stripedRows,
+              'srk-table-row-striped': rowStriped,
             })}
           >
             <thead>

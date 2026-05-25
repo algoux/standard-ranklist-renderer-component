@@ -74,9 +74,9 @@ import {
     <ng-template #ranklistTable>
       <div class="srk-common-table srk-main">
         <table
-          [class.srk-table-row-bordered]="borderedRows || rowBordered"
+          [class.srk-table-row-bordered]="rowBordered"
           [class.srk-table-column-bordered]="columnBordered"
-          [class.srk-table-row-striped]="stripedRows"
+          [class.srk-table-row-striped]="rowStriped"
         >
           <thead>
             <tr>
@@ -379,10 +379,9 @@ import {
 export class RanklistComponent {
   @Input({ required: true }) data!: StaticRanklist;
   @Input() theme: EnumTheme = EnumTheme.light;
-  @Input() borderedRows = false;
   @Input() rowBordered = false;
   @Input() columnBordered = false;
-  @Input() stripedRows = false;
+  @Input() rowStriped = false;
   @Input() formatSrkAssetUrl?: (url: string, field: string) => string;
   @Input() splitOrganization = false;
   @Input() columnTitles?: RanklistColumnTitles;

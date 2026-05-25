@@ -24,6 +24,7 @@ showProblemStatisticsFooter?: boolean;
 showDirtColumn?: boolean;
 showSEColumn?: boolean;
 rowBordered?: boolean;
+rowStriped?: boolean;
 columnBordered?: boolean;
 emptyStatusPlaceholder?: string | null;
 userAvatarPlacement?: 'user' | 'organization';
@@ -58,7 +59,8 @@ Default labels are: series title from SRK, `Name`, `Organization`, `Score`,
 | `showProblemStatisticsFooter` | `false` | Renders the multi-row problem statistics footer plus the final problem alias row. |
 | `showDirtColumn` | `false` | Appends the row Dirt percentage column after problem columns. |
 | `showSEColumn` | `false` | Appends the row SE column after problems and after Dirt when both are enabled. |
-| `rowBordered` | `false` | Enables row separators via shared CSS variables. Existing `borderedRows` remains a React alias. |
+| `rowBordered` | `false` | Enables row separators via shared CSS variables. |
+| `rowStriped` | `false` | Enables striped body rows. |
 | `columnBordered` | `false` | Enables column separators via shared CSS variables. |
 | `emptyStatusPlaceholder` | `null` | Replaces no-submission status cell blank content with a custom string. |
 | `userAvatarPlacement` | `user` | Moves the default avatar into the split Organization column only when set to `organization` and `splitOrganization` is enabled. |
@@ -153,10 +155,11 @@ Default labels are: series title from SRK, `Name`, `Organization`, `Score`,
 - If the footer and appended extra columns are both enabled, the footer gets
   one empty alignment cell for each enabled extra column, in column order
   (`Dirt`, then `SE`).
-- `rowBordered` enables a light horizontal separator between body rows.
-  `borderedRows` remains supported as the existing React alias. The color is
-  controlled by `--srk-table-row-border-color`, which defaults to
+- `rowBordered` enables a light horizontal separator between body rows. The
+  color is controlled by `--srk-table-row-border-color`, which defaults to
   `--srk-table-border` only when row borders are enabled.
+- `rowStriped` enables the existing `.srk-table-row-striped` body-row
+  background treatment.
 - `columnBordered` enables light vertical separators between columns. The color
   is controlled by `--srk-table-column-border-color`, which defaults to
   `--srk-table-border` only when column borders are enabled. Column separator
