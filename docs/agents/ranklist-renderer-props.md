@@ -185,7 +185,7 @@ Default labels are: series title from SRK, `Name`, `Organization`, `Score`,
 
 ## Rollout Status
 
-- React: implemented in source; focused option tests, `pnpm test:react`,
+- React/Vue workspace: implemented in source; focused option tests, `pnpm test:workspace`,
   `pnpm build:styles`, `pnpm build:core`, and `pnpm build:react` have been
   run during the pilot.
   Latest feedback pass adds footer tooltip labels, wider footer row spacing,
