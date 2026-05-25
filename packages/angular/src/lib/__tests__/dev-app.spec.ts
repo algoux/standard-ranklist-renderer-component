@@ -79,6 +79,8 @@ describe('Angular dev app', () => {
 
   it('renders interactive examples for the new Ranklist render option props', async () => {
     const { componentRef, hostElement } = await renderDevApp();
+    const getCheckbox = (label: string) => hostElement.querySelector(`input[aria-label="${label}"]`) as HTMLInputElement;
+    const getSelect = (label: string) => hostElement.querySelector(`select[aria-label="${label}"]`) as HTMLSelectElement;
 
     expect(componentRef.instance.splitOrganization).toBe(true);
     expect(componentRef.instance.useCustomColumnTitles).toBe(true);
@@ -91,6 +93,18 @@ describe('Angular dev app', () => {
     expect(componentRef.instance.columnBordered).toBe(true);
     expect(componentRef.instance.emptyStatusPlaceholder).toBe('·');
     expect(componentRef.instance.userAvatarPlacement).toBe('organization');
+
+    expect(getCheckbox('Split organization').checked).toBe(true);
+    expect(getCheckbox('Custom column titles').checked).toBe(true);
+    expect(getCheckbox('Text status colors').checked).toBe(true);
+    expect(getCheckbox('Problem statistics footer').checked).toBe(true);
+    expect(getCheckbox('Dirt column').checked).toBe(true);
+    expect(getCheckbox('SE column').checked).toBe(true);
+    expect(getCheckbox('Row borders').checked).toBe(true);
+    expect(getCheckbox('Column borders').checked).toBe(true);
+    expect(getSelect('Status preset').value).toBe('compact');
+    expect(getSelect('Empty status placeholder').value).toBe('·');
+    expect(getSelect('User avatar placement').value).toBe('organization');
 
     expect(hostElement.querySelector('th.srk-organization-header')?.textContent).toContain('School');
     expect(hostElement.querySelector('th.srk-dirt-header')?.textContent).toContain('Dirt');
@@ -108,6 +122,9 @@ describe('Angular dev app', () => {
     expect(componentRef.instance.statusCellPreset).toBe('minimal');
     expect(componentRef.instance.emptyStatusPlaceholder).toBe('-');
     expect(componentRef.instance.userAvatarPlacement).toBe('user');
+    expect(getSelect('Status preset').value).toBe('minimal');
+    expect(getSelect('Empty status placeholder').value).toBe('-');
+    expect(getSelect('User avatar placement').value).toBe('user');
 
     componentRef.instance.useBaselineOptions();
     componentRef.changeDetectorRef.detectChanges();
@@ -123,6 +140,17 @@ describe('Angular dev app', () => {
     expect(componentRef.instance.columnBordered).toBe(false);
     expect(componentRef.instance.emptyStatusPlaceholder).toBe(null);
     expect(componentRef.instance.userAvatarPlacement).toBe('user');
+    expect(getCheckbox('Split organization').checked).toBe(false);
+    expect(getCheckbox('Custom column titles').checked).toBe(false);
+    expect(getCheckbox('Text status colors').checked).toBe(false);
+    expect(getCheckbox('Problem statistics footer').checked).toBe(false);
+    expect(getCheckbox('Dirt column').checked).toBe(false);
+    expect(getCheckbox('SE column').checked).toBe(false);
+    expect(getCheckbox('Row borders').checked).toBe(false);
+    expect(getCheckbox('Column borders').checked).toBe(false);
+    expect(getSelect('Status preset').value).toBe('classic');
+    expect(getSelect('Empty status placeholder').value).toBe('');
+    expect(getSelect('User avatar placement').value).toBe('user');
   });
 
   it('updates the preview modal from ranklist click events', async () => {

@@ -60,10 +60,13 @@ function resolvePreferredTheme() {
             <span>Status preset</span>
             <select
               aria-label="Status preset"
-              [value]="statusCellPreset"
               (change)="statusCellPreset = $any($event.target).value"
             >
-              <option *ngFor="let option of statusPresetOptions" [value]="option.value">
+              <option
+                *ngFor="let option of statusPresetOptions"
+                [value]="option.value"
+                [selected]="statusCellPreset === option.value"
+              >
                 {{ option.label }}
               </option>
             </select>
@@ -72,10 +75,13 @@ function resolvePreferredTheme() {
             <span>Empty status placeholder</span>
             <select
               aria-label="Empty status placeholder"
-              [value]="emptyStatusPlaceholder || ''"
               (change)="setEmptyStatusPlaceholder($any($event.target).value)"
             >
-              <option *ngFor="let option of emptyStatusPlaceholderOptions" [value]="option.value">
+              <option
+                *ngFor="let option of emptyStatusPlaceholderOptions"
+                [value]="option.value"
+                [selected]="(emptyStatusPlaceholder || '') === option.value"
+              >
                 {{ option.label }}
               </option>
             </select>
@@ -84,10 +90,13 @@ function resolvePreferredTheme() {
             <span>User avatar placement</span>
             <select
               aria-label="User avatar placement"
-              [value]="userAvatarPlacement"
               (change)="userAvatarPlacement = $any($event.target).value"
             >
-              <option *ngFor="let option of userAvatarPlacementOptions" [value]="option.value">
+              <option
+                *ngFor="let option of userAvatarPlacementOptions"
+                [value]="option.value"
+                [selected]="userAvatarPlacement === option.value"
+              >
                 {{ option.label }}
               </option>
             </select>
