@@ -10,6 +10,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
   contents: write
+  id-token: write
   pull-requests: write
 
 jobs:
@@ -19,20 +20,21 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           registry-url: https://registry.npmjs.org
+          package-manager-cache: false
 
       - name: Setup pnpm
         run: |
           corepack enable
-          corepack prepare pnpm@8.15.9 --activate
+          corepack prepare pnpm@11.1.3 --activate
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -54,23 +56,12 @@ jobs:
         if: steps.pending-changesets.outputs.found == 'true'
         run: pnpm -w run test:release
 
-      - name: Configure npm token
+      - name: Verify npm trusted publishing toolchain
         run: |
           set -euo pipefail
-
-          if [ -z "${NPM_TOKEN:-}" ]; then
-            echo "NPM_TOKEN is not available to this workflow. Check repository/org secret name and repository access." >&2
-            exit 1
-          fi
-
-          echo "NPM_TOKEN length: ${#NPM_TOKEN}"
-          printf '%s' "$NPM_TOKEN" | sha256sum | cut -c1-12 | sed 's/^/NPM_TOKEN sha256: /'
-
-          echo "npm userconfig: $(npm config get userconfig)"
-          npm whoami --registry https://registry.npmjs.org/
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          node --version
+          npm --version
+          pnpm --version
 
       - name: Create version PR or publish packages
         id: changesets
@@ -82,8 +73,6 @@ jobs:
           title: 'release: version packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create repository release baseline tag
         if: steps.changesets.outputs.published == 'true'
