@@ -1,4 +1,5 @@
 import { cleanup, fireEvent, render } from '@testing-library/svelte';
+import { tick } from 'svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 import { resetModalInteractionStateForTests } from '@algoux/standard-ranklist-renderer-component-core';
 import App from '../../dev/App.svelte';
@@ -19,6 +20,12 @@ function getButton(container: ParentNode, text: string): HTMLButtonElement {
   const button = Array.from(container.querySelectorAll('button')).find((candidate) => textOf(candidate) === text);
   expect(button).toBeTruthy();
   return button as HTMLButtonElement;
+}
+
+function getAcceptedStatusCell(container: ParentNode): HTMLElement {
+  const statusCell = container.querySelector('tbody td.srk-prest-status-block-accepted') as HTMLElement | null;
+  expect(statusCell).toBeTruthy();
+  return statusCell!;
 }
 
 describe('Svelte local demo app', () => {
@@ -52,13 +59,27 @@ describe('Svelte local demo app', () => {
     expect(Array.from(container.querySelectorAll('tbody td')).some((cell) => cell.textContent === '·')).toBe(true);
 
     await fireEvent.change(getField(container, 'Status preset'), { target: { value: 'minimal' } });
+    await tick();
     expect((getField(container, 'Status preset') as HTMLSelectElement).value).toBe('minimal');
+    expect(textOf(getAcceptedStatusCell(container))).toBe('+');
     await fireEvent.change(getField(container, 'Empty status placeholder'), { target: { value: '-' } });
+    await tick();
     expect((getField(container, 'Empty status placeholder') as HTMLSelectElement).value).toBe('-');
     await fireEvent.change(getField(container, 'User avatar placement'), { target: { value: 'user' } });
+    await tick();
     expect((getField(container, 'User avatar placement') as HTMLSelectElement).value).toBe('user');
+    await fireEvent.click(getField(container, 'Custom column titles'));
+    await tick();
+    expect((getField(container, 'Custom column titles') as HTMLInputElement).checked).toBe(false);
+    expect(container.querySelector('th.srk-organization-header')?.textContent).toContain('Organization');
+    expect(container.querySelector('th.srk-organization-header')?.textContent).not.toContain('School');
+    await fireEvent.click(getField(container, 'Text status colors'));
+    await tick();
+    expect((getField(container, 'Text status colors') as HTMLInputElement).checked).toBe(false);
+    expect(getAcceptedStatusCell(container).classList.contains('srk-prest-status-block-color-text')).toBe(false);
 
     await fireEvent.click(getButton(container, 'Baseline'));
+    await tick();
 
     expect((getField(container, 'Split organization') as HTMLInputElement).checked).toBe(false);
     expect((getField(container, 'Custom column titles') as HTMLInputElement).checked).toBe(false);

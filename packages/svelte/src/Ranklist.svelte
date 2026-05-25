@@ -100,8 +100,8 @@
     return rankValue.rank ? rankValue.rank : row.user.official === false ? '＊' : '';
   }
 
-  function resolveSeriesColumnTitle(series, index) {
-    const seriesTitles = columnTitles && columnTitles.series;
+  function resolveSeriesColumnTitle(series, index, titles) {
+    const seriesTitles = titles && titles.series;
     if (typeof seriesTitles === 'function') {
       return seriesTitles(series, index) ?? series.title;
     }
@@ -111,8 +111,8 @@
     return series.title;
   }
 
-  function resolveColumnTitle(key, fallback) {
-    return columnTitles && columnTitles[key] !== undefined ? columnTitles[key] : fallback;
+  function resolveColumnTitle(key, fallback, titles) {
+    return titles && titles[key] !== undefined ? titles[key] : fallback;
   }
 
   function problemAlias(problem, problemIndex) {
@@ -179,12 +179,12 @@
     return getStatusSolutions(status).length > 0;
   }
 
-  function statusCellClass(status) {
+  function statusCellClass(status, colorAsText) {
     const classNames = ['srk-prest-status-block', 'srk--text-center', 'srk--nowrap'];
     if (hasSolutions(status)) {
       classNames.push('srk--cursor-pointer');
     }
-    if (statusColorAsText) {
+    if (colorAsText) {
       classNames.push('srk-prest-status-block-color-text');
     }
     if (status.result === 'FB') {
@@ -199,8 +199,8 @@
     return classNames.join(' ');
   }
 
-  function statusPresentation(status) {
-    return getRankProblemStatusCellPresentation(status, data, statusCellPreset);
+  function statusPresentation(status, preset) {
+    return getRankProblemStatusCellPresentation(status, data, preset);
   }
 
   function footerCellPrimary(key, stat) {
@@ -304,18 +304,18 @@
               class="srk-series-header srk--text-right srk--nowrap"
               class:srk-series-segmented-column={isSeriesSegmentedColumn(seriesItem)}
             >
-              {resolveSeriesColumnTitle(seriesItem, seriesIndex)}
+              {resolveSeriesColumnTitle(seriesItem, seriesIndex, columnTitles)}
             </th>
           {/each}
           {#if splitOrganization}
             <th class="srk-organization-header srk--text-left srk--nowrap">
-              {resolveColumnTitle('organization', 'Organization')}
+              {resolveColumnTitle('organization', 'Organization', columnTitles)}
             </th>
           {/if}
-          <th class="srk--text-left srk--nowrap">{resolveColumnTitle('user', 'Name')}</th>
-          <th class="srk--text-right srk--nowrap">{resolveColumnTitle('score', 'Score')}</th>
+          <th class="srk--text-left srk--nowrap">{resolveColumnTitle('user', 'Name', columnTitles)}</th>
+          <th class="srk--text-right srk--nowrap">{resolveColumnTitle('score', 'Score', columnTitles)}</th>
           {#if showTimeColumn}
-            <th class="srk--text-right srk--nowrap">{resolveColumnTitle('time', 'Time')}</th>
+            <th class="srk--text-right srk--nowrap">{resolveColumnTitle('time', 'Time', columnTitles)}</th>
           {/if}
           {#each data.problems as problem, problemIndex}
             <th
@@ -344,10 +344,10 @@
             </th>
           {/each}
           {#if showDirtColumn}
-            <th class="srk-dirt-header srk--text-right srk--nowrap">{resolveColumnTitle('dirt', 'Dirt')}</th>
+            <th class="srk-dirt-header srk--text-right srk--nowrap">{resolveColumnTitle('dirt', 'Dirt', columnTitles)}</th>
           {/if}
           {#if showSEColumn}
-            <th class="srk-se-header srk--text-right srk--nowrap">{resolveColumnTitle('se', 'SE')}</th>
+            <th class="srk-se-header srk--text-right srk--nowrap">{resolveColumnTitle('se', 'SE', columnTitles)}</th>
           {/if}
         </tr>
       </thead>
@@ -455,10 +455,10 @@
                 onClick={(event) => emitSolutionClick(event, row, rowIndex, status, problemIndex)}
               >
                 {#if status.result === 'FB' || status.result === 'AC'}
-                  {@const presentation = statusPresentation(status)}
+                  {@const presentation = statusPresentation(status, statusCellPreset)}
                   <!-- svelte-ignore a11y-click-events-have-key-events -->
                   <td
-                    class={statusCellClass(status)}
+                    class={statusCellClass(status, statusColorAsText)}
                     on:click|preventDefault={(event) => emitSolutionClick(event, row, rowIndex, status, problemIndex)}
                   >
                     {#if statusColorAsText && status.result === 'FB'}
@@ -474,10 +474,10 @@
                     {/if}
                   </td>
                 {:else if status.result === '?' || status.result === 'RJ'}
-                  {@const presentation = statusPresentation(status)}
+                  {@const presentation = statusPresentation(status, statusCellPreset)}
                   <!-- svelte-ignore a11y-click-events-have-key-events -->
                   <td
-                    class={statusCellClass(status)}
+                    class={statusCellClass(status, statusColorAsText)}
                     on:click|preventDefault={(event) => emitSolutionClick(event, row, rowIndex, status, problemIndex)}
                   >
                     {#if presentation.secondary !== undefined}
