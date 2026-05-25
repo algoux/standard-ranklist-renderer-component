@@ -8,7 +8,7 @@
     "changeset": "changeset",
     "changeset:status": "changeset status",
     "changeset:version": "changeset version",
-    "changeset:publish": "pnpm test:release && changeset publish",
+    "changeset:publish": "changeset publish",
     "release:audit": "node ./scripts/audit-release-plan.mjs",
     "build": "pnpm run build:all",
     "build:all": "pnpm run build:styles && pnpm run build:core && pnpm run build:react && pnpm run build:vue && pnpm run build:solid && pnpm run build:svelte && pnpm run build:angular",

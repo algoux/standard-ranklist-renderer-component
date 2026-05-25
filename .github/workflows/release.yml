@@ -1,7 +1,11 @@
 name: Release
 
 on:
-  push:
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
     branches:
       - master
   workflow_dispatch:
@@ -17,12 +21,14 @@ jobs:
   release:
     name: Version or publish packages
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -51,10 +57,6 @@ jobs:
       - name: Audit release plan
         if: steps.pending-changesets.outputs.found == 'true'
         run: pnpm -w run release:audit
-
-      - name: Run release verification before version PR
-        if: steps.pending-changesets.outputs.found == 'true'
-        run: pnpm -w run test:release
 
       - name: Verify npm trusted publishing toolchain
         run: |
