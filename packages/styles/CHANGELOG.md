@@ -1,5 +1,11 @@
 # @algoux/standard-ranklist-renderer-component-styles
 
+## 0.6.0
+
+### Minor Changes
+
+- fd3a873: Add some new Ranklist custom props
+
 ## 0.5.1
 
 ### Patch Changes

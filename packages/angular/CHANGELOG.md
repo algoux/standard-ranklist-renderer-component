@@ -1,5 +1,16 @@
 # @algoux/standard-ranklist-renderer-component-angular
 
+## 0.6.0
+
+### Minor Changes
+
+- fd3a873: Add some new Ranklist custom props
+
+### Patch Changes
+
+- Updated dependencies [fd3a873]
+  - @algoux/standard-ranklist-renderer-component-core@0.6.0
+
 ## 0.5.1
 
 ### Patch Changes
