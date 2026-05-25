@@ -1,5 +1,11 @@
 # @algoux/standard-ranklist-renderer-component-solid
 
+## 0.6.2
+
+### Patch Changes
+
+- 95d472d: Remove `borderedRows` prop and rename `stripedRows` prop to `rowStriped`
+
 ## 0.6.1
 
 ### Patch Changes
