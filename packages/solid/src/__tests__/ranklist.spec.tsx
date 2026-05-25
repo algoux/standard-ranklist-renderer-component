@@ -6,6 +6,7 @@ import { render } from 'solid-js/web';
 import { Ranklist } from '../index';
 import basicRanklistJson from '../../../../tests/fixtures/basic-ranklist.json';
 import { describeRanklistInteractionContract } from '../../../../tests/shared/ranklist-interaction-contract';
+import { makeRenderOptionsRanklist } from '../../../../tests/shared/ranklist-render-options-contract';
 
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 const makeStaticRanklist = () =>
@@ -100,6 +101,38 @@ describe('Solid Ranklist', () => {
       data.problems.length;
 
     expect(firstRowCells).toHaveLength(expectedCellCount);
+    dispose();
+  });
+
+  it('passes render option context into custom user and status parts', () => {
+    const data = makeRenderOptionsRanklist();
+    data.rows[0].user.avatar = 'https://example.com/team-alpha.png';
+
+    const { dispose } = renderSolid(() => (
+      <Ranklist
+        data={data as any}
+        splitOrganization
+        statusCellPreset="minimal"
+        statusColorAsText
+        emptyStatusPlaceholder="."
+        userAvatarPlacement="organization"
+        parts={{
+          userCell: (props) => (
+            <td data-testid="solid-user-context">
+              {props.user.id}|{String(props.hideOrganization)}|{String(props.hideAvatar)}
+            </td>
+          ),
+          statusCell: (props) => (
+            <td data-testid="solid-status-context">
+              {props.statusCellPreset}|{String(props.statusColorAsText)}|{props.emptyStatusPlaceholder}
+            </td>
+          ),
+        }}
+      />
+    ));
+
+    expect(screen.getAllByTestId('solid-user-context')[0].textContent).toBe('team-alpha|true|true');
+    expect(screen.getAllByTestId('solid-status-context')[0].textContent).toBe('minimal|true|.');
     dispose();
   });
 });

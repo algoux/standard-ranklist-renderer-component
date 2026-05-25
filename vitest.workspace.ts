@@ -1,5 +1,6 @@
 import react from '@vitejs/plugin-react';
 import vue from '@vitejs/plugin-vue';
+import { resolve } from 'node:path';
 import { defineConfig } from 'vitest/config';
 // @ts-ignore
 import pkg from './package.json';
@@ -11,6 +12,12 @@ export default defineConfig({
   ],
   define: {
     SRK_SUPPORTED_VERSIONS: JSON.stringify(pkg.srkSupportedVersions),
+  },
+  resolve: {
+    alias: {
+      '@algoux/standard-ranklist-renderer-component-core': resolve(__dirname, 'packages/core/src/index.ts'),
+      color: resolve(__dirname, 'packages/core/node_modules/color/index.js'),
+    },
   },
   test: {
     environment: 'jsdom',

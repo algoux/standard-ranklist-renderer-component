@@ -1,46 +1,67 @@
 <template>
   <td v-if="status.result === 'FB'" :class="[commonClassName, 'srk-prest-status-block-fb']" @click.prevent="emitSolutionClick">
-    <AcceptedStatusBody :status="status" />
+    <span v-if="statusColorAsText" class="srk-prest-status-block-fb-star">{{ fbStar }}</span>
+    <StatusBody :status="status" :ranklist="ranklist" :preset="statusCellPreset" />
   </td>
   <td v-else-if="status.result === 'AC'" :class="[commonClassName, 'srk-prest-status-block-accepted']" @click.prevent="emitSolutionClick">
-    <AcceptedStatusBody :status="status" />
+    <StatusBody :status="status" :ranklist="ranklist" :preset="statusCellPreset" />
   </td>
   <td v-else-if="status.result === '?'" :class="[commonClassName, 'srk-prest-status-block-frozen']" @click.prevent="emitSolutionClick">
-    {{ status.tries }}
+    <StatusBody :status="status" :ranklist="ranklist" :preset="statusCellPreset" />
   </td>
   <td v-else-if="status.result === 'RJ'" :class="[commonClassName, 'srk-prest-status-block-failed']" @click.prevent="emitSolutionClick">
-    {{ status.tries }}
+    <StatusBody :status="status" :ranklist="ranklist" :preset="statusCellPreset" />
   </td>
-  <td v-else></td>
+  <td v-else class="srk-status-placeholder-cell srk--text-center srk--nowrap">{{ emptyStatusPlaceholder }}</td>
 </template>
 
 <script setup lang="ts">
 import { computed, defineComponent, h } from 'vue';
 import type * as srk from '@algoux/standard-ranklist';
+import { resolveText } from '@algoux/standard-ranklist-utils';
 import {
   captureModalTriggerPointFromMouseEvent,
-  getAcceptedStatusDetails,
+  getRankProblemStatusCellPresentation,
 } from '@algoux/standard-ranklist-renderer-component-core';
-import type { SolutionClickPayload, StaticRanklist, StaticRanklistRow } from '@algoux/standard-ranklist-renderer-component-core';
+import type {
+  RanklistStatusCellPreset,
+  SolutionClickPayload,
+  StaticRanklist,
+  StaticRanklistRow,
+} from '@algoux/standard-ranklist-renderer-component-core';
 
-const props = defineProps<{
-  status: srk.RankProblemStatus;
-  problem?: srk.Problem;
-  problemIndex: number;
-  user: srk.User;
-  row: StaticRanklistRow;
-  rowIndex: number;
-  ranklist: StaticRanklist;
-  onSolutionClick?: (payload: SolutionClickPayload) => void | Promise<void>;
-}>();
+const props = withDefaults(
+  defineProps<{
+    status: srk.RankProblemStatus;
+    problem?: srk.Problem;
+    problemIndex: number;
+    user: srk.User;
+    row: StaticRanklistRow;
+    rowIndex: number;
+    ranklist: StaticRanklist;
+    onSolutionClick?: (payload: SolutionClickPayload) => void | Promise<void>;
+    statusCellPreset?: RanklistStatusCellPreset;
+    statusColorAsText?: boolean;
+    emptyStatusPlaceholder?: string | null;
+  }>(),
+  {
+    statusCellPreset: 'classic',
+    statusColorAsText: false,
+    emptyStatusPlaceholder: null,
+  },
+);
 
+const fbStar = '\u2605';
 const solutions = computed(() => [...(props.status.solutions || [])].reverse());
 const isClickable = computed(() => solutions.value.length > 0 && !!props.onSolutionClick);
 const commonClassName = computed(() => [
   'srk-prest-status-block',
   'srk--text-center',
   'srk--nowrap',
-  { 'srk--cursor-pointer': isClickable.value },
+  {
+    'srk--cursor-pointer': isClickable.value,
+    'srk-prest-status-block-color-text': props.statusColorAsText,
+  },
 ]);
 
 function emitSolutionClick(event: MouseEvent) {
@@ -53,7 +74,7 @@ function emitSolutionClick(event: MouseEvent) {
       rowIndex: props.rowIndex,
       problemIndex: props.problemIndex,
       problemAlias: props.problem?.alias || null,
-      problemTitle: props.problem ? props.problem.title : null,
+      problemTitle: props.problem ? resolveText(props.problem.title) : null,
       userId: props.user.id || null,
     },
   });
@@ -69,24 +90,44 @@ function emitSolutionClick(event: MouseEvent) {
   });
 }
 
-const AcceptedStatusBody = defineComponent({
+const StatusBody = defineComponent({
   props: {
     status: {
       type: Object,
+      required: true,
+    },
+    ranklist: {
+      type: Object,
+      required: true,
+    },
+    preset: {
+      type: String,
       required: true,
     },
   },
   setup(childProps) {
     return () => {
       const status = childProps.status as srk.RankProblemStatus;
-      const details = getAcceptedStatusDetails(status);
-      if (typeof status.score === 'number') {
+      const ranklist = childProps.ranklist as StaticRanklist;
+      const preset = childProps.preset as RanklistStatusCellPreset;
+      const presentation = getRankProblemStatusCellPresentation(status, ranklist, preset);
+
+      if (typeof presentation.score === 'number') {
         return [
-          h('span', { class: 'srk-prest-status-block-score' }, status.score),
-          h('span', { class: 'srk-prest-status-block-score-details' }, details),
+          h('span', { class: 'srk-prest-status-block-score' }, presentation.score),
+          h('span', { class: 'srk-prest-status-block-score-details' }, presentation.scoreDetails),
         ];
       }
-      return details;
+
+      if (presentation.secondary !== undefined) {
+        return [
+          h('span', { class: 'srk-prest-status-block-primary' }, presentation.primary || ''),
+          ' ',
+          h('span', { class: 'srk-prest-status-block-secondary' }, presentation.secondary),
+        ];
+      }
+
+      return presentation.primary || '';
     };
   },
 });

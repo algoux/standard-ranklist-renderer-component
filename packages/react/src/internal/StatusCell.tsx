@@ -4,9 +4,14 @@ import type * as srk from '@algoux/standard-ranklist';
 import { resolveText } from '@algoux/standard-ranklist-utils';
 import {
   captureModalTriggerPointFromMouseEvent,
-  getAcceptedStatusDetails,
+  getRankProblemStatusCellPresentation,
 } from '@algoux/standard-ranklist-renderer-component-core';
-import type { SolutionClickPayload, StaticRanklist, StaticRanklistRow } from '@algoux/standard-ranklist-renderer-component-core';
+import type {
+  RanklistStatusCellPreset,
+  SolutionClickPayload,
+  StaticRanklist,
+  StaticRanklistRow,
+} from '@algoux/standard-ranklist-renderer-component-core';
 
 export interface StatusCellProps {
   status: srk.RankProblemStatus;
@@ -17,6 +22,9 @@ export interface StatusCellProps {
   rowIndex: number;
   ranklist: StaticRanklist;
   onSolutionClick?: (payload: SolutionClickPayload) => void | Promise<void>;
+  statusCellPreset?: RanklistStatusCellPreset;
+  statusColorAsText?: boolean;
+  emptyStatusPlaceholder?: string | null;
 }
 
 export function StatusCell({
@@ -28,6 +36,9 @@ export function StatusCell({
   rowIndex,
   ranklist,
   onSolutionClick,
+  statusCellPreset = 'classic',
+  statusColorAsText = false,
+  emptyStatusPlaceholder = null,
 }: StatusCellProps) {
   const problemKey = problem?.alias || resolveText(problem?.title) || problemIndex;
   const problemTitle = resolveText(problem?.title) || null;
@@ -36,6 +47,7 @@ export function StatusCell({
   const isClickable = hasSolutions && !!onSolutionClick;
   const commonClassName = classnames('srk-prest-status-block srk--text-center srk--nowrap', {
     'srk--cursor-pointer': isClickable,
+    'srk-prest-status-block-color-text': statusColorAsText,
   });
   const onClick = isClickable
     ? (event: React.MouseEvent) =>
@@ -67,46 +79,71 @@ export function StatusCell({
   if (status.result === 'FB') {
     return (
       <td key={problemKey} onClick={onClick} className={classnames(commonClassName, 'srk-prest-status-block-fb')}>
-        {renderAcceptedStatusBody(status)}
+        {statusColorAsText && <span className="srk-prest-status-block-fb-star">★</span>}
+        {renderStatusBody(status, ranklist, statusCellPreset)}
       </td>
     );
   }
   if (status.result === 'AC') {
     return (
       <td key={problemKey} onClick={onClick} className={classnames(commonClassName, 'srk-prest-status-block-accepted')}>
-        {renderAcceptedStatusBody(status)}
+        {renderStatusBody(status, ranklist, statusCellPreset)}
       </td>
     );
   }
   if (status.result === '?') {
     return (
       <td key={problemKey} onClick={onClick} className={classnames(commonClassName, 'srk-prest-status-block-frozen')}>
-        {status.tries}
+        {renderStatusBody(status, ranklist, statusCellPreset)}
       </td>
     );
   }
   if (status.result === 'RJ') {
     return (
       <td key={problemKey} onClick={onClick} className={classnames(commonClassName, 'srk-prest-status-block-failed')}>
-        {status.tries}
+        {renderStatusBody(status, ranklist, statusCellPreset)}
       </td>
     );
   }
 
-  return <td key={problemKey}></td>;
+  return (
+    <td key={problemKey} className="srk-status-placeholder-cell srk--text-center srk--nowrap">
+      {emptyStatusPlaceholder}
+    </td>
+  );
 }
 
-function renderAcceptedStatusBody(status: srk.RankProblemStatus) {
-  const details = getAcceptedStatusDetails(status);
+function renderStatusBody(
+  status: srk.RankProblemStatus,
+  ranklist: StaticRanklist,
+  preset: RanklistStatusCellPreset,
+) {
+  return renderStatusPresentation(getRankProblemStatusCellPresentation(status, ranklist, preset));
+}
 
-  if (typeof status.score === 'number') {
+function renderTwoLineStatusBody(primary: string, secondary: string) {
+  return (
+    <>
+      <span className="srk-prest-status-block-primary">{primary}</span>
+      {' '}
+      <span className="srk-prest-status-block-secondary">{secondary}</span>
+    </>
+  );
+}
+
+function renderStatusPresentation(presentation: ReturnType<typeof getRankProblemStatusCellPresentation>) {
+  if (typeof presentation.score === 'number') {
     return (
       <>
-        <span className="srk-prest-status-block-score">{status.score}</span>
-        <span className="srk-prest-status-block-score-details">{details}</span>
+        <span className="srk-prest-status-block-score">{presentation.score}</span>
+        <span className="srk-prest-status-block-score-details">{presentation.scoreDetails}</span>
       </>
     );
   }
 
-  return <>{details}</>;
+  if (presentation.secondary !== undefined) {
+    return renderTwoLineStatusBody(presentation.primary || '', presentation.secondary);
+  }
+
+  return <>{presentation.primary}</>;
 }

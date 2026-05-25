@@ -11,8 +11,11 @@ export type { ProgressBarProps } from './ProgressBar';
 export { Ranklist } from './Ranklist';
 export type {
   ProblemHeaderCellPartProps,
+  RanklistColumnTitles,
   RanklistParts,
   RanklistProps,
+  RanklistStatusCellPreset,
+  RanklistUserAvatarPlacement,
   StatusCellPartProps,
   UserCellPartProps,
 } from './Ranklist';

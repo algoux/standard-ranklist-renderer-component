@@ -1,4 +1,10 @@
 import type * as srk from '@algoux/standard-ranklist';
+import type {
+  ProblemStatisticsFooter,
+  RanklistColumnTitles,
+  RanklistStatusCellPreset,
+  RanklistUserAvatarPlacement,
+} from '@algoux/standard-ranklist-renderer-component-core';
 
 export interface RankValue {
   rank: number | null;
@@ -28,3 +34,10 @@ export interface SolutionClickPayload {
   solutions: srk.Solution[];
   ranklist: StaticRanklist;
 }
+
+export type {
+  ProblemStatisticsFooter,
+  RanklistColumnTitles,
+  RanklistStatusCellPreset,
+  RanklistUserAvatarPlacement,
+};

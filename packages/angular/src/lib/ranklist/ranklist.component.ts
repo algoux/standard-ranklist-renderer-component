@@ -18,14 +18,26 @@ import {
 } from '@algoux/standard-ranklist-utils';
 import type { ThemeColor } from '@algoux/standard-ranklist-utils';
 import {
-  getAcceptedStatusDetails,
+  calculateDirtPercentage,
+  calculateProblemStatisticsFooter,
+  calculateSEValue,
   caniuse,
+  formatProblemStatisticsAcceptedMinute,
+  formatProblemStatisticsAverageHardness,
+  formatProblemStatisticsPercent,
   getMarkerPresentation,
   getProblemHeaderBackgroundImage,
+  getRankProblemStatusCellPresentation,
   resolveSrkAssetUrl,
   shouldShowTimeColumn,
   srkSupportedVersions,
-} from './ranklist-utils';
+} from '@algoux/standard-ranklist-renderer-component-core';
+import type {
+  ProblemStatisticsFooter,
+  RanklistColumnTitles,
+  RanklistStatusCellPreset,
+  RanklistUserAvatarPlacement,
+} from '@algoux/standard-ranklist-renderer-component-core';
 import { captureModalTriggerPointFromMouseEvent } from '../modal/modal-interactions';
 import type {
   RankValue,
@@ -62,20 +74,30 @@ import {
     <ng-template #ranklistTable>
       <div class="srk-common-table srk-main">
         <table
-          [class.srk-table-row-bordered]="borderedRows"
+          [class.srk-table-row-bordered]="borderedRows || rowBordered"
+          [class.srk-table-column-bordered]="columnBordered"
           [class.srk-table-row-striped]="stripedRows"
         >
           <thead>
             <tr>
               <th
-                *ngFor="let seriesItem of data.series"
+                *ngFor="let seriesItem of data.series; let seriesIndex = index"
                 class="srk-series-header srk--text-right srk--nowrap"
+                [class.srk-series-segmented-column]="isSeriesSegmentedColumn(seriesItem)"
               >
-                {{ seriesItem.title }}
+                {{ resolveSeriesColumnTitle(seriesItem, seriesIndex) }}
               </th>
-              <th class="srk--text-left srk--nowrap">Name</th>
-              <th class="srk--nowrap">Score</th>
-              <th *ngIf="showTimeColumn()" class="srk--nowrap">Time</th>
+              <th
+                *ngIf="splitOrganization"
+                class="srk-organization-header srk--text-left srk--nowrap"
+              >
+                {{ resolveColumnTitle('organization', 'Organization') }}
+              </th>
+              <th class="srk--text-left srk--nowrap">{{ resolveColumnTitle('user', 'Name') }}</th>
+              <th class="srk--text-right srk--nowrap">{{ resolveColumnTitle('score', 'Score') }}</th>
+              <th *ngIf="showTimeColumn()" class="srk--text-right srk--nowrap">
+                {{ resolveColumnTitle('time', 'Time') }}
+              </th>
               <th
                 *ngFor="let problem of data.problems; let problemIndex = index"
                 class="srk--nowrap srk-problem-header"
@@ -108,6 +130,12 @@ import {
                   </span>
                 </ng-template>
               </th>
+              <th *ngIf="showDirtColumn" class="srk-dirt-header srk--text-right srk--nowrap">
+                {{ resolveColumnTitle('dirt', 'Dirt') }}
+              </th>
+              <th *ngIf="showSEColumn" class="srk-se-header srk--text-right srk--nowrap">
+                {{ resolveColumnTitle('se', 'SE') }}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -116,9 +144,30 @@ import {
                 *ngFor="let rankValue of getRankValues(row); let seriesIndex = index"
                 class="srk--text-right srk--nowrap"
                 [ngClass]="getSeriesSegmentClass(rankValue, data.series[seriesIndex])"
+                [class.srk-series-segmented-column]="isSeriesSegmentedColumn(data.series[seriesIndex])"
                 [ngStyle]="getSeriesSegmentStyle(rankValue, data.series[seriesIndex])"
               >
                 {{ getRankText(rankValue, row) }}
+              </td>
+
+              <td
+                *ngIf="splitOrganization"
+                class="srk-organization-cell srk--text-left srk--nowrap"
+                [class.srk-organization-cell-avatar]="showAvatarInOrganization() && !!row.user.avatar"
+              >
+                <div class="srk-organization-cell-content">
+                  <div *ngIf="showAvatarInOrganization() && row.user.avatar" class="srk-user-avatar">
+                    <img
+                      [src]="formatAssetUrl(row.user.avatar, 'user.avatar')"
+                      alt="User Avatar"
+                    />
+                  </div>
+                  <span
+                    class="srk-organization-name-text"
+                    [title]="row.user.organization ? resolveDisplayText(row.user.organization) : ''"
+                    [textContent]="row.user.organization ? resolveDisplayText(row.user.organization) : ''"
+                  ></span>
+                </div>
               </td>
 
               <ng-container *ngIf="userCellTemplate; else defaultUserCell">
@@ -137,7 +186,7 @@ import {
                   (keydown.space)="activateUserCellFromKeyboard($event, row, rowIndex)"
                 >
                   <div class="srk-user-cell-content">
-                    <div *ngIf="row.user.avatar" class="srk-user-avatar">
+                    <div *ngIf="row.user.avatar && !showAvatarInOrganization()" class="srk-user-avatar">
                       <img
                         [src]="formatAssetUrl(row.user.avatar, 'user.avatar')"
                         alt="User Avatar"
@@ -162,7 +211,7 @@ import {
                         </span>
                       </div>
                       <p
-                        *ngIf="row.user.organization"
+                        *ngIf="row.user.organization && !splitOrganization"
                         class="srk-user-secondary-text srk--text-ellipsis"
                         title=""
                       >
@@ -195,15 +244,27 @@ import {
                     (keydown.enter)="activateStatusCellFromKeyboard($event, row, rowIndex, status, problemIndex)"
                     (keydown.space)="activateStatusCellFromKeyboard($event, row, rowIndex, status, problemIndex)"
                   >
-                    <ng-container *ngIf="isNumber(status.score); else acceptedDetails">
-                      <span class="srk-prest-status-block-score">{{ status.score }}</span>
-                      <span class="srk-prest-status-block-score-details">
-                        {{ acceptedStatusDetails(status) }}
-                      </span>
+                    <span
+                      *ngIf="statusColorAsText && status.result === 'FB'"
+                      class="srk-prest-status-block-fb-star"
+                      [textContent]="firstBloodStar"
+                    ></span>
+                    <ng-container *ngIf="statusPresentation(status) as presentation">
+                      <ng-container *ngIf="isNumber(presentation.score); else statusText">
+                        <span class="srk-prest-status-block-score">{{ presentation.score }}</span>
+                        <span class="srk-prest-status-block-score-details">
+                          {{ presentation.scoreDetails }}
+                        </span>
+                      </ng-container>
+                      <ng-template #statusText>
+                        <ng-container *ngIf="presentation.secondary !== undefined; else singleStatus">
+                          <span class="srk-prest-status-block-primary">{{ presentation.primary || '' }}</span>
+                          <span [textContent]="statusSeparator"></span>
+                          <span class="srk-prest-status-block-secondary">{{ presentation.secondary }}</span>
+                        </ng-container>
+                        <ng-template #singleStatus>{{ presentation.primary }}</ng-template>
+                      </ng-template>
                     </ng-container>
-                    <ng-template #acceptedDetails>
-                      {{ acceptedStatusDetails(status) }}
-                    </ng-template>
                   </td>
                   <ng-template #failedOrFrozenStatus>
                     <td
@@ -215,16 +276,101 @@ import {
                       (keydown.enter)="activateStatusCellFromKeyboard($event, row, rowIndex, status, problemIndex)"
                       (keydown.space)="activateStatusCellFromKeyboard($event, row, rowIndex, status, problemIndex)"
                     >
-                      {{ status.tries }}
+                      <ng-container *ngIf="statusPresentation(status) as presentation">
+                        <ng-container *ngIf="presentation.secondary !== undefined; else singleStatus">
+                          <span class="srk-prest-status-block-primary">{{ presentation.primary || '' }}</span>
+                          <span [textContent]="statusSeparator"></span>
+                          <span class="srk-prest-status-block-secondary">{{ presentation.secondary }}</span>
+                        </ng-container>
+                        <ng-template #singleStatus>{{ presentation.primary }}</ng-template>
+                      </ng-container>
                     </td>
                   </ng-template>
                   <ng-template #emptyStatus>
-                    <td></td>
+                    <td class="srk-status-placeholder-cell srk--text-center srk--nowrap">
+                      {{ emptyStatusPlaceholder }}
+                    </td>
                   </ng-template>
                 </ng-template>
               </ng-container>
+
+              <td *ngIf="showDirtColumn" class="srk-dirt-cell srk--text-right srk--nowrap">
+                {{ calculateDirtPercentage(row) }}
+              </td>
+              <td *ngIf="showSEColumn" class="srk-se-cell srk--text-right srk--nowrap">
+                {{ calculateSEValue(row, problemStatistics) }}
+              </td>
             </tr>
           </tbody>
+          <tfoot *ngIf="showProblemStatisticsFooter">
+            <tr
+              *ngFor="let footerRow of problemStatisticsFooterRows"
+              class="srk-problem-statistics-footer-row"
+            >
+              <td
+                class="srk-problem-statistics-footer-labels srk--text-right srk--nowrap"
+                [attr.colspan]="leftFooterColumnCount()"
+              >
+                <span
+                  class="srk-problem-statistics-footer-label srk--c-tooltip"
+                  [attr.data-tooltip]="footerRow.tooltip"
+                >
+                  {{ footerRow.label }}
+                </span>
+              </td>
+              <td
+                *ngFor="let stat of problemStatistics"
+                class="srk-problem-statistics-footer-cell srk--text-center srk--nowrap"
+              >
+                <span class="srk-problem-statistics-footer-primary">
+                  {{ getProblemStatisticsFooterCellPrimary(footerRow.key, stat) }}
+                </span>
+                <ng-container *ngIf="getProblemStatisticsFooterCellSecondary(footerRow.key, stat) !== undefined">
+                  <span> </span>
+                  <span class="srk-problem-statistics-footer-secondary">
+                    {{ getProblemStatisticsFooterCellSecondary(footerRow.key, stat) }}
+                  </span>
+                </ng-container>
+              </td>
+              <td
+                *ngIf="showDirtColumn"
+                class="srk-problem-statistics-footer-cell srk-extra-statistics-footer-cell srk-dirt-footer-cell srk--nowrap"
+              >
+                <span class="srk-problem-statistics-footer-primary"></span>
+              </td>
+              <td
+                *ngIf="showSEColumn"
+                class="srk-problem-statistics-footer-cell srk-extra-statistics-footer-cell srk-se-footer-cell srk--nowrap"
+              >
+                <span class="srk-problem-statistics-footer-primary"></span>
+              </td>
+            </tr>
+            <tr class="srk-problem-statistics-footer-row srk-problem-statistics-footer-problem-label-row">
+              <td
+                class="srk-problem-statistics-footer-labels srk--text-right srk--nowrap"
+                [attr.colspan]="leftFooterColumnCount()"
+              ></td>
+              <td
+                *ngFor="let problem of data.problems; let problemIndex = index"
+                class="srk-problem-statistics-footer-cell srk-problem-statistics-footer-problem-header srk-problem-header srk--text-center srk--nowrap"
+                [style.background-image]="problemHeaderBackgroundImage(problem, 0)"
+              >
+                <span class="srk--display-block">{{ problemAlias(problem, problemIndex) }}</span>
+              </td>
+              <td
+                *ngIf="showDirtColumn"
+                class="srk-problem-statistics-footer-cell srk-extra-statistics-footer-cell srk-dirt-footer-cell srk--nowrap"
+              >
+                <span class="srk-problem-statistics-footer-primary"></span>
+              </td>
+              <td
+                *ngIf="showSEColumn"
+                class="srk-problem-statistics-footer-cell srk-extra-statistics-footer-cell srk-se-footer-cell srk--nowrap"
+              >
+                <span class="srk-problem-statistics-footer-primary"></span>
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </ng-template>
@@ -234,8 +380,19 @@ export class RanklistComponent {
   @Input({ required: true }) data!: StaticRanklist;
   @Input() theme: EnumTheme = EnumTheme.light;
   @Input() borderedRows = false;
+  @Input() rowBordered = false;
+  @Input() columnBordered = false;
   @Input() stripedRows = false;
   @Input() formatSrkAssetUrl?: (url: string, field: string) => string;
+  @Input() splitOrganization = false;
+  @Input() columnTitles?: RanklistColumnTitles;
+  @Input() statusCellPreset: RanklistStatusCellPreset = 'classic';
+  @Input() statusColorAsText = false;
+  @Input() showProblemStatisticsFooter = false;
+  @Input() showDirtColumn = false;
+  @Input() showSEColumn = false;
+  @Input() emptyStatusPlaceholder: string | null = null;
+  @Input() userAvatarPlacement: RanklistUserAvatarPlacement = 'user';
 
   @Output() userClick = new EventEmitter<UserClickPayload>();
   @Output() solutionClick = new EventEmitter<SolutionClickPayload>();
@@ -247,6 +404,58 @@ export class RanklistComponent {
   userCellTemplate?: SrkUserCellTemplateDirective;
 
   readonly supportedVersions = srkSupportedVersions;
+  readonly firstBloodStar = '\u2605';
+  readonly statusSeparator = ' ';
+  readonly problemStatisticsFooterRows = [
+    {
+      key: 'accepted',
+      label: 'Accepted',
+      tooltip: 'Number of participants who solved this problem',
+    },
+    {
+      key: 'tried',
+      label: 'Tried',
+      tooltip: 'Number of participants who attempted this problem',
+    },
+    {
+      key: 'submitted',
+      label: 'Submitted',
+      tooltip: 'Total number of valid submissions for this problem',
+    },
+    {
+      key: 'dirt',
+      label: 'Dirt',
+      tooltip: 'Wrong submissions among participants who solved this problem',
+    },
+    {
+      key: 'se',
+      label: 'SE',
+      tooltip: 'Average hardness, calculated as (participants - accepted) / participants',
+    },
+    {
+      key: 'firstAccepted',
+      label: 'FB at',
+      tooltip: 'First Blood at, also known as first solve time, in minutes',
+    },
+    {
+      key: 'lastAccepted',
+      label: 'LB at',
+      tooltip: 'Last Blood at, also known as last solve time, in minutes',
+    },
+  ];
+  private problemStatisticsSource?: StaticRanklist;
+  private problemStatisticsCache?: ProblemStatisticsFooter[];
+
+  get problemStatistics() {
+    if (!this.showProblemStatisticsFooter && !this.showSEColumn) {
+      return [];
+    }
+    if (this.problemStatisticsSource !== this.data || !this.problemStatisticsCache) {
+      this.problemStatisticsSource = this.data;
+      this.problemStatisticsCache = calculateProblemStatisticsFooter(this.data);
+    }
+    return this.problemStatisticsCache;
+  }
 
   isSupportedVersion() {
     return caniuse(this.data.version);
@@ -254,6 +463,14 @@ export class RanklistComponent {
 
   showTimeColumn() {
     return shouldShowTimeColumn(this.data.rows);
+  }
+
+  showAvatarInOrganization() {
+    return this.splitOrganization && this.userAvatarPlacement === 'organization';
+  }
+
+  leftFooterColumnCount() {
+    return this.data.series.length + 1 + 1 + (this.showTimeColumn() ? 1 : 0) + (this.splitOrganization ? 1 : 0);
   }
 
   getRankValues(row: StaticRanklistRow): RankValue[] {
@@ -268,6 +485,21 @@ export class RanklistComponent {
     return resolveText(text);
   }
 
+  resolveSeriesColumnTitle(series: srk.RankSeries, index: number) {
+    const seriesTitles = this.columnTitles?.series;
+    if (typeof seriesTitles === 'function') {
+      return seriesTitles(series, index) ?? series.title;
+    }
+    if (Array.isArray(seriesTitles)) {
+      return seriesTitles[index] ?? series.title;
+    }
+    return series.title;
+  }
+
+  resolveColumnTitle(key: Exclude<keyof RanklistColumnTitles, 'series'>, fallback: string) {
+    return this.columnTitles?.[key] ?? fallback;
+  }
+
   problemAlias(problem: srk.Problem, problemIndex: number) {
     return problem.alias || numberToAlphabet(problemIndex);
   }
@@ -277,8 +509,8 @@ export class RanklistComponent {
     return `${statistics.accepted} / ${statistics.submitted} (${ratio}%)`;
   }
 
-  problemHeaderBackgroundImage(problem: srk.Problem) {
-    return getProblemHeaderBackgroundImage(problem.style, this.theme);
+  problemHeaderBackgroundImage(problem: srk.Problem, gradientDirection = 180) {
+    return getProblemHeaderBackgroundImage(problem.style, this.theme, gradientDirection);
   }
 
   resolvedUserMarkers(user: srk.User) {
@@ -296,8 +528,16 @@ export class RanklistComponent {
     return formatTimeDuration(time, 'min', Math.floor);
   }
 
-  acceptedStatusDetails(status: srk.RankProblemStatus) {
-    return getAcceptedStatusDetails(status);
+  calculateDirtPercentage(row: StaticRanklistRow) {
+    return calculateDirtPercentage(row);
+  }
+
+  calculateSEValue(row: StaticRanklistRow, problemStatistics: ProblemStatisticsFooter[]) {
+    return calculateSEValue(row, problemStatistics);
+  }
+
+  statusPresentation(status: srk.RankProblemStatus) {
+    return getRankProblemStatusCellPresentation(status, this.data, this.statusCellPreset);
   }
 
   isNumber(value: unknown): value is number {
@@ -312,6 +552,9 @@ export class RanklistComponent {
     const classNames = ['srk-prest-status-block', 'srk--text-center', 'srk--nowrap'];
     if (this.isStatusClickable(status)) {
       classNames.push('srk--cursor-pointer');
+    }
+    if (this.statusColorAsText) {
+      classNames.push('srk-prest-status-block-color-text');
     }
     if (status.result === 'FB') {
       classNames.push('srk-prest-status-block-fb');
@@ -345,6 +588,8 @@ export class RanklistComponent {
       rowIndex,
       ranklist: this.data,
       markers: this.data.markers,
+      hideOrganization: this.splitOrganization,
+      hideAvatar: this.showAvatarInOrganization(),
       onClick: (event?: MouseEvent) => this.emitUserClick(event, row, rowIndex),
     };
   }
@@ -365,6 +610,9 @@ export class RanklistComponent {
       rowIndex,
       ranklist: this.data,
       solutions: this.getStatusSolutions(status),
+      statusCellPreset: this.statusCellPreset,
+      statusColorAsText: this.statusColorAsText,
+      emptyStatusPlaceholder: this.emptyStatusPlaceholder,
       onClick: (event?: MouseEvent) => this.emitSolutionClick(event, row, rowIndex, status, problemIndex),
     };
   }
@@ -422,7 +670,7 @@ export class RanklistComponent {
           rowIndex,
           problemIndex,
           problemAlias: this.data.problems[problemIndex]?.alias || null,
-          problemTitle: this.data.problems[problemIndex]?.title || null,
+          problemTitle: this.data.problems[problemIndex] ? this.resolveDisplayText(this.data.problems[problemIndex].title) : null,
           userId: row.user.id || null,
         },
       });
@@ -442,6 +690,10 @@ export class RanklistComponent {
   private resolveSeriesSegment(rankValue: RankValue, series: srk.RankSeries | undefined) {
     const index = rankValue.segmentIndex || rankValue.segmentIndex === 0 ? rankValue.segmentIndex : -1;
     return (series?.segments || [])[index] || {};
+  }
+
+  isSeriesSegmentedColumn(series: srk.RankSeries | undefined) {
+    return (series?.segments || []).some((segment) => typeof segment.style === 'string');
   }
 
   getSeriesSegmentClass(rankValue: RankValue, series: srk.RankSeries | undefined) {
@@ -465,5 +717,39 @@ export class RanklistComponent {
       color: textColor[this.theme],
       backgroundColor: backgroundColor[this.theme],
     };
+  }
+
+  getProblemStatisticsFooterCellPrimary(key: string, stat: ProblemStatisticsFooter) {
+    switch (key) {
+      case 'accepted':
+        return stat.accepted;
+      case 'tried':
+        return stat.tried;
+      case 'submitted':
+        return stat.submitted;
+      case 'dirt':
+        return stat.dirt;
+      case 'se':
+        return formatProblemStatisticsAverageHardness(stat);
+      case 'firstAccepted':
+        return formatProblemStatisticsAcceptedMinute(stat.firstAcceptedTime);
+      case 'lastAccepted':
+        return formatProblemStatisticsAcceptedMinute(stat.lastAcceptedTime);
+      default:
+        return '';
+    }
+  }
+
+  getProblemStatisticsFooterCellSecondary(key: string, stat: ProblemStatisticsFooter) {
+    switch (key) {
+      case 'accepted':
+        return formatProblemStatisticsPercent(stat.accepted, stat.participantCount);
+      case 'tried':
+        return formatProblemStatisticsPercent(stat.tried, stat.participantCount);
+      case 'dirt':
+        return formatProblemStatisticsPercent(stat.dirt, stat.dirtSubmitted);
+      default:
+        return undefined;
+    }
   }
 }

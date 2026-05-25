@@ -98,3 +98,51 @@ export class BoardComponent {
 ```
 
 Use `ModalComponent` directly when you want custom modal content. `SrkUserCellTemplateDirective` and `SrkStatusCellTemplateDirective` let you replace selected ranklist table cells with Angular templates.
+
+## Ranklist Render Options
+
+`RanklistComponent` includes optional render inputs for changing the table structure and status presentation while keeping the default behavior unchanged:
+
+- `splitOrganization`: moves user organization into its own column before the user column.
+- `columnTitles`: overrides text labels for series, organization, user, score, time, Dirt, and SE columns.
+- `statusCellPreset`: uses `classic`, `detailed`, `minimal`, or `compact` status cell content.
+- `statusColorAsText`: uses bold status-colored text instead of colored cell backgrounds.
+- `showProblemStatisticsFooter`: appends a DOMjudge-style per-problem statistics footer.
+- `showDirtColumn`: appends a Dirt percentage column after problem columns.
+- `showSEColumn`: appends a contestant SE column after problem columns, placed after Dirt when both are enabled.
+- `rowBordered`: adds row separators controlled by CSS variables.
+- `columnBordered`: adds column separators controlled by CSS variables.
+- `emptyStatusPlaceholder`: renders a custom string in no-submission status cells.
+- `userAvatarPlacement`: chooses whether the default user avatar renders in the user column or, when `splitOrganization` is enabled, in the organization column.
+
+```ts
+import type { RanklistColumnTitles } from '@algoux/standard-ranklist-renderer-component-angular';
+
+export class BoardComponent {
+  readonly columnTitles: RanklistColumnTitles = {
+    organization: 'Org',
+    user: 'Team',
+    score: 'Solved',
+    time: 'Penalty',
+    dirt: 'Dirt',
+    se: 'SE',
+  };
+}
+```
+
+```html
+<srk-ranklist
+  [data]="staticRanklist"
+  [splitOrganization]="true"
+  [showProblemStatisticsFooter]="true"
+  [showDirtColumn]="true"
+  [showSEColumn]="true"
+  [statusCellPreset]="'compact'"
+  [statusColorAsText]="true"
+  [rowBordered]="true"
+  [columnBordered]="true"
+  [emptyStatusPlaceholder]="'·'"
+  [userAvatarPlacement]="'organization'"
+  [columnTitles]="columnTitles"
+></srk-ranklist>
+```

@@ -6,7 +6,7 @@
     @click.prevent="emitUserClick"
   >
     <div class="srk-user-cell-content">
-      <div v-if="user.avatar" class="srk-user-avatar">
+      <div v-if="user.avatar && !hideAvatar" class="srk-user-avatar">
         <img :src="formatSrkAssetUrl(user.avatar, 'user.avatar')" alt="User Avatar" />
       </div>
       <div class="srk-user-body">
@@ -23,7 +23,7 @@
             ></span>
           </span>
         </div>
-        <p v-if="user.organization" class="srk-user-secondary-text srk--text-ellipsis" title="">
+        <p v-if="user.organization && !hideOrganization" class="srk-user-secondary-text srk--text-ellipsis" title="">
           {{ resolveText(user.organization) }}
         </p>
       </div>
@@ -51,10 +51,14 @@ const props = withDefaults(
     theme?: EnumTheme;
     formatSrkAssetUrl: (url: string, field: string) => string;
     onUserClick?: (payload: UserClickPayload) => void | Promise<void>;
+    hideOrganization?: boolean;
+    hideAvatar?: boolean;
   }>(),
   {
     markers: () => [],
     theme: EnumTheme.light,
+    hideOrganization: false,
+    hideAvatar: false,
   },
 );
 

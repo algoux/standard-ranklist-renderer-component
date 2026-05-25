@@ -63,3 +63,47 @@ $: staticRanklist = convertToStaticRanklist(ranklist);
 ```
 
 Use `Modal` directly when you want custom modal content. `Ranklist` exposes slots such as `userCell` and `statusCell` for targeted table-cell customization.
+
+## Ranklist Render Options
+
+`Ranklist` includes optional render props for changing the table structure and status presentation while keeping the default behavior unchanged:
+
+- `splitOrganization`: moves user organization into its own column before the user column.
+- `columnTitles`: overrides text labels for series, organization, user, score, time, Dirt, and SE columns.
+- `statusCellPreset`: uses `classic`, `detailed`, `minimal`, or `compact` status cell content.
+- `statusColorAsText`: uses bold status-colored text instead of colored cell backgrounds.
+- `showProblemStatisticsFooter`: appends a DOMjudge-style per-problem statistics footer.
+- `showDirtColumn`: appends a Dirt percentage column after problem columns.
+- `showSEColumn`: appends a contestant SE column after problem columns, placed after Dirt when both are enabled.
+- `rowBordered`: adds row separators controlled by CSS variables.
+- `columnBordered`: adds column separators controlled by CSS variables.
+- `emptyStatusPlaceholder`: renders a custom string in no-submission status cells.
+- `userAvatarPlacement`: chooses whether the default user avatar renders in the user column or, when `splitOrganization` is enabled, in the organization column.
+
+```svelte
+<script lang="ts">
+const columnTitles = {
+  organization: 'Org',
+  user: 'Team',
+  score: 'Solved',
+  time: 'Penalty',
+  dirt: 'Dirt',
+  se: 'SE',
+};
+</script>
+
+<Ranklist
+  data={staticRanklist}
+  splitOrganization
+  showProblemStatisticsFooter
+  showDirtColumn
+  showSEColumn
+  statusCellPreset="compact"
+  statusColorAsText
+  rowBordered
+  columnBordered
+  emptyStatusPlaceholder="·"
+  userAvatarPlacement="organization"
+  {columnTitles}
+/>
+```
