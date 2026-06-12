@@ -48,6 +48,7 @@ describe('Svelte local demo app', () => {
     expect((getField(container, 'Status preset') as HTMLSelectElement).value).toBe('compact');
     expect((getField(container, 'Empty status placeholder') as HTMLSelectElement).value).toBe('·');
     expect((getField(container, 'User avatar placement') as HTMLSelectElement).value).toBe('organization');
+    expect((getField(container, 'Language') as HTMLSelectElement).value).toBe('browser');
 
     expect(container.querySelector('th.srk-organization-header')?.textContent).toContain('School');
     expect(container.querySelector('th.srk-dirt-header')?.textContent).toContain('Dirt');
@@ -68,6 +69,10 @@ describe('Svelte local demo app', () => {
     await fireEvent.change(getField(container, 'User avatar placement'), { target: { value: 'user' } });
     await tick();
     expect((getField(container, 'User avatar placement') as HTMLSelectElement).value).toBe('user');
+    await fireEvent.change(getField(container, 'Language'), { target: { value: 'zh-CN' } });
+    await tick();
+    expect((getField(container, 'Language') as HTMLSelectElement).value).toBe('zh-CN');
+    expect(container.textContent).toContain('中二之力');
     await fireEvent.click(getField(container, 'Custom column titles'));
     await tick();
     expect((getField(container, 'Custom column titles') as HTMLInputElement).checked).toBe(false);

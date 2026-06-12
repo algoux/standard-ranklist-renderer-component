@@ -7,29 +7,38 @@ export interface UserModalContentProps {
   userMarkers: srk.Marker[];
   theme: EnumTheme;
   formatSrkAssetUrl: (url: string, field: string) => string;
+  languages?: readonly string[];
 }
 
-export function UserModalContent({ user, userMarkers, theme, formatSrkAssetUrl }: UserModalContentProps) {
+export function UserModalContent({ user, userMarkers, theme, formatSrkAssetUrl, languages }: UserModalContentProps) {
   const hasMembers = !!user.teamMembers && user.teamMembers.length > 0;
 
   return (
     <div className="srk-user-modal-info">
-      <h3 className="srk-user-modal-info-user-name">{resolveText(user.name)}</h3>
-      {!!user.organization && <p className="srk-user-modal-info-user-second-name">{resolveText(user.organization)}</p>}
+      <h3 className="srk-user-modal-info-user-name">{resolveText(user.name, languages)}</h3>
+      {!!user.organization && (
+        <p className="srk-user-modal-info-user-second-name">{resolveText(user.organization, languages)}</p>
+      )}
       <div className="srk-user-modal-info-labels">
         <span className="srk-user-modal-info-labels-label srk-user-modal-info-labels-label-preset-general">
           {user.official === false ? '＊ 非正式参加者' : '正式参加者'}
         </span>
         {userMarkers.map((marker, index) => (
-          <MarkerLabel key={index} marker={marker} theme={theme} className="srk-user-modal-info-labels-label" />
+          <MarkerLabel
+            key={index}
+            marker={marker}
+            theme={theme}
+            className="srk-user-modal-info-labels-label"
+            languages={languages}
+          />
         ))}
       </div>
       {hasMembers && (
         <div className="srk-user-modal-info-team-members">
           {user.teamMembers!.map((member, index) => (
-            <span key={resolveText(member.name)}>
+            <span key={resolveText(member.name, languages)}>
               {index > 0 && <span className="srk-user-modal-info-team-members-slash"> / </span>}
-              <span>{resolveText(member.name)}</span>
+              <span>{resolveText(member.name, languages)}</span>
             </span>
           ))}
         </div>

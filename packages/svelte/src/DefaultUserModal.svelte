@@ -17,6 +17,7 @@
   export let wrapClassName = 'srk-user-modal';
   export let style = {};
   export let formatSrkAssetUrl = undefined;
+  export let languages = undefined;
   let cachedUser = user;
 
   const dispatch = createEventDispatcher();
@@ -35,6 +36,10 @@
   function formatAssetUrl(url, field) {
     return resolveSrkAssetUrl(url, field, formatSrkAssetUrl);
   }
+
+  function resolveDisplayText(text) {
+    return resolveText(text, languages);
+  }
 </script>
 
 {#if cachedUser}
@@ -48,9 +53,9 @@
     on:close={(event) => dispatch('close', event.detail)}
   >
     <div class="srk-user-modal-info">
-      <h3 class="srk-user-modal-info-user-name">{resolveText(cachedUser.name)}</h3>
+      <h3 class="srk-user-modal-info-user-name">{resolveDisplayText(cachedUser.name)}</h3>
       {#if cachedUser.organization}
-        <p class="srk-user-modal-info-user-second-name">{resolveText(cachedUser.organization)}</p>
+        <p class="srk-user-modal-info-user-second-name">{resolveDisplayText(cachedUser.organization)}</p>
       {/if}
       <div class="srk-user-modal-info-labels">
         <span class="srk-user-modal-info-labels-label srk-user-modal-info-labels-label-preset-general">
@@ -61,17 +66,17 @@
             class={`srk-user-modal-info-labels-label ${entry.presentation.className || ''}`}
             style:background-color={entry.presentation.style && entry.presentation.style.backgroundColor}
           >
-            {resolveText(entry.marker.label)}
+            {resolveDisplayText(entry.marker.label)}
           </span>
         {/each}
       </div>
       {#if cachedUser.teamMembers && cachedUser.teamMembers.length}
         <div class="srk-user-modal-info-team-members">
-          {#each cachedUser.teamMembers as member, index (resolveText(member.name))}
+          {#each cachedUser.teamMembers as member, index (resolveDisplayText(member.name))}
             {#if index > 0}
               <span class="srk-user-modal-info-team-members-slash"> / </span>
             {/if}
-            <span>{resolveText(member.name)}</span>
+            <span>{resolveDisplayText(member.name)}</span>
           {/each}
         </div>
       {/if}

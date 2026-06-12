@@ -6,7 +6,9 @@ import {
   getSortedCalculatedRawSolutions,
   regenerateRanklistBySolutions,
 } from '@algoux/standard-ranklist-utils';
-import { createEffect, createMemo, createSignal } from 'solid-js';
+import type { JSX } from 'solid-js';
+import { createEffect, createMemo, createSignal, onCleanup } from 'solid-js';
+import { render as renderSolid } from 'solid-js/web';
 import demoData from '../../../demo.json';
 import type {
   RanklistColumnTitles,
@@ -46,6 +48,12 @@ const userAvatarPlacementOptions: Array<{ value: RanklistUserAvatarPlacement; la
   { value: 'user', label: 'User' },
   { value: 'organization', label: 'Organization' },
 ];
+type LanguageOptionValue = 'browser' | 'zh-CN' | 'en-US';
+const languageOptions: Array<{ value: LanguageOptionValue; label: string }> = [
+  { value: 'browser', label: 'Browser' },
+  { value: 'zh-CN', label: 'zh-CN' },
+  { value: 'en-US', label: 'en-US' },
+];
 
 function resolvePreferredTheme() {
   if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
@@ -57,6 +65,32 @@ function resolvePreferredTheme() {
   } catch {
     return EnumTheme.light;
   }
+}
+
+function selectValue(event: Event) {
+  return (event.target as HTMLSelectElement).value;
+}
+
+const cloneRanklist = (ranklist: srk.Ranklist): srk.Ranklist => JSON.parse(JSON.stringify(ranklist));
+
+let globalLanguageListenerInstalled = false;
+const [language, setLanguage] = createSignal<LanguageOptionValue>('browser');
+
+function handleGlobalLanguageSelectEvent(event: Event) {
+  const target = event.target as HTMLSelectElement | null;
+
+  if (target?.getAttribute('aria-label') === 'Language') {
+    setLanguage(target.value as LanguageOptionValue);
+  }
+}
+
+function ensureGlobalLanguageListener() {
+  if (globalLanguageListenerInstalled || typeof document === 'undefined') {
+    return;
+  }
+  document.addEventListener('change', handleGlobalLanguageSelectEvent, true);
+  document.addEventListener('input', handleGlobalLanguageSelectEvent, true);
+  globalLanguageListenerInstalled = true;
 }
 
 export default function App() {
@@ -74,11 +108,18 @@ export default function App() {
   const [columnBordered, setColumnBordered] = createSignal(true);
   const [emptyStatusPlaceholder, setEmptyStatusPlaceholder] = createSignal<string | null>('·');
   const [userAvatarPlacement, setUserAvatarPlacement] = createSignal<RanklistUserAvatarPlacement>('organization');
-  const staticRanklist = createMemo(() => convertToStaticRanklist(ranklist()) as StaticRanklist);
+  setLanguage('browser');
+  ensureGlobalLanguageListener();
+  const selectedLanguages = createMemo(() => (language() === 'browser' ? undefined : [language()]));
+  const staticRanklist = createMemo(() => {
+    selectedLanguages();
+    return convertToStaticRanklist(cloneRanklist(ranklist())) as StaticRanklist;
+  });
   const preferredTheme = resolvePreferredTheme();
   let statusPresetSelectRef: HTMLSelectElement | undefined;
   let emptyStatusPlaceholderSelectRef: HTMLSelectElement | undefined;
   let userAvatarPlacementSelectRef: HTMLSelectElement | undefined;
+  let languageSelectRef: HTMLSelectElement | undefined;
 
   createEffect(() => {
     const value = statusCellPreset();
@@ -101,6 +142,14 @@ export default function App() {
 
     if (userAvatarPlacementSelectRef) {
       userAvatarPlacementSelectRef.value = value;
+    }
+  });
+
+  createEffect(() => {
+    const value = language();
+
+    if (languageSelectRef) {
+      languageSelectRef.value = value;
     }
   });
 
@@ -175,7 +224,7 @@ export default function App() {
               ref={statusPresetSelectRef}
               aria-label="Status preset"
               value={statusCellPreset()}
-              onChange={(event) => setStatusCellPreset(event.currentTarget.value as RanklistStatusCellPreset)}
+              onChange={(event) => setStatusCellPreset(selectValue(event) as RanklistStatusCellPreset)}
             >
               {statusPresetOptions.map((option) => (
                 <option value={option.value}>{option.label}</option>
@@ -188,7 +237,7 @@ export default function App() {
               ref={emptyStatusPlaceholderSelectRef}
               aria-label="Empty status placeholder"
               value={emptyStatusPlaceholder() || ''}
-              onChange={(event) => setEmptyStatusPlaceholder(event.currentTarget.value || null)}
+              onChange={(event) => setEmptyStatusPlaceholder(selectValue(event) || null)}
             >
               {emptyStatusPlaceholderOptions.map((option) => (
                 <option value={option.value}>{option.label}</option>
@@ -201,9 +250,25 @@ export default function App() {
               ref={userAvatarPlacementSelectRef}
               aria-label="User avatar placement"
               value={userAvatarPlacement()}
-              onChange={(event) => setUserAvatarPlacement(event.currentTarget.value as RanklistUserAvatarPlacement)}
+              onChange={(event) => setUserAvatarPlacement(selectValue(event) as RanklistUserAvatarPlacement)}
             >
               {userAvatarPlacementOptions.map((option) => (
+                <option value={option.value}>{option.label}</option>
+              ))}
+            </select>
+          </label>
+          <label class="preview-field preview-select-field">
+            <span>Language</span>
+            <select
+              ref={languageSelectRef}
+              aria-label="Language"
+              value={language()}
+              oninput={(event) => setLanguage(selectValue(event) as LanguageOptionValue)}
+              onchange={(event) => setLanguage(selectValue(event) as LanguageOptionValue)}
+              onInput={(event) => setLanguage(selectValue(event) as LanguageOptionValue)}
+              onChange={(event) => setLanguage(selectValue(event) as LanguageOptionValue)}
+            >
+              {languageOptions.map((option) => (
                 <option value={option.value}>{option.label}</option>
               ))}
             </select>
@@ -231,29 +296,35 @@ export default function App() {
         </div>
       </section>
       <div class="preview-spacer" />
-      <Ranklist
-        data={staticRanklist()}
-        theme={preferredTheme}
-        rowStriped
-        splitOrganization={splitOrganization()}
-        columnTitles={useCustomColumnTitles() ? demoColumnTitles : undefined}
-        statusCellPreset={statusCellPreset()}
-        statusColorAsText={statusColorAsText()}
-        showProblemStatisticsFooter={showProblemStatisticsFooter()}
-        showDirtColumn={showDirtColumn()}
-        showSEColumn={showSEColumn()}
-        rowBordered={rowBordered()}
-        columnBordered={columnBordered()}
-        emptyStatusPlaceholder={emptyStatusPlaceholder()}
-        userAvatarPlacement={userAvatarPlacement()}
-        onSolutionClick={handleSolutionClick}
-        onUserClick={handleUserClick}
+      <ImperativeMount
+        render={() => (
+          <Ranklist
+            data={staticRanklist()}
+            theme={preferredTheme}
+            rowStriped
+            splitOrganization={splitOrganization()}
+            columnTitles={useCustomColumnTitles() ? demoColumnTitles : undefined}
+            statusCellPreset={statusCellPreset()}
+            statusColorAsText={statusColorAsText()}
+            showProblemStatisticsFooter={showProblemStatisticsFooter()}
+            showDirtColumn={showDirtColumn()}
+            showSEColumn={showSEColumn()}
+            rowBordered={rowBordered()}
+            columnBordered={columnBordered()}
+            emptyStatusPlaceholder={emptyStatusPlaceholder()}
+            userAvatarPlacement={userAvatarPlacement()}
+            languages={selectedLanguages()}
+            onSolutionClick={handleSolutionClick}
+            onUserClick={handleUserClick}
+          />
+        )}
       />
       <DefaultUserModal
         open={!!activeUserClick()}
         user={activeUserClick()?.user}
         markers={staticRanklist().markers}
         theme={preferredTheme}
+        languages={selectedLanguages()}
         onClose={() => setActiveUserClick(null)}
       />
       <DefaultSolutionModal
@@ -262,6 +333,7 @@ export default function App() {
         problem={activeSolutionClick()?.problem}
         problemIndex={activeSolutionClick()?.problemIndex || 0}
         solutions={activeSolutionClick()?.solutions || []}
+        languages={selectedLanguages()}
         onClose={() => setActiveSolutionClick(null)}
       />
     </main>
@@ -291,4 +363,30 @@ function ToggleField(props: { label: string; checked: () => boolean; onChange: (
       <span>{props.label}</span>
     </label>
   );
+}
+
+function ImperativeMount(props: { render: () => JSX.Element }) {
+  let host: HTMLDivElement | undefined;
+  let dispose: (() => void) | undefined;
+  const [ready, setReady] = createSignal(false);
+
+  createEffect(() => {
+    if (!ready() || !host) {
+      return;
+    }
+
+    const node = props.render();
+    dispose?.();
+    host.replaceChildren();
+    dispose = renderSolid(() => node, host);
+  });
+
+  onCleanup(() => {
+    dispose?.();
+  });
+
+  return <div ref={(element) => {
+    host = element;
+    setReady(true);
+  }} />;
 }

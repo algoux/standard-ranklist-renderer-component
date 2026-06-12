@@ -27,12 +27,12 @@
           <th class="srk--text-left srk--nowrap">{{ resolveColumnTitle('user', 'Name') }}</th>
           <th class="srk--text-right srk--nowrap">{{ resolveColumnTitle('score', 'Score') }}</th>
           <th v-if="showTimeColumn" class="srk--text-right srk--nowrap">{{ resolveColumnTitle('time', 'Time') }}</th>
-          <template v-for="(problem, problemIndex) in data.problems" :key="problem.alias || resolveText(problem.title) || problemIndex">
+          <template v-for="(problem, problemIndex) in data.problems" :key="problem.alias || resolveDisplayText(problem.title) || problemIndex">
             <slot
               name="problem-header-cell"
-              v-bind="{ problem, problemIndex, index: problemIndex, theme: resolvedTheme }"
+              v-bind="{ problem, problemIndex, index: problemIndex, theme: resolvedTheme, languages }"
             >
-              <ProblemHeaderCell :problem="problem" :index="problemIndex" :theme="resolvedTheme" />
+              <ProblemHeaderCell :problem="problem" :index="problemIndex" :theme="resolvedTheme" :languages="languages" />
             </slot>
           </template>
           <th v-if="showDirtColumn" class="srk-dirt-header srk--text-right srk--nowrap">
@@ -44,7 +44,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(row, rowIndex) in data.rows" :key="row.user.id || resolveText(row.user.name)">
+        <tr v-for="(row, rowIndex) in data.rows" :key="row.user.id || resolveDisplayText(row.user.name)">
           <td
             v-for="(rankValue, seriesIndex) in getRankValues(row)"
             :key="data.series[seriesIndex]?.title || seriesIndex"
@@ -69,9 +69,9 @@
               </div>
               <span
                 class="srk-organization-name-text"
-                :title="row.user.organization ? resolveText(row.user.organization) : ''"
+                :title="row.user.organization ? resolveDisplayText(row.user.organization) : ''"
               >
-                {{ row.user.organization ? resolveText(row.user.organization) : '' }}
+                {{ row.user.organization ? resolveDisplayText(row.user.organization) : '' }}
               </span>
             </div>
           </td>
@@ -87,6 +87,7 @@
               theme: resolvedTheme,
               hideOrganization: splitOrganization,
               hideAvatar: showAvatarInOrganization,
+              languages,
               onClick: (event?: MouseEvent) => emitUserClick(row, rowIndex, event),
             }"
           >
@@ -101,6 +102,7 @@
               :on-user-click="emitUserClick"
               :hide-organization="splitOrganization"
               :hide-avatar="showAvatarInOrganization"
+              :languages="languages"
             />
           </slot>
 
@@ -124,6 +126,7 @@
                 statusCellPreset,
                 statusColorAsText,
                 emptyStatusPlaceholder,
+                languages,
                 onClick: (event?: MouseEvent) => emitSolutionClick(row, rowIndex, status, problemIndex, event),
               }"
             >
@@ -139,6 +142,7 @@
                 :status-cell-preset="statusCellPreset"
                 :status-color-as-text="statusColorAsText"
                 :empty-status-placeholder="emptyStatusPlaceholder"
+                :languages="languages"
               />
             </slot>
           </template>
@@ -193,7 +197,7 @@
           <td class="srk-problem-statistics-footer-labels srk--text-right srk--nowrap" :colspan="leftFooterColumnCount"></td>
           <td
             v-for="(problem, problemIndex) in data.problems"
-            :key="problem.alias || resolveText(problem.title) || problemIndex"
+            :key="problem.alias || resolveDisplayText(problem.title) || problemIndex"
             class="srk-problem-statistics-footer-cell srk-problem-statistics-footer-problem-header srk-problem-header srk--text-center srk--nowrap"
             :style="{ backgroundImage: getProblemHeaderBackgroundImage(problem.style, resolvedTheme, 0) }"
           >
@@ -274,6 +278,7 @@ const props = withDefaults(
     showSEColumn?: boolean;
     emptyStatusPlaceholder?: string | null;
     userAvatarPlacement?: RanklistUserAvatarPlacement;
+    languages?: readonly string[];
   }>(),
   {
     theme: EnumTheme.light,
@@ -315,8 +320,8 @@ const problemStatisticsFooterRows = [
     tooltip: 'Number of participants who solved this problem',
   },
   {
-    key: 'tried',
-    label: 'Tried',
+    key: 'attempted',
+    label: 'Attempted',
     tooltip: 'Number of participants who attempted this problem',
   },
   {
@@ -348,6 +353,10 @@ const problemStatisticsFooterRows = [
 
 function formatAssetUrl(url: string, field: string) {
   return resolveSrkAssetUrl(url, field, props.formatSrkAssetUrl);
+}
+
+function resolveDisplayText(text: Parameters<typeof resolveText>[0]) {
+  return resolveText(text, props.languages);
 }
 
 function getRankValues(row: StaticRanklistRow): RankValue[] {
@@ -413,8 +422,8 @@ function getProblemStatisticsFooterCellPrimary(key: string, stat: ProblemStatist
   switch (key) {
     case 'accepted':
       return stat.accepted;
-    case 'tried':
-      return stat.tried;
+    case 'attempted':
+      return stat.attempted;
     case 'submitted':
       return stat.submitted;
     case 'dirt':
@@ -434,8 +443,8 @@ function getProblemStatisticsFooterCellSecondary(key: string, stat: ProblemStati
   switch (key) {
     case 'accepted':
       return formatProblemStatisticsPercent(stat.accepted, stat.participantCount);
-    case 'tried':
-      return formatProblemStatisticsPercent(stat.tried, stat.participantCount);
+    case 'attempted':
+      return formatProblemStatisticsPercent(stat.attempted, stat.participantCount);
     case 'dirt':
       return formatProblemStatisticsPercent(stat.dirt, stat.dirtSubmitted);
     default:
@@ -454,7 +463,7 @@ function emitUserClick(payloadOrRow: UserClickPayload | StaticRanklistRow, rowIn
       context: {
         rowIndex: rowIndex || 0,
         userId: payloadOrRow.user.id || null,
-        userName: resolveText(payloadOrRow.user.name),
+        userName: resolveDisplayText(payloadOrRow.user.name),
       },
     });
   }
@@ -487,7 +496,7 @@ function emitSolutionClick(
         rowIndex: rowIndex || 0,
         problemIndex: resolvedProblemIndex,
         problemAlias: problem?.alias || null,
-        problemTitle: problem ? resolveText(problem.title) : null,
+        problemTitle: problem ? resolveDisplayText(problem.title) : null,
         userId: payloadOrRow.user.id || null,
       },
     });

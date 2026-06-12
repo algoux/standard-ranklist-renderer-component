@@ -392,6 +392,7 @@ export class RanklistComponent {
   @Input() showSEColumn = false;
   @Input() emptyStatusPlaceholder: string | null = null;
   @Input() userAvatarPlacement: RanklistUserAvatarPlacement = 'user';
+  @Input() languages?: readonly string[];
 
   @Output() userClick = new EventEmitter<UserClickPayload>();
   @Output() solutionClick = new EventEmitter<SolutionClickPayload>();
@@ -412,8 +413,8 @@ export class RanklistComponent {
       tooltip: 'Number of participants who solved this problem',
     },
     {
-      key: 'tried',
-      label: 'Tried',
+      key: 'attempted',
+      label: 'Attempted',
       tooltip: 'Number of participants who attempted this problem',
     },
     {
@@ -481,7 +482,7 @@ export class RanklistComponent {
   }
 
   resolveDisplayText(text: Parameters<typeof resolveText>[0]) {
-    return resolveText(text);
+    return resolveText(text, this.languages);
   }
 
   resolveSeriesColumnTitle(series: srk.RankSeries, index: number) {
@@ -589,6 +590,7 @@ export class RanklistComponent {
       markers: this.data.markers,
       hideOrganization: this.splitOrganization,
       hideAvatar: this.showAvatarInOrganization(),
+      languages: this.languages,
       onClick: (event?: MouseEvent) => this.emitUserClick(event, row, rowIndex),
     };
   }
@@ -612,6 +614,7 @@ export class RanklistComponent {
       statusCellPreset: this.statusCellPreset,
       statusColorAsText: this.statusColorAsText,
       emptyStatusPlaceholder: this.emptyStatusPlaceholder,
+      languages: this.languages,
       onClick: (event?: MouseEvent) => this.emitSolutionClick(event, row, rowIndex, status, problemIndex),
     };
   }
@@ -722,8 +725,8 @@ export class RanklistComponent {
     switch (key) {
       case 'accepted':
         return stat.accepted;
-      case 'tried':
-        return stat.tried;
+      case 'attempted':
+        return stat.attempted;
       case 'submitted':
         return stat.submitted;
       case 'dirt':
@@ -743,8 +746,8 @@ export class RanklistComponent {
     switch (key) {
       case 'accepted':
         return formatProblemStatisticsPercent(stat.accepted, stat.participantCount);
-      case 'tried':
-        return formatProblemStatisticsPercent(stat.tried, stat.participantCount);
+      case 'attempted':
+        return formatProblemStatisticsPercent(stat.attempted, stat.participantCount);
       case 'dirt':
         return formatProblemStatisticsPercent(stat.dirt, stat.dirtSubmitted);
       default:

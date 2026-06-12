@@ -8,13 +8,14 @@ export interface MarkerLabelProps {
   theme: EnumTheme;
   className?: string;
   style?: React.CSSProperties;
+  languages?: readonly string[];
 }
 
 export function MarkerLabel(props: MarkerLabelProps) {
   if (!props.marker) {
     return null;
   }
-  const { marker, theme } = props;
+  const { marker, theme, languages } = props;
   const markerPresentation = getMarkerPresentation(marker, theme);
 
   return (
@@ -25,7 +26,7 @@ export function MarkerLabel(props: MarkerLabelProps) {
         ...props.style,
       }}
     >
-      {resolveText(marker.label)}
+      {resolveText(marker.label, languages)}
     </span>
   );
 }

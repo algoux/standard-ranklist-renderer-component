@@ -22,6 +22,8 @@ import {
   describeDefaultModalContentContract,
   describeModalComponentContract,
   makeRanklist,
+  type DefaultSolutionModalRenderOptions,
+  type DefaultUserModalRenderOptions,
   type ModalComponentAdapter,
   type ModalRenderOptions,
 } from '../../../../../tests/shared/modal-component-contract';
@@ -71,23 +73,28 @@ class ModalHostComponent {
     <srk-default-user-modal
       [open]="true"
       [user]="user"
-      [markers]="ranklist.markers"
+      [markers]="markers"
       [formatSrkAssetUrl]="formatSrkAssetUrl"
+      [languages]="languages"
     ></srk-default-user-modal>
     <srk-default-solution-modal
       [open]="true"
       [user]="user"
       [problem]="problem"
-      [problemIndex]="0"
+      [problemIndex]="problemIndex"
       [solutions]="solutions"
+      [languages]="languages"
     ></srk-default-solution-modal>
   `,
 })
 class DefaultModalHostComponent {
   ranklist = makeRanklist();
   user = this.ranklist.rows[0].user;
+  markers = this.ranklist.markers;
   problem = this.ranklist.problems[0];
+  problemIndex = 0;
   solutions = [...(this.ranklist.rows[0].statuses[0].solutions || [])].reverse();
+  languages?: readonly string[];
   formatSrkAssetUrl = (url: string, field: string) => `proxied:${field}:${url}`;
 }
 
@@ -205,8 +212,12 @@ const angularModalAdapter: ModalComponentAdapter = {
       },
     };
   },
-  async renderDefaultUserModal() {
+  async renderDefaultUserModal(options: DefaultUserModalRenderOptions = {}) {
     const rendered = await renderHost(DefaultModalHostComponent);
+    rendered.componentRef.instance.user = options.user || rendered.componentRef.instance.user;
+    rendered.componentRef.instance.markers = options.markers || rendered.componentRef.instance.markers;
+    rendered.componentRef.instance.languages = options.languages;
+    rendered.componentRef.changeDetectorRef.detectChanges();
     const dialogs = rendered.hostElement.querySelectorAll('.srk-modal');
 
     return {
@@ -217,8 +228,14 @@ const angularModalAdapter: ModalComponentAdapter = {
         null,
     };
   },
-  async renderDefaultSolutionModal() {
+  async renderDefaultSolutionModal(options: DefaultSolutionModalRenderOptions = {}) {
     const rendered = await renderHost(DefaultModalHostComponent);
+    rendered.componentRef.instance.user = options.user || rendered.componentRef.instance.user;
+    rendered.componentRef.instance.problem = options.problem || rendered.componentRef.instance.problem;
+    rendered.componentRef.instance.problemIndex = options.problemIndex ?? rendered.componentRef.instance.problemIndex;
+    rendered.componentRef.instance.solutions = options.solutions || rendered.componentRef.instance.solutions;
+    rendered.componentRef.instance.languages = options.languages;
+    rendered.componentRef.changeDetectorRef.detectChanges();
     const dialogs = rendered.hostElement.querySelectorAll('.srk-modal');
 
     return {
@@ -240,8 +257,12 @@ const angularModalAdapter: ModalComponentAdapter = {
 describeModalComponentContract(angularModalAdapter);
 describeDefaultModalContentContract({
   ...angularModalAdapter,
-  async renderDefaultUserModal() {
+  async renderDefaultUserModal(options: DefaultUserModalRenderOptions = {}) {
     const rendered = await renderHost(DefaultModalHostComponent);
+    rendered.componentRef.instance.user = options.user || rendered.componentRef.instance.user;
+    rendered.componentRef.instance.markers = options.markers || rendered.componentRef.instance.markers;
+    rendered.componentRef.instance.languages = options.languages;
+    rendered.componentRef.changeDetectorRef.detectChanges();
     const dialogs = rendered.hostElement.querySelectorAll('.srk-modal');
 
     return {

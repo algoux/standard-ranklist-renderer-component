@@ -43,7 +43,7 @@ export interface RanklistColumnTitles {
 export interface ProblemStatisticsFooter {
   participantCount: number;
   accepted: number;
-  tried: number;
+  attempted: number;
   submitted: number;
   dirt: number;
   dirtSubmitted: number;
@@ -130,6 +130,8 @@ export function getSolutionResultMeta(result: srk.Solution['result']): SolutionR
       return { label: 'Memory Limit Exceeded', className: 'srk-preset-result-rj' };
     case 'OLE':
       return { label: 'Output Limit Exceeded', className: 'srk-preset-result-rj' };
+    case 'IDLE':
+      return { label: 'Idleness Limit Exceeded', className: 'srk-preset-result-rj' };
     case 'RTE':
       return { label: 'Runtime Error', className: 'srk-preset-result-rj' };
     case 'NOUT':
@@ -296,7 +298,7 @@ export function calculateProblemStatisticsFooter(ranklist: StaticRanklist): Prob
     const stat: ProblemStatisticsFooter = {
       participantCount,
       accepted: 0,
-      tried: 0,
+      attempted: 0,
       submitted: 0,
       dirt: 0,
       dirtSubmitted: 0,
@@ -307,7 +309,7 @@ export function calculateProblemStatisticsFooter(ranklist: StaticRanklist): Prob
       const tries = getRankProblemStatusTries(status);
 
       if (tries > 0) {
-        stat.tried += 1;
+        stat.attempted += 1;
         stat.submitted += tries;
       }
 
@@ -390,8 +392,8 @@ export function calculateSEValue(
   return formatAverageHardnessValue(values.reduce((sum, value) => sum + value, 0) / values.length);
 }
 
-export function getSolutionModalTitle(problemIndex: number, user: srk.User): string {
-  return `Solutions of ${numberToAlphabet(problemIndex)} (${resolveText(user.name)})`;
+export function getSolutionModalTitle(problemIndex: number, user: srk.User, languages?: readonly string[]): string {
+  return `Solutions of ${numberToAlphabet(problemIndex)} (${resolveText(user.name, languages)})`;
 }
 
 export function formatSolutionTimestamp(solution: srk.Solution): string {

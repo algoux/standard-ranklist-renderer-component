@@ -16,6 +16,8 @@ import {
   describeDefaultModalContentContract,
   describeModalComponentContract,
   makeRanklist,
+  type DefaultSolutionModalRenderOptions,
+  type DefaultUserModalRenderOptions,
   type ModalComponentAdapter,
   type ModalRenderOptions,
 } from '../../../../tests/shared/modal-component-contract';
@@ -111,14 +113,15 @@ const solidModalAdapter: ModalComponentAdapter = {
       },
     };
   },
-  renderDefaultUserModal() {
+  renderDefaultUserModal(options: DefaultUserModalRenderOptions = {}) {
     const ranklist = makeRanklist();
     const { cleanup } = renderSolid(() => (
       <DefaultUserModal
         open
-        user={ranklist.rows[0].user}
-        markers={ranklist.markers}
+        user={options.user || ranklist.rows[0].user}
+        markers={options.markers || ranklist.markers}
         formatSrkAssetUrl={(url, field) => `proxied:${field}:${url}`}
+        languages={options.languages}
       />
     ));
 
@@ -129,15 +132,16 @@ const solidModalAdapter: ModalComponentAdapter = {
         (document.body.querySelector('img[alt="User portrait"]') as HTMLImageElement | null)?.getAttribute('src') || null,
     };
   },
-  renderDefaultSolutionModal() {
+  renderDefaultSolutionModal(options: DefaultSolutionModalRenderOptions = {}) {
     const ranklist = makeRanklist();
     const { cleanup } = renderSolid(() => (
       <DefaultSolutionModal
         open
-        user={ranklist.rows[0].user}
-        problem={ranklist.problems[0]}
-        problemIndex={0}
-        solutions={[...(ranklist.rows[0].statuses[0].solutions || [])].reverse()}
+        user={options.user || ranklist.rows[0].user}
+        problem={options.problem || ranklist.problems[0]}
+        problemIndex={options.problemIndex ?? 0}
+        solutions={options.solutions || [...(ranklist.rows[0].statuses[0].solutions || [])].reverse()}
+        languages={options.languages}
       />
     ));
 

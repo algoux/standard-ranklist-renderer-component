@@ -11,7 +11,11 @@ import {
 import { createApplication } from '@angular/platform-browser';
 import { convertToStaticRanklist } from '@algoux/standard-ranklist-utils';
 import { afterEach, describe, expect, it } from 'vitest';
-import { caniuse as coreCaniuse } from '@algoux/standard-ranklist-renderer-component-core';
+import {
+  caniuse as coreCaniuse,
+  getRecentModalTriggerPoint,
+  resetModalInteractionStateForTests,
+} from '@algoux/standard-ranklist-renderer-component-core';
 import {
   RanklistComponent,
   SrkStatusCellTemplateDirective,
@@ -20,12 +24,14 @@ import {
 import type { UserClickPayload } from '../types';
 import { caniuse as angularCaniuse } from '../ranklist/ranklist-utils';
 import basicRanklistJson from '../../../../../tests/fixtures/basic-ranklist.json';
+import { makeI18nRanklist } from '../../../../../tests/shared/ranklist-i18n-fixtures';
 import { describeRanklistInteractionContract } from '../../../../../tests/shared/ranklist-interaction-contract';
 import { makeRenderOptionsRanklist } from '../../../../../tests/shared/ranklist-render-options-contract';
 
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value));
 const makeStaticRanklist = () =>
   convertToStaticRanklist(clone(basicRanklistJson as srk.Ranklist));
+const makeI18nStaticRanklist = () => convertToStaticRanklist(makeI18nRanklist());
 
 @Component({
   standalone: true,
@@ -67,27 +73,52 @@ class DefaultHostComponent {
 
 @Component({
   standalone: true,
+  imports: [CommonModule, RanklistComponent],
+  template: `
+    <srk-ranklist
+      [data]="data"
+      [languages]="languages"
+      (solutionClick)="solutionEvents.push($event)"
+    />
+  `,
+})
+class I18nHostComponent {
+  data = makeI18nStaticRanklist();
+  languages = ['zh-CN'];
+  solutionEvents: unknown[] = [];
+}
+
+@Component({
+  standalone: true,
   imports: [CommonModule, RanklistComponent, SrkStatusCellTemplateDirective, SrkUserCellTemplateDirective],
   template: `
     <srk-ranklist
       [data]="data"
+      [languages]="languages"
       [splitOrganization]="true"
       [statusCellPreset]="'minimal'"
       [statusColorAsText]="true"
       [emptyStatusPlaceholder]="'.'"
       [userAvatarPlacement]="'organization'"
     >
-      <ng-template srkUserCell let-user="user" let-hideOrganization="hideOrganization" let-hideAvatar="hideAvatar">
-        <td data-testid="ng-user-context">{{ user.id }}|{{ hideOrganization }}|{{ hideAvatar }}</td>
+      <ng-template
+        srkUserCell
+        let-user="user"
+        let-hideOrganization="hideOrganization"
+        let-hideAvatar="hideAvatar"
+        let-languages="languages"
+      >
+        <td data-testid="ng-user-context">{{ user.id }}|{{ hideOrganization }}|{{ hideAvatar }}|{{ languages[0] }}</td>
       </ng-template>
       <ng-template
         srkStatusCell
         let-statusCellPreset="statusCellPreset"
         let-statusColorAsText="statusColorAsText"
         let-emptyStatusPlaceholder="emptyStatusPlaceholder"
+        let-languages="languages"
       >
         <td data-testid="ng-status-context">
-          {{ statusCellPreset }}|{{ statusColorAsText }}|{{ emptyStatusPlaceholder }}
+          {{ statusCellPreset }}|{{ statusColorAsText }}|{{ emptyStatusPlaceholder }}|{{ languages[0] }}
         </td>
       </ng-template>
     </srk-ranklist>
@@ -95,6 +126,7 @@ class DefaultHostComponent {
 })
 class SlotContextHostComponent {
   data = makeRenderOptionsRanklist();
+  languages = ['zh-CN'];
 
   constructor() {
     this.data.rows[0].user.avatar = 'https://example.com/team-alpha.png';
@@ -165,6 +197,7 @@ describe('Angular Ranklist', () => {
       rendered.appRef.destroy();
       rendered.hostElement.remove();
     }
+    resetModalInteractionStateForTests();
   });
 
   it('renders a status-cell template override', async () => {
@@ -219,10 +252,22 @@ describe('Angular Ranklist', () => {
     const { hostElement } = await renderComponentHost(SlotContextHostComponent);
 
     expect(hostElement.querySelector('[data-testid="ng-user-context"]')?.textContent?.replace(/\s+/g, '')).toBe(
-      'team-alpha|true|true',
+      'team-alpha|true|true|zh-CN',
     );
     expect(hostElement.querySelector('[data-testid="ng-status-context"]')?.textContent?.replace(/\s+/g, '')).toBe(
-      'minimal|true|.',
+      'minimal|true|.|zh-CN',
     );
+  });
+
+  it('uses explicit languages for status-cell trigger context', async () => {
+    const { componentRef, hostElement } = await renderComponentHost(I18nHostComponent);
+    const statusCell = hostElement.querySelector('td.srk-prest-status-block-accepted') as HTMLElement | null;
+
+    expect(statusCell).toBeTruthy();
+    statusCell!.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: 18, clientY: 29 }));
+    componentRef.changeDetectorRef.detectChanges();
+
+    expect(componentRef.instance.solutionEvents).toHaveLength(1);
+    expect(getRecentModalTriggerPoint()?.context?.problemTitle).toBe('中文题目');
   });
 });

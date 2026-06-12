@@ -7,9 +7,10 @@ export interface ProblemHeaderCellProps {
   problem: srk.Problem;
   index: number;
   theme: EnumTheme;
+  languages?: readonly string[];
 }
 
-export function ProblemHeaderCell({ problem, index, theme }: ProblemHeaderCellProps) {
+export function ProblemHeaderCell({ problem, index, theme, languages }: ProblemHeaderCellProps) {
   const alias = problem.alias ? problem.alias : numberToAlphabet(index);
   const stat = problem.statistics;
   const statDesc = stat
@@ -38,7 +39,7 @@ export function ProblemHeaderCell({ problem, index, theme }: ProblemHeaderCellPr
   return (
     <th
       className="srk--nowrap srk-problem-header"
-      key={problem.alias || resolveText(problem.title)}
+      key={problem.alias || resolveText(problem.title, languages)}
       style={{ backgroundImage: getProblemHeaderBackgroundImage(problem.style, theme) }}
     >
       {cellComp}

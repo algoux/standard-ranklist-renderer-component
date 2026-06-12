@@ -19,12 +19,12 @@
               class="srk-marker srk-marker-dot srk--c-tooltip"
               :class="marker.presentation.className"
               :style="marker.presentation.style"
-              :data-tooltip="resolveText(marker.marker.label)"
+              :data-tooltip="resolveDisplayText(marker.marker.label)"
             ></span>
           </span>
         </div>
         <p v-if="user.organization && !hideOrganization" class="srk-user-secondary-text srk--text-ellipsis" title="">
-          {{ resolveText(user.organization) }}
+          {{ resolveDisplayText(user.organization) }}
         </p>
       </div>
     </div>
@@ -53,6 +53,7 @@ const props = withDefaults(
     onUserClick?: (payload: UserClickPayload) => void | Promise<void>;
     hideOrganization?: boolean;
     hideAvatar?: boolean;
+    languages?: readonly string[];
   }>(),
   {
     markers: () => [],
@@ -62,7 +63,7 @@ const props = withDefaults(
   },
 );
 
-const name = computed(() => resolveText(props.user.name));
+const name = computed(() => resolveDisplayText(props.user.name));
 const userMarkers = computed(() => resolveUserMarkers(props.user, props.markers));
 const resolvedMarkers = computed(() =>
   userMarkers.value.map((marker) => ({
@@ -70,6 +71,10 @@ const resolvedMarkers = computed(() =>
     presentation: getMarkerPresentation(marker, props.theme),
   })),
 );
+
+function resolveDisplayText(text: Parameters<typeof resolveText>[0]) {
+  return resolveText(text, props.languages);
+}
 
 function emitUserClick(event: MouseEvent) {
   captureModalTriggerPointFromMouseEvent(event, {

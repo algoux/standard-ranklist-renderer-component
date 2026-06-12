@@ -11,9 +11,9 @@
     @update:open="(value) => emit('update:open', value)"
   >
     <div class="srk-user-modal-info">
-      <h3 class="srk-user-modal-info-user-name">{{ resolveText(cachedUser.name) }}</h3>
+      <h3 class="srk-user-modal-info-user-name">{{ resolveDisplayText(cachedUser.name) }}</h3>
       <p v-if="cachedUser.organization" class="srk-user-modal-info-user-second-name">
-        {{ resolveText(cachedUser.organization) }}
+        {{ resolveDisplayText(cachedUser.organization) }}
       </p>
       <div class="srk-user-modal-info-labels">
         <span class="srk-user-modal-info-labels-label srk-user-modal-info-labels-label-preset-general">
@@ -26,13 +26,13 @@
           :class="marker.presentation.className"
           :style="marker.presentation.style"
         >
-          {{ resolveText(marker.marker.label) }}
+          {{ resolveDisplayText(marker.marker.label) }}
         </span>
       </div>
       <div v-if="cachedUser.teamMembers && cachedUser.teamMembers.length" class="srk-user-modal-info-team-members">
-        <template v-for="(member, index) in cachedUser.teamMembers" :key="resolveText(member.name)">
+        <template v-for="(member, index) in cachedUser.teamMembers" :key="resolveDisplayText(member.name)">
           <span v-if="index > 0" class="srk-user-modal-info-team-members-slash"> / </span>
-          <span>{{ resolveText(member.name) }}</span>
+          <span>{{ resolveDisplayText(member.name) }}</span>
         </template>
       </div>
       <div v-if="cachedUser.photo" class="srk-user-modal-info-photo">
@@ -62,6 +62,7 @@ const props = withDefaults(
     wrapClassName?: string;
     style?: CSSProperties;
     formatSrkAssetUrl?: (url: string, field: string) => string;
+    languages?: readonly string[];
   }>(),
   {
     markers: () => [],
@@ -101,5 +102,9 @@ const resolvedMarkers = computed(() =>
 
 function formatAssetUrl(url: string, field: string) {
   return resolveSrkAssetUrl(url, field, props.formatSrkAssetUrl);
+}
+
+function resolveDisplayText(text: Parameters<typeof resolveText>[0]) {
+  return resolveText(text, props.languages);
 }
 </script>

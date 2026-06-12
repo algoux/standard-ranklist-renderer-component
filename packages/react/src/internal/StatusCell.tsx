@@ -25,6 +25,7 @@ export interface StatusCellProps {
   statusCellPreset?: RanklistStatusCellPreset;
   statusColorAsText?: boolean;
   emptyStatusPlaceholder?: string | null;
+  languages?: readonly string[];
 }
 
 export function StatusCell({
@@ -39,9 +40,10 @@ export function StatusCell({
   statusCellPreset = 'classic',
   statusColorAsText = false,
   emptyStatusPlaceholder = null,
+  languages,
 }: StatusCellProps) {
-  const problemKey = problem?.alias || resolveText(problem?.title) || problemIndex;
-  const problemTitle = resolveText(problem?.title) || null;
+  const problemKey = problem?.alias || resolveText(problem?.title, languages) || problemIndex;
+  const problemTitle = resolveText(problem?.title, languages) || null;
   const solutions = [...(status.solutions || [])].reverse();
   const hasSolutions = solutions.length > 0;
   const isClickable = hasSolutions && !!onSolutionClick;

@@ -80,6 +80,7 @@ Use `Modal` directly when you want custom modal content. `Ranklist` also accepts
 
 `Ranklist` includes optional render props for changing the table structure and status presentation while keeping the default behavior unchanged:
 
+- `languages`: preferred BCP 47 language tags used by SRK i18n text fields; defaults to browser languages when omitted.
 - `splitOrganization`: moves user organization into its own column before the user column.
 - `columnTitles`: overrides text labels for series, organization, user, score, time, Dirt, and SE columns.
 - `statusCellPreset`: uses `classic`, `detailed`, `minimal`, or `compact` status cell content.
@@ -107,6 +108,7 @@ Use `Modal` directly when you want custom modal content. `Ranklist` also accepts
   columnBordered
   emptyStatusPlaceholder="·"
   userAvatarPlacement="organization"
+  languages={['zh-CN']}
   columnTitles={{
     organization: 'Org',
     user: 'Team',

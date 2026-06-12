@@ -70,6 +70,7 @@ export class DefaultSolutionModalComponent implements OnChanges {
   @Input() rootClassName = 'srk-general-modal-root';
   @Input() wrapClassName = 'srk-solutions-modal';
   @Input() panelStyle: Record<string, string | number> = {};
+  @Input() languages?: readonly string[];
 
   @Output() openChange = new EventEmitter<boolean>();
   @Output() close = new EventEmitter<ModalCloseReason>();
@@ -90,7 +91,7 @@ export class DefaultSolutionModalComponent implements OnChanges {
   }
 
   resolvedTitle() {
-    return this.title || (this.cachedUser ? getSolutionModalTitle(this.cachedProblemIndex, this.cachedUser) : '');
+    return this.title || (this.cachedUser ? getSolutionModalTitle(this.cachedProblemIndex, this.cachedUser, this.languages) : '');
   }
 
   solutionMeta(solution: srk.Solution): SolutionResultMeta {

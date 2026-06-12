@@ -25,6 +25,7 @@
   let columnBordered = true;
   let emptyStatusPlaceholderValue = '·';
   let userAvatarPlacement = 'organization';
+  let language = 'browser';
   const preferredTheme = resolvePreferredTheme();
   const demoColumnTitles = {
     series: (series, index) => (index === 0 ? 'Rank' : series.title || `Series ${index + 1}`),
@@ -50,9 +51,15 @@
     { value: 'user', label: 'User' },
     { value: 'organization', label: 'Organization' },
   ];
+  const languageOptions = [
+    { value: 'browser', label: 'Browser' },
+    { value: 'zh-CN', label: 'zh-CN' },
+    { value: 'en-US', label: 'en-US' },
+  ];
 
-  $: staticRanklist = convertToStaticRanklist(ranklist);
   $: emptyStatusPlaceholder = emptyStatusPlaceholderValue || null;
+  $: languages = language === 'browser' ? undefined : [language];
+  $: staticRanklist = (languages, convertToStaticRanklist(ranklist));
 
   function resolvePreferredTheme() {
     if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
@@ -154,6 +161,14 @@
           {/each}
         </select>
       </label>
+      <label class="preview-field preview-select-field">
+        <span>Language</span>
+        <select aria-label="Language" bind:value={language}>
+          {#each languageOptions as option}
+            <option value={option.value}>{option.label}</option>
+          {/each}
+        </select>
+      </label>
       <button type="button" class="preview-action" on:click={useShowcaseOptions}>Showcase</button>
       <button type="button" class="preview-action" on:click={useBaselineOptions}>Baseline</button>
     </div>
@@ -208,6 +223,7 @@
     {columnBordered}
     {emptyStatusPlaceholder}
     {userAvatarPlacement}
+    {languages}
     on:solutionClick={handleSolutionClick}
     on:userClick={handleUserClick}
   />
@@ -216,6 +232,7 @@
     user={activeUserClick && activeUserClick.user}
     markers={staticRanklist.markers}
     theme={preferredTheme}
+    {languages}
     on:close={() => (activeUserClick = null)}
   />
   <DefaultSolutionModal
@@ -224,6 +241,7 @@
     problem={activeSolutionClick && activeSolutionClick.problem}
     problemIndex={(activeSolutionClick && activeSolutionClick.problemIndex) || 0}
     solutions={(activeSolutionClick && activeSolutionClick.solutions) || []}
+    {languages}
     on:close={() => (activeSolutionClick = null)}
   />
 </main>

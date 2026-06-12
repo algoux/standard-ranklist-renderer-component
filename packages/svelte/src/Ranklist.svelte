@@ -39,6 +39,7 @@
   export let showSEColumn = false;
   export let emptyStatusPlaceholder = null;
   export let userAvatarPlacement = 'user';
+  export let languages = undefined;
 
   const dispatch = createEventDispatcher();
 
@@ -56,8 +57,8 @@
       tooltip: 'Number of participants who solved this problem',
     },
     {
-      key: 'tried',
-      label: 'Tried',
+      key: 'attempted',
+      label: 'Attempted',
       tooltip: 'Number of participants who attempted this problem',
     },
     {
@@ -89,6 +90,10 @@
 
   function formatAssetUrl(url, field) {
     return resolveSrkAssetUrl(url, field, formatSrkAssetUrl);
+  }
+
+  function resolveDisplayText(text) {
+    return resolveText(text, languages);
   }
 
   function getRankValues(row) {
@@ -206,8 +211,8 @@
     switch (key) {
       case 'accepted':
         return stat.accepted;
-      case 'tried':
-        return stat.tried;
+      case 'attempted':
+        return stat.attempted;
       case 'submitted':
         return stat.submitted;
       case 'dirt':
@@ -227,8 +232,8 @@
     switch (key) {
       case 'accepted':
         return formatProblemStatisticsPercent(stat.accepted, stat.participantCount);
-      case 'tried':
-        return formatProblemStatisticsPercent(stat.tried, stat.participantCount);
+      case 'attempted':
+        return formatProblemStatisticsPercent(stat.attempted, stat.participantCount);
       case 'dirt':
         return formatProblemStatisticsPercent(stat.dirt, stat.dirtSubmitted);
       default:
@@ -243,7 +248,7 @@
         context: {
           rowIndex,
           userId: row.user.id || null,
-          userName: resolveText(row.user.name),
+          userName: resolveDisplayText(row.user.name),
         },
       });
     }
@@ -267,7 +272,7 @@
           rowIndex,
           problemIndex,
           problemAlias: data.problems[problemIndex] && data.problems[problemIndex].alias,
-          problemTitle: data.problems[problemIndex] ? resolveText(data.problems[problemIndex].title) : null,
+          problemTitle: data.problems[problemIndex] ? resolveDisplayText(data.problems[problemIndex].title) : null,
           userId: row.user.id || null,
         },
       });
@@ -321,7 +326,7 @@
               class="srk--nowrap srk-problem-header"
               style:background-image={getProblemHeaderBackgroundImage(problem.style, theme)}
             >
-              <slot name="problem-header-cell" {problem} {problemIndex} index={problemIndex} {theme}>
+              <slot name="problem-header-cell" {problem} {problemIndex} index={problemIndex} {theme} {languages}>
                 {#if problem.link}
                   <a href={problem.link} target="_blank" rel="noopener noreferrer" style="color: unset">
                     <span class="srk--display-block">{problemAlias(problem, problemIndex)}</span>
@@ -376,9 +381,9 @@
                   {/if}
                   <span
                     class="srk-organization-name-text"
-                    title={row.user.organization ? resolveText(row.user.organization) : ''}
+                    title={row.user.organization ? resolveDisplayText(row.user.organization) : ''}
                   >
-                    {row.user.organization ? resolveText(row.user.organization) : ''}
+                    {row.user.organization ? resolveDisplayText(row.user.organization) : ''}
                   </span>
                 </div>
               </td>
@@ -393,6 +398,7 @@
               {theme}
               hideOrganization={splitOrganization}
               hideAvatar={showAvatarInOrganization}
+              {languages}
               onClick={(event) => emitUserClick(event, row, rowIndex)}
             >
               <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -409,22 +415,22 @@
                   {/if}
                   <div class="srk-user-body">
                     <div class="srk-user-name-row">
-                      <span class="srk-user-name-text" title={resolveText(row.user.name)}>
-                        {resolveText(row.user.name)}
+                      <span class="srk-user-name-text" title={resolveDisplayText(row.user.name)}>
+                        {resolveDisplayText(row.user.name)}
                       </span>
                       <span class="srk-marker-dot-group">
                         {#each getResolvedUserMarkers(row.user) as entry}
                           <span
                             class={markerClass(entry)}
                             style:background-color={markerBackgroundColor(entry)}
-                            data-tooltip={resolveText(entry.marker.label)}
+                            data-tooltip={resolveDisplayText(entry.marker.label)}
                           ></span>
                         {/each}
                       </span>
                     </div>
                     {#if row.user.organization && !splitOrganization}
                       <p class="srk-user-secondary-text srk--text-ellipsis" title="">
-                        {resolveText(row.user.organization)}
+                        {resolveDisplayText(row.user.organization)}
                       </p>
                     {/if}
                   </div>
@@ -451,6 +457,7 @@
                 statusCellPreset={statusCellPreset}
                 statusColorAsText={statusColorAsText}
                 emptyStatusPlaceholder={emptyStatusPlaceholder}
+                {languages}
                 onClick={(event) => emitSolutionClick(event, row, rowIndex, status, problemIndex)}
               >
                 {#if status.result === 'FB' || status.result === 'AC'}

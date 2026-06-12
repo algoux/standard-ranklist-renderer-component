@@ -9,6 +9,7 @@ import statusResultsRanklist from '../fixtures/ranklist/status-results.json';
 import usersMarkersAssetsRanklist from '../fixtures/ranklist/users-markers-assets.json';
 import unsupportedTypeRanklist from '../fixtures/unsupported-type.json';
 import unsupportedVersionRanklist from '../fixtures/unsupported-version.json';
+import { makeI18nRanklist } from './ranklist-i18n-fixtures';
 import {
   expectTextIncludes,
   getBodyRows,
@@ -25,6 +26,8 @@ export interface RanklistDisplayRenderProps {
   rowBordered?: boolean;
   rowStriped?: boolean;
   formatSrkAssetUrl?: (url: string, field: string) => string;
+  splitOrganization?: boolean;
+  languages?: readonly string[];
 }
 
 export interface RenderedRanklist {
@@ -156,6 +159,24 @@ export function describeRanklistDisplayContract(adapter: RanklistDisplayAdapter)
           expect(missingMarkerRow.querySelectorAll('.srk-marker-dot')).toHaveLength(0);
         },
         { formatSrkAssetUrl },
+      );
+    });
+
+    it('uses explicit languages for user, organization, and marker text', async () => {
+      await withRendered(
+        adapter,
+        makeI18nRanklist(),
+        (container) => {
+          expectTextIncludes(container, '中文队伍');
+          expectTextIncludes(container, '中文大学');
+          expect(textOf(container)).not.toContain('English Team');
+          expect(textOf(container)).not.toContain('English University');
+          expect(requireElement<HTMLElement>(container, '.srk-marker-dot').dataset.tooltip).toBe('中文标记');
+        },
+        {
+          languages: ['zh-CN'],
+          splitOrganization: true,
+        },
       );
     });
 

@@ -1,6 +1,7 @@
 import type * as srk from '@algoux/standard-ranklist';
 import { describe, expect, it } from 'vitest';
 import basicRanklistJson from '../fixtures/basic-ranklist.json';
+import { makeI18nRanklist } from './ranklist-i18n-fixtures';
 import { expectTextIncludes, requireElement, textOf } from './ranklist-dom-assertions';
 
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
@@ -42,11 +43,29 @@ export interface RenderedDefaultSolutionModalHarness {
   cleanup?: () => void | Promise<void>;
 }
 
+export interface DefaultUserModalRenderOptions {
+  user?: srk.User;
+  markers?: srk.Marker[];
+  languages?: readonly string[];
+}
+
+export interface DefaultSolutionModalRenderOptions {
+  user?: srk.User;
+  problem?: srk.Problem;
+  problemIndex?: number;
+  solutions?: srk.Solution[];
+  languages?: readonly string[];
+}
+
 export interface ModalComponentAdapter {
   target: string;
   renderModal: (options?: ModalRenderOptions) => RenderedModalHarness | Promise<RenderedModalHarness>;
-  renderDefaultUserModal: () => RenderedDefaultUserModalHarness | Promise<RenderedDefaultUserModalHarness>;
-  renderDefaultSolutionModal: () => RenderedDefaultSolutionModalHarness | Promise<RenderedDefaultSolutionModalHarness>;
+  renderDefaultUserModal: (
+    options?: DefaultUserModalRenderOptions,
+  ) => RenderedDefaultUserModalHarness | Promise<RenderedDefaultUserModalHarness>;
+  renderDefaultSolutionModal: (
+    options?: DefaultSolutionModalRenderOptions,
+  ) => RenderedDefaultSolutionModalHarness | Promise<RenderedDefaultSolutionModalHarness>;
 }
 
 export function describeModalComponentContract(adapter: ModalComponentAdapter) {
@@ -206,6 +225,43 @@ export function describeDefaultModalContentContract(adapter: ModalComponentAdapt
         expect(textOf(rendered.container as Element)).toContain('Accepted');
         expect(textOf(rendered.container as Element)).toContain('Wrong Answer');
         expect(dialog.style.width).toBe('320px');
+      } finally {
+        await rendered.cleanup?.();
+      }
+    });
+
+    it('uses explicit languages in default user modal text', async () => {
+      const ranklist = makeI18nRanklist();
+      const rendered = await adapter.renderDefaultUserModal({
+        user: ranklist.rows[0].user,
+        markers: ranklist.markers,
+        languages: ['zh-CN'],
+      });
+
+      try {
+        expect(textOf(rendered.container as Element)).toContain('中文队伍');
+        expect(textOf(rendered.container as Element)).toContain('中文大学');
+        expect(textOf(rendered.container as Element)).toContain('中文队员');
+        expect(textOf(rendered.container as Element)).toContain('中文标记');
+        expect(textOf(rendered.container as Element)).not.toContain('English Team');
+      } finally {
+        await rendered.cleanup?.();
+      }
+    });
+
+    it('uses explicit languages in default solution modal title text', async () => {
+      const ranklist = makeI18nRanklist();
+      const rendered = await adapter.renderDefaultSolutionModal({
+        user: ranklist.rows[0].user,
+        problem: ranklist.problems[0],
+        problemIndex: 0,
+        solutions: [],
+        languages: ['zh-CN'],
+      });
+
+      try {
+        expect(textOf(rendered.container as Element)).toContain('Solutions of A (中文队伍)');
+        expect(textOf(rendered.container as Element)).not.toContain('English Team');
       } finally {
         await rendered.cleanup?.();
       }

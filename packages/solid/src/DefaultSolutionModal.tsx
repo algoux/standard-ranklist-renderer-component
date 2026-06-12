@@ -15,6 +15,7 @@ export interface DefaultSolutionModalProps
   solutions: srk.Solution[];
   title?: string;
   width?: number;
+  languages?: readonly string[];
 }
 
 export function DefaultSolutionModal(props: DefaultSolutionModalProps) {
@@ -53,7 +54,7 @@ export function DefaultSolutionModal(props: DefaultSolutionModalProps) {
           onClose={props.onClose}
           rootClassName={props.rootClassName || 'srk-general-modal-root'}
           style={props.style}
-          title={props.title || getSolutionModalTitle(payload().problemIndex, payload().user)}
+          title={props.title || getSolutionModalTitle(payload().problemIndex, payload().user, props.languages)}
           width={props.width || 320}
           wrapClassName={props.wrapClassName || 'srk-solutions-modal'}
         >

@@ -115,6 +115,7 @@ Use `ModalComponent` directly when you want custom modal content. `SrkUserCellTe
 - `columnBordered`: adds column separators controlled by CSS variables.
 - `emptyStatusPlaceholder`: renders a custom string in no-submission status cells.
 - `userAvatarPlacement`: chooses whether the default user avatar renders in the user column or, when `splitOrganization` is enabled, in the organization column.
+- `languages`: passes an explicit language priority list to i18n text resolution. Leave it unset to use the browser language list; pass it to `RanklistComponent`, `DefaultUserModalComponent`, and `DefaultSolutionModalComponent` when rendering outside the browser or when you need a forced language.
 
 ```ts
 import type { RanklistColumnTitles } from '@algoux/standard-ranklist-renderer-component-angular';
@@ -145,6 +146,7 @@ export class BoardComponent {
   [columnBordered]="true"
   [emptyStatusPlaceholder]="'·'"
   [userAvatarPlacement]="'organization'"
+  [languages]="['zh-CN']"
   [columnTitles]="columnTitles"
 ></srk-ranklist>
 ```

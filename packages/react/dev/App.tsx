@@ -48,6 +48,7 @@ interface AppState {
   columnBordered: boolean;
   emptyStatusPlaceholder: string | null;
   userAvatarPlacement: RanklistUserAvatarPlacement;
+  language: LanguageOptionValue;
 }
 
 const demoColumnTitles: RanklistColumnTitles = {
@@ -78,6 +79,14 @@ const userAvatarPlacementOptions: Array<{ value: RanklistUserAvatarPlacement; la
   { value: 'organization', label: 'Organization' },
 ];
 
+type LanguageOptionValue = 'browser' | 'zh-CN' | 'en-US';
+
+const languageOptions: Array<{ value: LanguageOptionValue; label: string }> = [
+  { value: 'browser', label: 'Browser' },
+  { value: 'zh-CN', label: 'zh-CN' },
+  { value: 'en-US', label: 'en-US' },
+];
+
 export default class App extends React.Component<Record<string, never>, AppState> {
   private readonly preferredTheme = resolvePreferredTheme();
 
@@ -99,10 +108,15 @@ export default class App extends React.Component<Record<string, never>, AppState
       columnBordered: true,
       emptyStatusPlaceholder: '·',
       userAvatarPlacement: 'organization',
+      language: 'browser',
     };
   }
 
   getStaticRanklist = (): StaticRanklist => convertToStaticRanklist(this.state.data) as StaticRanklist;
+
+  getSelectedLanguages = (): readonly string[] | undefined => {
+    return this.state.language === 'browser' ? undefined : [this.state.language];
+  };
 
   handleTimeTravel = (time: number | null) => {
     if (time === null) {
@@ -168,6 +182,12 @@ export default class App extends React.Component<Record<string, never>, AppState
     });
   };
 
+  handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    this.setState({
+      language: event.target.value as LanguageOptionValue,
+    });
+  };
+
   useBaselineOptions = () => {
     this.setState({
       splitOrganization: false,
@@ -202,6 +222,7 @@ export default class App extends React.Component<Record<string, never>, AppState
 
   render() {
     const staticRanklist = this.getStaticRanklist();
+    const languages = this.getSelectedLanguages();
 
     return (
       <main className="preview-shell">
@@ -251,6 +272,20 @@ export default class App extends React.Component<Record<string, never>, AppState
                 onChange={this.handleUserAvatarPlacementChange}
               >
                 {userAvatarPlacementOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="preview-field preview-select-field">
+              <span>Language</span>
+              <select
+                aria-label="Language"
+                value={this.state.language}
+                onChange={this.handleLanguageChange}
+              >
+                {languageOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
@@ -325,6 +360,7 @@ export default class App extends React.Component<Record<string, never>, AppState
           columnBordered={this.state.columnBordered}
           emptyStatusPlaceholder={this.state.emptyStatusPlaceholder}
           userAvatarPlacement={this.state.userAvatarPlacement}
+          languages={languages}
         />
 
         <DefaultUserModal
@@ -332,6 +368,7 @@ export default class App extends React.Component<Record<string, never>, AppState
           user={this.state.activeUserClick?.user}
           markers={staticRanklist.markers}
           theme={this.preferredTheme}
+          languages={languages}
           onClose={this.closeUserModal}
         />
 
@@ -341,6 +378,7 @@ export default class App extends React.Component<Record<string, never>, AppState
           problem={this.state.activeSolutionClick?.problem}
           problemIndex={this.state.activeSolutionClick?.problemIndex || 0}
           solutions={this.state.activeSolutionClick?.solutions || []}
+          languages={languages}
           onClose={this.closeSolutionModal}
         />
 

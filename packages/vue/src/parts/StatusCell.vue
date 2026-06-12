@@ -43,6 +43,7 @@ const props = withDefaults(
     statusCellPreset?: RanklistStatusCellPreset;
     statusColorAsText?: boolean;
     emptyStatusPlaceholder?: string | null;
+    languages?: readonly string[];
   }>(),
   {
     statusCellPreset: 'classic',
@@ -74,7 +75,7 @@ function emitSolutionClick(event: MouseEvent) {
       rowIndex: props.rowIndex,
       problemIndex: props.problemIndex,
       problemAlias: props.problem?.alias || null,
-      problemTitle: props.problem ? resolveText(props.problem.title) : null,
+      problemTitle: props.problem ? resolveText(props.problem.title, props.languages) : null,
       userId: props.user.id || null,
     },
   });

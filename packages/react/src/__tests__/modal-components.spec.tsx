@@ -8,6 +8,8 @@ import {
   describeDefaultModalContentContract,
   describeModalComponentContract,
   makeRanklist,
+  type DefaultSolutionModalRenderOptions,
+  type DefaultUserModalRenderOptions,
   type ModalComponentAdapter,
   type ModalRenderOptions,
 } from '../../../../tests/shared/modal-component-contract';
@@ -69,15 +71,17 @@ const reactModalAdapter: ModalComponentAdapter = {
       },
     };
   },
-  renderDefaultUserModal() {
+  renderDefaultUserModal(options: DefaultUserModalRenderOptions = {}) {
     const ranklist = makeRanklist();
+    const user = options.user || ranklist.rows[0].user;
     const rendered = render(
       <DefaultUserModal
         open
         formatSrkAssetUrl={(url, field) => `proxied:${field}:${url}`}
-        markers={ranklist.markers}
+        markers={options.markers || ranklist.markers}
         theme={EnumTheme.light}
-        user={ranklist.rows[0].user}
+        user={user}
+        languages={options.languages}
       />,
     );
 
@@ -90,15 +94,17 @@ const reactModalAdapter: ModalComponentAdapter = {
         ) || null,
     };
   },
-  renderDefaultSolutionModal() {
+  renderDefaultSolutionModal(options: DefaultSolutionModalRenderOptions = {}) {
     const ranklist = makeRanklist();
+    const status = ranklist.rows[0].statuses[0];
     const rendered = render(
       <DefaultSolutionModal
         open
-        problem={ranklist.problems[0]}
-        problemIndex={0}
-        solutions={[...(ranklist.rows[0].statuses[0].solutions || [])].reverse()}
-        user={ranklist.rows[0].user}
+        problem={options.problem || ranklist.problems[0]}
+        problemIndex={options.problemIndex ?? 0}
+        solutions={options.solutions || [...(status.solutions || [])].reverse()}
+        user={options.user || ranklist.rows[0].user}
+        languages={options.languages}
       />,
     );
 
@@ -181,6 +187,66 @@ describe('React modal components', () => {
     cleanup();
     vi.useRealTimers();
     vi.restoreAllMocks();
+  });
+
+  it('uses explicit languages in the default user modal content', () => {
+    const user = {
+      id: 'team-i18n',
+      name: {
+        fallback: 'Fallback Team',
+        en: 'English Team',
+        'zh-CN': '中文队伍',
+      },
+      organization: {
+        fallback: 'Fallback University',
+        en: 'English University',
+        'zh-CN': '中文大学',
+      },
+      teamMembers: [
+        {
+          name: {
+            fallback: 'Fallback Member',
+            en: 'English Member',
+            'zh-CN': '中文队员',
+          },
+        },
+      ],
+      markers: ['regional'],
+    } as srk.User;
+    const markers = [
+      {
+        id: 'regional',
+        label: {
+          fallback: 'Fallback Marker',
+          en: 'English Marker',
+          'zh-CN': '中文标记',
+        },
+      },
+    ] as srk.Marker[];
+
+    const rendered = render(<DefaultUserModal open user={user} markers={markers} languages={['zh-CN']} />);
+
+    expect(rendered.container.ownerDocument.body.textContent).toContain('中文队伍');
+    expect(rendered.container.ownerDocument.body.textContent).toContain('中文大学');
+    expect(rendered.container.ownerDocument.body.textContent).toContain('中文队员');
+    expect(rendered.container.ownerDocument.body.textContent).toContain('中文标记');
+  });
+
+  it('uses explicit languages in the default solution modal title', () => {
+    const user = {
+      id: 'team-i18n',
+      name: {
+        fallback: 'Fallback Team',
+        en: 'English Team',
+        'zh-CN': '中文队伍',
+      },
+    } as srk.User;
+
+    const rendered = render(
+      <DefaultSolutionModal open user={user} problemIndex={0} solutions={[]} languages={['zh-CN']} />,
+    );
+
+    expect(rendered.container.ownerDocument.body.textContent).toContain('Solutions of A (中文队伍)');
   });
 
   it('emits time-travel changes from the internal range input', () => {

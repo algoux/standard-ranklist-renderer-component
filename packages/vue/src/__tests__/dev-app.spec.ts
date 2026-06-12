@@ -43,6 +43,7 @@ describe('Vue local demo app', () => {
       expect((getField(container, 'Status preset') as HTMLSelectElement).value).toBe('compact');
       expect((getField(container, 'Empty status placeholder') as HTMLSelectElement).value).toBe('·');
       expect((getField(container, 'User avatar placement') as HTMLSelectElement).value).toBe('organization');
+      expect((getField(container, 'Language') as HTMLSelectElement).value).toBe('browser');
 
       expect(container.querySelector('th.srk-organization-header')?.textContent).toContain('School');
       expect(container.querySelector('th.srk-dirt-header')?.textContent).toContain('Dirt');
@@ -70,6 +71,13 @@ describe('Vue local demo app', () => {
       avatarPlacement.dispatchEvent(new Event('change', { bubbles: true }));
       await nextTick();
       expect(avatarPlacement.value).toBe('user');
+
+      const language = getField(container, 'Language') as HTMLSelectElement;
+      language.value = 'zh-CN';
+      language.dispatchEvent(new Event('change', { bubbles: true }));
+      await nextTick();
+      expect(language.value).toBe('zh-CN');
+      expect(container.textContent).toContain('中二之力');
 
       getButton(container, 'Baseline').click();
       await nextTick();

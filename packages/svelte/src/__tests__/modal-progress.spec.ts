@@ -15,6 +15,8 @@ import {
   describeDefaultModalContentContract,
   describeModalComponentContract,
   makeRanklist,
+  type DefaultSolutionModalRenderOptions,
+  type DefaultUserModalRenderOptions,
   type ModalComponentAdapter,
   type ModalRenderOptions,
 } from '../../../../tests/shared/modal-component-contract';
@@ -66,14 +68,15 @@ const svelteModalAdapter: ModalComponentAdapter = {
       triggerEscape: () => fireEvent.keyDown(document, { key: 'Escape' }),
     };
   },
-  renderDefaultUserModal() {
+  renderDefaultUserModal(options: DefaultUserModalRenderOptions = {}) {
     const ranklist = makeRanklist();
     const rendered = render(DefaultUserModal, {
       props: {
         open: true,
-        user: ranklist.rows[0].user,
-        markers: ranklist.markers,
+        user: options.user || ranklist.rows[0].user,
+        markers: options.markers || ranklist.markers,
         formatSrkAssetUrl: (url: string, field: string) => `proxied:${field}:${url}`,
+        languages: options.languages,
       },
     });
 
@@ -84,15 +87,16 @@ const svelteModalAdapter: ModalComponentAdapter = {
         (rendered.container.querySelector('img[alt="User portrait"]') as HTMLImageElement | null)?.getAttribute('src') || null,
     };
   },
-  renderDefaultSolutionModal() {
+  renderDefaultSolutionModal(options: DefaultSolutionModalRenderOptions = {}) {
     const ranklist = makeRanklist();
     const rendered = render(DefaultSolutionModal, {
       props: {
         open: true,
-        user: ranklist.rows[0].user,
-        problem: ranklist.problems[0],
-        problemIndex: 0,
-        solutions: [...(ranklist.rows[0].statuses[0].solutions || [])].reverse(),
+        user: options.user || ranklist.rows[0].user,
+        problem: options.problem || ranklist.problems[0],
+        problemIndex: options.problemIndex ?? 0,
+        solutions: options.solutions || [...(ranklist.rows[0].statuses[0].solutions || [])].reverse(),
+        languages: options.languages,
       },
     });
 

@@ -13,6 +13,7 @@ export interface DefaultSolutionModalProps
   solutions: srk.Solution[];
   title?: ReactNode;
   width?: number;
+  languages?: readonly string[];
 }
 
 export function DefaultSolutionModal({
@@ -23,6 +24,7 @@ export function DefaultSolutionModal({
   solutions,
   title,
   width = 320,
+  languages,
   onClose,
   rootClassName = 'srk-general-modal-root',
   wrapClassName = 'srk-solutions-modal',
@@ -65,7 +67,7 @@ export function DefaultSolutionModal({
       onClose={onClose}
       rootClassName={rootClassName}
       style={style}
-      title={title || getSolutionModalTitle(cachedPayload.problemIndex, cachedPayload.user)}
+      title={title || getSolutionModalTitle(cachedPayload.problemIndex, cachedPayload.user, languages)}
       width={width}
       wrapClassName={wrapClassName}
     >

@@ -34,6 +34,8 @@ function resolvePreferredTheme() {
   }
 }
 
+type LanguageOptionValue = 'browser' | 'zh-CN' | 'en-US';
+
 @Component({
   selector: 'srk-angular-preview',
   standalone: true,
@@ -96,6 +98,21 @@ function resolvePreferredTheme() {
                 *ngFor="let option of userAvatarPlacementOptions"
                 [value]="option.value"
                 [selected]="userAvatarPlacement === option.value"
+              >
+                {{ option.label }}
+              </option>
+            </select>
+          </label>
+          <label class="preview-field preview-select-field">
+            <span>Language</span>
+            <select
+              aria-label="Language"
+              (change)="language = $any($event.target).value"
+            >
+              <option
+                *ngFor="let option of languageOptions"
+                [value]="option.value"
+                [selected]="language === option.value"
               >
                 {{ option.label }}
               </option>
@@ -195,6 +212,7 @@ function resolvePreferredTheme() {
         [columnBordered]="columnBordered"
         [emptyStatusPlaceholder]="emptyStatusPlaceholder"
         [userAvatarPlacement]="userAvatarPlacement"
+        [languages]="languages"
         (solutionClick)="handleSolutionClick($event)"
         (userClick)="handleUserClick($event)"
       />
@@ -203,6 +221,7 @@ function resolvePreferredTheme() {
         [user]="activeUserClick?.user"
         [markers]="staticRanklist.markers"
         [theme]="preferredTheme"
+        [languages]="languages"
         (close)="closeUserModal()"
       />
       <srk-default-solution-modal
@@ -211,6 +230,7 @@ function resolvePreferredTheme() {
         [problem]="activeSolutionClick?.problem"
         [problemIndex]="activeSolutionClick?.problemIndex ?? 0"
         [solutions]="activeSolutionClick?.solutions || []"
+        [languages]="languages"
         (close)="closeSolutionModal()"
       />
     </main>
@@ -254,6 +274,11 @@ export class AppComponent {
     { value: 'user', label: 'User' },
     { value: 'organization', label: 'Organization' },
   ];
+  readonly languageOptions: Array<{ value: LanguageOptionValue; label: string }> = [
+    { value: 'browser', label: 'Browser' },
+    { value: 'zh-CN', label: 'zh-CN' },
+    { value: 'en-US', label: 'en-US' },
+  ];
   ranklist: srk.Ranklist = this.originalRanklist;
   activeUserClick: UserClickPayload | null = null;
   activeSolutionClick: SolutionClickPayload | null = null;
@@ -268,12 +293,19 @@ export class AppComponent {
   columnBordered = true;
   emptyStatusPlaceholder: string | null = '·';
   userAvatarPlacement: RanklistUserAvatarPlacement = 'organization';
+  language: LanguageOptionValue = 'browser';
   private staticRanklistSource?: srk.Ranklist;
+  private staticRanklistLanguage?: LanguageOptionValue;
   private staticRanklistCache?: StaticRanklist;
 
   get staticRanklist(): StaticRanklist {
-    if (this.staticRanklistSource !== this.ranklist || !this.staticRanklistCache) {
+    if (
+      this.staticRanklistSource !== this.ranklist ||
+      this.staticRanklistLanguage !== this.language ||
+      !this.staticRanklistCache
+    ) {
       this.staticRanklistSource = this.ranklist;
+      this.staticRanklistLanguage = this.language;
       this.staticRanklistCache = convertToStaticRanklist(this.ranklist) as StaticRanklist;
     }
     return this.staticRanklistCache;
@@ -281,6 +313,10 @@ export class AppComponent {
 
   get timeDiff() {
     return this.ranklist._now ? Date.now() - new Date(this.ranklist._now).getTime() : 0;
+  }
+
+  get languages(): readonly string[] | undefined {
+    return this.language === 'browser' ? undefined : [this.language];
   }
 
   handleTimeTravel(time: number | null) {

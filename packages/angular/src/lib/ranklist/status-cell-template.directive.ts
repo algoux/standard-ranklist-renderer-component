@@ -20,6 +20,7 @@ export interface StatusCellTemplateContext {
   statusCellPreset?: RanklistStatusCellPreset;
   statusColorAsText?: boolean;
   emptyStatusPlaceholder?: string | null;
+  languages?: readonly string[];
   onClick: (event?: MouseEvent) => void;
 }
 

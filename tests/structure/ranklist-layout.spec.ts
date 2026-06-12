@@ -2,6 +2,8 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import less from 'less';
 import { describe, expect, it } from 'vitest';
+import { calculateProblemStatisticsFooter } from '@algoux/standard-ranklist-renderer-component-core';
+import { makeRenderOptionsRanklist } from '../shared/ranklist-render-options-contract';
 
 describe('ranklist layout styles', () => {
   const source = readFileSync(join(process.cwd(), 'packages/styles/src/Ranklist.less'), 'utf8');
@@ -54,6 +56,13 @@ describe('ranklist layout styles', () => {
     expect(normalizedSource).toContain('tfoot > tr:first-child > td');
     expect(normalizedSource).toContain('border-top: 1px solid var(--srk-table-border);');
     expect(normalizedSource).toContain('border-top: 1px solid var(--srk-table-row-border-color);');
+  });
+
+  it('names attempted problem statistics with the attempted field', () => {
+    const [firstProblem] = calculateProblemStatisticsFooter(makeRenderOptionsRanklist());
+
+    expect(firstProblem).toMatchObject({ attempted: 3 });
+    expect('tried' in firstProblem).toBe(false);
   });
 
   it('renders series segment markers without changing table border geometry', () => {

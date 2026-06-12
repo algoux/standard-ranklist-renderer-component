@@ -35,7 +35,7 @@
   "dependencies": {
     "@algoux/standard-ranklist-renderer-component-core": "workspace:*",
     "@algoux/standard-ranklist-renderer-component-styles": "workspace:*",
-    "@algoux/standard-ranklist-utils": "^0.2.11",
+    "@algoux/standard-ranklist-utils": "^0.3.1",
     "classnames": "^2.3.1"
   },
   "peerDependencies": {

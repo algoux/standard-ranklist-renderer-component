@@ -93,6 +93,7 @@ export interface RanklistProps {
   showSEColumn?: boolean;
   emptyStatusPlaceholder?: string | null;
   userAvatarPlacement?: RanklistUserAvatarPlacement;
+  languages?: readonly string[];
 }
 
 interface State {
@@ -134,6 +135,10 @@ export class Ranklist extends React.Component<RanklistProps, State> {
 
   formatSrkAssetUrl = (url: string, field: string) => {
     return resolveSrkAssetUrl(url, field, this.props.formatSrkAssetUrl);
+  };
+
+  resolveDisplayText = (text: srk.Text | undefined) => {
+    return resolveText(text, this.props.languages);
   };
 
   renderContestBanner = () => {
@@ -216,7 +221,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
   };
 
   renderOrganizationBody = (user: srk.User, showAvatar: boolean) => {
-    const organization = user.organization ? resolveText(user.organization) : '';
+    const organization = user.organization ? this.resolveDisplayText(user.organization) : '';
 
     return (
       <div className="srk-organization-cell-content">
@@ -288,13 +293,13 @@ export class Ranklist extends React.Component<RanklistProps, State> {
           ),
       },
       {
-        key: 'tried',
-        label: 'Tried',
+        key: 'attempted',
+        label: 'Attempted',
         tooltip: 'Number of participants who attempted this problem',
         render: (stat: ReturnType<typeof calculateProblemStatisticsFooter>[number]) =>
           this.renderProblemStatisticsFooterCell(
-            stat.tried,
-            formatProblemStatisticsPercent(stat.tried, stat.participantCount),
+            stat.attempted,
+            formatProblemStatisticsPercent(stat.attempted, stat.participantCount),
           ),
       },
       {
@@ -361,7 +366,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
           <td className="srk-problem-statistics-footer-labels srk--text-right srk--nowrap" colSpan={leftColumnCount}></td>
           {data.problems.map((problem, index) => (
             <td
-              key={problem.alias || resolveText(problem.title) || index}
+              key={problem.alias || this.resolveDisplayText(problem.title) || index}
               className="srk-problem-statistics-footer-cell srk-problem-statistics-footer-problem-header srk-problem-header srk--text-center srk--nowrap"
               style={{ backgroundImage: getProblemHeaderBackgroundImage(problem.style, this.props.theme!, 0) }}
             >
@@ -454,10 +459,11 @@ export class Ranklist extends React.Component<RanklistProps, State> {
                 )}
                 {problems.map((problem, index) => (
                   <ProblemHeaderCellComponent
-                    key={problem.alias || resolveText(problem.title)}
+                    key={problem.alias || this.resolveDisplayText(problem.title)}
                     problem={problem}
                     index={index}
                     theme={this.props.theme!}
+                    languages={this.props.languages}
                   />
                 ))}
                 {showDirtColumn && (
@@ -481,7 +487,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
                 }
                 const rankValues = r.rankValues || series.map((s) => ({ rank: null, segmentIndex: null }));
                 return (
-                  <tr key={r.user.id || resolveText(r.user.name)}>
+                  <tr key={r.user.id || this.resolveDisplayText(r.user.name)}>
                     {rankValues.map((rk, index) => this.renderSingleSeriesBody(rk, series[index], r))}
                     {splitOrganization && (
                       <td
@@ -503,6 +509,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
                       onUserClick={this.props.onUserClick}
                       hideOrganization={splitOrganization}
                       hideAvatar={showAvatarInOrganization}
+                      languages={this.props.languages}
                     />
                     <td className="srk--text-right srk--nowrap">{r.score.value}</td>
                     {showTimeColumn && (
@@ -510,22 +517,26 @@ export class Ranklist extends React.Component<RanklistProps, State> {
                         {r.score.time ? formatTimeDuration(r.score.time, 'min', Math.floor) : '-'}
                       </td>
                     )}
-                    {r.statuses.map((status, statusIndex) => (
-                      <StatusCellComponent
-                        key={(problems[statusIndex] || {}).alias || resolveText((problems[statusIndex] || {}).title) || statusIndex}
-                        status={status}
-                        problem={problems[statusIndex]}
-                        problemIndex={statusIndex}
-                        user={r.user}
-                        row={r}
-                        rowIndex={index}
-                        ranklist={data}
-                        onSolutionClick={this.props.onSolutionClick}
-                        statusCellPreset={statusCellPreset}
-                        statusColorAsText={statusColorAsText}
-                        emptyStatusPlaceholder={emptyStatusPlaceholder}
-                      />
-                    ))}
+                    {r.statuses.map((status, statusIndex) => {
+                      const problem = problems[statusIndex];
+                      return (
+                        <StatusCellComponent
+                          key={problem?.alias || this.resolveDisplayText(problem?.title) || statusIndex}
+                          status={status}
+                          problem={problem}
+                          problemIndex={statusIndex}
+                          user={r.user}
+                          row={r}
+                          rowIndex={index}
+                          ranklist={data}
+                          onSolutionClick={this.props.onSolutionClick}
+                          statusCellPreset={statusCellPreset}
+                          statusColorAsText={statusColorAsText}
+                          emptyStatusPlaceholder={emptyStatusPlaceholder}
+                          languages={this.props.languages}
+                        />
+                      );
+                    })}
                     {showDirtColumn && (
                       <td className="srk-dirt-cell srk--text-right srk--nowrap">{calculateDirtPercentage(r)}</td>
                     )}

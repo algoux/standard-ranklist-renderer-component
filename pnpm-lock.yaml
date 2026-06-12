@@ -9,11 +9,11 @@ importers:
   .:
     devDependencies:
       '@algoux/standard-ranklist':
-        specifier: 0.3.12
-        version: 0.3.12
+        specifier: 0.3.13
+        version: 0.3.13
       '@algoux/standard-ranklist-utils':
-        specifier: ^0.2.11
-        version: 0.2.11(@algoux/standard-ranklist@0.3.12)
+        specifier: ^0.3.1
+        version: 0.3.1(@algoux/standard-ranklist@0.3.13)
       '@changesets/cli':
         specifier: ^2.31.0
         version: 2.31.0(@types/node@14.18.22)
@@ -114,8 +114,8 @@ importers:
         specifier: workspace:*
         version: link:../core
       '@algoux/standard-ranklist-utils':
-        specifier: ^0.2.11
-        version: 0.2.11(@algoux/standard-ranklist@0.3.12)
+        specifier: ^0.3.1
+        version: 0.3.1(@algoux/standard-ranklist@0.3.12)
       tslib:
         specifier: ^2.3.0
         version: 2.4.0
@@ -160,8 +160,8 @@ importers:
         specifier: '*'
         version: 0.3.12
       '@algoux/standard-ranklist-utils':
-        specifier: ^0.2.11
-        version: 0.2.11(@algoux/standard-ranklist@0.3.12)
+        specifier: ^0.3.1
+        version: 0.3.1(@algoux/standard-ranklist@0.3.12)
       color:
         specifier: ^4.2.3
         version: 4.2.3
@@ -181,8 +181,8 @@ importers:
         specifier: workspace:*
         version: link:../styles
       '@algoux/standard-ranklist-utils':
-        specifier: ^0.2.11
-        version: 0.2.11(@algoux/standard-ranklist@0.3.12)
+        specifier: ^0.3.1
+        version: 0.3.1(@algoux/standard-ranklist@0.3.12)
       classnames:
         specifier: ^2.3.1
         version: 2.3.1
@@ -205,8 +205,8 @@ importers:
         specifier: workspace:*
         version: link:../styles
       '@algoux/standard-ranklist-utils':
-        specifier: ^0.2.11
-        version: 0.2.11(@algoux/standard-ranklist@0.3.12)
+        specifier: ^0.3.1
+        version: 0.3.1(@algoux/standard-ranklist@0.3.12)
       solid-js:
         specifier: '>=1.9.0'
         version: 1.9.12
@@ -225,8 +225,8 @@ importers:
         specifier: workspace:*
         version: link:../styles
       '@algoux/standard-ranklist-utils':
-        specifier: ^0.2.11
-        version: 0.2.11(@algoux/standard-ranklist@0.3.12)
+        specifier: ^0.3.1
+        version: 0.3.1(@algoux/standard-ranklist@0.3.12)
       svelte:
         specifier: '>=3.44.0'
         version: 3.59.2
@@ -243,8 +243,8 @@ importers:
         specifier: workspace:*
         version: link:../styles
       '@algoux/standard-ranklist-utils':
-        specifier: ^0.2.11
-        version: 0.2.11(@algoux/standard-ranklist@0.3.12)
+        specifier: ^0.3.1
+        version: 0.3.1(@algoux/standard-ranklist@0.3.12)
       vue:
         specifier: '>=3.4.0'
         version: 3.5.33(typescript@5.4.5)
@@ -255,13 +255,16 @@ packages:
     resolution: {integrity: sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==}
     engines: {node: '>=0.10.0'}
 
-  '@algoux/standard-ranklist-utils@0.2.11':
-    resolution: {integrity: sha512-xAOaGcaImfYzN+gfIxxZj9km2VOrPTQPgE8cqooCCFvCYWfsgy/rrSJXPK8bTceEc0h94Ky5qbDqz9Dic5JBVg==}
+  '@algoux/standard-ranklist-utils@0.3.1':
+    resolution: {integrity: sha512-qxXZEd6D4zLCzif3/13d8iXfX37hf0enQ52X+I1GhwQwlTGmnH4jjdQKQzX4O13ntuFRPYxtlv9/qXoWf/4zxA==}
     peerDependencies:
       '@algoux/standard-ranklist': '*'
 
   '@algoux/standard-ranklist@0.3.12':
     resolution: {integrity: sha512-O15MB6vtukM6sVZbbHxUNYbQqQWup4Q6FZIFHw+tPdK6RiHKlquQciAknAUPm2Ol14ewOzXxXVurY3dwvJkZGA==}
+
+  '@algoux/standard-ranklist@0.3.13':
+    resolution: {integrity: sha512-kwviR/kDwd/sSEQPQEyG6M3YDqyKnfeF4qPvQN+lkqggJaVjFD6NyJmwk8oByXnbAlAV+ljwAmhsXGF479fAgw==}
 
   '@ampproject/remapping@2.2.0':
     resolution: {integrity: sha512-qRmjj8nj9qmLTQXXmaR1cck3UXSRMPrbsLJAasZpF+t3riI71BXed5ebIOYwQntykeZuhjsdweEc9BxH5Jc26w==}
@@ -3836,7 +3839,7 @@ snapshots:
 
   '@aashutoshrathi/word-wrap@1.2.6': {}
 
-  '@algoux/standard-ranklist-utils@0.2.11(@algoux/standard-ranklist@0.3.12)':
+  '@algoux/standard-ranklist-utils@0.3.1(@algoux/standard-ranklist@0.3.12)':
     dependencies:
       '@algoux/standard-ranklist': 0.3.12
       '@types/semver': 7.7.0
@@ -3845,7 +3848,18 @@ snapshots:
       semver: 7.5.4
       textcolor: 1.0.2
 
+  '@algoux/standard-ranklist-utils@0.3.1(@algoux/standard-ranklist@0.3.13)':
+    dependencies:
+      '@algoux/standard-ranklist': 0.3.13
+      '@types/semver': 7.7.0
+      bcp-47-match: 2.0.2
+      bignumber.js: 9.1.1
+      semver: 7.5.4
+      textcolor: 1.0.2
+
   '@algoux/standard-ranklist@0.3.12': {}
+
+  '@algoux/standard-ranklist@0.3.13': {}
 
   '@ampproject/remapping@2.2.0':
     dependencies:

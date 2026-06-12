@@ -3,14 +3,20 @@ import { convertToStaticRanklist } from '@algoux/standard-ranklist-utils';
 import { fireEvent, screen } from '@testing-library/dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { render } from 'solid-js/web';
+import {
+  getRecentModalTriggerPoint,
+  resetModalInteractionStateForTests,
+} from '@algoux/standard-ranklist-renderer-component-core';
 import { Ranklist } from '../index';
 import basicRanklistJson from '../../../../tests/fixtures/basic-ranklist.json';
+import { makeI18nRanklist } from '../../../../tests/shared/ranklist-i18n-fixtures';
 import { describeRanklistInteractionContract } from '../../../../tests/shared/ranklist-interaction-contract';
 import { makeRenderOptionsRanklist } from '../../../../tests/shared/ranklist-render-options-contract';
 
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 const makeStaticRanklist = () =>
   convertToStaticRanklist(clone(basicRanklistJson as srk.Ranklist)) as any;
+const makeI18nStaticRanklist = () => convertToStaticRanklist(makeI18nRanklist()) as any;
 
 function renderSolid(view: () => Element) {
   const root = document.createElement('div');
@@ -39,6 +45,7 @@ describeRanklistInteractionContract({
 describe('Solid Ranklist', () => {
   afterEach(() => {
     document.body.innerHTML = '';
+    resetModalInteractionStateForTests();
   });
 
   it('uses a custom statusCell part when provided', () => {
@@ -116,23 +123,45 @@ describe('Solid Ranklist', () => {
         statusColorAsText
         emptyStatusPlaceholder="."
         userAvatarPlacement="organization"
+        languages={['zh-CN']}
         parts={{
+          problemHeaderCell: (props) => (
+            <th data-testid="solid-problem-header-context">
+              {props.problem.alias}|{props.languages?.[0]}
+            </th>
+          ),
           userCell: (props) => (
             <td data-testid="solid-user-context">
-              {props.user.id}|{String(props.hideOrganization)}|{String(props.hideAvatar)}
+              {props.user.id}|{String(props.hideOrganization)}|{String(props.hideAvatar)}|{props.languages?.[0]}
             </td>
           ),
           statusCell: (props) => (
             <td data-testid="solid-status-context">
-              {props.statusCellPreset}|{String(props.statusColorAsText)}|{props.emptyStatusPlaceholder}
+              {props.statusCellPreset}|{String(props.statusColorAsText)}|{props.emptyStatusPlaceholder}|{props.languages?.[0]}
             </td>
           ),
         }}
       />
     ));
 
-    expect(screen.getAllByTestId('solid-user-context')[0].textContent).toBe('team-alpha|true|true');
-    expect(screen.getAllByTestId('solid-status-context')[0].textContent).toBe('minimal|true|.');
+    expect(screen.getAllByTestId('solid-problem-header-context')[0].textContent).toBe('A|zh-CN');
+    expect(screen.getAllByTestId('solid-user-context')[0].textContent).toBe('team-alpha|true|true|zh-CN');
+    expect(screen.getAllByTestId('solid-status-context')[0].textContent).toBe('minimal|true|.|zh-CN');
+    dispose();
+  });
+
+  it('uses explicit languages for status-cell trigger context', () => {
+    const onSolutionClick = vi.fn();
+    const { root, dispose } = renderSolid(() => (
+      <Ranklist data={makeI18nStaticRanklist()} languages={['zh-CN']} onSolutionClick={onSolutionClick} />
+    ));
+
+    const statusCell = root.querySelector('td.srk-prest-status-block-accepted') as HTMLElement | null;
+    expect(statusCell).toBeTruthy();
+    fireEvent.click(statusCell!, { clientX: 18, clientY: 29 });
+
+    expect(onSolutionClick).toHaveBeenCalledTimes(1);
+    expect(getRecentModalTriggerPoint()?.context?.problemTitle).toBe('中文题目');
     dispose();
   });
 });

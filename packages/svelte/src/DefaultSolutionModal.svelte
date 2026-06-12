@@ -17,6 +17,7 @@
   export let rootClassName = 'srk-general-modal-root';
   export let wrapClassName = 'srk-solutions-modal';
   export let style = {};
+  export let languages = undefined;
   let cachedPayload = user
     ? {
         user,
@@ -37,7 +38,7 @@
     };
   }
 
-  $: resolvedTitle = title || (cachedPayload ? getSolutionModalTitle(cachedPayload.problemIndex, cachedPayload.user) : '');
+  $: resolvedTitle = title || (cachedPayload ? getSolutionModalTitle(cachedPayload.problemIndex, cachedPayload.user, languages) : '');
 </script>
 
 {#if cachedPayload}

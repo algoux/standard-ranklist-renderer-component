@@ -15,6 +15,7 @@ export interface UserCellTemplateContext {
   markers: srk.Marker[];
   hideOrganization?: boolean;
   hideAvatar?: boolean;
+  languages?: readonly string[];
   onClick: (event?: MouseEvent) => void;
 }
 

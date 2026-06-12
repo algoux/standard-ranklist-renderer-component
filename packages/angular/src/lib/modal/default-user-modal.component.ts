@@ -45,9 +45,9 @@ interface ResolvedMarker {
       (openChange)="openChange.emit($event)"
     >
       <div class="srk-user-modal-info">
-        <h3 class="srk-user-modal-info-user-name">{{ resolveText(modalUser.name) }}</h3>
+        <h3 class="srk-user-modal-info-user-name">{{ resolveDisplayText(modalUser.name) }}</h3>
         <p *ngIf="modalUser.organization" class="srk-user-modal-info-user-second-name">
-          {{ resolveText(modalUser.organization) }}
+          {{ resolveDisplayText(modalUser.organization) }}
         </p>
         <div class="srk-user-modal-info-labels">
           <span class="srk-user-modal-info-labels-label srk-user-modal-info-labels-label-preset-general">
@@ -59,13 +59,13 @@ interface ResolvedMarker {
             [ngClass]="entry.presentation.className"
             [ngStyle]="entry.presentation.style"
           >
-            {{ resolveText(entry.marker.label) }}
+            {{ resolveDisplayText(entry.marker.label) }}
           </span>
         </div>
         <div *ngIf="modalUser.teamMembers?.length" class="srk-user-modal-info-team-members">
           <ng-container *ngFor="let member of modalUser.teamMembers; let index = index; trackBy: trackByMemberName">
             <span *ngIf="index > 0" class="srk-user-modal-info-team-members-slash"> / </span>
-            <span>{{ resolveText(member.name) }}</span>
+            <span>{{ resolveDisplayText(member.name) }}</span>
           </ng-container>
         </div>
         <div *ngIf="modalUser.photo" class="srk-user-modal-info-photo">
@@ -90,11 +90,11 @@ export class DefaultUserModalComponent implements OnChanges {
   @Input() wrapClassName = 'srk-user-modal';
   @Input() panelStyle: Record<string, string | number> = {};
   @Input() formatSrkAssetUrl?: (url: string, field: string) => string;
+  @Input() languages?: readonly string[];
 
   @Output() openChange = new EventEmitter<boolean>();
   @Output() close = new EventEmitter<ModalCloseReason>();
 
-  readonly resolveText = resolveText;
   cachedUser: srk.User | null = null;
 
   ngOnChanges(_changes: SimpleChanges) {
@@ -117,11 +117,15 @@ export class DefaultUserModalComponent implements OnChanges {
     return resolveSrkAssetUrl(url, field, this.formatSrkAssetUrl);
   }
 
+  resolveDisplayText(text: Parameters<typeof resolveText>[0]) {
+    return resolveText(text, this.languages);
+  }
+
   trackByMarkerId(_index: number, entry: ResolvedMarker) {
     return entry.marker.id;
   }
 
-  trackByMemberName(_index: number, member: srk.ExternalUser) {
-    return resolveText(member.name);
-  }
+  trackByMemberName = (_index: number, member: srk.ExternalUser) => {
+    return this.resolveDisplayText(member.name);
+  };
 }

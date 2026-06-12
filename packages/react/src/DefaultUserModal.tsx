@@ -14,6 +14,7 @@ export interface DefaultUserModalProps
   title?: ReactNode;
   width?: number;
   formatSrkAssetUrl?: (url: string, field: string) => string;
+  languages?: readonly string[];
 }
 
 export function DefaultUserModal({
@@ -24,6 +25,7 @@ export function DefaultUserModal({
   title = 'User Info',
   width = 420,
   formatSrkAssetUrl,
+  languages,
   onClose,
   rootClassName = 'srk-general-modal-root',
   wrapClassName = 'srk-user-modal',
@@ -56,6 +58,7 @@ export function DefaultUserModal({
         userMarkers={resolveUserMarkers(cachedUser, markers)}
         theme={theme}
         formatSrkAssetUrl={(url, field) => resolveSrkAssetUrl(url, field, formatSrkAssetUrl)}
+        languages={languages}
       />
     </Modal>
   );

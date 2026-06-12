@@ -26,6 +26,7 @@ export interface RanklistProps {
   showSEColumn?: boolean;
   emptyStatusPlaceholder?: string | null;
   userAvatarPlacement?: RanklistUserAvatarPlacement;
+  languages?: readonly string[];
 }
 
 export interface ProblemHeaderCellSlotProps {
@@ -33,6 +34,7 @@ export interface ProblemHeaderCellSlotProps {
   problemIndex: number;
   index: number;
   theme?: EnumTheme;
+  languages?: readonly string[];
 }
 
 export interface UserCellSlotProps {
@@ -44,6 +46,7 @@ export interface UserCellSlotProps {
   theme?: EnumTheme;
   hideOrganization?: boolean;
   hideAvatar?: boolean;
+  languages?: readonly string[];
   onClick: (event?: MouseEvent) => void;
 }
 
@@ -59,6 +62,7 @@ export interface StatusCellSlotProps {
   statusCellPreset?: RanklistStatusCellPreset;
   statusColorAsText?: boolean;
   emptyStatusPlaceholder?: string | null;
+  languages?: readonly string[];
   onClick: (event?: MouseEvent) => void;
 }
 
@@ -87,6 +91,7 @@ export interface DefaultUserModalProps extends Pick<ModalProps, 'open' | 'rootCl
   title?: string;
   width?: number;
   formatSrkAssetUrl?: (url: string, field: string) => string;
+  languages?: readonly string[];
 }
 
 export interface DefaultSolutionModalProps extends Pick<ModalProps, 'open' | 'rootClassName' | 'wrapClassName' | 'style'> {
@@ -96,6 +101,7 @@ export interface DefaultSolutionModalProps extends Pick<ModalProps, 'open' | 'ro
   solutions?: srk.Solution[];
   title?: string;
   width?: number;
+  languages?: readonly string[];
 }
 
 export type RanklistEvents = {

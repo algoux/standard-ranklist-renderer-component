@@ -41,6 +41,7 @@ describe('Solid local demo app', () => {
 
   it('renders interactive examples for the new Ranklist render option props', async () => {
     const { root, dispose } = renderSolidApp();
+    await Promise.resolve();
 
     expect((getField(root, 'Split organization') as HTMLInputElement).checked).toBe(true);
     expect((getField(root, 'Custom column titles') as HTMLInputElement).checked).toBe(true);
@@ -53,6 +54,7 @@ describe('Solid local demo app', () => {
     expect((getField(root, 'Status preset') as HTMLSelectElement).value).toBe('compact');
     expect((getField(root, 'Empty status placeholder') as HTMLSelectElement).value).toBe('·');
     expect((getField(root, 'User avatar placement') as HTMLSelectElement).value).toBe('organization');
+    expect((getField(root, 'Language') as HTMLSelectElement).value).toBe('browser');
 
     expect(root.querySelector('th.srk-organization-header')?.textContent).toContain('School');
     expect(root.querySelector('th.srk-dirt-header')?.textContent).toContain('Dirt');
@@ -73,6 +75,14 @@ describe('Solid local demo app', () => {
 
     fireEvent.change(getField(root, 'User avatar placement'), { target: { value: 'user' } });
     expect((getField(root, 'User avatar placement') as HTMLSelectElement).value).toBe('user');
+    const languageSelect = getField(root, 'Language') as HTMLSelectElement;
+    languageSelect.value = 'zh-CN';
+    languageSelect.dispatchEvent(new Event('input', { bubbles: true }));
+    languageSelect.dispatchEvent(new Event('change', { bubbles: true }));
+    await Promise.resolve();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(languageSelect.value).toBe('zh-CN');
+    expect(root.textContent).toContain('中二之力');
 
     getButton(root, 'Baseline').click();
     await Promise.resolve();

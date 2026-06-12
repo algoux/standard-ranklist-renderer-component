@@ -82,6 +82,7 @@ describe('Local demo app', () => {
     expect((screen.getByLabelText('Status preset') as HTMLSelectElement).value).toBe('compact');
     expect((screen.getByLabelText('Empty status placeholder') as HTMLSelectElement).value).toBe('·');
     expect((screen.getByLabelText('User avatar placement') as HTMLSelectElement).value).toBe('organization');
+    expect((screen.getByLabelText('Language') as HTMLSelectElement).value).toBe('browser');
 
     expect(container.querySelector('th.srk-organization-header')?.textContent).toContain('School');
     expect(container.querySelector('th.srk-dirt-header')?.textContent).toContain('Dirt');
@@ -99,6 +100,9 @@ describe('Local demo app', () => {
     expect((screen.getByLabelText('Empty status placeholder') as HTMLSelectElement).value).toBe('-');
     fireEvent.change(screen.getByLabelText('User avatar placement'), { target: { value: 'user' } });
     expect((screen.getByLabelText('User avatar placement') as HTMLSelectElement).value).toBe('user');
+    fireEvent.change(screen.getByLabelText('Language'), { target: { value: 'zh-CN' } });
+    expect((screen.getByLabelText('Language') as HTMLSelectElement).value).toBe('zh-CN');
+    expect(screen.getByText('中二之力')).toBeTruthy();
 
     fireEvent.click(screen.getByText('Baseline'));
     expect((screen.getByLabelText('Split organization') as HTMLInputElement).checked).toBe(false);

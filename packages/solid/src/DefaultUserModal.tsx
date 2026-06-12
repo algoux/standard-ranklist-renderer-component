@@ -15,12 +15,14 @@ export interface DefaultUserModalProps
   title?: string;
   width?: number;
   formatSrkAssetUrl?: (url: string, field: string) => string;
+  languages?: readonly string[];
 }
 
 export function DefaultUserModal(props: DefaultUserModalProps) {
   const [cachedUser, setCachedUser] = createSignal<srk.User | null>(props.user || null);
   const theme = () => props.theme || EnumTheme.light;
   const markers = () => props.markers || [];
+  const resolveDisplayText = (text: Parameters<typeof resolveText>[0]) => resolveText(text, props.languages);
   const resolvedMarkers = (user: srk.User) =>
     resolveUserMarkers(user, markers()).map((marker) => ({
       marker,
@@ -47,9 +49,9 @@ export function DefaultUserModal(props: DefaultUserModalProps) {
           wrapClassName={props.wrapClassName || 'srk-user-modal'}
         >
           <div class="srk-user-modal-info">
-            <h3 class="srk-user-modal-info-user-name">{resolveText(user().name)}</h3>
+            <h3 class="srk-user-modal-info-user-name">{resolveDisplayText(user().name)}</h3>
             <Show when={user().organization}>
-              {(organization) => <p class="srk-user-modal-info-user-second-name">{resolveText(organization())}</p>}
+              {(organization) => <p class="srk-user-modal-info-user-second-name">{resolveDisplayText(organization())}</p>}
             </Show>
             <div class="srk-user-modal-info-labels">
               <span class="srk-user-modal-info-labels-label srk-user-modal-info-labels-label-preset-general">
@@ -58,7 +60,7 @@ export function DefaultUserModal(props: DefaultUserModalProps) {
               <For each={resolvedMarkers(user())}>
                 {(entry) => (
                   <span class={`srk-user-modal-info-labels-label ${entry.presentation.className || ''}`} style={entry.presentation.style}>
-                    {resolveText(entry.marker.label)}
+                    {resolveDisplayText(entry.marker.label)}
                   </span>
                 )}
               </For>
@@ -71,7 +73,7 @@ export function DefaultUserModal(props: DefaultUserModalProps) {
                       <Show when={index() > 0}>
                         <span class="srk-user-modal-info-team-members-slash"> / </span>
                       </Show>
-                      <span>{resolveText(member.name)}</span>
+                      <span>{resolveDisplayText(member.name)}</span>
                     </>
                   )}
                 </For>

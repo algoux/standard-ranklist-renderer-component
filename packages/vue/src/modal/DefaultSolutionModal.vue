@@ -54,6 +54,7 @@ const props = withDefaults(
     rootClassName?: string;
     wrapClassName?: string;
     style?: CSSProperties;
+    languages?: readonly string[];
   }>(),
   {
     solutions: () => [],
@@ -100,6 +101,7 @@ watch(
 );
 
 const resolvedTitle = computed(() =>
-  props.title || (cachedPayload.value ? getSolutionModalTitle(cachedPayload.value.problemIndex, cachedPayload.value.user) : ''),
+  props.title ||
+  (cachedPayload.value ? getSolutionModalTitle(cachedPayload.value.problemIndex, cachedPayload.value.user, props.languages) : ''),
 );
 </script>

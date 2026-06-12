@@ -8,6 +8,7 @@ import {
 } from '@algoux/standard-ranklist-renderer-component-core';
 import Ranklist from '../Ranklist.vue';
 import basicRanklistJson from '../../../../tests/fixtures/basic-ranklist.json';
+import { makeI18nRanklist } from '../../../../tests/shared/ranklist-i18n-fixtures';
 import { describeRanklistInteractionContract } from '../../../../tests/shared/ranklist-interaction-contract';
 import { makeRenderOptionsRanklist } from '../../../../tests/shared/ranklist-render-options-contract';
 
@@ -15,6 +16,7 @@ const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value));
 
 const makeStaticRanklist = () =>
   convertToStaticRanklist(clone(basicRanklistJson as srk.Ranklist));
+const makeI18nStaticRanklist = () => convertToStaticRanklist(makeI18nRanklist());
 
 describeRanklistInteractionContract({
   target: 'Vue',
@@ -112,6 +114,22 @@ describe('Vue Ranklist', () => {
     });
   });
 
+  it('uses explicit languages for status-cell trigger context', async () => {
+    const wrapper = mount(Ranklist, {
+      props: {
+        data: makeI18nStaticRanklist(),
+        languages: ['zh-CN'],
+      } as any,
+    });
+
+    await wrapper.find('td.srk-prest-status-block-accepted').trigger('click', {
+      clientX: 18,
+      clientY: 29,
+    });
+
+    expect(getRecentModalTriggerPoint()?.context?.problemTitle).toBe('中文题目');
+  });
+
   it('passes render option context into scoped user-cell and status-cell slots', () => {
     const data = makeRenderOptionsRanklist();
     data.rows[0].user.avatar = 'https://example.com/team-alpha.png';
@@ -124,22 +142,29 @@ describe('Vue Ranklist', () => {
         statusColorAsText: true,
         emptyStatusPlaceholder: '.',
         userAvatarPlacement: 'organization',
+        languages: ['zh-CN'],
       } as any,
       slots: {
+        'problem-header-cell': `
+          <template #problem-header-cell="{ problem, languages }">
+            <th data-testid="slot-problem-header-context">{{ problem.alias }}|{{ languages[0] }}</th>
+          </template>
+        `,
         'user-cell': `
-          <template #user-cell="{ user, hideOrganization, hideAvatar }">
-            <td data-testid="slot-user-context">{{ user.id }}|{{ hideOrganization }}|{{ hideAvatar }}</td>
+          <template #user-cell="{ user, hideOrganization, hideAvatar, languages }">
+            <td data-testid="slot-user-context">{{ user.id }}|{{ hideOrganization }}|{{ hideAvatar }}|{{ languages[0] }}</td>
           </template>
         `,
         'status-cell': `
-          <template #status-cell="{ statusCellPreset, statusColorAsText, emptyStatusPlaceholder }">
-            <td data-testid="slot-status-context">{{ statusCellPreset }}|{{ statusColorAsText }}|{{ emptyStatusPlaceholder }}</td>
+          <template #status-cell="{ statusCellPreset, statusColorAsText, emptyStatusPlaceholder, languages }">
+            <td data-testid="slot-status-context">{{ statusCellPreset }}|{{ statusColorAsText }}|{{ emptyStatusPlaceholder }}|{{ languages[0] }}</td>
           </template>
         `,
       },
     });
 
-    expect(wrapper.find('[data-testid="slot-user-context"]').text()).toBe('team-alpha|true|true');
-    expect(wrapper.find('[data-testid="slot-status-context"]').text()).toBe('minimal|true|.');
+    expect(wrapper.find('[data-testid="slot-problem-header-context"]').text()).toBe('A|zh-CN');
+    expect(wrapper.find('[data-testid="slot-user-context"]').text()).toBe('team-alpha|true|true|zh-CN');
+    expect(wrapper.find('[data-testid="slot-status-context"]').text()).toBe('minimal|true|.|zh-CN');
   });
 });

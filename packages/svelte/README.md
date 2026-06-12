@@ -80,6 +80,7 @@ Use `Modal` directly when you want custom modal content. `Ranklist` exposes slot
 - `columnBordered`: adds column separators controlled by CSS variables.
 - `emptyStatusPlaceholder`: renders a custom string in no-submission status cells.
 - `userAvatarPlacement`: chooses whether the default user avatar renders in the user column or, when `splitOrganization` is enabled, in the organization column.
+- `languages`: passes an explicit language priority list to i18n text resolution. Leave it unset to use the browser language list; pass it to `Ranklist`, `DefaultUserModal`, and `DefaultSolutionModal` when rendering outside the browser or when you need a forced language.
 
 ```svelte
 <script lang="ts">
@@ -106,6 +107,7 @@ const columnTitles = {
   columnBordered
   emptyStatusPlaceholder="·"
   userAvatarPlacement="organization"
+  languages={['zh-CN']}
   {columnTitles}
 />
 ```

@@ -19,6 +19,7 @@ export interface UserCellProps {
   onUserClick?: (payload: UserClickPayload) => void | Promise<void>;
   hideOrganization?: boolean;
   hideAvatar?: boolean;
+  languages?: readonly string[];
 }
 
 export function UserCell({
@@ -32,10 +33,11 @@ export function UserCell({
   onUserClick,
   hideOrganization,
   hideAvatar,
+  languages,
 }: UserCellProps) {
   const userMarkers = resolveUserMarkers(user, markers);
   const markerCalcStyles = userMarkers.map((marker) => getMarkerPresentation(marker, theme));
-  const name = resolveText(user.name);
+  const name = resolveText(user.name, languages);
 
   return (
     <td
@@ -78,14 +80,14 @@ export function UserCell({
                   key={userMarkers[index].id}
                   className={classnames('srk-marker srk-marker-dot srk--c-tooltip', markerStyle.className)}
                   style={markerStyle.style}
-                  data-tooltip={resolveText(userMarkers[index].label)}
+                  data-tooltip={resolveText(userMarkers[index].label, languages)}
                 ></span>
               ))}
             </span>
           </div>
           {!!user.organization && !hideOrganization && (
             <p className="srk-user-secondary-text srk--text-ellipsis" title="">
-              {resolveText(user.organization)}
+              {resolveText(user.organization, languages)}
             </p>
           )}
         </div>

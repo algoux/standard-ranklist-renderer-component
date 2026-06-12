@@ -49,6 +49,7 @@ export interface StatusCellPartProps {
   statusCellPreset?: RanklistStatusCellPreset;
   statusColorAsText?: boolean;
   emptyStatusPlaceholder?: string | null;
+  languages?: readonly string[];
   onClick: (event?: MouseEvent) => void;
 }
 
@@ -57,6 +58,7 @@ export interface ProblemHeaderCellPartProps {
   problemIndex: number;
   index: number;
   theme: EnumTheme;
+  languages?: readonly string[];
 }
 
 export interface UserCellPartProps {
@@ -68,6 +70,7 @@ export interface UserCellPartProps {
   theme: EnumTheme;
   hideOrganization?: boolean;
   hideAvatar?: boolean;
+  languages?: readonly string[];
   onClick: (event?: MouseEvent) => void;
 }
 
@@ -96,12 +99,14 @@ export interface RanklistProps {
   showSEColumn?: boolean;
   emptyStatusPlaceholder?: string | null;
   userAvatarPlacement?: RanklistUserAvatarPlacement;
+  languages?: readonly string[];
 }
 
 export function Ranklist(props: RanklistProps) {
   const theme = () => props.theme || EnumTheme.light;
   const showTimeColumn = () => shouldShowTimeColumn(props.data.rows);
   const formatAssetUrl = (url: string, field: string) => resolveSrkAssetUrl(url, field, props.formatSrkAssetUrl);
+  const resolveDisplayText = (text: Parameters<typeof resolveText>[0]) => resolveText(text, props.languages);
   const showAvatarInOrganization = () => !!props.splitOrganization && props.userAvatarPlacement === 'organization';
   const problemStatistics = createMemo(() =>
     props.showProblemStatisticsFooter || props.showSEColumn ? calculateProblemStatisticsFooter(props.data) : [],
@@ -113,7 +118,7 @@ export function Ranklist(props: RanklistProps) {
         context: {
           rowIndex,
           userId: row.user.id || null,
-          userName: resolveText(row.user.name),
+          userName: resolveDisplayText(row.user.name),
         },
       });
     }
@@ -159,7 +164,7 @@ export function Ranklist(props: RanklistProps) {
           rowIndex,
           problemIndex,
           problemAlias: payload.problem?.alias || null,
-          problemTitle: payload.problem ? resolveText(payload.problem.title) : null,
+          problemTitle: payload.problem ? resolveDisplayText(payload.problem.title) : null,
           userId: row.user.id || null,
         },
       });
@@ -220,6 +225,7 @@ export function Ranklist(props: RanklistProps) {
                         problemIndex={index}
                         index={index}
                         theme={theme()}
+                        languages={props.languages}
                       />
                     ) : (
                       <th
@@ -285,9 +291,9 @@ export function Ranklist(props: RanklistProps) {
                           </Show>
                           <span
                             class="srk-organization-name-text"
-                            title={row.user.organization ? resolveText(row.user.organization) : ''}
+                            title={row.user.organization ? resolveDisplayText(row.user.organization) : ''}
                           >
-                            {row.user.organization ? resolveText(row.user.organization) : ''}
+                            {row.user.organization ? resolveDisplayText(row.user.organization) : ''}
                           </span>
                         </div>
                       </td>
@@ -304,6 +310,7 @@ export function Ranklist(props: RanklistProps) {
                           theme={theme()}
                           hideOrganization={!!props.splitOrganization}
                           hideAvatar={showAvatarInOrganization()}
+                          languages={props.languages}
                           onClick={(event) => emitUserClick(event, row, rowIndex())}
                         />
                       ) : (
@@ -325,8 +332,8 @@ export function Ranklist(props: RanklistProps) {
                             </Show>
                             <div class="srk-user-body">
                               <div class="srk-user-name-row">
-                                <span class="srk-user-name-text" title={resolveText(row.user.name)}>
-                                  {resolveText(row.user.name)}
+                                <span class="srk-user-name-text" title={resolveDisplayText(row.user.name)}>
+                                  {resolveDisplayText(row.user.name)}
                                 </span>
                                 <span class="srk-marker-dot-group">
                                   <For each={getResolvedUserMarkers(row.user, props.data.markers, theme())}>
@@ -336,7 +343,7 @@ export function Ranklist(props: RanklistProps) {
                                           entry.presentation.className || ''
                                         }`}
                                         style={getMarkerStyle(entry.presentation.style)}
-                                        data-tooltip={resolveText(entry.marker.label)}
+                                        data-tooltip={resolveDisplayText(entry.marker.label)}
                                       />
                                     )}
                                   </For>
@@ -345,7 +352,7 @@ export function Ranklist(props: RanklistProps) {
                               <Show when={!props.splitOrganization && row.user.organization ? row.user.organization : undefined}>
                                 {(organization) => (
                                   <p class="srk-user-secondary-text srk--text-ellipsis" title="">
-                                    {resolveText(organization())}
+                                    {resolveDisplayText(organization())}
                                   </p>
                                 )}
                               </Show>
@@ -378,6 +385,7 @@ export function Ranklist(props: RanklistProps) {
                               statusCellPreset={props.statusCellPreset || 'classic'}
                               statusColorAsText={!!props.statusColorAsText}
                               emptyStatusPlaceholder={props.emptyStatusPlaceholder ?? null}
+                              languages={props.languages}
                               onClick={(event) => emitSolutionClick(event, row, rowIndex(), status, problemIndex())}
                             />
                           );
@@ -396,6 +404,7 @@ export function Ranklist(props: RanklistProps) {
                             statusCellPreset={props.statusCellPreset || 'classic'}
                             statusColorAsText={!!props.statusColorAsText}
                             emptyStatusPlaceholder={props.emptyStatusPlaceholder ?? null}
+                            languages={props.languages}
                             onClick={(event) => emitSolutionClick(event, row, rowIndex(), status, problemIndex())}
                             onSolutionClick={props.onSolutionClick}
                           />
@@ -633,8 +642,8 @@ function ProblemStatisticsFooterRows(props: {
       tooltip: 'Number of participants who solved this problem',
     },
     {
-      key: 'tried',
-      label: 'Tried',
+      key: 'attempted',
+      label: 'Attempted',
       tooltip: 'Number of participants who attempted this problem',
     },
     {
@@ -731,8 +740,8 @@ function footerCellPrimary(key: string, stat: ProblemStatisticsFooter) {
   switch (key) {
     case 'accepted':
       return stat.accepted;
-    case 'tried':
-      return stat.tried;
+    case 'attempted':
+      return stat.attempted;
     case 'submitted':
       return stat.submitted;
     case 'dirt':
@@ -752,8 +761,8 @@ function footerCellSecondary(key: string, stat: ProblemStatisticsFooter) {
   switch (key) {
     case 'accepted':
       return formatProblemStatisticsPercent(stat.accepted, stat.participantCount);
-    case 'tried':
-      return formatProblemStatisticsPercent(stat.tried, stat.participantCount);
+    case 'attempted':
+      return formatProblemStatisticsPercent(stat.attempted, stat.participantCount);
     case 'dirt':
       return formatProblemStatisticsPercent(stat.dirt, stat.dirtSubmitted);
     default:

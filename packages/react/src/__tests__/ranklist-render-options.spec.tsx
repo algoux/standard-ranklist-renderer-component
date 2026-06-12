@@ -491,7 +491,7 @@ describe('React ranklist render option props', () => {
 
     expect(statisticRows.map((row) => textOf(row.children[0]))).toEqual([
       'Accepted',
-      'Tried',
+      'Attempted',
       'Submitted',
       'Dirt',
       'SE',

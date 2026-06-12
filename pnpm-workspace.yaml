@@ -6,3 +6,5 @@ shamefullyHoist: true
 allowBuilds:
   '@parcel/watcher': true
   esbuild: true
+minimumReleaseAgeExclude:
+  - '@algoux/standard-ranklist@0.3.13'

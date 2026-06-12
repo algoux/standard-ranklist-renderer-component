@@ -28,6 +28,14 @@
             </option>
           </select>
         </label>
+        <label class="preview-field preview-select-field">
+          <span>Language</span>
+          <select v-model="language" aria-label="Language">
+            <option v-for="option in languageOptions" :key="option.value" :value="option.value">
+              {{ option.label }}
+            </option>
+          </select>
+        </label>
         <button type="button" class="preview-action" @click="useShowcaseOptions">Showcase</button>
         <button type="button" class="preview-action" @click="useBaselineOptions">Baseline</button>
       </div>
@@ -82,6 +90,7 @@
       :column-bordered="columnBordered"
       :empty-status-placeholder="emptyStatusPlaceholder"
       :user-avatar-placement="userAvatarPlacement"
+      :languages="languages"
       @solution-click="handleSolutionClick"
       @user-click="handleUserClick"
     />
@@ -90,6 +99,7 @@
       :user="activeUserClick?.user"
       :markers="staticRanklist.markers"
       :theme="preferredTheme"
+      :languages="languages"
       @close="closeUserModal"
     />
     <DefaultSolutionModal
@@ -98,6 +108,7 @@
       :problem="activeSolutionClick?.problem"
       :problem-index="activeSolutionClick?.problemIndex ?? 0"
       :solutions="activeSolutionClick?.solutions || []"
+      :languages="languages"
       @close="closeSolutionModal"
     />
   </main>
@@ -141,12 +152,15 @@ const rowBordered = ref(true);
 const columnBordered = ref(true);
 const emptyStatusPlaceholder = ref<string | null>('·');
 const userAvatarPlacement = ref<RanklistUserAvatarPlacement>('organization');
+type LanguageOptionValue = 'browser' | 'zh-CN' | 'en-US';
+const language = ref<LanguageOptionValue>('browser');
 const emptyStatusPlaceholderValue = computed({
   get: () => emptyStatusPlaceholder.value || '',
   set: (value: string) => {
     emptyStatusPlaceholder.value = value || null;
   },
 });
+const languages = computed(() => (language.value === 'browser' ? undefined : [language.value]));
 
 const demoColumnTitles: RanklistColumnTitles = {
   series: (series, index) => (index === 0 ? 'Rank' : series.title || `Series ${index + 1}`),
@@ -174,6 +188,12 @@ const emptyStatusPlaceholderOptions = [
 const userAvatarPlacementOptions: Array<{ value: RanklistUserAvatarPlacement; label: string }> = [
   { value: 'user', label: 'User' },
   { value: 'organization', label: 'Organization' },
+];
+
+const languageOptions: Array<{ value: LanguageOptionValue; label: string }> = [
+  { value: 'browser', label: 'Browser' },
+  { value: 'zh-CN', label: 'zh-CN' },
+  { value: 'en-US', label: 'en-US' },
 ];
 
 function resolvePreferredTheme() {

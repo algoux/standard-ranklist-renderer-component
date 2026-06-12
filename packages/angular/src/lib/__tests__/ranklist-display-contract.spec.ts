@@ -24,6 +24,8 @@ import { RanklistComponent } from '../index';
       [rowBordered]="rowBordered"
       [rowStriped]="rowStriped"
       [formatSrkAssetUrl]="formatSrkAssetUrl"
+      [splitOrganization]="splitOrganization"
+      [languages]="languages"
     />
   `,
 })
@@ -44,6 +46,8 @@ class ContractHostComponent {
   rowBordered = false;
   rowStriped = false;
   formatSrkAssetUrl?: (url: string, field: string) => string;
+  splitOrganization = false;
+  languages?: readonly string[];
 }
 
 interface RenderedHost {
@@ -65,6 +69,8 @@ async function renderHost(data: unknown, props: RanklistDisplayRenderProps = {})
     rowBordered: !!props.rowBordered,
     rowStriped: !!props.rowStriped,
     formatSrkAssetUrl: props.formatSrkAssetUrl,
+    splitOrganization: !!props.splitOrganization,
+    languages: props.languages,
   });
   appRef.attachView(componentRef.hostView);
   componentRef.changeDetectorRef.detectChanges();

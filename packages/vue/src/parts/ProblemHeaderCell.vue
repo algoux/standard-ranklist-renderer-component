@@ -25,6 +25,7 @@ const props = withDefaults(
     problem: srk.Problem;
     index: number;
     theme?: EnumTheme;
+    languages?: readonly string[];
   }>(),
   {
     theme: EnumTheme.light,

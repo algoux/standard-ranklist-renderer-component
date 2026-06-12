@@ -93,6 +93,7 @@ describe('Angular dev app', () => {
     expect(componentRef.instance.columnBordered).toBe(true);
     expect(componentRef.instance.emptyStatusPlaceholder).toBe('·');
     expect(componentRef.instance.userAvatarPlacement).toBe('organization');
+    expect(componentRef.instance.language).toBe('browser');
 
     expect(getCheckbox('Split organization').checked).toBe(true);
     expect(getCheckbox('Custom column titles').checked).toBe(true);
@@ -105,6 +106,7 @@ describe('Angular dev app', () => {
     expect(getSelect('Status preset').value).toBe('compact');
     expect(getSelect('Empty status placeholder').value).toBe('·');
     expect(getSelect('User avatar placement').value).toBe('organization');
+    expect(getSelect('Language').value).toBe('browser');
 
     expect(hostElement.querySelector('th.srk-organization-header')?.textContent).toContain('School');
     expect(hostElement.querySelector('th.srk-dirt-header')?.textContent).toContain('Dirt');
@@ -118,13 +120,17 @@ describe('Angular dev app', () => {
     componentRef.instance.statusCellPreset = 'minimal';
     componentRef.instance.emptyStatusPlaceholder = '-';
     componentRef.instance.userAvatarPlacement = 'user';
+    componentRef.instance.language = 'zh-CN';
     componentRef.changeDetectorRef.detectChanges();
     expect(componentRef.instance.statusCellPreset).toBe('minimal');
     expect(componentRef.instance.emptyStatusPlaceholder).toBe('-');
     expect(componentRef.instance.userAvatarPlacement).toBe('user');
+    expect(componentRef.instance.language).toBe('zh-CN');
     expect(getSelect('Status preset').value).toBe('minimal');
     expect(getSelect('Empty status placeholder').value).toBe('-');
     expect(getSelect('User avatar placement').value).toBe('user');
+    expect(getSelect('Language').value).toBe('zh-CN');
+    expect(hostElement.textContent).toContain('中二之力');
 
     componentRef.instance.useBaselineOptions();
     componentRef.changeDetectorRef.detectChanges();
