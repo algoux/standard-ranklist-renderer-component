@@ -1,6 +1,7 @@
 <script>
   import { EnumTheme, resolveText, resolveUserMarkers } from '@algoux/standard-ranklist-utils';
   import {
+    formatTeamMemberName,
     getMarkerPresentation,
     resolveSrkAssetUrl,
   } from '@algoux/standard-ranklist-renderer-component-core';
@@ -40,6 +41,10 @@
   function resolveDisplayText(text) {
     return resolveText(text, languages);
   }
+
+  function formatMemberName(member) {
+    return formatTeamMemberName(member, languages);
+  }
 </script>
 
 {#if cachedUser}
@@ -76,7 +81,7 @@
             {#if index > 0}
               <span class="srk-user-modal-info-team-members-slash"> / </span>
             {/if}
-            <span>{resolveDisplayText(member.name)}</span>
+            <span>{formatMemberName(member)}</span>
           {/each}
         </div>
       {/if}

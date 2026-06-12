@@ -32,7 +32,7 @@
       <div v-if="cachedUser.teamMembers && cachedUser.teamMembers.length" class="srk-user-modal-info-team-members">
         <template v-for="(member, index) in cachedUser.teamMembers" :key="resolveDisplayText(member.name)">
           <span v-if="index > 0" class="srk-user-modal-info-team-members-slash"> / </span>
-          <span>{{ resolveDisplayText(member.name) }}</span>
+          <span>{{ formatMemberName(member) }}</span>
         </template>
       </div>
       <div v-if="cachedUser.photo" class="srk-user-modal-info-photo">
@@ -47,7 +47,7 @@ import type * as srk from '@algoux/standard-ranklist';
 import type { CSSProperties } from 'vue';
 import { computed, ref, watch } from 'vue';
 import { EnumTheme, resolveText, resolveUserMarkers } from '@algoux/standard-ranklist-utils';
-import { getMarkerPresentation, resolveSrkAssetUrl } from '@algoux/standard-ranklist-renderer-component-core';
+import { formatTeamMemberName, getMarkerPresentation, resolveSrkAssetUrl } from '@algoux/standard-ranklist-renderer-component-core';
 import Modal from './Modal.vue';
 
 const props = withDefaults(
@@ -106,5 +106,9 @@ function formatAssetUrl(url: string, field: string) {
 
 function resolveDisplayText(text: Parameters<typeof resolveText>[0]) {
   return resolveText(text, props.languages);
+}
+
+function formatMemberName(member: srk.ExternalUser) {
+  return formatTeamMemberName(member, props.languages);
 }
 </script>

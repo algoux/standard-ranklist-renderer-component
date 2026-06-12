@@ -216,6 +216,27 @@ export function describeDefaultModalContentContract(adapter: ModalComponentAdapt
       }
     });
 
+    it('renders team member roles when they are provided', async () => {
+      const ranklist = makeRanklist();
+      const user: srk.User = {
+        ...ranklist.rows[0].user,
+        teamMembers: [
+          { name: 'Alice', role: 'Captain' },
+          { name: 'Bob' },
+        ],
+      };
+      const rendered = await adapter.renderDefaultUserModal({ user });
+
+      try {
+        const text = textOf(rendered.container as Element);
+        expect(text).toContain('Alice (Captain)');
+        expect(text).toContain('Bob');
+        expect(text).not.toContain('Bob (');
+      } finally {
+        await rendered.cleanup?.();
+      }
+    });
+
     it('renders the default solution modal content and width contract', async () => {
       const rendered = await adapter.renderDefaultSolutionModal();
 

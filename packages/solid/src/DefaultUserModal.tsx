@@ -1,6 +1,7 @@
 import type * as srk from '@algoux/standard-ranklist';
 import { EnumTheme, resolveText, resolveUserMarkers } from '@algoux/standard-ranklist-utils';
 import {
+  formatTeamMemberName,
   getMarkerPresentation,
   resolveSrkAssetUrl,
 } from '@algoux/standard-ranklist-renderer-component-core';
@@ -73,7 +74,7 @@ export function DefaultUserModal(props: DefaultUserModalProps) {
                       <Show when={index() > 0}>
                         <span class="srk-user-modal-info-team-members-slash"> / </span>
                       </Show>
-                      <span>{resolveDisplayText(member.name)}</span>
+                      <span>{formatTeamMemberName(member, props.languages)}</span>
                     </>
                   )}
                 </For>

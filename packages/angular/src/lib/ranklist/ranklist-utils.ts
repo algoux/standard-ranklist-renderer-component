@@ -2,6 +2,7 @@ export {
   caniuse,
   defaultBackgroundColor,
   formatSolutionTimestamp,
+  formatTeamMemberName,
   getAcceptedStatusDetails,
   getMarkerPresentation,
   getProblemHeaderBackgroundImage,

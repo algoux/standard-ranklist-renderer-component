@@ -14,6 +14,7 @@ import {
   resolveUserMarkers,
 } from '@algoux/standard-ranklist-utils';
 import {
+  formatTeamMemberName,
   getMarkerPresentation,
   type MarkerPresentation,
   resolveSrkAssetUrl,
@@ -65,7 +66,7 @@ interface ResolvedMarker {
         <div *ngIf="modalUser.teamMembers?.length" class="srk-user-modal-info-team-members">
           <ng-container *ngFor="let member of modalUser.teamMembers; let index = index; trackBy: trackByMemberName">
             <span *ngIf="index > 0" class="srk-user-modal-info-team-members-slash"> / </span>
-            <span>{{ resolveDisplayText(member.name) }}</span>
+            <span>{{ formatMemberName(member) }}</span>
           </ng-container>
         </div>
         <div *ngIf="modalUser.photo" class="srk-user-modal-info-photo">
@@ -119,6 +120,10 @@ export class DefaultUserModalComponent implements OnChanges {
 
   resolveDisplayText(text: Parameters<typeof resolveText>[0]) {
     return resolveText(text, this.languages);
+  }
+
+  formatMemberName(member: srk.ExternalUser) {
+    return formatTeamMemberName(member, this.languages);
   }
 
   trackByMarkerId(_index: number, entry: ResolvedMarker) {

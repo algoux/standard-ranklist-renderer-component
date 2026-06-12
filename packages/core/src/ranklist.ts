@@ -110,6 +110,11 @@ export function getMarkerPresentation(marker: srk.Marker, theme: EnumTheme): Mar
   return {};
 }
 
+export function formatTeamMemberName(member: srk.ExternalUser, languages?: readonly string[]): string {
+  const name = resolveText(member.name, languages);
+  return member.role ? `${name} (${member.role})` : name;
+}
+
 export function getSolutionResultMeta(result: srk.Solution['result']): SolutionResultMeta {
   switch (result) {
     case 'FB':

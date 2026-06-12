@@ -1,5 +1,6 @@
 import type * as srk from '@algoux/standard-ranklist';
 import { resolveText, EnumTheme } from '@algoux/standard-ranklist-utils';
+import { formatTeamMemberName } from '@algoux/standard-ranklist-renderer-component-core';
 import { MarkerLabel } from '../MarkerLabel';
 
 export interface UserModalContentProps {
@@ -38,7 +39,7 @@ export function UserModalContent({ user, userMarkers, theme, formatSrkAssetUrl, 
           {user.teamMembers!.map((member, index) => (
             <span key={resolveText(member.name, languages)}>
               {index > 0 && <span className="srk-user-modal-info-team-members-slash"> / </span>}
-              <span>{resolveText(member.name, languages)}</span>
+              <span>{formatTeamMemberName(member, languages)}</span>
             </span>
           ))}
         </div>
