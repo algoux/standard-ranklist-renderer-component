@@ -1,5 +1,11 @@
 # @algoux/standard-ranklist-renderer-component-core
 
+## 0.6.2
+
+### Patch Changes
+
+- 198304e: Support explicit language resolution across renderers, rename problem statistics tried fields to attempted, reuse shared core helpers in Angular, and show team member roles in default user modals.
+
 ## 0.6.1
 
 ### Patch Changes
