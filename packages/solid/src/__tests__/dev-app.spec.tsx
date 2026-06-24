@@ -1,4 +1,4 @@
-import { fireEvent } from '@testing-library/dom';
+import { fireEvent, waitFor } from '@testing-library/dom';
 import { afterEach, describe, expect, it } from 'vitest';
 import { render } from 'solid-js/web';
 import { resetModalInteractionStateForTests } from '@algoux/standard-ranklist-renderer-component-core';
@@ -36,6 +36,8 @@ function getButton(container: HTMLElement, label: string) {
 describe('Solid local demo app', () => {
   afterEach(() => {
     document.body.innerHTML = '';
+    document.body.className = '';
+    document.body.removeAttribute('style');
     resetModalInteractionStateForTests();
   });
 
@@ -98,6 +100,106 @@ describe('Solid local demo app', () => {
     expect((getField(root, 'Status preset') as HTMLSelectElement).value).toBe('classic');
     expect((getField(root, 'Empty status placeholder') as HTMLSelectElement).value).toBe('');
     expect((getField(root, 'User avatar placement') as HTMLSelectElement).value).toBe('user');
+    dispose();
+  });
+
+  it('opens the custom problem modal from a problem header click', async () => {
+    const { root, dispose } = renderSolidApp();
+    await Promise.resolve();
+
+    const problemHeader = root.querySelector('th.srk-problem-header') as HTMLElement | null;
+    expect(problemHeader).toBeTruthy();
+    expect(problemHeader?.classList.contains('srk--cursor-pointer')).toBe(true);
+    fireEvent.click(problemHeader!, { clientX: 20, clientY: 30 });
+    await Promise.resolve();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(document.body.querySelector('.srk-general-modal-root')).toBeTruthy();
+    expect(document.body.querySelector('.srk-problem-modal')).toBeTruthy();
+    expect(document.body.textContent).toContain('Problem Info');
+    await waitFor(() => {
+      expect(document.body.textContent).toContain('Alias: A');
+      expect(document.body.textContent).toContain('Title: Some Title');
+      expect(document.body.textContent).toContain('Link: https://icpc.global');
+      expect(document.body.textContent).toContain('Stats: 320 accepted / 596 submitted');
+    });
+    dispose();
+  });
+
+  it('anchors the custom problem modal motion to the problem header click point', async () => {
+    const originalGetBoundingClientRect = HTMLElement.prototype.getBoundingClientRect;
+    HTMLElement.prototype.getBoundingClientRect = function () {
+      if (this instanceof HTMLElement && this.classList.contains('srk-modal')) {
+        return {
+          x: 200,
+          y: 100,
+          left: 200,
+          top: 100,
+          right: 620,
+          bottom: 340,
+          width: 420,
+          height: 240,
+          toJSON: () => ({}),
+        } as DOMRect;
+      }
+      return originalGetBoundingClientRect.call(this);
+    };
+
+    try {
+      const { root, dispose } = renderSolidApp();
+      await Promise.resolve();
+
+      const problemHeader = root.querySelector('th.srk-problem-header') as HTMLElement | null;
+      expect(problemHeader).toBeTruthy();
+      fireEvent.click(problemHeader!, { clientX: 60, clientY: 40 });
+
+      await waitFor(() => {
+        const dialog = document.body.querySelector('.srk-modal') as HTMLElement | null;
+        expect(dialog?.style.getPropertyValue('--srk-modal-origin-x')).toBe('-140px');
+        expect(dialog?.style.getPropertyValue('--srk-modal-origin-y')).toBe('-60px');
+      });
+
+      dispose();
+    } finally {
+      HTMLElement.prototype.getBoundingClientRect = originalGetBoundingClientRect;
+    }
+  });
+
+  it('closes the custom problem modal from the mask with the shared closing animation', async () => {
+    const { root, dispose } = renderSolidApp();
+    await Promise.resolve();
+
+    const problemHeader = root.querySelector('th.srk-problem-header') as HTMLElement | null;
+    expect(problemHeader).toBeTruthy();
+    fireEvent.click(problemHeader!, { clientX: 20, clientY: 30 });
+    await Promise.resolve();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const wrap = document.body.querySelector('.srk-problem-modal') as HTMLElement | null;
+    expect(wrap).toBeTruthy();
+    fireEvent.mouseDown(wrap!);
+    await Promise.resolve();
+
+    expect(document.body.querySelector('.srk-animated-modal-root')?.getAttribute('data-srk-modal-state')).toBe('closing');
+    dispose();
+  });
+
+  it('closes the custom problem modal from the close button with the shared closing animation', async () => {
+    const { root, dispose } = renderSolidApp();
+    await Promise.resolve();
+
+    const problemHeader = root.querySelector('th.srk-problem-header') as HTMLElement | null;
+    expect(problemHeader).toBeTruthy();
+    fireEvent.click(problemHeader!, { clientX: 20, clientY: 30 });
+    await Promise.resolve();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const closeButton = document.body.querySelector('.srk-problem-modal .srk-modal-close') as HTMLElement | null;
+    expect(closeButton).toBeTruthy();
+    fireEvent.click(closeButton!);
+    await Promise.resolve();
+
+    expect(document.body.querySelector('.srk-animated-modal-root')?.getAttribute('data-srk-modal-state')).toBe('closing');
     dispose();
   });
 });

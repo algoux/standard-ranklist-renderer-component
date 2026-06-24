@@ -76,7 +76,17 @@ function handleSolutionClick(payload: SolutionClickPayload) {
 </template>
 ```
 
+## Advanced Usage
+
 Use `Modal` directly when you want custom modal content. `Ranklist` exposes scoped slots such as `userCell` and `statusCell` for targeted table-cell customization.
+
+For custom interaction flows, `Ranklist` emits three semantic click events:
+
+- `@user-click`: receives `UserClickPayload` when a user cell is clicked.
+- `@problem-click`: receives `ProblemClickPayload` when a problem header is clicked. When listened to, default problem headers are always clickable and problem links are not rendered as anchors.
+- `@solution-click`: receives `SolutionClickPayload` when a status cell with submissions is clicked.
+
+`problem-header-cell` slots receive `ranklist` and an `onClick` helper so they can opt into the same problem-click payload path.
 
 ## Ranklist Render Options
 

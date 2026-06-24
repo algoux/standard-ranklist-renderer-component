@@ -40,12 +40,17 @@ import type {
 } from '@algoux/standard-ranklist-renderer-component-core';
 import { captureModalTriggerPointFromMouseEvent } from '../modal/modal-interactions';
 import type {
+  ProblemClickPayload,
   RankValue,
   SolutionClickPayload,
   StaticRanklist,
   StaticRanklistRow,
   UserClickPayload,
 } from '../types';
+import {
+  SrkProblemHeaderCellTemplateDirective,
+  type ProblemHeaderCellTemplateContext,
+} from './problem-header-cell-template.directive';
 import {
   SrkStatusCellTemplateDirective,
   type StatusCellTemplateContext,
@@ -98,38 +103,55 @@ import {
               <th *ngIf="showTimeColumn()" class="srk--text-right srk--nowrap">
                 {{ resolveColumnTitle('time', 'Time') }}
               </th>
-              <th
+              <ng-container
                 *ngFor="let problem of data.problems; let problemIndex = index"
-                class="srk--nowrap srk-problem-header"
-                [style.background-image]="problemHeaderBackgroundImage(problem)"
               >
-                <a
-                  *ngIf="problem.link; else unlinkedProblemHeader"
-                  [href]="problem.link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style="color: unset"
-                >
-                  <span class="srk--display-block">{{ problemAlias(problem, problemIndex) }}</span>
-                  <span
-                    *ngIf="problem.statistics"
-                    class="srk--display-block srk-problem-stats"
-                    [title]="problemStatsTitle(problem.statistics)"
+                <ng-container *ngIf="problemHeaderCellTemplate; else defaultProblemHeader">
+                  <ng-container
+                    [ngTemplateOutlet]="problemHeaderCellTemplate.templateRef"
+                    [ngTemplateOutletContext]="buildProblemHeaderCellContext(problem, problemIndex)"
+                  />
+                </ng-container>
+                <ng-template #defaultProblemHeader>
+                  <th
+                    class="srk--nowrap srk-problem-header"
+                    [class.srk--cursor-pointer]="hasProblemClickListener()"
+                    [attr.role]="problemHeaderRole()"
+                    [attr.tabindex]="problemHeaderTabIndex()"
+                    [style.background-image]="problemHeaderBackgroundImage(problem)"
+                    (click)="emitProblemClick($event, problem, problemIndex)"
+                    (keydown.enter)="activateProblemHeaderFromKeyboard($event, problem, problemIndex)"
+                    (keydown.space)="activateProblemHeaderFromKeyboard($event, problem, problemIndex)"
                   >
-                    {{ problem.statistics.accepted }}
-                  </span>
-                </a>
-                <ng-template #unlinkedProblemHeader>
-                  <span class="srk--display-block">{{ problemAlias(problem, problemIndex) }}</span>
-                  <span
-                    *ngIf="problem.statistics"
-                    class="srk--display-block srk-problem-stats"
-                    [title]="problemStatsTitle(problem.statistics)"
-                  >
-                    {{ problem.statistics.accepted }}
-                  </span>
+                    <a
+                      *ngIf="problem.link && !hasProblemClickListener(); else unlinkedProblemHeader"
+                      [href]="problem.link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style="color: unset"
+                    >
+                      <span class="srk--display-block">{{ problemAlias(problem, problemIndex) }}</span>
+                      <span
+                        *ngIf="problem.statistics"
+                        class="srk--display-block srk-problem-stats"
+                        [title]="problemStatsTitle(problem.statistics)"
+                      >
+                        {{ problem.statistics.accepted }}
+                      </span>
+                    </a>
+                    <ng-template #unlinkedProblemHeader>
+                      <span class="srk--display-block">{{ problemAlias(problem, problemIndex) }}</span>
+                      <span
+                        *ngIf="problem.statistics"
+                        class="srk--display-block srk-problem-stats"
+                        [title]="problemStatsTitle(problem.statistics)"
+                      >
+                        {{ problem.statistics.accepted }}
+                      </span>
+                    </ng-template>
+                  </th>
                 </ng-template>
-              </th>
+              </ng-container>
               <th *ngIf="showDirtColumn" class="srk-dirt-header srk--text-right srk--nowrap">
                 {{ resolveColumnTitle('dirt', 'Dirt') }}
               </th>
@@ -395,7 +417,11 @@ export class RanklistComponent {
   @Input() languages?: readonly string[];
 
   @Output() userClick = new EventEmitter<UserClickPayload>();
+  @Output() problemClick = new EventEmitter<ProblemClickPayload>();
   @Output() solutionClick = new EventEmitter<SolutionClickPayload>();
+
+  @ContentChild(SrkProblemHeaderCellTemplateDirective)
+  problemHeaderCellTemplate?: SrkProblemHeaderCellTemplateDirective;
 
   @ContentChild(SrkStatusCellTemplateDirective)
   statusCellTemplate?: SrkStatusCellTemplateDirective;
@@ -580,6 +606,34 @@ export class RanklistComponent {
     return this.isStatusClickable(status) ? 0 : null;
   }
 
+  hasProblemClickListener() {
+    const emitter = this.problemClick as EventEmitter<ProblemClickPayload> & {
+      observed?: boolean;
+      observers?: unknown[];
+    };
+    return emitter.observed === true || Boolean(emitter.observers?.length);
+  }
+
+  problemHeaderRole() {
+    return this.hasProblemClickListener() ? 'button' : null;
+  }
+
+  problemHeaderTabIndex() {
+    return this.hasProblemClickListener() ? 0 : null;
+  }
+
+  buildProblemHeaderCellContext(problem: srk.Problem, problemIndex: number): ProblemHeaderCellTemplateContext {
+    return {
+      $implicit: problem,
+      problem,
+      problemIndex,
+      index: problemIndex,
+      ranklist: this.data,
+      languages: this.languages,
+      onClick: (event?: MouseEvent) => this.emitProblemClick(event, problem, problemIndex),
+    };
+  }
+
   buildUserCellContext(row: StaticRanklistRow, rowIndex: number): UserCellTemplateContext {
     return {
       $implicit: row.user,
@@ -624,6 +678,14 @@ export class RanklistComponent {
     this.emitUserClick(undefined, row, rowIndex);
   }
 
+  activateProblemHeaderFromKeyboard(event: Event, problem: srk.Problem, problemIndex: number) {
+    if (!this.hasProblemClickListener()) {
+      return;
+    }
+    event.preventDefault();
+    this.emitProblemClick(undefined, problem, problemIndex);
+  }
+
   activateStatusCellFromKeyboard(
     event: Event,
     row: StaticRanklistRow,
@@ -650,6 +712,28 @@ export class RanklistComponent {
       user: row.user,
       row,
       rowIndex,
+      ranklist: this.data,
+    });
+  }
+
+  emitProblemClick(event: MouseEvent | undefined, problem: srk.Problem, problemIndex: number) {
+    if (!this.hasProblemClickListener()) {
+      return;
+    }
+    if (event) {
+      event.preventDefault();
+      captureModalTriggerPointFromMouseEvent(event, {
+        source: 'problem-header',
+        context: {
+          problemIndex,
+          problemAlias: problem.alias || null,
+          problemTitle: this.resolveDisplayText(problem.title) || null,
+        },
+      });
+    }
+    this.problemClick.emit({
+      problem,
+      problemIndex,
       ranklist: this.data,
     });
   }

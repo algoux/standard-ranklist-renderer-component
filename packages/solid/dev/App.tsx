@@ -5,15 +5,23 @@ import {
   filterSolutionsUntil,
   getSortedCalculatedRawSolutions,
   regenerateRanklistBySolutions,
+  resolveText,
 } from '@algoux/standard-ranklist-utils';
+import {
+  MODAL_ANIMATION_DURATION_MS,
+  lockModalBodyScroll,
+  resolveModalTransformOrigin,
+  unlockModalBodyScroll,
+} from '@algoux/standard-ranklist-renderer-component-core';
 import type { JSX } from 'solid-js';
-import { createEffect, createMemo, createSignal, onCleanup } from 'solid-js';
+import { createEffect, createMemo, createSignal, onCleanup, untrack } from 'solid-js';
 import { render as renderSolid } from 'solid-js/web';
 import demoData from '../../../demo.json';
 import type {
   RanklistColumnTitles,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
+  ProblemClickPayload,
   SolutionClickPayload,
   StaticRanklist,
   UserClickPayload,
@@ -96,6 +104,7 @@ function ensureGlobalLanguageListener() {
 export default function App() {
   const [ranklist, setRanklist] = createSignal<srk.Ranklist>(originalRanklist);
   const [activeUserClick, setActiveUserClick] = createSignal<UserClickPayload | null>(null);
+  const [activeProblemClick, setActiveProblemClick] = createSignal<ProblemClickPayload | null>(null);
   const [activeSolutionClick, setActiveSolutionClick] = createSignal<SolutionClickPayload | null>(null);
   const [splitOrganization, setSplitOrganization] = createSignal(true);
   const [useCustomColumnTitles, setUseCustomColumnTitles] = createSignal(true);
@@ -165,16 +174,25 @@ export default function App() {
       );
     }
     setActiveUserClick(null);
+    setActiveProblemClick(null);
     setActiveSolutionClick(null);
   };
 
   const handleUserClick = (payload: UserClickPayload) => {
     setActiveUserClick(payload);
+    setActiveProblemClick(null);
+    setActiveSolutionClick(null);
+  };
+
+  const handleProblemClick = (payload: ProblemClickPayload) => {
+    setActiveUserClick(null);
+    setActiveProblemClick(payload);
     setActiveSolutionClick(null);
   };
 
   const handleSolutionClick = (payload: SolutionClickPayload) => {
     setActiveUserClick(null);
+    setActiveProblemClick(null);
     setActiveSolutionClick(payload);
   };
 
@@ -314,6 +332,7 @@ export default function App() {
             emptyStatusPlaceholder={emptyStatusPlaceholder()}
             userAvatarPlacement={userAvatarPlacement()}
             languages={selectedLanguages()}
+            onProblemClick={handleProblemClick}
             onSolutionClick={handleSolutionClick}
             onUserClick={handleUserClick}
           />
@@ -327,6 +346,11 @@ export default function App() {
         languages={selectedLanguages()}
         onClose={() => setActiveUserClick(null)}
       />
+      <ProblemModal
+        payload={activeProblemClick()}
+        languages={selectedLanguages()}
+        onClose={() => setActiveProblemClick(null)}
+      />
       <DefaultSolutionModal
         open={!!activeSolutionClick()}
         user={activeSolutionClick()?.user}
@@ -337,6 +361,191 @@ export default function App() {
         onClose={() => setActiveSolutionClick(null)}
       />
     </main>
+  );
+}
+
+function ProblemModal(props: {
+  payload: ProblemClickPayload | null;
+  languages?: readonly string[];
+  onClose: () => void;
+}) {
+  const [mounted, setMounted] = createSignal(!!props.payload);
+  const [animationState, setAnimationState] = createSignal<'pre-open' | 'opening' | 'closing'>(
+    props.payload ? 'pre-open' : 'closing',
+  );
+  const [transformOrigin, setTransformOrigin] = createSignal({ x: 0, y: 0 });
+  let dialogRef: HTMLDivElement | undefined;
+  let bodyRef: HTMLDivElement | undefined;
+  let openTimer: number | null = null;
+  let closeTimer: number | null = null;
+  let bodyLocked = false;
+
+  const clearTimers = () => {
+    if (openTimer !== null) {
+      window.clearTimeout(openTimer);
+      openTimer = null;
+    }
+    if (closeTimer !== null) {
+      window.clearTimeout(closeTimer);
+      closeTimer = null;
+    }
+  };
+
+  const lockBody = () => {
+    if (!bodyLocked) {
+      lockModalBodyScroll();
+      bodyLocked = true;
+    }
+  };
+
+  const unlockBody = () => {
+    if (bodyLocked) {
+      unlockModalBodyScroll();
+      bodyLocked = false;
+    }
+  };
+
+  const appendProblemModalText = (container: HTMLElement, label: string, value: string | number) => {
+    const paragraph = document.createElement('p');
+    paragraph.textContent = `${label}: ${value}`;
+    container.appendChild(paragraph);
+  };
+
+  const renderProblemModalBody = (payload: ProblemClickPayload) => {
+    if (!bodyRef || typeof document === 'undefined') {
+      return;
+    }
+
+    const problem = payload.problem;
+    const container = document.createElement('div');
+
+    appendProblemModalText(container, 'Alias', problem.alias || payload.problemIndex + 1);
+    appendProblemModalText(container, 'Title', resolveText(problem.title, props.languages) || '-');
+    appendProblemModalText(container, 'Index', payload.problemIndex);
+
+    if (problem.link) {
+      const paragraph = document.createElement('p');
+      const link = document.createElement('a');
+      link.href = problem.link;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = problem.link;
+      paragraph.append('Link: ', link);
+      container.appendChild(paragraph);
+    }
+
+    if (problem.statistics) {
+      appendProblemModalText(
+        container,
+        'Stats',
+        `${problem.statistics.accepted} accepted / ${problem.statistics.submitted} submitted`,
+      );
+    }
+
+    bodyRef.replaceChildren(container);
+  };
+
+  const playOpenAnimation = (payload: ProblemClickPayload) => {
+    clearTimers();
+    renderProblemModalBody(payload);
+    setMounted(true);
+    setTransformOrigin({ x: 0, y: 0 });
+    dialogRef?.style.setProperty('--srk-modal-origin-x', '0px');
+    dialogRef?.style.setProperty('--srk-modal-origin-y', '0px');
+    setAnimationState('pre-open');
+    lockBody();
+
+    openTimer = window.setTimeout(() => {
+      const resolution = resolveModalTransformOrigin(dialogRef || null);
+      setTransformOrigin(resolution.origin);
+      dialogRef?.style.setProperty('--srk-modal-origin-x', `${resolution.origin.x}px`);
+      dialogRef?.style.setProperty('--srk-modal-origin-y', `${resolution.origin.y}px`);
+      setAnimationState('opening');
+      openTimer = null;
+    }, 0);
+  };
+
+  const playCloseAnimation = () => {
+    clearTimers();
+    setAnimationState('closing');
+    closeTimer = window.setTimeout(() => {
+      setMounted(false);
+      bodyRef?.replaceChildren();
+      unlockBody();
+      closeTimer = null;
+    }, MODAL_ANIMATION_DURATION_MS);
+  };
+
+  createEffect(() => {
+    const payload = props.payload;
+
+    if (payload) {
+      playOpenAnimation(payload);
+      return;
+    }
+
+    if (untrack(mounted)) {
+      playCloseAnimation();
+    }
+  });
+
+  onCleanup(() => {
+    clearTimers();
+    unlockBody();
+  });
+
+  return (
+    <div
+      class="srk-modal-root srk-animated-modal-root srk-general-modal-root"
+      data-srk-modal-state={animationState()}
+      style={{ display: mounted() ? undefined : 'none' }}
+    >
+      <div class="srk-modal-mask" />
+      <div
+        class="srk-modal-wrap srk-problem-modal"
+        tabIndex={-1}
+        onMouseDown={(event) => {
+          if (event.target === event.currentTarget) {
+            props.onClose();
+          }
+        }}
+      >
+        <div
+          aria-labelledby="solid-problem-modal-title"
+          aria-modal="true"
+          class="srk-modal"
+          data-srk-modal-panel="true"
+          ref={(element) => {
+            dialogRef = element;
+          }}
+          role="dialog"
+          style={{
+            width: '420px',
+            '--srk-modal-max-width': '420px',
+            '--srk-modal-origin-x': `${transformOrigin().x}px`,
+            '--srk-modal-origin-y': `${transformOrigin().y}px`,
+          }}
+          tabIndex={-1}
+        >
+          <div class="srk-modal-content">
+            <button aria-label="Close" class="srk-modal-close" type="button" onClick={props.onClose}>
+              <span class="srk-modal-close-x" />
+            </button>
+            <div class="srk-modal-header">
+              <div class="srk-modal-title" id="solid-problem-modal-title">
+                Problem Info
+              </div>
+            </div>
+            <div
+              class="srk-modal-body"
+              ref={(element) => {
+                bodyRef = element;
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -375,18 +584,21 @@ function ImperativeMount(props: { render: () => JSX.Element }) {
       return;
     }
 
-    const node = props.render();
     dispose?.();
     host.replaceChildren();
-    dispose = renderSolid(() => node, host);
+    dispose = renderSolid(props.render, host);
   });
 
   onCleanup(() => {
     dispose?.();
   });
 
-  return <div ref={(element) => {
-    host = element;
-    setReady(true);
-  }} />;
+  return (
+    <div
+      ref={(element) => {
+        host = element;
+        setReady(true);
+      }}
+    />
+  );
 }

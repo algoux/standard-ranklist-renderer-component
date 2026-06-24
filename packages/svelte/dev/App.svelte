@@ -5,14 +5,16 @@
     filterSolutionsUntil,
     getSortedCalculatedRawSolutions,
     regenerateRanklistBySolutions,
+    resolveText,
   } from '@algoux/standard-ranklist-utils';
   import demoData from '../../../demo.json';
-  import { DefaultSolutionModal, DefaultUserModal, ProgressBar, Ranklist } from '../src';
+  import { DefaultSolutionModal, DefaultUserModal, Modal, ProgressBar, Ranklist } from '../src';
 
   const originalRanklist = demoData;
   const sortedSolutions = getSortedCalculatedRawSolutions(originalRanklist.rows);
   let ranklist = originalRanklist;
   let activeUserClick = null;
+  let activeProblemClick = null;
   let activeSolutionClick = null;
   let splitOrganization = true;
   let useCustomColumnTitles = true;
@@ -60,6 +62,9 @@
   $: emptyStatusPlaceholder = emptyStatusPlaceholderValue || null;
   $: languages = language === 'browser' ? undefined : [language];
   $: staticRanklist = (languages, convertToStaticRanklist(ranklist));
+  $: activeProblem = activeProblemClick && activeProblemClick.problem;
+  $: activeProblemIndex = activeProblemClick ? activeProblemClick.problemIndex : 0;
+  $: activeProblemTitle = activeProblem ? resolveText(activeProblem.title, languages) : '';
 
   function resolvePreferredTheme() {
     if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
@@ -84,16 +89,25 @@
       );
     }
     activeUserClick = null;
+    activeProblemClick = null;
     activeSolutionClick = null;
   }
 
   function handleUserClick(event) {
     activeUserClick = event.detail;
+    activeProblemClick = null;
+    activeSolutionClick = null;
+  }
+
+  function handleProblemClick(payload) {
+    activeUserClick = null;
+    activeProblemClick = payload;
     activeSolutionClick = null;
   }
 
   function handleSolutionClick(event) {
     activeUserClick = null;
+    activeProblemClick = null;
     activeSolutionClick = event.detail;
   }
 
@@ -224,6 +238,7 @@
     {emptyStatusPlaceholder}
     {userAvatarPlacement}
     {languages}
+    onProblemClick={handleProblemClick}
     on:solutionClick={handleSolutionClick}
     on:userClick={handleUserClick}
   />
@@ -235,6 +250,30 @@
     {languages}
     on:close={() => (activeUserClick = null)}
   />
+  <Modal
+    open={!!activeProblemClick}
+    rootClassName="srk-general-modal-root"
+    title="Problem Info"
+    width={420}
+    wrapClassName="srk-problem-modal"
+    on:close={() => (activeProblemClick = null)}
+  >
+    {#if activeProblem}
+      <div>
+        <p>Alias: {activeProblem.alias || activeProblemIndex + 1}</p>
+        <p>Title: {activeProblemTitle || '-'}</p>
+        <p>Index: {activeProblemIndex}</p>
+        {#if activeProblem.link}
+          <p>Link: <a href={activeProblem.link} target="_blank" rel="noopener noreferrer">{activeProblem.link}</a></p>
+        {/if}
+        {#if activeProblem.statistics}
+          <p>
+            Stats: {activeProblem.statistics.accepted} accepted / {activeProblem.statistics.submitted} submitted
+          </p>
+        {/if}
+      </div>
+    {/if}
+  </Modal>
   <DefaultSolutionModal
     open={!!activeSolutionClick}
     user={activeSolutionClick && activeSolutionClick.user}

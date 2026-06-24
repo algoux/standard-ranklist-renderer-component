@@ -11,6 +11,10 @@ export {
 export { ProgressBarComponent } from './progress/progress-bar.component';
 export { RanklistComponent } from './ranklist/ranklist.component';
 export {
+  SrkProblemHeaderCellTemplateDirective,
+  type ProblemHeaderCellTemplateContext,
+} from './ranklist/problem-header-cell-template.directive';
+export {
   SrkStatusCellTemplateDirective,
   type StatusCellTemplateContext,
 } from './ranklist/status-cell-template.directive';
@@ -23,6 +27,7 @@ export type {
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
   RankValue,
+  ProblemClickPayload,
   SolutionClickPayload,
   StaticRanklist,
   UserClickPayload,

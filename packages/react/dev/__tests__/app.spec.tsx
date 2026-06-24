@@ -31,6 +31,20 @@ describe('Local demo app', () => {
     expect(container.ownerDocument.body.querySelector('.srk-solutions-modal')).toBeTruthy();
   });
 
+  it('composes a custom problem modal from Ranklist problem click events', () => {
+    const { container } = render(<App />);
+
+    const problemHeader = container.querySelector('th.srk-problem-header') as HTMLElement | null;
+    expect(problemHeader).toBeTruthy();
+    fireEvent.click(problemHeader!);
+
+    expect(screen.getByText('Problem Info')).toBeTruthy();
+    expect(screen.getByText(/Some Title/)).toBeTruthy();
+    expect(screen.getByText('https://icpc.global')).toBeTruthy();
+    expect(container.ownerDocument.body.querySelector('.srk-general-modal-root')).toBeTruthy();
+    expect(container.ownerDocument.body.querySelector('.srk-problem-modal')).toBeTruthy();
+  });
+
   it('uses the first click position for the first modal open after a fresh render', async () => {
     const originalGetBoundingClientRect = HTMLElement.prototype.getBoundingClientRect;
     HTMLElement.prototype.getBoundingClientRect = function () {

@@ -10,6 +10,7 @@ export type {
   DefaultUserModalProps,
   ModalEvents,
   ModalProps,
+  ProblemClickPayload,
   ProblemHeaderCellSlotProps,
   ProgressBarEvents,
   ProgressBarProps,

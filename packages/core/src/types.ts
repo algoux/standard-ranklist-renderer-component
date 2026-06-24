@@ -24,6 +24,12 @@ export interface UserClickPayload {
   ranklist: StaticRanklist;
 }
 
+export interface ProblemClickPayload {
+  problem: srk.Problem;
+  problemIndex: number;
+  ranklist: StaticRanklist;
+}
+
 export interface SolutionClickPayload {
   user: srk.User;
   row: StaticRanklistRow;

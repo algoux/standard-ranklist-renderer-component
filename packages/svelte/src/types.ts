@@ -4,6 +4,7 @@ import type {
   RanklistColumnTitles,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
+  ProblemClickPayload,
   SolutionClickPayload,
   StaticRanklist,
   StaticRanklistRow,
@@ -27,14 +28,17 @@ export interface RanklistProps {
   emptyStatusPlaceholder?: string | null;
   userAvatarPlacement?: RanklistUserAvatarPlacement;
   languages?: readonly string[];
+  onProblemClick?: (payload: ProblemClickPayload) => void | Promise<void>;
 }
 
 export interface ProblemHeaderCellSlotProps {
   problem: srk.Problem;
   problemIndex: number;
   index: number;
+  ranklist: StaticRanklist;
   theme?: EnumTheme;
   languages?: readonly string[];
+  onClick: (event?: MouseEvent) => void;
 }
 
 export interface UserCellSlotProps {
@@ -105,6 +109,7 @@ export interface DefaultSolutionModalProps extends Pick<ModalProps, 'open' | 'ro
 }
 
 export type RanklistEvents = {
+  problemClick: CustomEvent<ProblemClickPayload>;
   solutionClick: CustomEvent<SolutionClickPayload>;
   userClick: CustomEvent<UserClickPayload>;
 };
@@ -121,6 +126,7 @@ export type {
   RanklistColumnTitles,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
+  ProblemClickPayload,
   SolutionClickPayload,
   StaticRanklist,
   StaticRanklistRow,

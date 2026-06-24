@@ -7,13 +7,16 @@ import {
   filterSolutionsUntil,
   getSortedCalculatedRawSolutions,
   regenerateRanklistBySolutions,
+  resolveText,
 } from '@algoux/standard-ranklist-utils';
 import demoData from '../../../demo.json';
 import {
   DefaultSolutionModalComponent,
   DefaultUserModalComponent,
+  ModalComponent,
   ProgressBarComponent,
   RanklistComponent,
+  type ProblemClickPayload,
   type RanklistColumnTitles,
   type RanklistStatusCellPreset,
   type RanklistUserAvatarPlacement,
@@ -43,6 +46,7 @@ type LanguageOptionValue = 'browser' | 'zh-CN' | 'en-US';
     CommonModule,
     DefaultSolutionModalComponent,
     DefaultUserModalComponent,
+    ModalComponent,
     ProgressBarComponent,
     RanklistComponent,
   ],
@@ -213,6 +217,7 @@ type LanguageOptionValue = 'browser' | 'zh-CN' | 'en-US';
         [emptyStatusPlaceholder]="emptyStatusPlaceholder"
         [userAvatarPlacement]="userAvatarPlacement"
         [languages]="languages"
+        (problemClick)="handleProblemClick($event)"
         (solutionClick)="handleSolutionClick($event)"
         (userClick)="handleUserClick($event)"
       />
@@ -224,6 +229,27 @@ type LanguageOptionValue = 'browser' | 'zh-CN' | 'en-US';
         [languages]="languages"
         (close)="closeUserModal()"
       />
+      <srk-modal
+        [open]="!!activeProblemClick"
+        rootClassName="srk-general-modal-root"
+        title="Problem Info"
+        [width]="420"
+        wrapClassName="srk-problem-modal"
+        (close)="closeProblemModal()"
+      >
+        <div *ngIf="activeProblem">
+          <p>Alias: {{ activeProblem.alias || activeProblemIndex + 1 }}</p>
+          <p>Title: {{ activeProblemTitle || '-' }}</p>
+          <p>Index: {{ activeProblemIndex }}</p>
+          <p *ngIf="activeProblem.link">
+            Link:
+            <a [href]="activeProblem.link" target="_blank" rel="noopener noreferrer">{{ activeProblem.link }}</a>
+          </p>
+          <p *ngIf="activeProblem.statistics">
+            Stats: {{ activeProblem.statistics.accepted }} accepted / {{ activeProblem.statistics.submitted }} submitted
+          </p>
+        </div>
+      </srk-modal>
       <srk-default-solution-modal
         [open]="!!activeSolutionClick"
         [user]="activeSolutionClick?.user"
@@ -281,6 +307,7 @@ export class AppComponent {
   ];
   ranklist: srk.Ranklist = this.originalRanklist;
   activeUserClick: UserClickPayload | null = null;
+  activeProblemClick: ProblemClickPayload | null = null;
   activeSolutionClick: SolutionClickPayload | null = null;
   splitOrganization = true;
   useCustomColumnTitles = true;
@@ -319,6 +346,18 @@ export class AppComponent {
     return this.language === 'browser' ? undefined : [this.language];
   }
 
+  get activeProblem() {
+    return this.activeProblemClick?.problem || null;
+  }
+
+  get activeProblemIndex() {
+    return this.activeProblemClick?.problemIndex ?? 0;
+  }
+
+  get activeProblemTitle() {
+    return this.activeProblem ? resolveText(this.activeProblem.title, this.languages) : '';
+  }
+
   handleTimeTravel(time: number | null) {
     if (time === null) {
       this.ranklist = this.originalRanklist;
@@ -329,21 +368,34 @@ export class AppComponent {
       ) as srk.Ranklist;
     }
     this.activeUserClick = null;
+    this.activeProblemClick = null;
     this.activeSolutionClick = null;
   }
 
   handleUserClick(payload: UserClickPayload) {
     this.activeUserClick = payload;
+    this.activeProblemClick = null;
+    this.activeSolutionClick = null;
+  }
+
+  handleProblemClick(payload: ProblemClickPayload) {
+    this.activeUserClick = null;
+    this.activeProblemClick = payload;
     this.activeSolutionClick = null;
   }
 
   handleSolutionClick(payload: SolutionClickPayload) {
     this.activeUserClick = null;
+    this.activeProblemClick = null;
     this.activeSolutionClick = payload;
   }
 
   closeUserModal() {
     this.activeUserClick = null;
+  }
+
+  closeProblemModal() {
+    this.activeProblemClick = null;
   }
 
   closeSolutionModal() {

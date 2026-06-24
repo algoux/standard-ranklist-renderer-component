@@ -23,6 +23,7 @@ import {
   srkSupportedVersions,
 } from '@algoux/standard-ranklist-renderer-component-core';
 import type {
+  ProblemClickPayload,
   RanklistColumnTitles,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
@@ -82,6 +83,7 @@ export interface RanklistProps {
 
   formatSrkAssetUrl?: (url: string, field: string) => string;
   onUserClick?: (payload: UserClickPayload) => void | Promise<void>;
+  onProblemClick?: (payload: ProblemClickPayload) => void | Promise<void>;
   onSolutionClick?: (payload: SolutionClickPayload) => void | Promise<void>;
   components?: Partial<RanklistComponents>;
   splitOrganization?: boolean;
@@ -462,7 +464,9 @@ export class Ranklist extends React.Component<RanklistProps, State> {
                     key={problem.alias || this.resolveDisplayText(problem.title)}
                     problem={problem}
                     index={index}
+                    ranklist={data}
                     theme={this.props.theme!}
+                    onProblemClick={this.props.onProblemClick}
                     languages={this.props.languages}
                   />
                 ))}

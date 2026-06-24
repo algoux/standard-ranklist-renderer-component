@@ -17,6 +17,15 @@ const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 const makeStaticRanklist = () =>
   convertToStaticRanklist(clone(basicRanklistJson as srk.Ranklist)) as any;
 const makeI18nStaticRanklist = () => convertToStaticRanklist(makeI18nRanklist()) as any;
+const makeLinkedProblemRanklist = () => {
+  const data = makeStaticRanklist();
+  data.problems[0] = {
+    ...data.problems[0],
+    title: 'Linked Alpha Problem',
+    link: 'https://example.com/problems/alpha',
+  };
+  return data;
+};
 
 function renderSolid(view: () => Element) {
   const root = document.createElement('div');
@@ -29,14 +38,21 @@ describeRanklistInteractionContract({
   target: 'Solid',
   render(data) {
     const onUserClick = vi.fn();
+    const onProblemClick = vi.fn();
     const onSolutionClick = vi.fn();
     const rendered = renderSolid(() => (
-      <Ranklist data={data as any} onUserClick={onUserClick} onSolutionClick={onSolutionClick} />
+      <Ranklist
+        data={data as any}
+        onUserClick={onUserClick}
+        onProblemClick={onProblemClick}
+        onSolutionClick={onSolutionClick}
+      />
     ));
     return {
       container: rendered.root,
       cleanup: rendered.dispose,
       getUserPayloads: () => onUserClick.mock.calls.map((call) => call[0]),
+      getProblemPayloads: () => onProblemClick.mock.calls.map((call) => call[0]),
       getSolutionPayloads: () => onSolutionClick.mock.calls.map((call) => call[0]),
     };
   },
@@ -64,13 +80,17 @@ describe('Solid Ranklist', () => {
 
   it('uses custom problemHeaderCell and userCell parts when provided', () => {
     const onUserClick = vi.fn();
+    const onProblemClick = vi.fn();
     const { dispose } = renderSolid(() => (
       <Ranklist
         data={makeStaticRanklist()}
+        onProblemClick={onProblemClick}
         onUserClick={onUserClick}
         parts={{
           problemHeaderCell: (props) => (
-            <th data-testid="solid-problem-header">{props.problem.alias || props.index}</th>
+            <th data-testid="solid-problem-header" onClick={(event) => props.onClick(event)}>
+              {props.problem.alias || props.index}|{props.ranklist.problems.length}|{String(!!props.onProblemClick)}
+            </th>
           ),
           userCell: (props) => (
             <td data-testid="solid-user" onClick={(event) => props.onClick(event)}>
@@ -81,13 +101,58 @@ describe('Solid Ranklist', () => {
       />
     ));
 
-    expect(screen.getAllByTestId('solid-problem-header')[0].textContent).toBe('A');
+    const problemHeader = screen.getAllByTestId('solid-problem-header')[0];
+    expect(problemHeader.textContent).toBe('A|2|true');
+    fireEvent.click(problemHeader);
+    expect(onProblemClick.mock.calls[0]?.[0]).toMatchObject({
+      problem: { alias: 'A' },
+      problemIndex: 0,
+    });
     const userCell = screen.getAllByTestId('solid-user')[0];
     expect(userCell.textContent).toBe('team-alpha');
     fireEvent.click(userCell);
     expect(onUserClick.mock.calls[0]?.[0]).toMatchObject({
       user: { id: 'team-alpha' },
       rowIndex: 0,
+    });
+    dispose();
+  });
+
+  it('keeps linked problem headers as anchors without custom problem clicks', () => {
+    const { root, dispose } = renderSolid(() => <Ranklist data={makeLinkedProblemRanklist()} />);
+
+    const problemHeader = root.querySelector('th.srk-problem-header') as HTMLElement | null;
+    expect(problemHeader).toBeTruthy();
+    expect(problemHeader?.classList.contains('srk--cursor-pointer')).toBe(false);
+    expect(problemHeader?.querySelector('a')?.getAttribute('href')).toBe('https://example.com/problems/alpha');
+    dispose();
+  });
+
+  it('emits problem-click payloads from problem headers and suppresses link anchors', () => {
+    const onProblemClick = vi.fn();
+    const data = makeLinkedProblemRanklist();
+    const { root, dispose } = renderSolid(() => <Ranklist data={data} onProblemClick={onProblemClick} />);
+
+    const problemHeader = root.querySelector('th.srk-problem-header') as HTMLElement | null;
+    expect(problemHeader).toBeTruthy();
+    expect(problemHeader?.classList.contains('srk--cursor-pointer')).toBe(true);
+    expect(problemHeader?.querySelector('a')).toBeFalsy();
+
+    fireEvent.click(problemHeader!, { clientX: 20, clientY: 30 });
+
+    expect(onProblemClick).toHaveBeenCalledTimes(1);
+    expect(onProblemClick.mock.calls[0]?.[0]).toMatchObject({
+      problem: { alias: 'A', link: 'https://example.com/problems/alpha' },
+      problemIndex: 0,
+      ranklist: data,
+    });
+    expect(getRecentModalTriggerPoint()).toMatchObject({
+      source: 'problem-header',
+      context: {
+        problemIndex: 0,
+        problemAlias: 'A',
+        problemTitle: 'Linked Alpha Problem',
+      },
     });
     dispose();
   });

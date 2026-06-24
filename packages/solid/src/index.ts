@@ -20,6 +20,7 @@ export type {
   UserCellPartProps,
 } from './Ranklist';
 export type {
+  ProblemClickPayload,
   SolutionClickPayload,
   StaticRanklist,
   StaticRanklistRow,

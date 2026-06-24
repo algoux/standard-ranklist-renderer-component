@@ -91,6 +91,7 @@
       :empty-status-placeholder="emptyStatusPlaceholder"
       :user-avatar-placement="userAvatarPlacement"
       :languages="languages"
+      @problem-click="handleProblemClick"
       @solution-click="handleSolutionClick"
       @user-click="handleUserClick"
     />
@@ -111,6 +112,27 @@
       :languages="languages"
       @close="closeSolutionModal"
     />
+    <Modal
+      :open="!!activeProblemClick"
+      root-class-name="srk-general-modal-root"
+      title="Problem Info"
+      :width="420"
+      wrap-class-name="srk-problem-modal"
+      @close="closeProblemModal"
+    >
+      <div v-if="activeProblem">
+        <p>Alias: {{ activeProblem.alias || activeProblemIndex + 1 }}</p>
+        <p>Title: {{ activeProblemTitle || '-' }}</p>
+        <p>Index: {{ activeProblemIndex }}</p>
+        <p v-if="activeProblem.link">
+          Link:
+          <a :href="activeProblem.link" target="_blank" rel="noopener noreferrer">{{ activeProblem.link }}</a>
+        </p>
+        <p v-if="activeProblem.statistics">
+          Stats: {{ activeProblem.statistics.accepted }} accepted / {{ activeProblem.statistics.submitted }} submitted
+        </p>
+      </div>
+    </Modal>
   </main>
 </template>
 
@@ -122,6 +144,7 @@ import {
   filterSolutionsUntil,
   getSortedCalculatedRawSolutions,
   regenerateRanklistBySolutions,
+  resolveText,
 } from '@algoux/standard-ranklist-utils';
 import { computed, ref } from 'vue';
 import demoData from '../../../demo.json';
@@ -129,15 +152,17 @@ import type {
   RanklistColumnTitles,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
+  ProblemClickPayload,
   SolutionClickPayload,
   UserClickPayload,
 } from '../src';
-import { DefaultSolutionModal, DefaultUserModal, ProgressBar, Ranklist } from '../src';
+import { DefaultSolutionModal, DefaultUserModal, Modal, ProgressBar, Ranklist } from '../src';
 
 const originalRanklist = demoData as srk.Ranklist;
 const sortedSolutions = getSortedCalculatedRawSolutions(originalRanklist.rows);
 const ranklist = ref<srk.Ranklist>(originalRanklist);
 const activeUserClick = ref<UserClickPayload | null>(null);
+const activeProblemClick = ref<ProblemClickPayload | null>(null);
 const activeSolutionClick = ref<SolutionClickPayload | null>(null);
 const staticRanklist = computed(() => convertToStaticRanklist(ranklist.value));
 const preferredTheme = resolvePreferredTheme();
@@ -161,6 +186,9 @@ const emptyStatusPlaceholderValue = computed({
   },
 });
 const languages = computed(() => (language.value === 'browser' ? undefined : [language.value]));
+const activeProblem = computed(() => activeProblemClick.value?.problem || null);
+const activeProblemIndex = computed(() => activeProblemClick.value?.problemIndex ?? 0);
+const activeProblemTitle = computed(() => (activeProblem.value ? resolveText(activeProblem.value.title, languages.value) : ''));
 
 const demoColumnTitles: RanklistColumnTitles = {
   series: (series, index) => (index === 0 ? 'Rank' : series.title || `Series ${index + 1}`),
@@ -218,21 +246,34 @@ function handleTimeTravel(time: number | null) {
     ) as srk.Ranklist;
   }
   activeUserClick.value = null;
+  activeProblemClick.value = null;
   activeSolutionClick.value = null;
 }
 
 function handleUserClick(payload: UserClickPayload) {
   activeUserClick.value = payload;
+  activeProblemClick.value = null;
+  activeSolutionClick.value = null;
+}
+
+function handleProblemClick(payload: ProblemClickPayload) {
+  activeUserClick.value = null;
+  activeProblemClick.value = payload;
   activeSolutionClick.value = null;
 }
 
 function handleSolutionClick(payload: SolutionClickPayload) {
   activeUserClick.value = null;
+  activeProblemClick.value = null;
   activeSolutionClick.value = payload;
 }
 
 function closeUserModal() {
   activeUserClick.value = null;
+}
+
+function closeProblemModal() {
+  activeProblemClick.value = null;
 }
 
 function closeSolutionModal() {

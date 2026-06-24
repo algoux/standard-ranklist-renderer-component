@@ -16,6 +16,7 @@ npm i -S @algoux/standard-ranklist-renderer-component-angular @algoux/standard-r
 - `ModalComponent`
 - `DefaultUserModalComponent`
 - `DefaultSolutionModalComponent`
+- `SrkProblemHeaderCellTemplateDirective`
 - `SrkUserCellTemplateDirective`
 - `SrkStatusCellTemplateDirective`
 
@@ -97,7 +98,17 @@ export class BoardComponent {
 }
 ```
 
+## Advanced Usage
+
 Use `ModalComponent` directly when you want custom modal content. `SrkUserCellTemplateDirective` and `SrkStatusCellTemplateDirective` let you replace selected ranklist table cells with Angular templates.
+
+For custom interaction flows, `RanklistComponent` exposes three semantic outputs:
+
+- `(userClick)`: receives `UserClickPayload` when a user cell is clicked.
+- `(problemClick)`: receives `ProblemClickPayload` when a problem header is clicked. When observed, default problem headers are always clickable and problem links are not rendered as anchors.
+- `(solutionClick)`: receives `SolutionClickPayload` when a status cell with submissions is clicked.
+
+`SrkProblemHeaderCellTemplateDirective` contexts receive `ranklist` and an `onClick` helper so they can opt into the same problem-click payload path.
 
 ## Ranklist Render Options
 

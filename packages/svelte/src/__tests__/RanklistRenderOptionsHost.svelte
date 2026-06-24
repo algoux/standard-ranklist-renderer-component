@@ -23,9 +23,12 @@
     slot="problem-header-cell"
     data-testid="svelte-problem-header-context"
     let:problem
+    let:ranklist
+    let:onClick
     let:languages
+    on:click={(event) => onClick(event)}
   >
-    {problem.alias}|{languages && languages[0]}
+    {problem.alias}|{ranklist.problems.length}|{!!onClick}|{languages && languages[0]}
   </th>
   <td
     slot="user-cell"

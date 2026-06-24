@@ -1,5 +1,6 @@
 export type {
   ProblemStatisticsFooter,
+  ProblemClickPayload,
   RankValue,
   RanklistColumnTitles,
   RanklistStatusCellPreset,

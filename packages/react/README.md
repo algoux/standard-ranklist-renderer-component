@@ -20,7 +20,7 @@ npm i -S @algoux/standard-ranklist-renderer-component-react @algoux/standard-ran
 
 ## Usage
 
-Import the shared stylesheet once in your app entry. `Ranklist` expects a static ranklist, so convert an SRK ranklist before rendering. User/status cell clicks are emitted as semantic payloads; use those payloads to open the default modals or your own UI.
+Import the shared stylesheet once in your app entry. `Ranklist` expects a static ranklist, so convert an SRK ranklist before rendering. User and solution clicks are emitted as semantic payloads; use those payloads to open the default modals or your own UI.
 
 ```tsx
 import { useMemo, useState } from 'react';
@@ -74,7 +74,17 @@ function Board({ ranklist }) {
 }
 ```
 
+## Advanced Usage
+
 Use `Modal` directly when you want custom modal content. `Ranklist` also accepts `components` such as `userCell` and `statusCell` when you need to replace selected table cells while keeping the rest of the renderer.
+
+For custom interaction flows, `Ranklist` exposes three semantic click props:
+
+- `onUserClick`: receives `UserClickPayload` when a user cell is clicked.
+- `onProblemClick`: receives `ProblemClickPayload` when a problem header is clicked. When provided, default problem headers are always clickable and problem links are not rendered as anchors.
+- `onSolutionClick`: receives `SolutionClickPayload` when a status cell with submissions is clicked.
+
+Custom `components.problemHeaderCell` implementations receive `ranklist`, `onProblemClick`, and an `onClick` helper so they can opt into the same problem-click payload path.
 
 ## Ranklist Render Options
 

@@ -1,8 +1,7 @@
 # Ranklist Render Options Props
 
 This document is the agent-facing source of truth for the optional render props
-being piloted in the React package before promotion to the other framework
-packages.
+shared across the framework packages.
 
 ## Execution Constraints
 
@@ -11,9 +10,10 @@ packages.
 - Do not create commits unless the user explicitly asks for a commit.
 - Preserve unrelated local changes.
 
-## React Pilot API
+## Shared API
 
-Add the following optional props to React `RanklistProps`:
+The following optional props are available on React and Solid `RanklistProps`,
+with framework-idiomatic event/input names in Vue, Svelte, and Angular:
 
 ```ts
 splitOrganization?: boolean;
@@ -28,6 +28,7 @@ rowStriped?: boolean;
 columnBordered?: boolean;
 emptyStatusPlaceholder?: string | null;
 userAvatarPlacement?: 'user' | 'organization';
+onProblemClick?: (payload: ProblemClickPayload) => void | Promise<void>; // React/Solid/Svelte callback prop
 ```
 
 `RanklistColumnTitles` is text-only so the same concept can later map cleanly to
@@ -42,6 +43,16 @@ interface RanklistColumnTitles {
   time?: string;
   dirt?: string;
   se?: string;
+}
+```
+
+`ProblemClickPayload` is shared by all framework packages:
+
+```ts
+interface ProblemClickPayload {
+  problem: srk.Problem;
+  problemIndex: number;
+  ranklist: StaticRanklist;
 }
 ```
 
@@ -64,9 +75,20 @@ Default labels are: series title from SRK, `Name`, `Organization`, `Score`,
 | `columnBordered` | `false` | Enables column separators via shared CSS variables. |
 | `emptyStatusPlaceholder` | `null` | Replaces no-submission status cell blank content with a custom string. |
 | `userAvatarPlacement` | `user` | Moves the default avatar into the split Organization column only when set to `organization` and `splitOrganization` is enabled. |
+| `onProblemClick` / `problemClick` | `undefined` | Makes default problem headers clickable and emits a problem payload instead of rendering problem links as anchors. |
 
 ## Behavior Rules
 
+- Problem click is implemented in every framework package. React and Solid use
+  `onProblemClick`; Vue and Angular emit `problemClick`; Svelte uses the
+  `onProblemClick` callback prop to opt into link override and also dispatches
+  `problemClick`. When present, every default problem header gets the pointer
+  cursor and click handler regardless of `problem.link`; the default problem
+  header cell must not render an `<a href>` for the problem in this mode.
+  Without problem click, existing `problem.link` anchor rendering stays
+  unchanged. Custom problem-header render hooks receive `ranklist` and an
+  `onClick` helper where the framework supports custom header hooks; Angular
+  exposes this through `SrkProblemHeaderCellTemplateDirective`.
 - `splitOrganization` inserts an Organization column between series columns and
   User. The default user cell must not duplicate organization text when the
   split column is active.
@@ -100,9 +122,9 @@ Default labels are: series title from SRK, `Name`, `Organization`, `Score`,
     The cell shows a second line `(r%)`, where `r` is
     `Math.floor(accepted / participantCount * 100)`. If the participant count
     is `0`, show `(-)`.
-  - Tried: number of users with `tries > 0`.
+  - Attempted: number of users with `tries > 0`.
     The cell shows a second line `(r%)`, where `r` is
-    `Math.floor(tried / participantCount * 100)`. If the participant count is
+    `Math.floor(attempted / participantCount * 100)`. If the participant count is
     `0`, show `(-)`.
   - Submitted: sum of `tries`.
   - Dirt: among users who accepted this problem (`AC` or `FB`), sum
@@ -121,7 +143,7 @@ Default labels are: series title from SRK, `Name`, `Organization`, `Score`,
   and the tooltip pseudo-element must not receive pointer events, otherwise the
   hover hot zone can drift to the tooltip bubble:
   - Accepted: number of participants who solved this problem
-  - Tried: number of participants who attempted this problem
+  - Attempted: number of participants who attempted this problem
   - Submitted: total number of valid submissions for this problem
   - Dirt: wrong submissions among participants who solved this problem
   - SE: average hardness, calculated as `(participants - accepted) / participants`
@@ -204,19 +226,26 @@ Default labels are: series title from SRK, `Name`, `Organization`, `Score`,
   when `columnBordered` is enabled, while preserving the old text-to-marker
   spacing across the whole affected series column and preventing row-gap breaks
   when row borders are disabled. Latest footer statistics update adds Accepted
-  and Tried percentages, per-problem Dirt and SE rows, and renames FB/LB labels
+  and Attempted percentages, per-problem Dirt and SE rows, and renames FB/LB labels
   to `FB at` / `LB at`. Latest footer layout pass renders each statistic as its
   own table row so label/value alignment is handled by the table layout itself,
   and scopes footer striping/borders to problem statistic value cells only.
   Latest SE column update adds `showSEColumn`, keeps appended extra columns in
   `Dirt` then `SE` order, and standardizes SE formatting to two-decimal
   round-to-nearest output for both footer and contestant values. Final React
-  pilot cleanup extracts status preset presentation into core and documents the
+  cleanup extracts status preset presentation into core and documents the
   prop contracts, shared implementation map, and test coverage matrix for the
-  upcoming framework ports.
-- Vue, Solid, Svelte, Angular: pending React manual confirmation.
+  framework ports. Latest footer wording cleanup standardizes the
+  attempted-count footer row and statistics field/key as `Attempted` /
+  `attempted`. Latest problem-click pass adds framework-specific problem click
+  APIs for custom problem-header interactions while preserving default problem
+  links when the API is omitted.
+- Vue, Solid, Svelte, Angular: problem click has been promoted after React
+  manual confirmation. Vue and Angular use `problemClick` events, Solid uses
+  `onProblemClick`, and Svelte uses `onProblemClick` for link override while
+  dispatching `problemClick`.
 
-## React Implementation Notes
+## Implementation Notes
 
 - Runtime helpers for shared logic live in core so later framework ports can use
   the same time formatting, status preset presentation, footer statistics,

@@ -30,9 +30,24 @@
           <template v-for="(problem, problemIndex) in data.problems" :key="problem.alias || resolveDisplayText(problem.title) || problemIndex">
             <slot
               name="problem-header-cell"
-              v-bind="{ problem, problemIndex, index: problemIndex, theme: resolvedTheme, languages }"
+              v-bind="{
+                problem,
+                problemIndex,
+                index: problemIndex,
+                ranklist: data,
+                theme: resolvedTheme,
+                languages,
+                onClick: (event?: MouseEvent) => emitProblemClick(problem, problemIndex, event),
+              }"
             >
-              <ProblemHeaderCell :problem="problem" :index="problemIndex" :theme="resolvedTheme" :languages="languages" />
+              <ProblemHeaderCell
+                :problem="problem"
+                :index="problemIndex"
+                :ranklist="data"
+                :theme="resolvedTheme"
+                :languages="languages"
+                :on-problem-click="hasProblemClickListener ? emitProblemClickPayload : undefined"
+              />
             </slot>
           </template>
           <th v-if="showDirtColumn" class="srk-dirt-header srk--text-right srk--nowrap">
@@ -231,7 +246,7 @@ import {
   resolveText,
 } from '@algoux/standard-ranklist-utils';
 import type { ThemeColor } from '@algoux/standard-ranklist-utils';
-import { computed } from 'vue';
+import { computed, getCurrentInstance } from 'vue';
 import {
   calculateDirtPercentage,
   calculateProblemStatisticsFooter,
@@ -248,6 +263,7 @@ import {
 } from '@algoux/standard-ranklist-renderer-component-core';
 import type {
   ProblemStatisticsFooter,
+  ProblemClickPayload,
   RanklistColumnTitles,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
@@ -298,10 +314,13 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   userClick: [payload: UserClickPayload];
+  problemClick: [payload: ProblemClickPayload];
   solutionClick: [payload: SolutionClickPayload];
 }>();
 
+const instance = getCurrentInstance();
 const resolvedTheme = computed(() => props.theme);
+const hasProblemClickListener = computed(() => Boolean(instance?.vnode.props?.onProblemClick));
 const supportedVersions = srkSupportedVersions;
 const isSupportedVersion = computed(() => caniuse(props.data.version));
 const showTimeColumn = computed(() => shouldShowTimeColumn(props.data.rows));
@@ -416,6 +435,29 @@ function getSeriesSegmentStyle(rankValue: RankValue, series: srk.RankSeries | un
 
 function getStatusSolutions(status: srk.RankProblemStatus) {
   return [...(status.solutions || [])].reverse();
+}
+
+function emitProblemClickPayload(payload: ProblemClickPayload) {
+  emit('problemClick', payload);
+}
+
+function emitProblemClick(problem: srk.Problem, problemIndex: number, event?: MouseEvent) {
+  if (event) {
+    event.preventDefault();
+    captureModalTriggerPointFromMouseEvent(event, {
+      source: 'problem-header',
+      context: {
+        problemIndex,
+        problemAlias: problem.alias || null,
+        problemTitle: resolveDisplayText(problem.title) || null,
+      },
+    });
+  }
+  emitProblemClickPayload({
+    problem,
+    problemIndex,
+    ranklist: props.data,
+  });
 }
 
 function getProblemStatisticsFooterCellPrimary(key: string, stat: ProblemStatisticsFooter) {

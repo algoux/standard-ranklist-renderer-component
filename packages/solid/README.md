@@ -73,7 +73,17 @@ function Board(props: { ranklist: any }) {
 }
 ```
 
+## Advanced Usage
+
 Use `Modal` directly when you want custom modal content. `Ranklist` also accepts `parts` such as `userCell` and `statusCell` when you need targeted table-cell customization.
+
+For custom interaction flows, `Ranklist` exposes three semantic click props:
+
+- `onUserClick`: receives `UserClickPayload` when a user cell is clicked.
+- `onProblemClick`: receives `ProblemClickPayload` when a problem header is clicked. When provided, default problem headers are always clickable and problem links are not rendered as anchors.
+- `onSolutionClick`: receives `SolutionClickPayload` when a status cell with submissions is clicked.
+
+Custom `problemHeaderCell` parts receive `ranklist`, `onProblemClick`, and an `onClick` helper so they can opt into the same problem-click payload path.
 
 ## Ranklist Render Options
 

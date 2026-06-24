@@ -19,7 +19,9 @@ export interface RenderedRanklistInteraction {
   cleanup?: () => void | Promise<void>;
   clickUser?: () => void | Promise<void>;
   clickSolution?: () => void | Promise<void>;
+  clickProblem?: () => void | Promise<void>;
   getUserPayloads: () => unknown[];
+  getProblemPayloads?: () => unknown[];
   getSolutionPayloads: () => unknown[];
 }
 
@@ -65,6 +67,28 @@ export function describeRanklistInteractionContract(adapter: RanklistInteraction
           problemIndex: 0,
           problem: { alias: 'A' },
           status: { result: 'AC' },
+        });
+      } finally {
+        await rendered.cleanup?.();
+      }
+    });
+
+    it('emits problem-click payloads from problem headers when enabled', async () => {
+      const rendered = await adapter.render(makeStaticRanklist());
+      try {
+        if (!rendered.getProblemPayloads) {
+          return;
+        }
+
+        if (rendered.clickProblem) {
+          await rendered.clickProblem();
+        } else {
+          clickElement(requireElement(rendered.container, 'thead th.srk-problem-header'));
+        }
+
+        expect(rendered.getProblemPayloads()[0]).toMatchObject({
+          problem: { alias: 'A' },
+          problemIndex: 0,
         });
       } finally {
         await rendered.cleanup?.();

@@ -26,6 +26,7 @@ import {
 } from '@algoux/standard-ranklist-renderer-component-core';
 import type {
   ProblemStatisticsFooter,
+  ProblemClickPayload,
   RanklistColumnTitles,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
@@ -57,8 +58,11 @@ export interface ProblemHeaderCellPartProps {
   problem: srk.Problem;
   problemIndex: number;
   index: number;
+  ranklist: StaticRanklist;
   theme: EnumTheme;
   languages?: readonly string[];
+  onClick: (event?: MouseEvent) => void;
+  onProblemClick?: (payload: ProblemClickPayload) => void | Promise<void>;
 }
 
 export interface UserCellPartProps {
@@ -88,6 +92,7 @@ export interface RanklistProps {
   rowStriped?: boolean;
   formatSrkAssetUrl?: (url: string, field: string) => string;
   onUserClick?: (payload: UserClickPayload) => void | Promise<void>;
+  onProblemClick?: (payload: ProblemClickPayload) => void | Promise<void>;
   onSolutionClick?: (payload: SolutionClickPayload) => void | Promise<void>;
   parts?: RanklistParts;
   splitOrganization?: boolean;
@@ -126,6 +131,30 @@ export function Ranklist(props: RanklistProps) {
       user: row.user,
       row,
       rowIndex,
+      ranklist: props.data,
+    });
+  };
+
+  const emitProblemClick = (
+    event: MouseEvent | undefined,
+    problem: srk.Problem,
+    problemIndex: number,
+    onProblemClick = props.onProblemClick,
+  ) => {
+    if (event) {
+      event.preventDefault();
+      captureModalTriggerPointFromMouseEvent(event, {
+        source: 'problem-header',
+        context: {
+          problemIndex,
+          problemAlias: problem.alias || null,
+          problemTitle: resolveDisplayText(problem.title) || null,
+        },
+      });
+    }
+    onProblemClick?.({
+      problem,
+      problemIndex,
       ranklist: props.data,
     });
   };
@@ -219,21 +248,31 @@ export function Ranklist(props: RanklistProps) {
                   {(problem, problemIndex) => {
                     const ProblemHeaderCellPart = props.parts?.problemHeaderCell;
                     const index = problemIndex();
+                    const onProblemClick = props.onProblemClick;
                     return ProblemHeaderCellPart ? (
                       <ProblemHeaderCellPart
                         problem={problem}
                         problemIndex={index}
                         index={index}
+                        ranklist={props.data}
                         theme={theme()}
                         languages={props.languages}
+                        onClick={(event) => emitProblemClick(event, problem, index, onProblemClick)}
+                        onProblemClick={onProblemClick}
                       />
                     ) : (
                       <th
                         class="srk--nowrap srk-problem-header"
+                        classList={{ 'srk--cursor-pointer': !!onProblemClick }}
+                        onClick={(event) => {
+                          if (onProblemClick) {
+                            emitProblemClick(event, problem, index, onProblemClick);
+                          }
+                        }}
                         style={{ 'background-image': getProblemHeaderBackgroundImage(problem.style, theme()) }}
                       >
                         <Show
-                          when={problem.link}
+                          when={problem.link && !onProblemClick ? problem.link : undefined}
                           fallback={<ProblemHeaderBody problem={problem} index={index} />}
                         >
                           {(link) => (

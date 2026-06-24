@@ -80,6 +80,8 @@
   "problems": [
     {
       "alias": "A",
+      "title": "Some Title",
+      "link": "https://icpc.global",
       "style": {
         "backgroundColor": "#bd0e0e"
       },

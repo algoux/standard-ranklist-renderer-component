@@ -98,4 +98,21 @@ describe('Svelte local demo app', () => {
     expect((getField(container, 'Empty status placeholder') as HTMLSelectElement).value).toBe('');
     expect((getField(container, 'User avatar placement') as HTMLSelectElement).value).toBe('user');
   });
+
+  it('opens the custom problem modal from a problem header click', async () => {
+    const { container } = render(App);
+    const problemHeader = container.querySelector('th.srk-problem-header') as HTMLElement | null;
+
+    expect(problemHeader).toBeTruthy();
+    await fireEvent.click(problemHeader!, { clientX: 20, clientY: 30 });
+    await tick();
+
+    expect(container.querySelector('.srk-general-modal-root')).toBeTruthy();
+    expect(container.querySelector('.srk-problem-modal')).toBeTruthy();
+    expect(container.textContent).toContain('Problem Info');
+    expect(container.textContent).toContain('Alias: A');
+    expect(container.textContent).toContain('Title: Some Title');
+    expect(container.textContent).toContain('Link: https://icpc.global');
+    expect(container.textContent).toContain('Stats: 320 accepted / 596 submitted');
+  });
 });

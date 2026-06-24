@@ -40,6 +40,7 @@
   export let emptyStatusPlaceholder = null;
   export let userAvatarPlacement = 'user';
   export let languages = undefined;
+  export let onProblemClick = undefined;
 
   const dispatch = createEventDispatcher();
 
@@ -260,6 +261,30 @@
     });
   }
 
+  function emitProblemClick(event, problem, problemIndex) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      captureModalTriggerPointFromMouseEvent(event, {
+        source: 'problem-header',
+        context: {
+          problemIndex,
+          problemAlias: problem.alias || null,
+          problemTitle: resolveDisplayText(problem.title) || null,
+        },
+      });
+    }
+    const payload = {
+      problem,
+      problemIndex,
+      ranklist: data,
+    };
+    if (typeof onProblemClick === 'function') {
+      onProblemClick(payload);
+    }
+    dispatch('problemClick', payload);
+  }
+
   function emitSolutionClick(event, row, rowIndex, status, problemIndex) {
     const solutions = getStatusSolutions(status);
     if (!solutions.length) {
@@ -324,10 +349,25 @@
           {#each data.problems as problem, problemIndex}
             <th
               class="srk--nowrap srk-problem-header"
+              class:srk--cursor-pointer={!!onProblemClick}
               style:background-image={getProblemHeaderBackgroundImage(problem.style, theme)}
+              on:click={(event) => {
+                if (onProblemClick) {
+                  emitProblemClick(event, problem, problemIndex);
+                }
+              }}
             >
-              <slot name="problem-header-cell" {problem} {problemIndex} index={problemIndex} {theme} {languages}>
-                {#if problem.link}
+              <slot
+                name="problem-header-cell"
+                {problem}
+                {problemIndex}
+                index={problemIndex}
+                ranklist={data}
+                {theme}
+                {languages}
+                onClick={(event) => emitProblemClick(event, problem, problemIndex)}
+              >
+                {#if problem.link && !onProblemClick}
                   <a href={problem.link} target="_blank" rel="noopener noreferrer" style="color: unset">
                     <span class="srk--display-block">{problemAlias(problem, problemIndex)}</span>
                     {#if problem.statistics}

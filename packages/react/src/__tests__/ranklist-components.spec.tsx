@@ -16,6 +16,16 @@ const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 
 const makeStaticRanklist = () => convertToStaticRanklist(clone(basicRanklistJson as srk.Ranklist)) as any;
 
+const makeLinkedProblemRanklist = () => {
+  const data = makeStaticRanklist();
+  data.problems[0] = {
+    ...data.problems[0],
+    title: 'Linked Alpha Problem',
+    link: 'https://example.com/problems/alpha',
+  };
+  return data;
+};
+
 const makeI18nStaticRanklist = () =>
   ({
     type: 'general',
@@ -88,12 +98,21 @@ describeRanklistInteractionContract({
   target: 'React',
   render(data) {
     const onUserClick = vi.fn();
+    const onProblemClick = vi.fn();
     const onSolutionClick = vi.fn();
-    const rendered = render(<Ranklist data={data} onUserClick={onUserClick} onSolutionClick={onSolutionClick} />);
+    const rendered = render(
+      <Ranklist
+        data={data}
+        onUserClick={onUserClick}
+        onProblemClick={onProblemClick}
+        onSolutionClick={onSolutionClick}
+      />,
+    );
     return {
       container: rendered.container,
       cleanup: rendered.unmount,
       getUserPayloads: () => onUserClick.mock.calls.map((call) => call[0]),
+      getProblemPayloads: () => onProblemClick.mock.calls.map((call) => call[0]),
       getSolutionPayloads: () => onSolutionClick.mock.calls.map((call) => call[0]),
     };
   },
@@ -143,11 +162,53 @@ describe('React ranklist component overrides', () => {
     expect(getRecentModalTriggerPoint()?.context?.problemTitle).toBe('中文题目');
   });
 
+  it('keeps linked problem headers as anchors without custom problem clicks', () => {
+    const { container } = render(<Ranklist data={makeLinkedProblemRanklist()} />);
+
+    const problemHeader = container.querySelector('th.srk-problem-header') as HTMLElement | null;
+    expect(problemHeader).toBeTruthy();
+    expect(problemHeader?.classList.contains('srk--cursor-pointer')).toBe(false);
+    expect(problemHeader?.querySelector('a')?.getAttribute('href')).toBe('https://example.com/problems/alpha');
+  });
+
+  it('emits problem-click payloads from problem headers and suppresses link anchors', () => {
+    const onProblemClick = vi.fn();
+    const data = makeLinkedProblemRanklist();
+    const { container } = render(<Ranklist data={data} onProblemClick={onProblemClick} />);
+
+    const problemHeader = container.querySelector('th.srk-problem-header') as HTMLElement | null;
+    expect(problemHeader).toBeTruthy();
+    expect(problemHeader?.classList.contains('srk--cursor-pointer')).toBe(true);
+    expect(problemHeader?.querySelector('a')).toBeFalsy();
+
+    fireEvent.click(problemHeader!, { clientX: 20, clientY: 30 });
+
+    expect(onProblemClick).toHaveBeenCalledTimes(1);
+    expect(onProblemClick.mock.calls[0]?.[0]).toMatchObject({
+      problem: { alias: 'A', link: 'https://example.com/problems/alpha' },
+      problemIndex: 0,
+      ranklist: data,
+    });
+    expect(getRecentModalTriggerPoint()).toMatchObject({
+      source: 'problem-header',
+      context: {
+        problemIndex: 0,
+        problemAlias: 'A',
+        problemTitle: 'Linked Alpha Problem',
+      },
+    });
+  });
+
   it('passes explicit languages to internal component overrides', () => {
     const languages = ['zh-CN'];
     const received: unknown[] = [];
+    const onProblemClick = vi.fn();
     const CustomProblemHeaderCell = (props: ProblemHeaderCellProps) => {
-      received.push(props.languages);
+      received.push({
+        languages: props.languages,
+        ranklist: props.ranklist,
+        onProblemClick: props.onProblemClick,
+      });
       return <th data-testid="custom-problem-header">problem</th>;
     };
     const CustomUserCell = (props: UserCellProps) => {
@@ -163,6 +224,7 @@ describe('React ranklist component overrides', () => {
       <Ranklist
         data={makeI18nStaticRanklist()}
         languages={languages}
+        onProblemClick={onProblemClick}
         components={{
           problemHeaderCell: CustomProblemHeaderCell,
           userCell: CustomUserCell,
@@ -174,6 +236,14 @@ describe('React ranklist component overrides', () => {
     expect(screen.getByTestId('custom-problem-header')).toBeTruthy();
     expect(screen.getByTestId('custom-user-cell')).toBeTruthy();
     expect(screen.getByTestId('custom-status-cell')).toBeTruthy();
-    expect(received).toEqual([languages, languages, languages]);
+    expect(received).toEqual([
+      {
+        languages,
+        ranklist: makeI18nStaticRanklist(),
+        onProblemClick,
+      },
+      languages,
+      languages,
+    ]);
   });
 });

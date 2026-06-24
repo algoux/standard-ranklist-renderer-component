@@ -62,7 +62,17 @@ $: staticRanklist = convertToStaticRanklist(ranklist);
 />
 ```
 
+## Advanced Usage
+
 Use `Modal` directly when you want custom modal content. `Ranklist` exposes slots such as `userCell` and `statusCell` for targeted table-cell customization.
+
+For custom interaction flows, `Ranklist` exposes three semantic click hooks:
+
+- `on:userClick`: receives `UserClickPayload` when a user cell is clicked.
+- `onProblemClick` / `on:problemClick`: `onProblemClick` enables default problem-header clicks and receives `ProblemClickPayload`; the component also dispatches `problemClick` with the same payload. When enabled, default problem links are not rendered as anchors.
+- `on:solutionClick`: receives `SolutionClickPayload` when a status cell with submissions is clicked.
+
+`problem-header-cell` slots receive `ranklist` and an `onClick` helper so they can opt into the same problem-click payload path.
 
 ## Ranklist Render Options
 

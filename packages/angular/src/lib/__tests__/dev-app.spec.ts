@@ -169,6 +169,24 @@ describe('Angular dev app', () => {
     expect(hostElement.querySelector('.srk-modal-root')).not.toBeNull();
   });
 
+  it('opens the custom problem modal from a problem header click', async () => {
+    const { componentRef, hostElement } = await renderDevApp();
+    const problemHeader = hostElement.querySelector('th.srk-problem-header') as HTMLElement | null;
+
+    expect(problemHeader).toBeTruthy();
+    problemHeader!.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }));
+    componentRef.changeDetectorRef.detectChanges();
+
+    expect(componentRef.instance.activeProblemClick).not.toBeNull();
+    expect(hostElement.querySelector('.srk-general-modal-root')).toBeTruthy();
+    expect(hostElement.querySelector('.srk-problem-modal')).toBeTruthy();
+    expect(hostElement.textContent).toContain('Problem Info');
+    expect(hostElement.textContent).toContain('Alias: A');
+    expect(hostElement.textContent).toContain('Title: Some Title');
+    expect(hostElement.textContent).toContain('Link: https://icpc.global');
+    expect(hostElement.textContent).toContain('Stats: 320 accepted / 596 submitted');
+  });
+
   it('applies default modal widths like the other framework previews', async () => {
     const { componentRef, hostElement } = await renderDevApp();
 

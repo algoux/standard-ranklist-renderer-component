@@ -97,4 +97,27 @@ describe('Vue local demo app', () => {
       wrapper.unmount();
     }
   });
+
+  it('opens the custom problem modal from a problem header click', async () => {
+    const wrapper = mount(App);
+    const container = wrapper.element as HTMLElement;
+
+    try {
+      await wrapper.find('th.srk-problem-header').trigger('click', {
+        clientX: 20,
+        clientY: 30,
+      });
+      await nextTick();
+
+      expect(container.querySelector('.srk-general-modal-root')).toBeTruthy();
+      expect(container.querySelector('.srk-problem-modal')).toBeTruthy();
+      expect(container.textContent).toContain('Problem Info');
+      expect(container.textContent).toContain('Alias: A');
+      expect(container.textContent).toContain('Title: Some Title');
+      expect(container.textContent).toContain('Link: https://icpc.global');
+      expect(container.textContent).toContain('Stats: 320 accepted / 596 submitted');
+    } finally {
+      wrapper.unmount();
+    }
+  });
 });

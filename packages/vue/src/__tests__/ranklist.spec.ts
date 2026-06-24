@@ -1,6 +1,6 @@
 import type * as srk from '@algoux/standard-ranklist';
 import { mount } from '@vue/test-utils';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { convertToStaticRanklist } from '@algoux/standard-ranklist-utils';
 import {
   getRecentModalTriggerPoint,
@@ -17,6 +17,15 @@ const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value));
 const makeStaticRanklist = () =>
   convertToStaticRanklist(clone(basicRanklistJson as srk.Ranklist));
 const makeI18nStaticRanklist = () => convertToStaticRanklist(makeI18nRanklist());
+const makeLinkedProblemRanklist = () => {
+  const data = makeStaticRanklist();
+  data.problems[0] = {
+    ...data.problems[0],
+    title: 'Linked Alpha Problem',
+    link: 'https://example.com/problems/alpha',
+  };
+  return data;
+};
 
 describeRanklistInteractionContract({
   target: 'Vue',
@@ -24,12 +33,14 @@ describeRanklistInteractionContract({
     const wrapper = mount(Ranklist, {
       props: {
         data,
+        onProblemClick: () => undefined,
       },
     });
     return {
       container: wrapper.element as HTMLElement,
       cleanup: () => wrapper.unmount(),
       getUserPayloads: () => (wrapper.emitted('userClick') || []).map((event) => event[0]),
+      getProblemPayloads: () => (wrapper.emitted('problemClick') || []).map((event) => event[0]),
       getSolutionPayloads: () => (wrapper.emitted('solutionClick') || []).map((event) => event[0]),
     };
   },
@@ -130,6 +141,55 @@ describe('Vue Ranklist', () => {
     expect(getRecentModalTriggerPoint()?.context?.problemTitle).toBe('中文题目');
   });
 
+  it('keeps linked problem headers as anchors without custom problem clicks', () => {
+    const wrapper = mount(Ranklist, {
+      props: {
+        data: makeLinkedProblemRanklist(),
+      },
+    });
+
+    const problemHeader = wrapper.find('th.srk-problem-header');
+    expect(problemHeader.exists()).toBe(true);
+    expect(problemHeader.classes()).not.toContain('srk--cursor-pointer');
+    expect(problemHeader.find('a').attributes('href')).toBe('https://example.com/problems/alpha');
+  });
+
+  it('emits problemClick payloads from problem headers and suppresses link anchors', async () => {
+    const onProblemClick = vi.fn();
+    const data = makeLinkedProblemRanklist();
+    const wrapper = mount(Ranklist, {
+      props: {
+        data,
+        onProblemClick,
+      } as any,
+    });
+
+    const problemHeader = wrapper.find('th.srk-problem-header');
+    expect(problemHeader.exists()).toBe(true);
+    expect(problemHeader.classes()).toContain('srk--cursor-pointer');
+    expect(problemHeader.find('a').exists()).toBe(false);
+
+    await problemHeader.trigger('click', {
+      clientX: 20,
+      clientY: 30,
+    });
+
+    expect(onProblemClick).toHaveBeenCalledTimes(1);
+    expect(wrapper.emitted('problemClick')?.[0]?.[0]).toMatchObject({
+      problem: { alias: 'A', link: 'https://example.com/problems/alpha' },
+      problemIndex: 0,
+      ranklist: data,
+    });
+    expect(getRecentModalTriggerPoint()).toMatchObject({
+      source: 'problem-header',
+      context: {
+        problemIndex: 0,
+        problemAlias: 'A',
+        problemTitle: 'Linked Alpha Problem',
+      },
+    });
+  });
+
   it('passes render option context into scoped user-cell and status-cell slots', () => {
     const data = makeRenderOptionsRanklist();
     data.rows[0].user.avatar = 'https://example.com/team-alpha.png';
@@ -146,8 +206,8 @@ describe('Vue Ranklist', () => {
       } as any,
       slots: {
         'problem-header-cell': `
-          <template #problem-header-cell="{ problem, languages }">
-            <th data-testid="slot-problem-header-context">{{ problem.alias }}|{{ languages[0] }}</th>
+          <template #problem-header-cell="{ problem, ranklist, onClick, languages }">
+            <th data-testid="slot-problem-header-context" @click="onClick($event)">{{ problem.alias }}|{{ ranklist.problems.length }}|{{ !!onClick }}|{{ languages[0] }}</th>
           </template>
         `,
         'user-cell': `
@@ -163,7 +223,7 @@ describe('Vue Ranklist', () => {
       },
     });
 
-    expect(wrapper.find('[data-testid="slot-problem-header-context"]').text()).toBe('A|zh-CN');
+    expect(wrapper.find('[data-testid="slot-problem-header-context"]').text()).toBe('A|3|true|zh-CN');
     expect(wrapper.find('[data-testid="slot-user-context"]').text()).toBe('team-alpha|true|true|zh-CN');
     expect(wrapper.find('[data-testid="slot-status-context"]').text()).toBe('minimal|true|.|zh-CN');
   });

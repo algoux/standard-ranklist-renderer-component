@@ -1,6 +1,7 @@
 import React from 'react';
 import type * as srk from '@algoux/standard-ranklist';
 import type {
+  ProblemClickPayload,
   RanklistColumnTitles,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
@@ -12,6 +13,7 @@ import data from '../../../demo.json';
 import {
   DefaultSolutionModal,
   DefaultUserModal,
+  Modal,
   Ranklist,
   convertToStaticRanklist,
 } from '../src';
@@ -36,6 +38,7 @@ interface AppState {
   data: srk.Ranklist;
   solutions: srk.Solution[];
   activeUserClick: UserClickPayload | null;
+  activeProblemClick: ProblemClickPayload | null;
   activeSolutionClick: SolutionClickPayload | null;
   splitOrganization: boolean;
   useCustomColumnTitles: boolean;
@@ -96,6 +99,7 @@ export default class App extends React.Component<Record<string, never>, AppState
       data: data as srk.Ranklist,
       solutions: Utils.getSortedCalculatedRawSolutions((data as srk.Ranklist).rows),
       activeUserClick: null,
+      activeProblemClick: null,
       activeSolutionClick: null,
       splitOrganization: true,
       useCustomColumnTitles: true,
@@ -123,6 +127,7 @@ export default class App extends React.Component<Record<string, never>, AppState
       this.setState({
         data: data as srk.Ranklist,
         activeUserClick: null,
+        activeProblemClick: null,
         activeSolutionClick: null,
       });
       return;
@@ -132,6 +137,7 @@ export default class App extends React.Component<Record<string, never>, AppState
     this.setState({
       data: newSrk as srk.Ranklist,
       activeUserClick: null,
+      activeProblemClick: null,
       activeSolutionClick: null,
     });
   };
@@ -139,6 +145,15 @@ export default class App extends React.Component<Record<string, never>, AppState
   handleUserClick = (payload: UserClickPayload) => {
     this.setState({
       activeUserClick: payload,
+      activeProblemClick: null,
+      activeSolutionClick: null,
+    });
+  };
+
+  handleProblemClick = (payload: ProblemClickPayload) => {
+    this.setState({
+      activeUserClick: null,
+      activeProblemClick: payload,
       activeSolutionClick: null,
     });
   };
@@ -146,12 +161,17 @@ export default class App extends React.Component<Record<string, never>, AppState
   handleSolutionClick = (payload: SolutionClickPayload) => {
     this.setState({
       activeUserClick: null,
+      activeProblemClick: null,
       activeSolutionClick: payload,
     });
   };
 
   closeUserModal = () => {
     this.setState({ activeUserClick: null });
+  };
+
+  closeProblemModal = () => {
+    this.setState({ activeProblemClick: null });
   };
 
   closeSolutionModal = () => {
@@ -223,6 +243,10 @@ export default class App extends React.Component<Record<string, never>, AppState
   render() {
     const staticRanklist = this.getStaticRanklist();
     const languages = this.getSelectedLanguages();
+    const activeProblemClick = this.state.activeProblemClick;
+    const activeProblem = activeProblemClick?.problem;
+    const activeProblemTitle = activeProblem ? Utils.resolveText(activeProblem.title, languages) : '';
+    const activeProblemIndex = activeProblemClick?.problemIndex ?? 0;
 
     return (
       <main className="preview-shell">
@@ -348,6 +372,7 @@ export default class App extends React.Component<Record<string, never>, AppState
           theme={this.preferredTheme}
           rowStriped
           onUserClick={this.handleUserClick}
+          onProblemClick={this.handleProblemClick}
           onSolutionClick={this.handleSolutionClick}
           splitOrganization={this.state.splitOrganization}
           columnTitles={this.state.useCustomColumnTitles ? demoColumnTitles : undefined}
@@ -371,6 +396,37 @@ export default class App extends React.Component<Record<string, never>, AppState
           languages={languages}
           onClose={this.closeUserModal}
         />
+
+        <Modal
+          open={!!activeProblemClick}
+          onClose={this.closeProblemModal}
+          rootClassName="srk-general-modal-root"
+          title="Problem Info"
+          width={420}
+          wrapClassName="srk-problem-modal"
+        >
+          {activeProblem ? (
+            <div>
+              <p>Alias: {activeProblem.alias || activeProblemIndex + 1}</p>
+              <p>Title: {activeProblemTitle || '-'}</p>
+              <p>Index: {activeProblemIndex}</p>
+              {activeProblem.link ? (
+                <p>
+                  Link:{' '}
+                  <a href={activeProblem.link} target="_blank" rel="noopener noreferrer">
+                    {activeProblem.link}
+                  </a>
+                </p>
+              ) : null}
+              {activeProblem.statistics ? (
+                <p>
+                  Stats: {activeProblem.statistics.accepted} accepted / {activeProblem.statistics.submitted}{' '}
+                  submitted
+                </p>
+              ) : null}
+            </div>
+          ) : null}
+        </Modal>
 
         <DefaultSolutionModal
           open={!!this.state.activeSolutionClick}

@@ -18,10 +18,11 @@ import {
 } from '@algoux/standard-ranklist-renderer-component-core';
 import {
   RanklistComponent,
+  SrkProblemHeaderCellTemplateDirective,
   SrkStatusCellTemplateDirective,
   SrkUserCellTemplateDirective,
 } from '../index';
-import type { UserClickPayload } from '../types';
+import type { ProblemClickPayload, UserClickPayload } from '../types';
 import { caniuse as angularCaniuse } from '../ranklist/ranklist-utils';
 import basicRanklistJson from '../../../../../tests/fixtures/basic-ranklist.json';
 import { makeI18nRanklist } from '../../../../../tests/shared/ranklist-i18n-fixtures';
@@ -32,6 +33,15 @@ const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value));
 const makeStaticRanklist = () =>
   convertToStaticRanklist(clone(basicRanklistJson as srk.Ranklist));
 const makeI18nStaticRanklist = () => convertToStaticRanklist(makeI18nRanklist());
+const makeLinkedProblemRanklist = () => {
+  const data = makeStaticRanklist();
+  data.problems[0] = {
+    ...data.problems[0],
+    title: 'Linked Alpha Problem',
+    link: 'https://example.com/problems/alpha',
+  };
+  return data;
+};
 
 @Component({
   standalone: true,
@@ -40,6 +50,7 @@ const makeI18nStaticRanklist = () => convertToStaticRanklist(makeI18nRanklist())
     <srk-ranklist
       [data]="data"
       (userClick)="userEvents.push($event)"
+      (problemClick)="problemEvents.push($event)"
       (solutionClick)="solutionEvents.push($event)"
     >
       <ng-template srkStatusCell let-status="status" let-onClick="onClick">
@@ -51,6 +62,7 @@ const makeI18nStaticRanklist = () => convertToStaticRanklist(makeI18nRanklist())
 class HostComponent {
   data = makeStaticRanklist();
   userEvents: UserClickPayload[] = [];
+  problemEvents: ProblemClickPayload[] = [];
   solutionEvents: unknown[] = [];
 }
 
@@ -90,7 +102,37 @@ class I18nHostComponent {
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RanklistComponent, SrkStatusCellTemplateDirective, SrkUserCellTemplateDirective],
+  imports: [CommonModule, RanklistComponent],
+  template: `<srk-ranklist [data]="data" />`,
+})
+class LinkedProblemDefaultHostComponent {
+  data = makeLinkedProblemRanklist();
+}
+
+@Component({
+  standalone: true,
+  imports: [CommonModule, RanklistComponent],
+  template: `
+    <srk-ranklist
+      [data]="data"
+      (problemClick)="problemEvents.push($event)"
+    />
+  `,
+})
+class LinkedProblemClickHostComponent {
+  data = makeLinkedProblemRanklist();
+  problemEvents: ProblemClickPayload[] = [];
+}
+
+@Component({
+  standalone: true,
+  imports: [
+    CommonModule,
+    RanklistComponent,
+    SrkProblemHeaderCellTemplateDirective,
+    SrkStatusCellTemplateDirective,
+    SrkUserCellTemplateDirective,
+  ],
   template: `
     <srk-ranklist
       [data]="data"
@@ -101,6 +143,17 @@ class I18nHostComponent {
       [emptyStatusPlaceholder]="'.'"
       [userAvatarPlacement]="'organization'"
     >
+      <ng-template
+        srkProblemHeaderCell
+        let-problem="problem"
+        let-ranklist="ranklist"
+        let-onClick="onClick"
+        let-languages="languages"
+      >
+        <th data-testid="ng-problem-header-context" (click)="onClick($event)">
+          {{ problem.alias }}|{{ ranklist.problems.length }}|{{ onClick ? 'true' : 'false' }}|{{ languages[0] }}
+        </th>
+      </ng-template>
       <ng-template
         srkUserCell
         let-user="user"
@@ -183,7 +236,14 @@ describeRanklistInteractionContract({
         );
         rendered.componentRef.changeDetectorRef.detectChanges();
       },
+      clickProblem: async () => {
+        rendered.hostElement.querySelector('thead th.srk-problem-header')?.dispatchEvent(
+          new MouseEvent('click', { bubbles: true, cancelable: true }),
+        );
+        rendered.componentRef.changeDetectorRef.detectChanges();
+      },
       getUserPayloads: () => rendered.componentRef.instance.userEvents,
+      getProblemPayloads: () => rendered.componentRef.instance.problemEvents,
       getSolutionPayloads: () => rendered.componentRef.instance.solutionEvents,
     };
   },
@@ -251,6 +311,9 @@ describe('Angular Ranklist', () => {
   it('passes render option context into user and status templates', async () => {
     const { hostElement } = await renderComponentHost(SlotContextHostComponent);
 
+    expect(hostElement.querySelector('[data-testid="ng-problem-header-context"]')?.textContent?.replace(/\s+/g, '')).toBe(
+      'A|3|true|zh-CN',
+    );
     expect(hostElement.querySelector('[data-testid="ng-user-context"]')?.textContent?.replace(/\s+/g, '')).toBe(
       'team-alpha|true|true|zh-CN',
     );
@@ -269,5 +332,40 @@ describe('Angular Ranklist', () => {
 
     expect(componentRef.instance.solutionEvents).toHaveLength(1);
     expect(getRecentModalTriggerPoint()?.context?.problemTitle).toBe('中文题目');
+  });
+
+  it('keeps linked problem headers as anchors without custom problem clicks', async () => {
+    const { hostElement } = await renderComponentHost(LinkedProblemDefaultHostComponent);
+    const problemHeader = hostElement.querySelector('th.srk-problem-header') as HTMLElement | null;
+
+    expect(problemHeader).toBeTruthy();
+    expect(problemHeader?.classList.contains('srk--cursor-pointer')).toBe(false);
+    expect(problemHeader?.querySelector('a')?.getAttribute('href')).toBe('https://example.com/problems/alpha');
+  });
+
+  it('emits problemClick payloads from problem headers and suppresses link anchors', async () => {
+    const { componentRef, hostElement } = await renderComponentHost(LinkedProblemClickHostComponent);
+    const problemHeader = hostElement.querySelector('th.srk-problem-header') as HTMLElement | null;
+
+    expect(problemHeader).toBeTruthy();
+    expect(problemHeader?.classList.contains('srk--cursor-pointer')).toBe(true);
+    expect(problemHeader?.querySelector('a')).toBeFalsy();
+
+    problemHeader!.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: 20, clientY: 30 }));
+    componentRef.changeDetectorRef.detectChanges();
+
+    expect(componentRef.instance.problemEvents[0]).toMatchObject({
+      problem: { alias: 'A', link: 'https://example.com/problems/alpha' },
+      problemIndex: 0,
+      ranklist: componentRef.instance.data,
+    });
+    expect(getRecentModalTriggerPoint()).toMatchObject({
+      source: 'problem-header',
+      context: {
+        problemIndex: 0,
+        problemAlias: 'A',
+        problemTitle: 'Linked Alpha Problem',
+      },
+    });
   });
 });

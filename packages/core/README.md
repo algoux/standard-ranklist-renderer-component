@@ -16,6 +16,7 @@ npm i -S @algoux/standard-ranklist-renderer-component-core
 - `srkSupportedVersions`
 - `StaticRanklist`
 - `UserClickPayload`
+- `ProblemClickPayload`
 - `SolutionClickPayload`
 
 ## Usage
