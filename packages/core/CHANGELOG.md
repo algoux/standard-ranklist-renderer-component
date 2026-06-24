@@ -1,5 +1,11 @@
 # @algoux/standard-ranklist-renderer-component-core
 
+## 0.6.3
+
+### Patch Changes
+
+- 94e5978: Add custom problem-header click payloads across framework packages.
+
 ## 0.6.2
 
 ### Patch Changes

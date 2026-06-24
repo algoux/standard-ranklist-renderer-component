@@ -1,5 +1,13 @@
 # @algoux/standard-ranklist-renderer-component-vue
 
+## 0.6.4
+
+### Patch Changes
+
+- 94e5978: Add custom problem-header click payloads across framework packages.
+- Updated dependencies [94e5978]
+  - @algoux/standard-ranklist-renderer-component-core@0.6.3
+
 ## 0.6.3
 
 ### Patch Changes
