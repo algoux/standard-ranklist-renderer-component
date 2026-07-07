@@ -2,7 +2,7 @@
 
 Multi-package renderer components for [standard-ranklist](https://srk.algoux.org/) data.
 
-Supported srk versions: `>=0.3.0 && <=0.3.12`.
+Supported srk versions: `>=0.3.0 && <=0.3.13`.
 
 The repository now publishes framework-specific packages plus shared `core` and `styles` packages. The root package is kept as the monorepo coordinator and documentation entry; new consumers should install the framework package they use.
 
