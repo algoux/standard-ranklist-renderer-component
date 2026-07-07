@@ -17,7 +17,8 @@
     formatProblemStatisticsAverageHardness,
     formatProblemStatisticsPercent,
     getMarkerPresentation,
-    getProblemHeaderBackgroundImage,
+    getProblemHeaderBackgroundImageIfStyled,
+    getRankProblemStatusCellClassName,
     getRankProblemStatusCellPresentation,
     resolveSrkAssetUrl,
     shouldShowTimeColumn,
@@ -192,14 +193,9 @@
     if (colorAsText) {
       classNames.push('srk-prest-status-block-color-text');
     }
-    if (status.result === 'FB') {
-      classNames.push('srk-prest-status-block-fb');
-    } else if (status.result === 'AC') {
-      classNames.push('srk-prest-status-block-accepted');
-    } else if (status.result === '?') {
-      classNames.push('srk-prest-status-block-frozen');
-    } else if (status.result === 'RJ') {
-      classNames.push('srk-prest-status-block-failed');
+    const resultClassName = getRankProblemStatusCellClassName(status, data);
+    if (resultClassName) {
+      classNames.push(resultClassName);
     }
     return classNames.join(' ');
   }
@@ -350,7 +346,7 @@
             <th
               class="srk--nowrap srk-problem-header"
               class:srk--cursor-pointer={!!onProblemClick}
-              style:background-image={getProblemHeaderBackgroundImage(problem.style, theme)}
+              style:background-image={getProblemHeaderBackgroundImageIfStyled(problem.style, theme)}
               on:click={(event) => {
                 if (onProblemClick) {
                   emitProblemClick(event, problem, problemIndex);
@@ -512,7 +508,10 @@
                     {/if}
                     {#if typeof presentation.score === 'number'}
                       <span class="srk-prest-status-block-score">{presentation.score}</span>
+                      {#if presentation.scoreDetails !== undefined}
+                        {' '}
                       <span class="srk-prest-status-block-score-details">{presentation.scoreDetails}</span>
+                      {/if}
                     {:else if presentation.secondary !== undefined}
                       <span class="srk-prest-status-block-primary">{presentation.primary || ''}</span>{' '}<span class="srk-prest-status-block-secondary">{presentation.secondary}</span>
                     {:else}
@@ -526,7 +525,13 @@
                     class={statusCellClass(status, statusColorAsText)}
                     on:click|preventDefault={(event) => emitSolutionClick(event, row, rowIndex, status, problemIndex)}
                   >
-                    {#if presentation.secondary !== undefined}
+                    {#if typeof presentation.score === 'number'}
+                      <span class="srk-prest-status-block-score">{presentation.score}</span>
+                      {#if presentation.scoreDetails !== undefined}
+                        {' '}
+                        <span class="srk-prest-status-block-score-details">{presentation.scoreDetails}</span>
+                      {/if}
+                    {:else if presentation.secondary !== undefined}
                       <span class="srk-prest-status-block-primary">{presentation.primary || ''}</span>{' '}<span class="srk-prest-status-block-secondary">{presentation.secondary}</span>
                     {:else}
                       {presentation.primary}
@@ -583,7 +588,7 @@
             {#each data.problems as problem, problemIndex}
               <td
                 class="srk-problem-statistics-footer-cell srk-problem-statistics-footer-problem-header srk-problem-header srk--text-center srk--nowrap"
-                style:background-image={getProblemHeaderBackgroundImage(problem.style, theme, 0)}
+                style:background-image={getProblemHeaderBackgroundImageIfStyled(problem.style, theme, 0)}
               >
                 <span class="srk--display-block">{problem.alias || numberToAlphabet(problemIndex)}</span>
               </td>

@@ -1,5 +1,6 @@
 import type * as srk from '@algoux/standard-ranklist';
 import { afterEach, describe, expect, it } from 'vitest';
+import { EnumTheme } from '@algoux/standard-ranklist-utils';
 import type { RanklistColumnTitles } from '@algoux/standard-ranklist-renderer-component-core';
 
 type StatusCellPreset = 'classic' | 'detailed' | 'minimal' | 'compact';
@@ -7,6 +8,7 @@ type UserAvatarPlacement = 'user' | 'organization';
 
 export type RanklistRenderOptionsProps = {
   data: srk.Ranklist;
+  theme?: EnumTheme;
   splitOrganization?: boolean;
   columnTitles?: RanklistColumnTitles;
   statusCellPreset?: StatusCellPreset;
@@ -348,6 +350,117 @@ export function describeRanklistRenderOptionsContract(adapter: RanklistRenderOpt
       expect(statusCells[1].querySelector('.srk-prest-status-block-secondary')).toBeFalsy();
     });
 
+    it('renders score status cells for each preset without missing tries or time placeholders', async () => {
+      const data = makeRenderOptionsRanklist({
+        ...baseRanklist,
+        problems: [
+          { alias: 'A', title: 'Score Complete' },
+          { alias: 'B', title: 'Score Time Only' },
+          { alias: 'C', title: 'Score Tries Only' },
+          { alias: 'D', title: 'Score Only' },
+        ],
+        rows: [
+          {
+            ...baseRanklist.rows[0],
+            statuses: [
+              { result: 'AC', score: 87, time: [75, 'min'], tries: 2 },
+              { result: 'AC', score: 88, time: [80, 'min'] },
+              { result: 'AC', score: 89, tries: 3 },
+              { result: 'AC', score: 90 },
+            ],
+          },
+        ],
+      });
+
+      const classic = await adapter.render({ data });
+      cleanups.push(classic.cleanup);
+      let statusCells = getStatusCells(classic.container);
+      expect(statusCells.map(textOf)).toEqual(['87 2/75min', '88 80min', '89 3', '90']);
+      expect(statusCells[3].querySelector('.srk-prest-status-block-score-details')).toBeFalsy();
+
+      const detailed = await adapter.render({ data, statusCellPreset: 'detailed' });
+      cleanups.push(detailed.cleanup);
+      statusCells = getStatusCells(detailed.container);
+      expect(statusCells.map(textOf)).toEqual(['87 2/1:15', '88 1:20', '89 3', '90']);
+      expect(statusCells[3].querySelector('.srk-prest-status-block-score-details')).toBeFalsy();
+
+      const minimal = await adapter.render({ data, statusCellPreset: 'minimal' });
+      cleanups.push(minimal.cleanup);
+      statusCells = getStatusCells(minimal.container);
+      expect(statusCells.map(textOf)).toEqual(['87', '88', '89', '90']);
+      expect(statusCells.map((cell) => cell.querySelector('.srk-prest-status-block-score-details'))).toEqual([
+        null,
+        null,
+        null,
+        null,
+      ]);
+
+      const compact = await adapter.render({ data, statusCellPreset: 'compact' });
+      cleanups.push(compact.cleanup);
+      statusCells = getStatusCells(compact.container);
+      expect(statusCells.map(textOf)).toEqual(['87 1:15', '88 1:20', '89', '90']);
+      expect(statusCells[0].querySelector('.srk-prest-status-block-score-details')?.textContent).toBe('1:15');
+      expect(statusCells[2].querySelector('.srk-prest-status-block-score-details')).toBeFalsy();
+    });
+
+    it('uses the partial status class for non-accepted score statuses in score sorter ranklists', async () => {
+      const scoreRanklist = makeRenderOptionsRanklist({
+        ...baseRanklist,
+        sorter: {
+          algorithm: 'score',
+          config: {},
+        } as any,
+        rows: [
+          {
+            ...baseRanklist.rows[0],
+            statuses: [
+              { result: 'AC', score: 100 },
+              { result: 'RJ', score: 40 },
+              { result: '?', score: 20 },
+              { result: 'RJ', score: 0 },
+              { result: '?', score: 0 },
+            ],
+          },
+        ],
+      });
+
+      const scoreRender = await adapter.render({ data: scoreRanklist });
+      cleanups.push(scoreRender.cleanup);
+      let statusCells = getStatusCells(scoreRender.container);
+      expect(statusCells[0].classList.contains('srk-prest-status-block-accepted')).toBe(true);
+      expect(statusCells[1].classList.contains('srk-prest-status-block-partial')).toBe(true);
+      expect(statusCells[1].classList.contains('srk-prest-status-block-failed')).toBe(false);
+      expect(statusCells[2].classList.contains('srk-prest-status-block-partial')).toBe(true);
+      expect(statusCells[2].classList.contains('srk-prest-status-block-frozen')).toBe(false);
+      expect(statusCells[3].classList.contains('srk-prest-status-block-failed')).toBe(true);
+      expect(statusCells[3].classList.contains('srk-prest-status-block-partial')).toBe(false);
+      expect(statusCells[4].classList.contains('srk-prest-status-block-failed')).toBe(true);
+      expect(statusCells[4].classList.contains('srk-prest-status-block-frozen')).toBe(false);
+      expect(statusCells[4].classList.contains('srk-prest-status-block-partial')).toBe(false);
+
+      const icpcRanklist = makeRenderOptionsRanklist({
+        ...baseRanklist,
+        rows: [
+          {
+            ...baseRanklist.rows[0],
+            statuses: [
+              { result: 'AC', score: 100 },
+              { result: 'RJ', score: 40 },
+              { result: '?', score: 20 },
+            ],
+          },
+        ],
+      });
+
+      const icpcRender = await adapter.render({ data: icpcRanklist });
+      cleanups.push(icpcRender.cleanup);
+      statusCells = getStatusCells(icpcRender.container);
+      expect(statusCells[1].classList.contains('srk-prest-status-block-failed')).toBe(true);
+      expect(statusCells[1].classList.contains('srk-prest-status-block-partial')).toBe(false);
+      expect(statusCells[2].classList.contains('srk-prest-status-block-frozen')).toBe(true);
+      expect(statusCells[2].classList.contains('srk-prest-status-block-partial')).toBe(false);
+    });
+
     it('formats status preset times from sorter precision', async () => {
       const secondsRanklist = makeRenderOptionsRanklist({
         ...baseRanklist,
@@ -559,6 +672,23 @@ export function describeRanklistRenderOptionsContract(adapter: RanklistRenderOpt
         'First Blood at, also known as first solve time, in minutes',
         'Last Blood at, also known as last solve time, in minutes',
       ]);
+    });
+
+    it('does not render problem header background images when problems have no color style', async () => {
+      const rendered = await adapter.render({
+        data: makeRenderOptionsRanklist(),
+        theme: EnumTheme.dark,
+        showProblemStatisticsFooter: true,
+      });
+      cleanups.push(rendered.cleanup);
+
+      const problemHeaderCells = Array.from(
+        rendered.container.querySelectorAll('thead th.srk-problem-header, tfoot .srk-problem-statistics-footer-problem-header'),
+      ) as HTMLElement[];
+      expect(problemHeaderCells.length).toBeGreaterThan(0);
+      expect(problemHeaderCells.map((cell) => cell.getAttribute('style') || '')).toEqual(
+        problemHeaderCells.map(() => expect.not.stringContaining('background-image')),
+      );
     });
 
     it('renders footer percentage fallbacks when there are no participants', async () => {

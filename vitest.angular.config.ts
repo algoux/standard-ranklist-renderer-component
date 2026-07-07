@@ -1,3 +1,4 @@
+import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 
@@ -7,6 +8,12 @@ export default defineConfig({
   root: fileURLToPath(new URL('.', import.meta.url)),
   define: {
     SRK_SUPPORTED_VERSIONS: JSON.stringify(pkg.srkSupportedVersions),
+  },
+  resolve: {
+    alias: {
+      '@algoux/standard-ranklist-renderer-component-core': resolve(__dirname, 'packages/core/src/index.ts'),
+      color: resolve(__dirname, 'packages/core/node_modules/color/index.js'),
+    },
   },
   esbuild: {
     tsconfigRaw: {

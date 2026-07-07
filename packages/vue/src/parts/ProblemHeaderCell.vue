@@ -22,7 +22,7 @@ import type * as srk from '@algoux/standard-ranklist';
 import { EnumTheme, numberToAlphabet, resolveText } from '@algoux/standard-ranklist-utils';
 import {
   captureModalTriggerPointFromMouseEvent,
-  getProblemHeaderBackgroundImage,
+  getProblemHeaderBackgroundImageIfStyled,
 } from '@algoux/standard-ranklist-renderer-component-core';
 import type {
   ProblemClickPayload,
@@ -53,7 +53,7 @@ const statDesc = computed(() => {
   const ratio = stat.value.submitted ? ((stat.value.accepted / stat.value.submitted) * 100).toFixed(1) : 0;
   return `${stat.value.accepted} / ${stat.value.submitted} (${ratio}%)`;
 });
-const backgroundImage = computed(() => getProblemHeaderBackgroundImage(props.problem.style, props.theme));
+const backgroundImage = computed(() => getProblemHeaderBackgroundImageIfStyled(props.problem.style, props.theme));
 
 function handleClick(event: MouseEvent) {
   if (!props.onProblemClick) {

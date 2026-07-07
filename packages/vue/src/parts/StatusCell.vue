@@ -1,15 +1,15 @@
 <template>
-  <td v-if="status.result === 'FB'" :class="[commonClassName, 'srk-prest-status-block-fb']" @click.prevent="emitSolutionClick">
+  <td v-if="status.result === 'FB'" :class="[commonClassName, statusResultClassName]" @click.prevent="emitSolutionClick">
     <span v-if="statusColorAsText" class="srk-prest-status-block-fb-star">{{ fbStar }}</span>
     <StatusBody :status="status" :ranklist="ranklist" :preset="statusCellPreset" />
   </td>
-  <td v-else-if="status.result === 'AC'" :class="[commonClassName, 'srk-prest-status-block-accepted']" @click.prevent="emitSolutionClick">
+  <td v-else-if="status.result === 'AC'" :class="[commonClassName, statusResultClassName]" @click.prevent="emitSolutionClick">
     <StatusBody :status="status" :ranklist="ranklist" :preset="statusCellPreset" />
   </td>
-  <td v-else-if="status.result === '?'" :class="[commonClassName, 'srk-prest-status-block-frozen']" @click.prevent="emitSolutionClick">
+  <td v-else-if="status.result === '?'" :class="[commonClassName, statusResultClassName]" @click.prevent="emitSolutionClick">
     <StatusBody :status="status" :ranklist="ranklist" :preset="statusCellPreset" />
   </td>
-  <td v-else-if="status.result === 'RJ'" :class="[commonClassName, 'srk-prest-status-block-failed']" @click.prevent="emitSolutionClick">
+  <td v-else-if="status.result === 'RJ'" :class="[commonClassName, statusResultClassName]" @click.prevent="emitSolutionClick">
     <StatusBody :status="status" :ranklist="ranklist" :preset="statusCellPreset" />
   </td>
   <td v-else class="srk-status-placeholder-cell srk--text-center srk--nowrap">{{ emptyStatusPlaceholder }}</td>
@@ -21,6 +21,7 @@ import type * as srk from '@algoux/standard-ranklist';
 import { resolveText } from '@algoux/standard-ranklist-utils';
 import {
   captureModalTriggerPointFromMouseEvent,
+  getRankProblemStatusCellClassName,
   getRankProblemStatusCellPresentation,
 } from '@algoux/standard-ranklist-renderer-component-core';
 import type {
@@ -55,6 +56,7 @@ const props = withDefaults(
 const fbStar = '\u2605';
 const solutions = computed(() => [...(props.status.solutions || [])].reverse());
 const isClickable = computed(() => solutions.value.length > 0 && !!props.onSolutionClick);
+const statusResultClassName = computed(() => getRankProblemStatusCellClassName(props.status, props.ranklist));
 const commonClassName = computed(() => [
   'srk-prest-status-block',
   'srk--text-center',
@@ -114,10 +116,11 @@ const StatusBody = defineComponent({
       const presentation = getRankProblemStatusCellPresentation(status, ranklist, preset);
 
       if (typeof presentation.score === 'number') {
-        return [
-          h('span', { class: 'srk-prest-status-block-score' }, presentation.score),
-          h('span', { class: 'srk-prest-status-block-score-details' }, presentation.scoreDetails),
-        ];
+        const children = [h('span', { class: 'srk-prest-status-block-score' }, presentation.score)];
+        if (presentation.scoreDetails !== undefined) {
+          children.push(' ', h('span', { class: 'srk-prest-status-block-score-details' }, presentation.scoreDetails));
+        }
+        return children;
       }
 
       if (presentation.secondary !== undefined) {

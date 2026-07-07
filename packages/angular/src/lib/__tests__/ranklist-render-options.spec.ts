@@ -8,6 +8,7 @@ import {
   type ComponentRef,
 } from '@angular/core';
 import { createApplication } from '@angular/platform-browser';
+import { EnumTheme } from '@algoux/standard-ranklist-utils';
 import { describeRanklistRenderOptionsContract } from '../../../../../tests/shared/ranklist-render-options-contract';
 import type { RanklistRenderOptionsProps } from '../../../../../tests/shared/ranklist-render-options-contract';
 import { RanklistComponent } from '../index';
@@ -18,6 +19,7 @@ import { RanklistComponent } from '../index';
   template: `
     <srk-ranklist
       [data]="data"
+      [theme]="theme"
       [splitOrganization]="splitOrganization"
       [columnTitles]="columnTitles"
       [statusCellPreset]="statusCellPreset"
@@ -34,6 +36,7 @@ import { RanklistComponent } from '../index';
 })
 class RenderOptionsHostComponent {
   data!: RanklistRenderOptionsProps['data'];
+  theme: RanklistRenderOptionsProps['theme'] = EnumTheme.light;
   splitOrganization?: RanklistRenderOptionsProps['splitOrganization'];
   columnTitles?: RanklistRenderOptionsProps['columnTitles'];
   statusCellPreset?: RanklistRenderOptionsProps['statusCellPreset'];

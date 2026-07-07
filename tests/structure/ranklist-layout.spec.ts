@@ -36,13 +36,28 @@ describe('ranklist layout styles', () => {
   });
 
   it('renders footer problem labels with the reversed problem header gradient', () => {
-    expect(reactRanklistSource).toContain('getProblemHeaderBackgroundImage(problem.style, this.props.theme!, 0)');
+    expect(reactRanklistSource).toContain('getProblemHeaderBackgroundStyle(problem.style, this.props.theme!, 0)');
   });
 
   it('positions footer statistics tooltips from the label text on the left side', () => {
     expect(normalizedSource).toContain('pointer-events: none;');
     expect(normalizedSource).toContain(
       '&.srk--c-tooltip::after { top: 50%; right: calc(100% + 8px); bottom: auto; left: auto; transform: translateY(-50%); }',
+    );
+  });
+
+  it('defines partial status colors between accepted and failed status colors', async () => {
+    const css = (await less.render(source)).css.replace(/\s+/g, ' ');
+
+    expect(source.indexOf('--srk-color-accepted-bg')).toBeLessThan(source.indexOf('--srk-color-partial-bg'));
+    expect(source.indexOf('--srk-color-partial-bg')).toBeLessThan(source.indexOf('--srk-color-failed-bg'));
+    expect(source.indexOf('--srk-color-accepted-text')).toBeLessThan(source.indexOf('--srk-color-partial-text'));
+    expect(source.indexOf('--srk-color-partial-text')).toBeLessThan(source.indexOf('--srk-color-failed-text'));
+    expect(normalizedSource).toContain('--srk-color-partial-bg:');
+    expect(normalizedSource).toContain('--srk-color-partial-text:');
+    expect(css).toContain('.srk-main .srk-prest-status-block-partial { background: var(--srk-color-partial-bg); }');
+    expect(css).toContain(
+      '.srk-main .srk-prest-status-block-color-text.srk-prest-status-block-partial { color: var(--srk-color-partial-text); }',
     );
   });
 

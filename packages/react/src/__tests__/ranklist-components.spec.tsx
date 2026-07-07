@@ -1,7 +1,9 @@
 import React from 'react';
 import type * as srk from '@algoux/standard-ranklist';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { EnumTheme } from '@algoux/standard-ranklist-utils';
 import { getRecentModalTriggerPoint, resetModalInteractionStateForTests } from '@algoux/standard-ranklist-renderer-component-core';
+import * as core from '@algoux/standard-ranklist-renderer-component-core';
 import {
   convertToStaticRanklist,
   Ranklist,
@@ -23,6 +25,12 @@ const makeLinkedProblemRanklist = () => {
     title: 'Linked Alpha Problem',
     link: 'https://example.com/problems/alpha',
   };
+  return data;
+};
+
+const makeUnstyledProblemsRanklist = () => {
+  const data = makeStaticRanklist();
+  data.problems = data.problems.map(({ style: _style, ...problem }: srk.Problem) => problem);
   return data;
 };
 
@@ -121,6 +129,7 @@ describeRanklistInteractionContract({
 describe('React ranklist component overrides', () => {
   afterEach(() => {
     cleanup();
+    vi.restoreAllMocks();
     resetModalInteractionStateForTests();
   });
 
@@ -169,6 +178,29 @@ describe('React ranklist component overrides', () => {
     expect(problemHeader).toBeTruthy();
     expect(problemHeader?.classList.contains('srk--cursor-pointer')).toBe(false);
     expect(problemHeader?.querySelector('a')?.getAttribute('href')).toBe('https://example.com/problems/alpha');
+  });
+
+  it('does not apply problem header background images when problems have no style', () => {
+    const backgroundImageSpy = vi.spyOn(core, 'getProblemHeaderBackgroundImage');
+
+    const { container } = render(
+      <Ranklist data={makeUnstyledProblemsRanklist()} theme={EnumTheme.dark} showProblemStatisticsFooter />,
+    );
+
+    const headers = Array.from(container.querySelectorAll('thead th.srk-problem-header')) as HTMLElement[];
+    const footerHeaders = Array.from(
+      container.querySelectorAll('tfoot td.srk-problem-statistics-footer-problem-header'),
+    ) as HTMLElement[];
+
+    expect(headers).not.toHaveLength(0);
+    expect(footerHeaders).not.toHaveLength(0);
+    headers.forEach((header) => {
+      expect(header.style.backgroundImage).toBe('');
+    });
+    footerHeaders.forEach((header) => {
+      expect(header.style.backgroundImage).toBe('');
+    });
+    expect(backgroundImageSpy).not.toHaveBeenCalled();
   });
 
   it('emits problem-click payloads from problem headers and suppresses link anchors', () => {

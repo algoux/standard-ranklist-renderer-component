@@ -4,7 +4,7 @@ import type * as srk from '@algoux/standard-ranklist';
 import { EnumTheme, numberToAlphabet, resolveText } from '@algoux/standard-ranklist-utils';
 import {
   captureModalTriggerPointFromMouseEvent,
-  getProblemHeaderBackgroundImage,
+  getProblemHeaderBackgroundImageIfStyled,
 } from '@algoux/standard-ranklist-renderer-component-core';
 import type {
   ProblemClickPayload,
@@ -18,6 +18,20 @@ export interface ProblemHeaderCellProps {
   theme: EnumTheme;
   onProblemClick?: (payload: ProblemClickPayload) => void | Promise<void>;
   languages?: readonly string[];
+}
+
+export function getProblemHeaderBackgroundStyle(
+  style: srk.Style | undefined,
+  theme: EnumTheme,
+  gradientDirection?: number,
+): React.CSSProperties | undefined {
+  const backgroundImage = getProblemHeaderBackgroundImageIfStyled(style, theme, gradientDirection);
+  if (!backgroundImage) {
+    return undefined;
+  }
+  return {
+    backgroundImage,
+  };
 }
 
 export function ProblemHeaderCell({
@@ -80,7 +94,7 @@ export function ProblemHeaderCell({
             }
           : undefined
       }
-      style={{ backgroundImage: getProblemHeaderBackgroundImage(problem.style, theme) }}
+      style={getProblemHeaderBackgroundStyle(problem.style, theme)}
     >
       {cellComp}
     </th>

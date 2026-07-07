@@ -4,6 +4,7 @@ import type * as srk from '@algoux/standard-ranklist';
 import { resolveText } from '@algoux/standard-ranklist-utils';
 import {
   captureModalTriggerPointFromMouseEvent,
+  getRankProblemStatusCellClassName,
   getRankProblemStatusCellPresentation,
 } from '@algoux/standard-ranklist-renderer-component-core';
 import type {
@@ -80,7 +81,11 @@ export function StatusCell({
 
   if (status.result === 'FB') {
     return (
-      <td key={problemKey} onClick={onClick} className={classnames(commonClassName, 'srk-prest-status-block-fb')}>
+      <td
+        key={problemKey}
+        onClick={onClick}
+        className={classnames(commonClassName, getRankProblemStatusCellClassName(status, ranklist))}
+      >
         {statusColorAsText && <span className="srk-prest-status-block-fb-star">★</span>}
         {renderStatusBody(status, ranklist, statusCellPreset)}
       </td>
@@ -88,21 +93,33 @@ export function StatusCell({
   }
   if (status.result === 'AC') {
     return (
-      <td key={problemKey} onClick={onClick} className={classnames(commonClassName, 'srk-prest-status-block-accepted')}>
+      <td
+        key={problemKey}
+        onClick={onClick}
+        className={classnames(commonClassName, getRankProblemStatusCellClassName(status, ranklist))}
+      >
         {renderStatusBody(status, ranklist, statusCellPreset)}
       </td>
     );
   }
   if (status.result === '?') {
     return (
-      <td key={problemKey} onClick={onClick} className={classnames(commonClassName, 'srk-prest-status-block-frozen')}>
+      <td
+        key={problemKey}
+        onClick={onClick}
+        className={classnames(commonClassName, getRankProblemStatusCellClassName(status, ranklist))}
+      >
         {renderStatusBody(status, ranklist, statusCellPreset)}
       </td>
     );
   }
   if (status.result === 'RJ') {
     return (
-      <td key={problemKey} onClick={onClick} className={classnames(commonClassName, 'srk-prest-status-block-failed')}>
+      <td
+        key={problemKey}
+        onClick={onClick}
+        className={classnames(commonClassName, getRankProblemStatusCellClassName(status, ranklist))}
+      >
         {renderStatusBody(status, ranklist, statusCellPreset)}
       </td>
     );
@@ -123,6 +140,20 @@ function renderStatusBody(
   return renderStatusPresentation(getRankProblemStatusCellPresentation(status, ranklist, preset));
 }
 
+function renderScoreStatus(score: number, details: string | undefined) {
+  return (
+    <>
+      <span className="srk-prest-status-block-score">{score}</span>
+      {details !== undefined && (
+        <>
+          {' '}
+          <span className="srk-prest-status-block-score-details">{details}</span>
+        </>
+      )}
+    </>
+  );
+}
+
 function renderTwoLineStatusBody(primary: string, secondary: string) {
   return (
     <>
@@ -135,12 +166,7 @@ function renderTwoLineStatusBody(primary: string, secondary: string) {
 
 function renderStatusPresentation(presentation: ReturnType<typeof getRankProblemStatusCellPresentation>) {
   if (typeof presentation.score === 'number') {
-    return (
-      <>
-        <span className="srk-prest-status-block-score">{presentation.score}</span>
-        <span className="srk-prest-status-block-score-details">{presentation.scoreDetails}</span>
-      </>
-    );
+    return renderScoreStatus(presentation.score, presentation.scoreDetails);
   }
 
   if (presentation.secondary !== undefined) {

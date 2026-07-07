@@ -351,6 +351,111 @@ describe('React ranklist render option props', () => {
     expect(statusCells[1].querySelector('.srk-prest-status-block-secondary')).toBeFalsy();
   });
 
+  it('renders score status cells for each preset without missing tries or time placeholders', () => {
+    const data = makeStaticRanklist({
+      ...baseRanklist,
+      problems: [
+        { alias: 'A', title: 'Score Complete' },
+        { alias: 'B', title: 'Score Time Only' },
+        { alias: 'C', title: 'Score Tries Only' },
+        { alias: 'D', title: 'Score Only' },
+      ],
+      rows: [
+        {
+          ...baseRanklist.rows[0],
+          statuses: [
+            { result: 'AC', score: 87, time: [75, 'min'], tries: 2 },
+            { result: 'AC', score: 88, time: [80, 'min'] },
+            { result: 'AC', score: 89, tries: 3 },
+            { result: 'AC', score: 90 },
+          ],
+        },
+      ],
+    });
+
+    const { container, rerender } = render(<Ranklist data={data as any} />);
+    let statusCells = getStatusCells(container);
+    expect(statusCells.map(textOf)).toEqual(['87 2/75min', '88 80min', '89 3', '90']);
+    expect(statusCells[3].querySelector('.srk-prest-status-block-score-details')).toBeFalsy();
+
+    rerender(<Ranklist data={data as any} statusCellPreset="detailed" />);
+    statusCells = getStatusCells(container);
+    expect(statusCells.map(textOf)).toEqual(['87 2/1:15', '88 1:20', '89 3', '90']);
+    expect(statusCells[3].querySelector('.srk-prest-status-block-score-details')).toBeFalsy();
+
+    rerender(<Ranklist data={data as any} statusCellPreset="minimal" />);
+    statusCells = getStatusCells(container);
+    expect(statusCells.map(textOf)).toEqual(['87', '88', '89', '90']);
+    expect(statusCells.map((cell) => cell.querySelector('.srk-prest-status-block-score-details'))).toEqual([
+      null,
+      null,
+      null,
+      null,
+    ]);
+
+    rerender(<Ranklist data={data as any} statusCellPreset="compact" />);
+    statusCells = getStatusCells(container);
+    expect(statusCells.map(textOf)).toEqual(['87 1:15', '88 1:20', '89', '90']);
+    expect(statusCells[0].querySelector('.srk-prest-status-block-score-details')?.textContent).toBe('1:15');
+    expect(statusCells[2].querySelector('.srk-prest-status-block-score-details')).toBeFalsy();
+  });
+
+  it('uses the partial status class for non-accepted score statuses in score sorter ranklists', () => {
+    const scoreRanklist = makeStaticRanklist({
+      ...baseRanklist,
+      sorter: {
+        algorithm: 'score',
+        config: {},
+      } as any,
+      rows: [
+        {
+          ...baseRanklist.rows[0],
+          statuses: [
+            { result: 'AC', score: 100 },
+            { result: 'RJ', score: 40 },
+            { result: '?', score: 20 },
+            { result: 'RJ', score: 0 },
+            { result: '?', score: 0 },
+          ],
+        },
+      ],
+    });
+
+    const { container, rerender } = render(<Ranklist data={scoreRanklist as any} />);
+    let statusCells = getStatusCells(container);
+    expect(statusCells[0].classList.contains('srk-prest-status-block-accepted')).toBe(true);
+    expect(statusCells[1].classList.contains('srk-prest-status-block-partial')).toBe(true);
+    expect(statusCells[1].classList.contains('srk-prest-status-block-failed')).toBe(false);
+    expect(statusCells[2].classList.contains('srk-prest-status-block-partial')).toBe(true);
+    expect(statusCells[2].classList.contains('srk-prest-status-block-frozen')).toBe(false);
+    expect(statusCells[3].classList.contains('srk-prest-status-block-failed')).toBe(true);
+    expect(statusCells[3].classList.contains('srk-prest-status-block-partial')).toBe(false);
+    expect(statusCells[4].classList.contains('srk-prest-status-block-failed')).toBe(true);
+    expect(statusCells[4].classList.contains('srk-prest-status-block-frozen')).toBe(false);
+    expect(statusCells[4].classList.contains('srk-prest-status-block-partial')).toBe(false);
+
+    const icpcRanklist = makeStaticRanklist({
+      ...baseRanklist,
+      rows: [
+        {
+          ...baseRanklist.rows[0],
+          statuses: [
+            { result: 'AC', score: 100 },
+            { result: 'RJ', score: 40 },
+            { result: '?', score: 20 },
+          ],
+        },
+      ],
+    });
+
+    rerender(<Ranklist data={icpcRanklist as any} />);
+    statusCells = getStatusCells(container);
+    expect(statusCells[1].classList.contains('srk-prest-status-block-failed')).toBe(true);
+    expect(statusCells[1].classList.contains('srk-prest-status-block-partial')).toBe(false);
+    expect(statusCells[2].classList.contains('srk-prest-status-block-frozen')).toBe(true);
+    expect(statusCells[2].classList.contains('srk-prest-status-block-partial')).toBe(false);
+  });
+
   it('formats status preset times from sorter precision', () => {
     const secondsRanklist = makeStaticRanklist({
       ...baseRanklist,

@@ -96,6 +96,17 @@ export function getProblemHeaderBackgroundImage(
   return `linear-gradient(${gradientDirection}deg, ${bgColorStr} 0%, ${bgColorStr} 10%, ${bgColorAlphaStr} 10%, transparent 100%)`;
 }
 
+export function getProblemHeaderBackgroundImageIfStyled(
+  style: srk.Style | undefined,
+  theme: EnumTheme,
+  gradientDirection = 180,
+): string | undefined {
+  if (!style || !resolveStyle(style).backgroundColor[theme]) {
+    return undefined;
+  }
+  return getProblemHeaderBackgroundImage(style, theme, gradientDirection);
+}
+
 export function getMarkerPresentation(marker: srk.Marker, theme: EnumTheme): MarkerPresentation {
   if (typeof marker.style === 'string') {
     return { className: `srk-preset-marker-${marker.style}` };
@@ -168,6 +179,36 @@ export function getRankProblemStatusTries(status: srk.RankProblemStatus | undefi
   return status?.tries || 0;
 }
 
+export function getRankProblemStatusCellClassName(
+  status: srk.RankProblemStatus,
+  ranklist: srk.Ranklist,
+): string | undefined {
+  if (!status.result) {
+    return undefined;
+  }
+
+  if (isPartialScoreRankProblemStatus(status, ranklist)) {
+    return 'srk-prest-status-block-partial';
+  }
+  if (isFailedScoreRankProblemStatus(status, ranklist)) {
+    return 'srk-prest-status-block-failed';
+  }
+
+  if (status.result === 'FB') {
+    return 'srk-prest-status-block-fb';
+  }
+  if (status.result === 'AC') {
+    return 'srk-prest-status-block-accepted';
+  }
+  if (status.result === '?') {
+    return 'srk-prest-status-block-frozen';
+  }
+  if (status.result === 'RJ') {
+    return 'srk-prest-status-block-failed';
+  }
+  return undefined;
+}
+
 export function getLastPenaltySolution(
   status: srk.RankProblemStatus,
   ranklist: srk.Ranklist,
@@ -214,15 +255,16 @@ export function getRankProblemStatusCellPresentation(
     return {};
   }
 
+  if (typeof status.score === 'number') {
+    return {
+      score: status.score,
+      scoreDetails: getScoreStatusDetails(status, ranklist, preset),
+    };
+  }
+
   if (preset === 'classic') {
     if (isAcceptedRankProblemStatus(status)) {
       const details = getAcceptedStatusDetails(status);
-      if (typeof status.score === 'number') {
-        return {
-          score: status.score,
-          scoreDetails: details,
-        };
-      }
       return { primary: details };
     }
 
@@ -272,6 +314,58 @@ export function getRankProblemStatusCellPresentation(
   }
 
   return {};
+}
+
+function isPartialScoreRankProblemStatus(status: srk.RankProblemStatus, ranklist: srk.Ranklist): boolean {
+  return (
+    ranklist.sorter?.algorithm === 'score' &&
+    status.result !== 'AC' &&
+    status.result !== 'FB' &&
+    typeof status.score === 'number' &&
+    status.score > 0
+  );
+}
+
+function isFailedScoreRankProblemStatus(status: srk.RankProblemStatus, ranklist: srk.Ranklist): boolean {
+  return (
+    ranklist.sorter?.algorithm === 'score' &&
+    status.result !== 'AC' &&
+    status.result !== 'FB' &&
+    typeof status.score === 'number' &&
+    status.score === 0
+  );
+}
+
+function getScoreStatusDetails(
+  status: srk.RankProblemStatus,
+  ranklist: srk.Ranklist,
+  preset: RanklistStatusCellPreset,
+): string | undefined {
+  if (preset === 'minimal') {
+    return undefined;
+  }
+
+  if (preset === 'compact') {
+    return status.time ? formatRanklistStatusTime(status.time, ranklist) : undefined;
+  }
+
+  const time = status.time ? formatScoreStatusTime(status.time, ranklist, preset) : undefined;
+  const parts = [typeof status.tries === 'number' ? String(status.tries) : undefined, time].filter(
+    (part): part is string => part !== undefined,
+  );
+  return parts.length > 0 ? parts.join('/') : undefined;
+}
+
+function formatScoreStatusTime(
+  time: srk.TimeDuration,
+  ranklist: srk.Ranklist,
+  preset: RanklistStatusCellPreset,
+): string {
+  if (preset === 'detailed') {
+    return formatRanklistStatusTime(time, ranklist);
+  }
+
+  return `${formatTimeDuration(time, 'min', Math.floor)}min`;
 }
 
 export function calculateDirtPercentage(row: Pick<StaticRanklistRow, 'statuses'>): string {

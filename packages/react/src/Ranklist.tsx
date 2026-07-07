@@ -17,7 +17,6 @@ import {
   formatProblemStatisticsAcceptedMinute,
   formatProblemStatisticsAverageHardness,
   formatProblemStatisticsPercent,
-  getProblemHeaderBackgroundImage,
   resolveSrkAssetUrl,
   shouldShowTimeColumn,
   srkSupportedVersions,
@@ -32,7 +31,7 @@ import type {
   StaticRanklist,
   UserClickPayload,
 } from '@algoux/standard-ranklist-renderer-component-core';
-import { ProblemHeaderCell } from './internal/ProblemHeaderCell';
+import { getProblemHeaderBackgroundStyle, ProblemHeaderCell } from './internal/ProblemHeaderCell';
 import type { ProblemHeaderCellProps } from './internal/ProblemHeaderCell';
 import { StatusCell } from './internal/StatusCell';
 import type { StatusCellProps } from './internal/StatusCell';
@@ -370,7 +369,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
             <td
               key={problem.alias || this.resolveDisplayText(problem.title) || index}
               className="srk-problem-statistics-footer-cell srk-problem-statistics-footer-problem-header srk-problem-header srk--text-center srk--nowrap"
-              style={{ backgroundImage: getProblemHeaderBackgroundImage(problem.style, this.props.theme!, 0) }}
+              style={getProblemHeaderBackgroundStyle(problem.style, this.props.theme!, 0)}
             >
               <span className="srk--display-block">{problem.alias || numberToAlphabet(index)}</span>
             </td>

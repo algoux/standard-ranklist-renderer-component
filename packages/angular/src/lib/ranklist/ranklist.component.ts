@@ -26,7 +26,8 @@ import {
   formatProblemStatisticsAverageHardness,
   formatProblemStatisticsPercent,
   getMarkerPresentation,
-  getProblemHeaderBackgroundImage,
+  getProblemHeaderBackgroundImageIfStyled,
+  getRankProblemStatusCellClassName,
   getRankProblemStatusCellPresentation,
   resolveSrkAssetUrl,
   shouldShowTimeColumn,
@@ -274,9 +275,13 @@ import {
                     <ng-container *ngIf="statusPresentation(status) as presentation">
                       <ng-container *ngIf="isNumber(presentation.score); else statusText">
                         <span class="srk-prest-status-block-score">{{ presentation.score }}</span>
-                        <span class="srk-prest-status-block-score-details">
-                          {{ presentation.scoreDetails }}
-                        </span>
+                        <ng-container *ngIf="presentation.scoreDetails !== undefined">
+                          <span [textContent]="statusSeparator"></span>
+                          <span
+                            class="srk-prest-status-block-score-details"
+                            [textContent]="presentation.scoreDetails"
+                          ></span>
+                        </ng-container>
                       </ng-container>
                       <ng-template #statusText>
                         <ng-container *ngIf="presentation.secondary !== undefined; else singleStatus">
@@ -299,12 +304,24 @@ import {
                       (keydown.space)="activateStatusCellFromKeyboard($event, row, rowIndex, status, problemIndex)"
                     >
                       <ng-container *ngIf="statusPresentation(status) as presentation">
-                        <ng-container *ngIf="presentation.secondary !== undefined; else singleStatus">
-                          <span class="srk-prest-status-block-primary">{{ presentation.primary || '' }}</span>
-                          <span [textContent]="statusSeparator"></span>
-                          <span class="srk-prest-status-block-secondary">{{ presentation.secondary }}</span>
+                        <ng-container *ngIf="isNumber(presentation.score); else failedStatusText">
+                          <span class="srk-prest-status-block-score">{{ presentation.score }}</span>
+                          <ng-container *ngIf="presentation.scoreDetails !== undefined">
+                            <span [textContent]="statusSeparator"></span>
+                            <span
+                              class="srk-prest-status-block-score-details"
+                              [textContent]="presentation.scoreDetails"
+                            ></span>
+                          </ng-container>
                         </ng-container>
-                        <ng-template #singleStatus>{{ presentation.primary }}</ng-template>
+                        <ng-template #failedStatusText>
+                          <ng-container *ngIf="presentation.secondary !== undefined; else singleStatus">
+                            <span class="srk-prest-status-block-primary">{{ presentation.primary || '' }}</span>
+                            <span [textContent]="statusSeparator"></span>
+                            <span class="srk-prest-status-block-secondary">{{ presentation.secondary }}</span>
+                          </ng-container>
+                          <ng-template #singleStatus>{{ presentation.primary }}</ng-template>
+                        </ng-template>
                       </ng-container>
                     </td>
                   </ng-template>
@@ -536,7 +553,7 @@ export class RanklistComponent {
   }
 
   problemHeaderBackgroundImage(problem: srk.Problem, gradientDirection = 180) {
-    return getProblemHeaderBackgroundImage(problem.style, this.theme, gradientDirection);
+    return getProblemHeaderBackgroundImageIfStyled(problem.style, this.theme, gradientDirection);
   }
 
   resolvedUserMarkers(user: srk.User) {
@@ -582,14 +599,9 @@ export class RanklistComponent {
     if (this.statusColorAsText) {
       classNames.push('srk-prest-status-block-color-text');
     }
-    if (status.result === 'FB') {
-      classNames.push('srk-prest-status-block-fb');
-    } else if (status.result === 'AC') {
-      classNames.push('srk-prest-status-block-accepted');
-    } else if (status.result === '?') {
-      classNames.push('srk-prest-status-block-frozen');
-    } else if (status.result === 'RJ') {
-      classNames.push('srk-prest-status-block-failed');
+    const resultClassName = getRankProblemStatusCellClassName(status, this.data);
+    if (resultClassName) {
+      classNames.push(resultClassName);
     }
     return classNames.join(' ');
   }

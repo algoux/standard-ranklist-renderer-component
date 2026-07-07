@@ -214,7 +214,7 @@
             v-for="(problem, problemIndex) in data.problems"
             :key="problem.alias || resolveDisplayText(problem.title) || problemIndex"
             class="srk-problem-statistics-footer-cell srk-problem-statistics-footer-problem-header srk-problem-header srk--text-center srk--nowrap"
-            :style="{ backgroundImage: getProblemHeaderBackgroundImage(problem.style, resolvedTheme, 0) }"
+            :style="{ backgroundImage: getProblemHeaderBackgroundImageIfStyled(problem.style, resolvedTheme, 0) }"
           >
             <span class="srk--display-block">{{ problem.alias || numberToAlphabet(problemIndex) }}</span>
           </td>
@@ -256,7 +256,7 @@ import {
   formatProblemStatisticsAcceptedMinute,
   formatProblemStatisticsAverageHardness,
   formatProblemStatisticsPercent,
-  getProblemHeaderBackgroundImage,
+  getProblemHeaderBackgroundImageIfStyled,
   resolveSrkAssetUrl,
   shouldShowTimeColumn,
   srkSupportedVersions,

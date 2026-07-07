@@ -62,7 +62,7 @@ describe('Svelte local demo app', () => {
     await fireEvent.change(getField(container, 'Status preset'), { target: { value: 'minimal' } });
     await tick();
     expect((getField(container, 'Status preset') as HTMLSelectElement).value).toBe('minimal');
-    expect(textOf(getAcceptedStatusCell(container))).toBe('+');
+    expect(textOf(getAcceptedStatusCell(container))).toBe('100');
     await fireEvent.change(getField(container, 'Empty status placeholder'), { target: { value: '-' } });
     await tick();
     expect((getField(container, 'Empty status placeholder') as HTMLSelectElement).value).toBe('-');

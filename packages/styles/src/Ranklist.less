@@ -175,15 +175,17 @@
 :root {
   --srk-color-user-second-name: #828282;
   --srk-color-accepted-bg: #99ff99;
+  --srk-color-partial-bg: #ffeb99;
   --srk-color-failed-bg: #ff9999;
   --srk-color-frozen-bg: #c8d6fa;
   --srk-color-fb-bg: #009900;
   --srk-color-fb-text: #ffffff;
   --srk-color-fb-attempted-text: #f0f0f0;
-  --srk-color-accepted-text: #007f04;
-  --srk-color-failed-text: #b00000;
+  --srk-color-accepted-text: #009905;
+  --srk-color-partial-text: #e2a010;
+  --srk-color-failed-text: #c83939;
   --srk-color-frozen-text: #304fa5;
-  --srk-color-fb-status-text: #007f04;
+  --srk-color-fb-status-text: #009905;
   --srk-color-gold: #f8bf29;
   --srk-color-silver: #c0c0c0;
   --srk-color-bronze: #d69872;
@@ -199,12 +201,14 @@
   @media screen and (prefers-color-scheme: dark) {
     --srk-color-user-second-name: #a5a5a5;
     --srk-color-accepted-bg: #084b00;
+    --srk-color-partial-bg: #695203;
     --srk-color-failed-bg: #690700;
     --srk-color-frozen-bg: #2f4a8e;
     --srk-color-fb-bg: #248e18;
     --srk-color-fb-text: #ffffff;
     --srk-color-fb-attempted-text: #f0f0f0;
     --srk-color-accepted-text: #5ce667;
+    --srk-color-partial-text: #ffd666;
     --srk-color-failed-text: #ff7373;
     --srk-color-frozen-text: #8fa4ff;
     --srk-color-fb-status-text: #5ce667;
@@ -319,6 +323,10 @@
     background: var(--srk-color-accepted-bg);
   }
 
+  .srk-prest-status-block-partial {
+    background: var(--srk-color-partial-bg);
+  }
+
   .srk-prest-status-block-failed {
     background: var(--srk-color-failed-bg);
   }
@@ -342,6 +350,10 @@
 
     &.srk-prest-status-block-accepted {
       color: var(--srk-color-accepted-text);
+    }
+
+    &.srk-prest-status-block-partial {
+      color: var(--srk-color-partial-text);
     }
 
     &.srk-prest-status-block-failed {

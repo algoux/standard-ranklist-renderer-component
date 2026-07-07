@@ -19,7 +19,8 @@ import {
   formatProblemStatisticsAverageHardness,
   formatProblemStatisticsPercent,
   getMarkerPresentation,
-  getProblemHeaderBackgroundImage,
+  getProblemHeaderBackgroundImageIfStyled,
+  getRankProblemStatusCellClassName,
   getRankProblemStatusCellPresentation,
   resolveSrkAssetUrl,
   shouldShowTimeColumn,
@@ -269,7 +270,7 @@ export function Ranklist(props: RanklistProps) {
                             emitProblemClick(event, problem, index, onProblemClick);
                           }
                         }}
-                        style={{ 'background-image': getProblemHeaderBackgroundImage(problem.style, theme()) }}
+                        style={{ 'background-image': getProblemHeaderBackgroundImageIfStyled(problem.style, theme()) }}
                       >
                         <Show
                           when={problem.link && !onProblemClick ? problem.link : undefined}
@@ -508,6 +509,7 @@ function StatusCell(
     `srk-prest-status-block srk--text-center srk--nowrap${
       props.statusColorAsText ? ' srk-prest-status-block-color-text' : ''
     }`;
+  const statusClass = () => [commonClass(), getRankProblemStatusCellClassName(props.status, props.ranklist)].filter(Boolean).join(' ');
   const onClick = (event: MouseEvent) => {
     event.preventDefault();
     if (isClickable()) {
@@ -524,7 +526,7 @@ function StatusCell(
 
   if (props.status.result === 'FB') {
     return (
-      <td class={`${commonClass()} srk-prest-status-block-fb`} classList={{ 'srk--cursor-pointer': isClickable() }} onClick={onClick}>
+      <td class={statusClass()} classList={{ 'srk--cursor-pointer': isClickable() }} onClick={onClick}>
         <Show when={props.statusColorAsText}>
           <span class="srk-prest-status-block-fb-star">{'\u2605'}</span>
         </Show>
@@ -534,21 +536,21 @@ function StatusCell(
   }
   if (props.status.result === 'AC') {
     return (
-      <td class={`${commonClass()} srk-prest-status-block-accepted`} classList={{ 'srk--cursor-pointer': isClickable() }} onClick={onClick}>
+      <td class={statusClass()} classList={{ 'srk--cursor-pointer': isClickable() }} onClick={onClick}>
         {body}
       </td>
     );
   }
   if (props.status.result === '?') {
     return (
-      <td class={`${commonClass()} srk-prest-status-block-frozen`} classList={{ 'srk--cursor-pointer': isClickable() }} onClick={onClick}>
+      <td class={statusClass()} classList={{ 'srk--cursor-pointer': isClickable() }} onClick={onClick}>
         {body}
       </td>
     );
   }
   if (props.status.result === 'RJ') {
     return (
-      <td class={`${commonClass()} srk-prest-status-block-failed`} classList={{ 'srk--cursor-pointer': isClickable() }} onClick={onClick}>
+      <td class={statusClass()} classList={{ 'srk--cursor-pointer': isClickable() }} onClick={onClick}>
         {body}
       </td>
     );
@@ -579,7 +581,10 @@ function StatusBody(props: {
     >
       <>
         <span class="srk-prest-status-block-score">{presentation().score}</span>
-        <span class="srk-prest-status-block-score-details">{presentation().scoreDetails}</span>
+        <Show when={presentation().scoreDetails !== undefined}>
+          {' '}
+          <span class="srk-prest-status-block-score-details">{presentation().scoreDetails}</span>
+        </Show>
       </>
     </Show>
   );
@@ -746,7 +751,7 @@ function ProblemStatisticsFooterRows(props: {
           {(problem, problemIndex) => (
             <td
               class="srk-problem-statistics-footer-cell srk-problem-statistics-footer-problem-header srk-problem-header srk--text-center srk--nowrap"
-              style={{ 'background-image': getProblemHeaderBackgroundImage(problem.style, props.theme, 0) }}
+              style={{ 'background-image': getProblemHeaderBackgroundImageIfStyled(problem.style, props.theme, 0) }}
             >
               <span class="srk--display-block">{problem.alias || numberToAlphabet(problemIndex())}</span>
             </td>
