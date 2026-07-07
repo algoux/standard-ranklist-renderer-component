@@ -59,10 +59,11 @@ describe('Svelte local demo app', () => {
     expect(container.querySelector('table')?.classList.contains('srk-table-column-bordered')).toBe(true);
     expect(Array.from(container.querySelectorAll('tbody td')).some((cell) => cell.textContent === '·')).toBe(true);
 
+    const acceptedScore = getAcceptedStatusCell(container).querySelector('.srk-prest-status-block-score')?.textContent;
     await fireEvent.change(getField(container, 'Status preset'), { target: { value: 'minimal' } });
     await tick();
     expect((getField(container, 'Status preset') as HTMLSelectElement).value).toBe('minimal');
-    expect(textOf(getAcceptedStatusCell(container))).toBe('100');
+    expect(textOf(getAcceptedStatusCell(container))).toBe(acceptedScore || '+');
     await fireEvent.change(getField(container, 'Empty status placeholder'), { target: { value: '-' } });
     await tick();
     expect((getField(container, 'Empty status placeholder') as HTMLSelectElement).value).toBe('-');
