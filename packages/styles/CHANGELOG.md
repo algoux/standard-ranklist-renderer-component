@@ -1,5 +1,11 @@
 # @algoux/standard-ranklist-renderer-component-styles
 
+## 0.6.2
+
+### Patch Changes
+
+- d43c539: Improve score status rendering, partial score styling, and unstyled problem-header backgrounds across framework renderers.
+
 ## 0.6.1
 
 ### Patch Changes
