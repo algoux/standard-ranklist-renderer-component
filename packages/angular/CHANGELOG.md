@@ -1,5 +1,13 @@
 # @algoux/standard-ranklist-renderer-component-angular
 
+## 0.6.5
+
+### Patch Changes
+
+- d43c539: Improve score status rendering, partial score styling, and unstyled problem-header backgrounds across framework renderers.
+- Updated dependencies [d43c539]
+  - @algoux/standard-ranklist-renderer-component-core@0.6.4
+
 ## 0.6.4
 
 ### Patch Changes
