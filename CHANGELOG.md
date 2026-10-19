@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.4.16
+
+- Supported srk@0.3.14.
+- Supported `CCPC26` mode.
+
 ## 0.4.15
 
 - Added `borderedRows` prop to enable borders between rows in the table.

@@ -10,6 +10,8 @@ export interface DefaultSolutionModalProps
   user?: srk.User | null;
   problem?: srk.Problem;
   problemIndex: number;
+  /** Hide the default title's problem label and display first blood as accepted when false. Defaults to true. */
+  problemRevealed?: boolean;
   solutions: srk.Solution[];
   title?: ReactNode;
   width?: number;
@@ -21,6 +23,7 @@ export function DefaultSolutionModal({
   user,
   problem,
   problemIndex,
+  problemRevealed = true,
   solutions,
   title,
   width = 320,
@@ -34,6 +37,7 @@ export function DefaultSolutionModal({
     user: srk.User;
     problem?: srk.Problem;
     problemIndex: number;
+    problemRevealed: boolean;
     solutions: srk.Solution[];
   } | null>(
     user
@@ -41,6 +45,7 @@ export function DefaultSolutionModal({
           user,
           problem,
           problemIndex,
+          problemRevealed,
           solutions,
         }
       : null,
@@ -52,12 +57,15 @@ export function DefaultSolutionModal({
         user,
         problem,
         problemIndex,
+        problemRevealed,
         solutions,
       });
     }
-  }, [problem, problemIndex, solutions, user]);
+  }, [problem, problemIndex, problemRevealed, solutions, user]);
 
-  if (!cachedPayload) {
+  // Use live props immediately; retain the entire last payload only for the exit animation.
+  const payload = user ? { user, problem, problemIndex, problemRevealed, solutions } : cachedPayload;
+  if (!payload) {
     return null;
   }
 
@@ -67,11 +75,11 @@ export function DefaultSolutionModal({
       onClose={onClose}
       rootClassName={rootClassName}
       style={style}
-      title={title || getSolutionModalTitle(cachedPayload.problemIndex, cachedPayload.user, languages)}
+      title={title || getSolutionModalTitle(payload.problemIndex, payload.user, languages, payload.problemRevealed)}
       width={width}
       wrapClassName={wrapClassName}
     >
-      <SolutionTable solutions={cachedPayload.solutions} />
+      <SolutionTable solutions={payload.solutions} problemRevealed={payload.problemRevealed} />
     </Modal>
   );
 }

@@ -1,11 +1,17 @@
 <template>
   <th
     class="srk--nowrap srk-problem-header"
-    :class="{ 'srk--cursor-pointer': !!onProblemClick }"
+    :class="[className, { 'srk--cursor-pointer': !!onProblemClick }]"
     :style="{ backgroundImage }"
     @click="handleClick"
   >
-    <a v-if="problem.link && !onProblemClick" :href="problem.link" target="_blank" rel="noopener noreferrer" style="color: unset">
+    <a
+      v-if="problem.link && !onProblemClick"
+      :href="problem.link"
+      target="_blank"
+      rel="noopener noreferrer"
+      style="color: unset"
+    >
       <span class="srk--display-block">{{ alias }}</span>
       <span v-if="stat" class="srk--display-block srk-problem-stats" :title="statDesc">{{ stat.accepted }}</span>
     </a>
@@ -24,15 +30,13 @@ import {
   captureModalTriggerPointFromMouseEvent,
   getProblemHeaderBackgroundImageIfStyled,
 } from '@algoux/standard-ranklist-renderer-component-core';
-import type {
-  ProblemClickPayload,
-  StaticRanklist,
-} from '@algoux/standard-ranklist-renderer-component-core';
+import type { ProblemClickPayload, StaticRanklist } from '@algoux/standard-ranklist-renderer-component-core';
 
 const props = withDefaults(
   defineProps<{
     problem: srk.Problem;
     index: number;
+    className?: string;
     ranklist: StaticRanklist;
     theme?: EnumTheme;
     languages?: readonly string[];

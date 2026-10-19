@@ -13,6 +13,7 @@ import {
   calculateDirtPercentage,
   calculateProblemStatisticsFooter,
   calculateSEValue,
+  getRanklistProblemPresentation,
   caniuse,
   formatProblemStatisticsAcceptedMinute,
   formatProblemStatisticsAverageHardness,
@@ -95,6 +96,8 @@ export interface RanklistProps {
   emptyStatusPlaceholder?: string | null;
   userAvatarPlacement?: RanklistUserAvatarPlacement;
   languages?: readonly string[];
+  /** Enable CCPC26 problem reveal/order for a configured ICPC ranklist. The caller owns freeze timing. */
+  enableCCPC26?: boolean;
 }
 
 interface State {
@@ -116,6 +119,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     showSEColumn: false,
     emptyStatusPlaceholder: null,
     userAvatarPlacement: 'user',
+    enableCCPC26: false,
   };
 
   constructor(props: RanklistProps) {
@@ -274,14 +278,14 @@ export class Ranklist extends React.Component<RanklistProps, State> {
   renderProblemStatisticsFooter = (
     showTimeColumn: boolean,
     problemStatistics: ReturnType<typeof calculateProblemStatisticsFooter>,
+    problemColumns: readonly (number | null)[],
   ) => {
     if (!this.props.showProblemStatisticsFooter) {
       return null;
     }
 
     const { data, splitOrganization } = this.props;
-    const leftColumnCount =
-      data.series.length + 1 + 1 + (showTimeColumn ? 1 : 0) + (splitOrganization ? 1 : 0);
+    const leftColumnCount = data.series.length + 1 + 1 + (showTimeColumn ? 1 : 0) + (splitOrganization ? 1 : 0);
     const footerRows = [
       {
         key: 'accepted',
@@ -352,28 +356,36 @@ export class Ranklist extends React.Component<RanklistProps, State> {
                 {row.label}
               </span>
             </td>
-            {problemStatistics.map((stat, index) => (
+            {problemColumns.map((problemIndex, columnIndex) => (
               <td
-                key={data.problems[index]?.alias || index}
+                key={problemIndex ?? `hidden-${columnIndex}`}
                 className="srk-problem-statistics-footer-cell srk--text-center srk--nowrap"
               >
-                {row.render(stat)}
+                {problemIndex !== null && row.render(problemStatistics[problemIndex])}
               </td>
             ))}
             {this.renderProblemStatisticsFooterExtraCells()}
           </tr>
         ))}
         <tr className="srk-problem-statistics-footer-row srk-problem-statistics-footer-problem-label-row">
-          <td className="srk-problem-statistics-footer-labels srk--text-right srk--nowrap" colSpan={leftColumnCount}></td>
-          {data.problems.map((problem, index) => (
-            <td
-              key={problem.alias || this.resolveDisplayText(problem.title) || index}
-              className="srk-problem-statistics-footer-cell srk-problem-statistics-footer-problem-header srk-problem-header srk--text-center srk--nowrap"
-              style={getProblemHeaderBackgroundStyle(problem.style, this.props.theme!, 0)}
-            >
-              <span className="srk--display-block">{problem.alias || numberToAlphabet(index)}</span>
-            </td>
-          ))}
+          <td
+            className="srk-problem-statistics-footer-labels srk--text-right srk--nowrap"
+            colSpan={leftColumnCount}
+          ></td>
+          {problemColumns.map((problemIndex, columnIndex) => {
+            const problem = problemIndex === null ? undefined : data.problems[problemIndex];
+            return (
+              <td
+                key={problemIndex ?? `hidden-${columnIndex}`}
+                className="srk-problem-statistics-footer-cell srk-problem-statistics-footer-problem-header srk-problem-header srk--text-center srk--nowrap"
+                style={problem ? getProblemHeaderBackgroundStyle(problem.style, this.props.theme!, 0) : undefined}
+              >
+                {problem && problemIndex !== null && (
+                  <span className="srk--display-block">{problem.alias || numberToAlphabet(problemIndex)}</span>
+                )}
+              </td>
+            );
+          })}
           {this.renderProblemStatisticsFooterExtraCells()}
         </tr>
       </tfoot>
@@ -422,9 +434,10 @@ export class Ranklist extends React.Component<RanklistProps, State> {
       );
     }
     const showTimeColumn = shouldShowTimeColumn(rows);
-    const showAvatarInOrganization = splitOrganization && userAvatarPlacement === 'organization';
-    const problemStatistics =
-      showProblemStatisticsFooter || showSEColumn ? calculateProblemStatisticsFooter(data) : [];
+    const showAvatarInOrganization = !!splitOrganization && userAvatarPlacement === 'organization';
+    const problemStatistics = showProblemStatisticsFooter || showSEColumn ? calculateProblemStatisticsFooter(data) : [];
+    const problemPresentation = getRanklistProblemPresentation(data, this.props.enableCCPC26);
+    const { problemColumns, revealedProblemCount, hasRevealDivider } = problemPresentation;
 
     return (
       <>
@@ -436,6 +449,15 @@ export class Ranklist extends React.Component<RanklistProps, State> {
               'srk-table-row-striped': rowStriped,
             })}
           >
+            {hasRevealDivider && (
+              <>
+                <colgroup span={series.length + 2 + (showTimeColumn ? 1 : 0) + (splitOrganization ? 1 : 0)} />
+                <colgroup className="srk-ccpc26-revealed-columns" span={revealedProblemCount} />
+                <colgroup
+                  span={problems.length - revealedProblemCount + (showDirtColumn ? 1 : 0) + (showSEColumn ? 1 : 0)}
+                />
+              </>
+            )}
             <thead>
               <tr>
                 {series.map((s, index) => (
@@ -458,26 +480,29 @@ export class Ranklist extends React.Component<RanklistProps, State> {
                 {showTimeColumn && (
                   <th className="srk--text-right srk--nowrap">{this.resolveColumnTitle('time', 'Time')}</th>
                 )}
-                {problems.map((problem, index) => (
-                  <ProblemHeaderCellComponent
-                    key={problem.alias || this.resolveDisplayText(problem.title)}
-                    problem={problem}
-                    index={index}
-                    ranklist={data}
-                    theme={this.props.theme!}
-                    onProblemClick={this.props.onProblemClick}
-                    languages={this.props.languages}
-                  />
-                ))}
+                {problemColumns.map((problemIndex, columnIndex) =>
+                  problemIndex === null ? (
+                    <th key={`hidden-${columnIndex}`} className="srk--nowrap srk-problem-header" />
+                  ) : (
+                    <ProblemHeaderCellComponent
+                      key={problemIndex}
+                      problem={problems[problemIndex]}
+                      index={problemIndex}
+                      className={problemPresentation.headerClassNames[columnIndex]}
+                      ranklist={data}
+                      theme={this.props.theme!}
+                      onProblemClick={this.props.onProblemClick}
+                      languages={this.props.languages}
+                    />
+                  ),
+                )}
                 {showDirtColumn && (
                   <th className="srk-dirt-header srk--text-right srk--nowrap">
                     {this.resolveColumnTitle('dirt', 'Dirt')}
                   </th>
                 )}
                 {showSEColumn && (
-                  <th className="srk-se-header srk--text-right srk--nowrap">
-                    {this.resolveColumnTitle('se', 'SE')}
-                  </th>
+                  <th className="srk-se-header srk--text-right srk--nowrap">{this.resolveColumnTitle('se', 'SE')}</th>
                 )}
               </tr>
             </thead>
@@ -489,6 +514,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
                   );
                 }
                 const rankValues = r.rankValues || series.map((s) => ({ rank: null, segmentIndex: null }));
+                const problemOrder = problemPresentation.rowProblemIndexes[index];
                 return (
                   <tr key={r.user.id || this.resolveDisplayText(r.user.name)}>
                     {rankValues.map((rk, index) => this.renderSingleSeriesBody(rk, series[index], r))}
@@ -520,14 +546,16 @@ export class Ranklist extends React.Component<RanklistProps, State> {
                         {r.score.time ? formatTimeDuration(r.score.time, 'min', Math.floor) : '-'}
                       </td>
                     )}
-                    {r.statuses.map((status, statusIndex) => {
+                    {problemOrder.map((statusIndex) => {
+                      const status = r.statuses[statusIndex] || { result: null };
                       const problem = problems[statusIndex];
                       return (
                         <StatusCellComponent
-                          key={problem?.alias || this.resolveDisplayText(problem?.title) || statusIndex}
+                          key={statusIndex}
                           status={status}
                           problem={problem}
                           problemIndex={statusIndex}
+                          problemRevealed={problemPresentation.problemRevealed[statusIndex] ?? true}
                           user={r.user}
                           row={r}
                           rowIndex={index}
@@ -552,7 +580,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
                 );
               })}
             </tbody>
-            {this.renderProblemStatisticsFooter(showTimeColumn, problemStatistics)}
+            {this.renderProblemStatisticsFooter(showTimeColumn, problemStatistics, problemColumns)}
           </table>
         </div>
       </>

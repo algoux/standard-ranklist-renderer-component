@@ -6,6 +6,8 @@ import {
   ContentChild,
   EventEmitter,
   Input,
+  OnChanges,
+  SimpleChanges,
   Output,
 } from '@angular/core';
 import {
@@ -26,6 +28,8 @@ import {
   formatProblemStatisticsAverageHardness,
   formatProblemStatisticsPercent,
   getMarkerPresentation,
+  getRanklistProblemPresentation,
+  getRankProblemDisplayStatus,
   getProblemHeaderBackgroundImageIfStyled,
   getRankProblemStatusCellClassName,
   getRankProblemStatusCellPresentation,
@@ -84,6 +88,11 @@ import {
           [class.srk-table-column-bordered]="columnBordered"
           [class.srk-table-row-striped]="rowStriped"
         >
+          <ng-container *ngIf="problemPresentation.hasRevealDivider">
+            <colgroup [attr.span]="leftFooterColumnCount()"></colgroup>
+            <colgroup class="srk-ccpc26-revealed-columns" [attr.span]="problemPresentation.revealedProblemCount"></colgroup>
+            <colgroup [attr.span]="data.problems.length - problemPresentation.revealedProblemCount + (showDirtColumn ? 1 : 0) + (showSEColumn ? 1 : 0)"></colgroup>
+          </ng-container>
           <thead>
             <tr>
               <th
@@ -105,52 +114,60 @@ import {
                 {{ resolveColumnTitle('time', 'Time') }}
               </th>
               <ng-container
-                *ngFor="let problem of data.problems; let problemIndex = index"
+                *ngFor="let problemIndex of problemPresentation.problemColumns; let columnIndex = index"
               >
-                <ng-container *ngIf="problemHeaderCellTemplate; else defaultProblemHeader">
-                  <ng-container
-                    [ngTemplateOutlet]="problemHeaderCellTemplate.templateRef"
-                    [ngTemplateOutletContext]="buildProblemHeaderCellContext(problem, problemIndex)"
-                  />
-                </ng-container>
-                <ng-template #defaultProblemHeader>
-                  <th
-                    class="srk--nowrap srk-problem-header"
-                    [class.srk--cursor-pointer]="hasProblemClickListener()"
-                    [attr.role]="problemHeaderRole()"
-                    [attr.tabindex]="problemHeaderTabIndex()"
-                    [style.background-image]="problemHeaderBackgroundImage(problem)"
-                    (click)="emitProblemClick($event, problem, problemIndex)"
-                    (keydown.enter)="activateProblemHeaderFromKeyboard($event, problem, problemIndex)"
-                    (keydown.space)="activateProblemHeaderFromKeyboard($event, problem, problemIndex)"
-                  >
-                    <a
-                      *ngIf="problem.link && !hasProblemClickListener(); else unlinkedProblemHeader"
-                      [href]="problem.link"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style="color: unset"
-                    >
-                      <span class="srk--display-block">{{ problemAlias(problem, problemIndex) }}</span>
-                      <span
-                        *ngIf="problem.statistics"
-                        class="srk--display-block srk-problem-stats"
-                        [title]="problemStatsTitle(problem.statistics)"
+                <ng-container *ngIf="problemIndex !== null; else anonymousProblemHeader">
+                  <ng-container *ngIf="data.problems[problemIndex] as problem">
+                    <ng-container *ngIf="problemHeaderCellTemplate; else defaultProblemHeader">
+                      <ng-container
+                        [ngTemplateOutlet]="problemHeaderCellTemplate.templateRef"
+                        [ngTemplateOutletContext]="buildProblemHeaderCellContext(problem, problemIndex, columnIndex)"
+                      />
+                    </ng-container>
+                    <ng-template #defaultProblemHeader>
+                      <th
+                        class="srk--nowrap srk-problem-header"
+                        [ngClass]="problemPresentation.headerClassNames[columnIndex]"
+                        [class.srk--cursor-pointer]="hasProblemClickListener()"
+                        [attr.role]="problemHeaderRole()"
+                        [attr.tabindex]="problemHeaderTabIndex()"
+                        [style.background-image]="problemHeaderBackgroundImage(problem)"
+                        (click)="emitProblemClick($event, problem, problemIndex)"
+                        (keydown.enter)="activateProblemHeaderFromKeyboard($event, problem, problemIndex)"
+                        (keydown.space)="activateProblemHeaderFromKeyboard($event, problem, problemIndex)"
                       >
-                        {{ problem.statistics.accepted }}
-                      </span>
-                    </a>
-                    <ng-template #unlinkedProblemHeader>
-                      <span class="srk--display-block">{{ problemAlias(problem, problemIndex) }}</span>
-                      <span
-                        *ngIf="problem.statistics"
-                        class="srk--display-block srk-problem-stats"
-                        [title]="problemStatsTitle(problem.statistics)"
-                      >
-                        {{ problem.statistics.accepted }}
-                      </span>
+                        <a
+                          *ngIf="problem.link && !hasProblemClickListener(); else unlinkedProblemHeader"
+                          [href]="problem.link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style="color: unset"
+                        >
+                          <span class="srk--display-block">{{ problemAlias(problem, problemIndex) }}</span>
+                          <span
+                            *ngIf="problem.statistics"
+                            class="srk--display-block srk-problem-stats"
+                            [title]="problemStatsTitle(problem.statistics)"
+                          >
+                            {{ problem.statistics.accepted }}
+                          </span>
+                        </a>
+                        <ng-template #unlinkedProblemHeader>
+                          <span class="srk--display-block">{{ problemAlias(problem, problemIndex) }}</span>
+                          <span
+                            *ngIf="problem.statistics"
+                            class="srk--display-block srk-problem-stats"
+                            [title]="problemStatsTitle(problem.statistics)"
+                          >
+                            {{ problem.statistics.accepted }}
+                          </span>
+                        </ng-template>
+                      </th>
                     </ng-template>
-                  </th>
+                  </ng-container>
+                </ng-container>
+                <ng-template #anonymousProblemHeader>
+                  <th class="srk--nowrap srk-problem-header"></th>
                 </ng-template>
               </ng-container>
               <th *ngIf="showDirtColumn" class="srk-dirt-header srk--text-right srk--nowrap">
@@ -250,61 +267,31 @@ import {
                 {{ row.score.time ? formatTime(row.score.time) : '-' }}
               </td>
 
-              <ng-container *ngFor="let status of row.statuses; let problemIndex = index">
-                <ng-container *ngIf="statusCellTemplate; else defaultStatusCell">
-                  <ng-container
-                    [ngTemplateOutlet]="statusCellTemplate.templateRef"
-                    [ngTemplateOutletContext]="buildStatusCellContext(row, rowIndex, status, problemIndex)"
-                  />
-                </ng-container>
-                <ng-template #defaultStatusCell>
-                  <td
-                    *ngIf="status.result === 'FB' || status.result === 'AC'; else failedOrFrozenStatus"
-                    [ngClass]="statusCellClass(status)"
-                    [attr.role]="statusCellRole(status)"
-                    [attr.tabindex]="statusCellTabIndex(status)"
-                    (click)="emitSolutionClick($event, row, rowIndex, status, problemIndex)"
-                    (keydown.enter)="activateStatusCellFromKeyboard($event, row, rowIndex, status, problemIndex)"
-                    (keydown.space)="activateStatusCellFromKeyboard($event, row, rowIndex, status, problemIndex)"
-                  >
-                    <span
-                      *ngIf="statusColorAsText && status.result === 'FB'"
-                      class="srk-prest-status-block-fb-star"
-                      [textContent]="firstBloodStar"
-                    ></span>
-                    <ng-container *ngIf="statusPresentation(status) as presentation">
-                      <ng-container *ngIf="isNumber(presentation.score); else statusText">
-                        <span class="srk-prest-status-block-score">{{ presentation.score }}</span>
-                        <ng-container *ngIf="presentation.scoreDetails !== undefined">
-                          <span [textContent]="statusSeparator"></span>
-                          <span
-                            class="srk-prest-status-block-score-details"
-                            [textContent]="presentation.scoreDetails"
-                          ></span>
-                        </ng-container>
-                      </ng-container>
-                      <ng-template #statusText>
-                        <ng-container *ngIf="presentation.secondary !== undefined; else singleStatus">
-                          <span class="srk-prest-status-block-primary">{{ presentation.primary || '' }}</span>
-                          <span [textContent]="statusSeparator"></span>
-                          <span class="srk-prest-status-block-secondary">{{ presentation.secondary }}</span>
-                        </ng-container>
-                        <ng-template #singleStatus>{{ presentation.primary }}</ng-template>
-                      </ng-template>
-                    </ng-container>
-                  </td>
-                  <ng-template #failedOrFrozenStatus>
+              <ng-container *ngFor="let problemIndex of problemPresentation.rowProblemIndexes[rowIndex]; trackBy: trackByProblemIndex">
+                <ng-container *ngIf="getRowStatus(row, problemIndex) as status">
+                  <ng-container *ngIf="statusCellTemplate; else defaultStatusCell">
+                    <ng-container
+                      [ngTemplateOutlet]="statusCellTemplate.templateRef"
+                      [ngTemplateOutletContext]="buildStatusCellContext(row, rowIndex, status, problemIndex)"
+                    />
+                  </ng-container>
+                  <ng-template #defaultStatusCell>
                     <td
-                      *ngIf="status.result === '?' || status.result === 'RJ'; else emptyStatus"
-                      [ngClass]="statusCellClass(status)"
+                      *ngIf="status.result === 'FB' || status.result === 'AC'; else failedOrFrozenStatus"
+                      [ngClass]="statusCellClass(status, problemIndex)"
                       [attr.role]="statusCellRole(status)"
                       [attr.tabindex]="statusCellTabIndex(status)"
                       (click)="emitSolutionClick($event, row, rowIndex, status, problemIndex)"
                       (keydown.enter)="activateStatusCellFromKeyboard($event, row, rowIndex, status, problemIndex)"
                       (keydown.space)="activateStatusCellFromKeyboard($event, row, rowIndex, status, problemIndex)"
                     >
-                      <ng-container *ngIf="statusPresentation(status) as presentation">
-                        <ng-container *ngIf="isNumber(presentation.score); else failedStatusText">
+                      <span
+                        *ngIf="statusColorAsText && status.result === 'FB' && problemPresentation.problemRevealed[problemIndex]"
+                        class="srk-prest-status-block-fb-star"
+                        [textContent]="firstBloodStar"
+                      ></span>
+                      <ng-container *ngIf="statusPresentation(status, problemIndex) as presentation">
+                        <ng-container *ngIf="isNumber(presentation.score); else statusText">
                           <span class="srk-prest-status-block-score">{{ presentation.score }}</span>
                           <ng-container *ngIf="presentation.scoreDetails !== undefined">
                             <span [textContent]="statusSeparator"></span>
@@ -314,7 +301,7 @@ import {
                             ></span>
                           </ng-container>
                         </ng-container>
-                        <ng-template #failedStatusText>
+                        <ng-template #statusText>
                           <ng-container *ngIf="presentation.secondary !== undefined; else singleStatus">
                             <span class="srk-prest-status-block-primary">{{ presentation.primary || '' }}</span>
                             <span [textContent]="statusSeparator"></span>
@@ -324,13 +311,45 @@ import {
                         </ng-template>
                       </ng-container>
                     </td>
+                    <ng-template #failedOrFrozenStatus>
+                      <td
+                        *ngIf="status.result === '?' || status.result === 'RJ'; else emptyStatus"
+                        [ngClass]="statusCellClass(status, problemIndex)"
+                        [attr.role]="statusCellRole(status)"
+                        [attr.tabindex]="statusCellTabIndex(status)"
+                        (click)="emitSolutionClick($event, row, rowIndex, status, problemIndex)"
+                        (keydown.enter)="activateStatusCellFromKeyboard($event, row, rowIndex, status, problemIndex)"
+                        (keydown.space)="activateStatusCellFromKeyboard($event, row, rowIndex, status, problemIndex)"
+                      >
+                        <ng-container *ngIf="statusPresentation(status, problemIndex) as presentation">
+                          <ng-container *ngIf="isNumber(presentation.score); else failedStatusText">
+                            <span class="srk-prest-status-block-score">{{ presentation.score }}</span>
+                            <ng-container *ngIf="presentation.scoreDetails !== undefined">
+                              <span [textContent]="statusSeparator"></span>
+                              <span
+                                class="srk-prest-status-block-score-details"
+                                [textContent]="presentation.scoreDetails"
+                              ></span>
+                            </ng-container>
+                          </ng-container>
+                          <ng-template #failedStatusText>
+                            <ng-container *ngIf="presentation.secondary !== undefined; else singleStatus">
+                              <span class="srk-prest-status-block-primary">{{ presentation.primary || '' }}</span>
+                              <span [textContent]="statusSeparator"></span>
+                              <span class="srk-prest-status-block-secondary">{{ presentation.secondary }}</span>
+                            </ng-container>
+                            <ng-template #singleStatus>{{ presentation.primary }}</ng-template>
+                          </ng-template>
+                        </ng-container>
+                      </td>
+                    </ng-template>
+                    <ng-template #emptyStatus>
+                      <td class="srk-status-placeholder-cell srk--text-center srk--nowrap">
+                        {{ emptyStatusPlaceholder }}
+                      </td>
+                    </ng-template>
                   </ng-template>
-                  <ng-template #emptyStatus>
-                    <td class="srk-status-placeholder-cell srk--text-center srk--nowrap">
-                      {{ emptyStatusPlaceholder }}
-                    </td>
-                  </ng-template>
-                </ng-template>
+                </ng-container>
               </ng-container>
 
               <td *ngIf="showDirtColumn" class="srk-dirt-cell srk--text-right srk--nowrap">
@@ -358,17 +377,21 @@ import {
                 </span>
               </td>
               <td
-                *ngFor="let stat of problemStatistics"
+                *ngFor="let problemIndex of problemPresentation.problemColumns"
                 class="srk-problem-statistics-footer-cell srk--text-center srk--nowrap"
               >
-                <span class="srk-problem-statistics-footer-primary">
-                  {{ getProblemStatisticsFooterCellPrimary(footerRow.key, stat) }}
-                </span>
-                <ng-container *ngIf="getProblemStatisticsFooterCellSecondary(footerRow.key, stat) !== undefined">
-                  <span> </span>
-                  <span class="srk-problem-statistics-footer-secondary">
-                    {{ getProblemStatisticsFooterCellSecondary(footerRow.key, stat) }}
-                  </span>
+                <ng-container *ngIf="problemIndex !== null">
+                  <ng-container *ngIf="problemStatistics[problemIndex] as stat">
+                    <span class="srk-problem-statistics-footer-primary">
+                      {{ getProblemStatisticsFooterCellPrimary(footerRow.key, stat) }}
+                    </span>
+                    <ng-container *ngIf="getProblemStatisticsFooterCellSecondary(footerRow.key, stat) !== undefined">
+                      <span> </span>
+                      <span class="srk-problem-statistics-footer-secondary">
+                        {{ getProblemStatisticsFooterCellSecondary(footerRow.key, stat) }}
+                      </span>
+                    </ng-container>
+                  </ng-container>
                 </ng-container>
               </td>
               <td
@@ -390,11 +413,11 @@ import {
                 [attr.colspan]="leftFooterColumnCount()"
               ></td>
               <td
-                *ngFor="let problem of data.problems; let problemIndex = index"
+                *ngFor="let problemIndex of problemPresentation.problemColumns"
                 class="srk-problem-statistics-footer-cell srk-problem-statistics-footer-problem-header srk-problem-header srk--text-center srk--nowrap"
-                [style.background-image]="problemHeaderBackgroundImage(problem, 0)"
+                [style.background-image]="problemIndex === null ? null : problemHeaderBackgroundImage(data.problems[problemIndex], 0)"
               >
-                <span class="srk--display-block">{{ problemAlias(problem, problemIndex) }}</span>
+                <span *ngIf="problemIndex !== null" class="srk--display-block">{{ problemAlias(data.problems[problemIndex], problemIndex) }}</span>
               </td>
               <td
                 *ngIf="showDirtColumn"
@@ -415,8 +438,9 @@ import {
     </ng-template>
   `,
 })
-export class RanklistComponent {
+export class RanklistComponent implements OnChanges {
   @Input({ required: true }) data!: StaticRanklist;
+  @Input() enableCCPC26 = false;
   @Input() theme: EnumTheme = EnumTheme.light;
   @Input() rowBordered = false;
   @Input() columnBordered = false;
@@ -445,6 +469,24 @@ export class RanklistComponent {
 
   @ContentChild(SrkUserCellTemplateDirective)
   userCellTemplate?: SrkUserCellTemplateDirective;
+
+  problemPresentation!: ReturnType<typeof getRanklistProblemPresentation>;
+  private readonly emptyStatus: srk.RankProblemStatus = { result: null, tries: 0 };
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.data.type !== 'general' || !this.isSupportedVersion()) return;
+    if (changes['data'] || changes['enableCCPC26'] || !this.problemPresentation) {
+      this.problemPresentation = getRanklistProblemPresentation(this.data, this.enableCCPC26);
+    }
+  }
+
+  trackByProblemIndex(_index: number, problemIndex: number) {
+    return problemIndex;
+  }
+
+  getRowStatus(row: StaticRanklistRow, problemIndex: number) {
+    return row.statuses[problemIndex] || this.emptyStatus;
+  }
 
   readonly supportedVersions = srkSupportedVersions;
   readonly firstBloodStar = '\u2605';
@@ -579,8 +621,9 @@ export class RanklistComponent {
     return calculateSEValue(row, problemStatistics);
   }
 
-  statusPresentation(status: srk.RankProblemStatus) {
-    return getRankProblemStatusCellPresentation(status, this.data, this.statusCellPreset);
+  statusPresentation(status: srk.RankProblemStatus, problemIndex: number) {
+    const displayStatus = getRankProblemDisplayStatus(status, this.problemPresentation.problemRevealed[problemIndex]);
+    return getRankProblemStatusCellPresentation(displayStatus, this.data, this.statusCellPreset);
   }
 
   isNumber(value: unknown): value is number {
@@ -591,7 +634,7 @@ export class RanklistComponent {
     return [...(status.solutions || [])].reverse();
   }
 
-  statusCellClass(status: srk.RankProblemStatus) {
+  statusCellClass(status: srk.RankProblemStatus, problemIndex: number) {
     const classNames = ['srk-prest-status-block', 'srk--text-center', 'srk--nowrap'];
     if (this.isStatusClickable(status)) {
       classNames.push('srk--cursor-pointer');
@@ -599,7 +642,7 @@ export class RanklistComponent {
     if (this.statusColorAsText) {
       classNames.push('srk-prest-status-block-color-text');
     }
-    const resultClassName = getRankProblemStatusCellClassName(status, this.data);
+    const resultClassName = getRankProblemStatusCellClassName(getRankProblemDisplayStatus(status, this.problemPresentation.problemRevealed[problemIndex]), this.data);
     if (resultClassName) {
       classNames.push(resultClassName);
     }
@@ -634,12 +677,13 @@ export class RanklistComponent {
     return this.hasProblemClickListener() ? 0 : null;
   }
 
-  buildProblemHeaderCellContext(problem: srk.Problem, problemIndex: number): ProblemHeaderCellTemplateContext {
+  buildProblemHeaderCellContext(problem: srk.Problem, problemIndex: number, columnIndex: number): ProblemHeaderCellTemplateContext {
     return {
       $implicit: problem,
       problem,
       problemIndex,
       index: problemIndex,
+      className: this.problemPresentation.headerClassNames[columnIndex],
       ranklist: this.data,
       languages: this.languages,
       onClick: (event?: MouseEvent) => this.emitProblemClick(event, problem, problemIndex),
@@ -672,6 +716,7 @@ export class RanklistComponent {
       status,
       problem: this.data.problems[problemIndex],
       problemIndex,
+      problemRevealed: this.problemPresentation.problemRevealed[problemIndex],
       user: row.user,
       row,
       rowIndex,
@@ -778,6 +823,7 @@ export class RanklistComponent {
       row,
       rowIndex,
       problemIndex,
+      problemRevealed: this.problemPresentation.problemRevealed[problemIndex],
       problem: this.data.problems[problemIndex],
       status,
       solutions,

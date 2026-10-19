@@ -261,6 +261,7 @@
   --srk-table-row-border: transparent;
   --srk-table-row-border-color: var(--srk-table-row-border);
   --srk-table-column-border-color: transparent;
+  --srk-ccpc26-divider-width: 1px;
   --srk-body-color: inherit;
   --srk-body-bg: inherit;
   --srk-table-striped-bg: rgba(30, 30, 30, 0.06);
@@ -285,6 +286,7 @@
 
   .srk-table-column-bordered {
     --srk-table-column-border-color: var(--srk-table-border);
+    --srk-ccpc26-divider-width: 3px;
   }
 
   .srk-table-row-striped {
@@ -418,6 +420,28 @@
     table-layout: fixed;
     border-spacing: 0;
     border-collapse: collapse;
+
+    // A column-group border spans header, body and footer, including custom cells.
+    colgroup.srk-ccpc26-revealed-columns {
+      border-right: var(--srk-ccpc26-divider-width) solid var(--srk-table-border);
+    }
+
+    // Sticky headers paint above collapsed column borders, so repeat the edge on top.
+    thead > tr > th.srk-ccpc26-revealed-boundary {
+      z-index: 2;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        // The collapsed border's half-width is outside the positioned padding box.
+        right: calc(-1 * var(--srk-ccpc26-divider-width));
+        width: var(--srk-ccpc26-divider-width);
+        background: var(--srk-table-border);
+        pointer-events: none;
+      }
+    }
 
     thead > tr > th {
       padding: 8px;

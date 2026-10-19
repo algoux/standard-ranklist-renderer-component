@@ -14,6 +14,8 @@ import type {
 export interface RanklistProps {
   data: StaticRanklist;
   theme?: EnumTheme;
+  /** Opt in to CCPC26 presentation; the caller owns freeze timing. */
+  enableCCPC26?: boolean;
   rowBordered?: boolean;
   columnBordered?: boolean;
   rowStriped?: boolean;
@@ -32,6 +34,7 @@ export interface RanklistProps {
 }
 
 export interface ProblemHeaderCellSlotProps {
+  className?: string;
   problem: srk.Problem;
   problemIndex: number;
   index: number;
@@ -55,6 +58,7 @@ export interface UserCellSlotProps {
 }
 
 export interface StatusCellSlotProps {
+  problemRevealed?: boolean;
   status: srk.RankProblemStatus;
   problem: srk.Problem | undefined;
   problemIndex: number;
@@ -98,10 +102,12 @@ export interface DefaultUserModalProps extends Pick<ModalProps, 'open' | 'rootCl
   languages?: readonly string[];
 }
 
-export interface DefaultSolutionModalProps extends Pick<ModalProps, 'open' | 'rootClassName' | 'wrapClassName' | 'style'> {
+export interface DefaultSolutionModalProps
+  extends Pick<ModalProps, 'open' | 'rootClassName' | 'wrapClassName' | 'style'> {
   user?: srk.User | null;
   problem?: srk.Problem;
   problemIndex?: number;
+  problemRevealed?: boolean;
   solutions?: srk.Solution[];
   title?: string;
   width?: number;

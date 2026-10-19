@@ -10,6 +10,7 @@ export interface ProblemHeaderCellTemplateContext {
   problem: srk.Problem;
   problemIndex: number;
   index: number;
+  className?: string;
   ranklist: StaticRanklist;
   languages?: readonly string[];
   onClick: (event?: MouseEvent) => void;

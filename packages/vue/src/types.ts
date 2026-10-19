@@ -15,6 +15,8 @@ import type {
 export type ModalCloseReason = 'mask' | 'close-button' | 'escape';
 
 export interface RanklistProps {
+  /** Opt in to configured CCPC26 presentation; the caller owns freeze timing. */
+  enableCCPC26?: boolean;
   data: StaticRanklist;
   theme?: EnumTheme;
   rowBordered?: boolean;
@@ -37,6 +39,7 @@ export interface ProblemHeaderCellSlotProps {
   problem: srk.Problem;
   problemIndex: number;
   index: number;
+  className?: string;
   ranklist: StaticRanklist;
   theme?: EnumTheme;
   languages?: readonly string[];
@@ -57,6 +60,7 @@ export interface UserCellSlotProps {
 }
 
 export interface StatusCellSlotProps {
+  problemRevealed?: boolean;
   status: srk.RankProblemStatus;
   problem: srk.Problem | undefined;
   problemIndex: number;
@@ -104,6 +108,7 @@ export interface DefaultSolutionModalProps
   extends Pick<ModalProps, 'open' | 'rootClassName' | 'wrapClassName' | 'style'> {
   user?: srk.User | null;
   problem?: srk.Problem;
+  problemRevealed?: boolean;
   problemIndex: number;
   solutions: srk.Solution[];
   title?: string;

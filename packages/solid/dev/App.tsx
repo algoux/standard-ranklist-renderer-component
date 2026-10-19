@@ -9,6 +9,7 @@ import {
 } from '@algoux/standard-ranklist-utils';
 import {
   MODAL_ANIMATION_DURATION_MS,
+  isBeforeContestFreeze,
   lockModalBodyScroll,
   resolveModalTransformOrigin,
   unlockModalBodyScroll,
@@ -16,7 +17,6 @@ import {
 import type { JSX } from 'solid-js';
 import { createEffect, createMemo, createSignal, onCleanup, untrack } from 'solid-js';
 import { render as renderSolid } from 'solid-js/web';
-import demoData from '../../../demo.json';
 import type {
   RanklistColumnTitles,
   RanklistStatusCellPreset,
@@ -30,8 +30,6 @@ import { DefaultSolutionModal, DefaultUserModal, ProgressBar, Ranklist } from '.
 
 import './style.css';
 
-const originalRanklist = demoData as srk.Ranklist;
-const sortedSolutions = getSortedCalculatedRawSolutions(originalRanklist.rows);
 const demoColumnTitles: RanklistColumnTitles = {
   series: (series, index) => (index === 0 ? 'Rank' : series.title || `Series ${index + 1}`),
   organization: 'School',
@@ -101,7 +99,10 @@ function ensureGlobalLanguageListener() {
   globalLanguageListenerInstalled = true;
 }
 
-export default function App() {
+export default function App(props: { initialRanklist: srk.Ranklist }) {
+  const originalRanklist = props.initialRanklist;
+  const sortedSolutions = getSortedCalculatedRawSolutions(originalRanklist.rows);
+  const [enableCCPC26, setEnableCCPC26] = createSignal(false);
   const [ranklist, setRanklist] = createSignal<srk.Ranklist>(originalRanklist);
   const [activeUserClick, setActiveUserClick] = createSignal<UserClickPayload | null>(null);
   const [activeProblemClick, setActiveProblemClick] = createSignal<ProblemClickPayload | null>(null);
@@ -125,6 +126,10 @@ export default function App() {
     return convertToStaticRanklist(cloneRanklist(ranklist())) as StaticRanklist;
   });
   const preferredTheme = resolvePreferredTheme();
+  const timeDifference = () => {
+    const now = ranklist()._now;
+    return now ? Date.now() - new Date(now).getTime() : 0;
+  };
   let statusPresetSelectRef: HTMLSelectElement | undefined;
   let emptyStatusPlaceholderSelectRef: HTMLSelectElement | undefined;
   let userAvatarPlacementSelectRef: HTMLSelectElement | undefined;
@@ -163,6 +168,7 @@ export default function App() {
   });
 
   const handleTimeTravel = (time: number | null) => {
+    setEnableCCPC26(isBeforeContestFreeze(originalRanklist.contest, time));
     if (time === null) {
       setRanklist(originalRanklist);
     } else {
@@ -228,7 +234,7 @@ export default function App() {
     <main class="preview-shell">
       <ProgressBar
         data={ranklist()}
-        td={ranklist()._now ? Date.now() - new Date(ranklist()._now).getTime() : 0}
+        td={timeDifference()}
         live
         enableTimeTravel
         onTimeTravel={handleTimeTravel}
@@ -299,8 +305,21 @@ export default function App() {
           </button>
         </div>
         <div class="preview-control-row">
+          <ToggleField
+            label="CCPC26 mode"
+            checked={enableCCPC26}
+            onChange={(checked) => {
+              setEnableCCPC26(checked);
+              setActiveProblemClick(null);
+              setActiveSolutionClick(null);
+            }}
+          />
           <ToggleField label="Split organization" checked={splitOrganization} onChange={setSplitOrganization} />
-          <ToggleField label="Custom column titles" checked={useCustomColumnTitles} onChange={setUseCustomColumnTitles} />
+          <ToggleField
+            label="Custom column titles"
+            checked={useCustomColumnTitles}
+            onChange={setUseCustomColumnTitles}
+          />
           <ToggleField label="Text status colors" checked={statusColorAsText} onChange={setStatusColorAsText} />
           <ToggleField
             label="Problem statistics footer"
@@ -318,6 +337,7 @@ export default function App() {
         render={() => (
           <Ranklist
             data={staticRanklist()}
+            enableCCPC26={enableCCPC26()}
             theme={preferredTheme}
             rowStriped
             splitOrganization={splitOrganization()}
@@ -356,6 +376,7 @@ export default function App() {
         user={activeSolutionClick()?.user}
         problem={activeSolutionClick()?.problem}
         problemIndex={activeSolutionClick()?.problemIndex || 0}
+        problemRevealed={activeSolutionClick()?.problemRevealed}
         solutions={activeSolutionClick()?.solutions || []}
         languages={selectedLanguages()}
         onClose={() => setActiveSolutionClick(null)}

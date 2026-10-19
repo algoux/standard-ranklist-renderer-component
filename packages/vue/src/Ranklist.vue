@@ -11,6 +11,18 @@
         'srk-table-row-striped': rowStriped,
       }"
     >
+      <template v-if="problemPresentation.hasRevealDivider">
+        <colgroup :span="leftFooterColumnCount" />
+        <colgroup class="srk-ccpc26-revealed-columns" :span="problemPresentation.revealedProblemCount" />
+        <colgroup
+          :span="
+            data.problems.length -
+            problemPresentation.revealedProblemCount +
+            (showDirtColumn ? 1 : 0) +
+            (showSEColumn ? 1 : 0)
+          "
+        />
+      </template>
       <thead>
         <tr>
           <th
@@ -27,22 +39,29 @@
           <th class="srk--text-left srk--nowrap">{{ resolveColumnTitle('user', 'Name') }}</th>
           <th class="srk--text-right srk--nowrap">{{ resolveColumnTitle('score', 'Score') }}</th>
           <th v-if="showTimeColumn" class="srk--text-right srk--nowrap">{{ resolveColumnTitle('time', 'Time') }}</th>
-          <template v-for="(problem, problemIndex) in data.problems" :key="problem.alias || resolveDisplayText(problem.title) || problemIndex">
+          <template
+            v-for="(problemIndex, columnIndex) in problemPresentation.problemColumns"
+            :key="problemIndex ?? `hidden-${columnIndex}`"
+          >
+            <th v-if="problemIndex === null" class="srk--nowrap srk-problem-header" />
             <slot
+              v-else
               name="problem-header-cell"
               v-bind="{
-                problem,
+                problem: data.problems[problemIndex],
                 problemIndex,
                 index: problemIndex,
+                className: problemPresentation.headerClassNames[columnIndex],
                 ranklist: data,
                 theme: resolvedTheme,
                 languages,
-                onClick: (event?: MouseEvent) => emitProblemClick(problem, problemIndex, event),
+                onClick: (event?: MouseEvent) => emitProblemClick(data.problems[problemIndex], problemIndex, event),
               }"
             >
               <ProblemHeaderCell
-                :problem="problem"
+                :problem="data.problems[problemIndex]"
                 :index="problemIndex"
+                :class-name="problemPresentation.headerClassNames[columnIndex]"
                 :ranklist="data"
                 :theme="resolvedTheme"
                 :languages="languages"
@@ -126,29 +145,31 @@
             {{ row.score.time ? formatTimeDuration(row.score.time, 'min', Math.floor) : '-' }}
           </td>
 
-          <template v-for="(status, problemIndex) in row.statuses" :key="data.problems[problemIndex]?.alias || problemIndex">
+          <template v-for="problemIndex in problemPresentation.rowProblemIndexes[rowIndex]" :key="problemIndex">
             <slot
               name="status-cell"
               v-bind="{
-                status,
+                status: getRowStatus(row, problemIndex),
                 problem: data.problems[problemIndex],
                 problemIndex,
+                problemRevealed: problemPresentation.problemRevealed[problemIndex],
                 user: row.user,
                 row,
                 rowIndex,
                 ranklist: data,
-                solutions: getStatusSolutions(status),
+                solutions: getStatusSolutions(getRowStatus(row, problemIndex)),
                 statusCellPreset,
                 statusColorAsText,
                 emptyStatusPlaceholder,
                 languages,
-                onClick: (event?: MouseEvent) => emitSolutionClick(row, rowIndex, status, problemIndex, event),
+                onClick: (event?: MouseEvent) => emitSolutionClick(row, rowIndex, getRowStatus(row, problemIndex), problemIndex, event),
               }"
             >
               <StatusCell
-                :status="status"
+                :status="getRowStatus(row, problemIndex)"
                 :problem="data.problems[problemIndex]"
                 :problem-index="problemIndex"
+                :problem-revealed="problemPresentation.problemRevealed[problemIndex]"
                 :user="row.user"
                 :row="row"
                 :row-index="rowIndex"
@@ -181,18 +202,24 @@
             </span>
           </td>
           <td
-            v-for="(stat, problemIndex) in problemStatistics"
-            :key="data.problems[problemIndex]?.alias || problemIndex"
+            v-for="(problemIndex, columnIndex) in problemPresentation.problemColumns"
+            :key="problemIndex ?? `hidden-${columnIndex}`"
             class="srk-problem-statistics-footer-cell srk--text-center srk--nowrap"
           >
-            <span class="srk-problem-statistics-footer-primary">
-              {{ getProblemStatisticsFooterCellPrimary(footerRow.key, stat) }}
-            </span>
-            <template v-if="getProblemStatisticsFooterCellSecondary(footerRow.key, stat) !== undefined">
-              {{ ' ' }}
-              <span class="srk-problem-statistics-footer-secondary">
-                {{ getProblemStatisticsFooterCellSecondary(footerRow.key, stat) }}
+            <template v-if="problemIndex !== null">
+              <span class="srk-problem-statistics-footer-primary">
+                {{ getProblemStatisticsFooterCellPrimary(footerRow.key, problemStatistics[problemIndex]) }}
               </span>
+              <template
+                v-if="
+                  getProblemStatisticsFooterCellSecondary(footerRow.key, problemStatistics[problemIndex]) !== undefined
+                "
+              >
+                {{ ' ' }}
+                <span class="srk-problem-statistics-footer-secondary">
+                  {{ getProblemStatisticsFooterCellSecondary(footerRow.key, problemStatistics[problemIndex]) }}
+                </span>
+              </template>
             </template>
           </td>
           <td
@@ -209,14 +236,29 @@
           </td>
         </tr>
         <tr class="srk-problem-statistics-footer-row srk-problem-statistics-footer-problem-label-row">
-          <td class="srk-problem-statistics-footer-labels srk--text-right srk--nowrap" :colspan="leftFooterColumnCount"></td>
           <td
-            v-for="(problem, problemIndex) in data.problems"
-            :key="problem.alias || resolveDisplayText(problem.title) || problemIndex"
+            class="srk-problem-statistics-footer-labels srk--text-right srk--nowrap"
+            :colspan="leftFooterColumnCount"
+          ></td>
+          <td
+            v-for="(problemIndex, columnIndex) in problemPresentation.problemColumns"
+            :key="problemIndex ?? `hidden-${columnIndex}`"
             class="srk-problem-statistics-footer-cell srk-problem-statistics-footer-problem-header srk-problem-header srk--text-center srk--nowrap"
-            :style="{ backgroundImage: getProblemHeaderBackgroundImageIfStyled(problem.style, resolvedTheme, 0) }"
+            :style="
+              problemIndex !== null
+                ? {
+                    backgroundImage: getProblemHeaderBackgroundImageIfStyled(
+                      data.problems[problemIndex].style,
+                      resolvedTheme,
+                      0,
+                    ),
+                  }
+                : undefined
+            "
           >
-            <span class="srk--display-block">{{ problem.alias || numberToAlphabet(problemIndex) }}</span>
+            <span v-if="problemIndex !== null" class="srk--display-block">{{
+              data.problems[problemIndex].alias || numberToAlphabet(problemIndex)
+            }}</span>
           </td>
           <td
             v-if="showDirtColumn"
@@ -257,6 +299,7 @@ import {
   formatProblemStatisticsAverageHardness,
   formatProblemStatisticsPercent,
   getProblemHeaderBackgroundImageIfStyled,
+  getRanklistProblemPresentation,
   resolveSrkAssetUrl,
   shouldShowTimeColumn,
   srkSupportedVersions,
@@ -280,6 +323,7 @@ import UserCell from './parts/UserCell.vue';
 const props = withDefaults(
   defineProps<{
     data: StaticRanklist;
+    enableCCPC26?: boolean;
     theme?: EnumTheme;
     rowBordered?: boolean;
     columnBordered?: boolean;
@@ -298,6 +342,7 @@ const props = withDefaults(
   }>(),
   {
     theme: EnumTheme.light,
+    enableCCPC26: false,
     rowBordered: false,
     columnBordered: false,
     rowStriped: false,
@@ -319,12 +364,15 @@ const emit = defineEmits<{
 }>();
 
 const instance = getCurrentInstance();
+const problemPresentation = computed(() => getRanklistProblemPresentation(props.data, props.enableCCPC26));
 const resolvedTheme = computed(() => props.theme);
 const hasProblemClickListener = computed(() => Boolean(instance?.vnode.props?.onProblemClick));
 const supportedVersions = srkSupportedVersions;
 const isSupportedVersion = computed(() => caniuse(props.data.version));
 const showTimeColumn = computed(() => shouldShowTimeColumn(props.data.rows));
-const showAvatarInOrganization = computed(() => props.splitOrganization && props.userAvatarPlacement === 'organization');
+const showAvatarInOrganization = computed(
+  () => props.splitOrganization && props.userAvatarPlacement === 'organization',
+);
 const problemStatistics = computed(() =>
   props.showProblemStatisticsFooter || props.showSEColumn ? calculateProblemStatisticsFooter(props.data) : [],
 );
@@ -433,6 +481,10 @@ function getSeriesSegmentStyle(rankValue: RankValue, series: srk.RankSeries | un
   };
 }
 
+function getRowStatus(row: StaticRanklistRow, problemIndex: number): srk.RankProblemStatus {
+  return row.statuses[problemIndex] || { result: null };
+}
+
 function getStatusSolutions(status: srk.RankProblemStatus) {
   return [...(status.solutions || [])].reverse();
 }
@@ -529,7 +581,7 @@ function emitSolutionClick(
     return;
   }
   const resolvedProblemIndex = problemIndex || 0;
-  const resolvedStatus = status || payloadOrRow.statuses[resolvedProblemIndex];
+  const resolvedStatus = status || getRowStatus(payloadOrRow, resolvedProblemIndex);
   if (event) {
     const problem = props.data.problems[resolvedProblemIndex];
     captureModalTriggerPointFromMouseEvent(event, {
@@ -548,6 +600,7 @@ function emitSolutionClick(
     row: payloadOrRow,
     rowIndex: rowIndex || 0,
     problemIndex: resolvedProblemIndex,
+    problemRevealed: problemPresentation.value.problemRevealed[resolvedProblemIndex],
     problem: props.data.problems[resolvedProblemIndex],
     status: resolvedStatus,
     solutions: getStatusSolutions(resolvedStatus),

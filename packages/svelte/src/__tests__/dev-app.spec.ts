@@ -1,7 +1,9 @@
-import { cleanup, fireEvent, render } from '@testing-library/svelte';
+import { cleanup, fireEvent, render, waitFor } from '@testing-library/svelte';
 import { tick } from 'svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 import { resetModalInteractionStateForTests } from '@algoux/standard-ranklist-renderer-component-core';
+
+import { makePreviewRanklist } from '../../../../tests/shared/preview-ranklist-fixture';
 import App from '../../dev/App.svelte';
 
 function textOf(element: Element | null | undefined): string {
@@ -35,7 +37,7 @@ describe('Svelte local demo app', () => {
   });
 
   it('renders interactive examples for the new Ranklist render option props', async () => {
-    const { container } = render(App);
+    const { container } = render(App, { props: { initialRanklist: makePreviewRanklist() } });
 
     expect((getField(container, 'Split organization') as HTMLInputElement).checked).toBe(true);
     expect((getField(container, 'Custom column titles') as HTMLInputElement).checked).toBe(true);
@@ -73,7 +75,7 @@ describe('Svelte local demo app', () => {
     await fireEvent.change(getField(container, 'Language'), { target: { value: 'zh-CN' } });
     await tick();
     expect((getField(container, 'Language') as HTMLSelectElement).value).toBe('zh-CN');
-    expect(container.textContent).toContain('中二之力');
+    expect(container.textContent).toContain('测试队伍');
     await fireEvent.click(getField(container, 'Custom column titles'));
     await tick();
     expect((getField(container, 'Custom column titles') as HTMLInputElement).checked).toBe(false);
@@ -101,7 +103,7 @@ describe('Svelte local demo app', () => {
   });
 
   it('opens the custom problem modal from a problem header click', async () => {
-    const { container } = render(App);
+    const { container } = render(App, { props: { initialRanklist: makePreviewRanklist() } });
     const problemHeader = container.querySelector('th.srk-problem-header') as HTMLElement | null;
 
     expect(problemHeader).toBeTruthy();
@@ -112,8 +114,68 @@ describe('Svelte local demo app', () => {
     expect(container.querySelector('.srk-problem-modal')).toBeTruthy();
     expect(container.textContent).toContain('Problem Info');
     expect(container.textContent).toContain('Alias: A');
-    expect(container.textContent).toContain('Title: Some Title');
-    expect(container.textContent).toContain('Link: https://icpc.global');
-    expect(container.textContent).toContain('Stats: 320 accepted / 596 submitted');
+    expect(container.textContent).toContain('Title: Preview Problem');
+    expect(container.textContent).toContain('Link: https://example.com/problem-a');
+    expect(container.textContent).toContain('Stats: 1 accepted / 1 submitted');
+  });
+
+  it('switches CCPC26 manually and follows the replay freeze boundary in both directions', async () => {
+    const ranklist = makePreviewRanklist();
+    ranklist.sorter = {
+      algorithm: 'ICPC',
+      config: {
+        extendedAlgorithms: [{ algorithm: 'CCPC26', config: { problemRevealAcceptedThreshold: { count: 2 } } }],
+      },
+    };
+    const before = JSON.stringify(ranklist);
+    const { container } = render(App, { props: { initialRanklist: ranklist } });
+    const toggle = getField(container, 'CCPC26 mode') as HTMLInputElement;
+    const headers = () =>
+      Array.from(container.querySelectorAll('thead .srk-problem-header')).map(
+        (cell) => cell.querySelector('span')?.textContent || '',
+      );
+    const slider = container.querySelector('input[aria-label="Time Travel"]')!;
+    async function selectMinute(minute: number) {
+      await fireEvent.mouseDown(slider);
+      await fireEvent.input(slider, { target: { value: String(minute) } });
+      await fireEvent.mouseUp(slider);
+      await tick();
+    }
+
+    expect(toggle.checked).toBe(false);
+    expect(headers()).toEqual(['A', 'B']);
+    await fireEvent.click(toggle);
+    expect(toggle.checked).toBe(true);
+    expect(headers()).toEqual(['', '']);
+    await fireEvent.click(getButton(container, 'Baseline'));
+    expect(toggle.checked).toBe(true);
+    await fireEvent.click(toggle);
+    expect(headers()).toEqual(['A', 'B']);
+
+    await selectMinute(0);
+    expect(toggle.checked).toBe(true);
+    expect(headers()).toEqual(['', '']);
+    expect(container.querySelector('tbody .srk-prest-status-block-accepted')).toBeNull();
+    await selectMinute(7);
+    await fireEvent.click(getAcceptedStatusCell(container));
+    expect(textOf(container.querySelector('.srk-modal-title'))).toBe('Solutions (Preview Team)');
+    await fireEvent.click(toggle);
+    await waitFor(() => expect(container.querySelector('.srk-modal-root')).toBeNull());
+    expect(headers()).toEqual(['A', 'B']);
+
+    await selectMinute(7);
+    expect(toggle.checked).toBe(true);
+    await fireEvent.click(getAcceptedStatusCell(container));
+    await selectMinute(8);
+    expect(toggle.checked).toBe(false);
+    expect(headers()).toEqual(['A', 'B']);
+    await waitFor(() => expect(container.querySelector('.srk-modal-root')).toBeNull());
+    await selectMinute(7);
+    expect(headers()).toEqual(['', '']);
+    await selectMinute(10);
+    expect(toggle.checked).toBe(false);
+    expect(headers()).toEqual(['A', 'B']);
+    expect(container.textContent).not.toContain('Time Travel Mode');
+    expect(JSON.stringify(ranklist)).toBe(before);
   });
 });

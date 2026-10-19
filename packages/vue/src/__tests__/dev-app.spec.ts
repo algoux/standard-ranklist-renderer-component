@@ -2,7 +2,10 @@ import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
 import { afterEach, describe, expect, it } from 'vitest';
 import { resetModalInteractionStateForTests } from '@algoux/standard-ranklist-renderer-component-core';
-import App from '../../dev/App.vue';
+
+import { makePreviewRanklist } from '../../../../tests/shared/preview-ranklist-fixture';
+
+const { default: App } = await import('../../dev/App.vue');
 
 function textOf(element: Element | null | undefined): string {
   return (element?.textContent || '').replace(/\s+/g, ' ').trim();
@@ -28,7 +31,7 @@ describe('Vue local demo app', () => {
   });
 
   it('renders interactive examples for the new Ranklist render option props', async () => {
-    const wrapper = mount(App);
+    const wrapper = mount(App, { props: { initialRanklist: makePreviewRanklist() } });
     const container = wrapper.element as HTMLElement;
 
     try {
@@ -77,7 +80,7 @@ describe('Vue local demo app', () => {
       language.dispatchEvent(new Event('change', { bubbles: true }));
       await nextTick();
       expect(language.value).toBe('zh-CN');
-      expect(container.textContent).toContain('中二之力');
+      expect(container.textContent).toContain('测试队伍');
 
       getButton(container, 'Baseline').click();
       await nextTick();
@@ -99,7 +102,7 @@ describe('Vue local demo app', () => {
   });
 
   it('opens the custom problem modal from a problem header click', async () => {
-    const wrapper = mount(App);
+    const wrapper = mount(App, { props: { initialRanklist: makePreviewRanklist() } });
     const container = wrapper.element as HTMLElement;
 
     try {
@@ -113,9 +116,62 @@ describe('Vue local demo app', () => {
       expect(container.querySelector('.srk-problem-modal')).toBeTruthy();
       expect(container.textContent).toContain('Problem Info');
       expect(container.textContent).toContain('Alias: A');
-      expect(container.textContent).toContain('Title: Some Title');
-      expect(container.textContent).toContain('Link: https://icpc.global');
-      expect(container.textContent).toContain('Stats: 320 accepted / 596 submitted');
+      expect(container.textContent).toContain('Title: Preview Problem');
+      expect(container.textContent).toContain('Link: https://example.com/problem-a');
+      expect(container.textContent).toContain('Stats: 1 accepted / 1 submitted');
+    } finally {
+      wrapper.unmount();
+    }
+  });
+});
+
+describe('Vue CCPC26 preview controls', () => {
+  it('toggles manually and follows the exact freeze boundary, rewind and replay exit', async () => {
+    const data = makePreviewRanklist();
+    const before = JSON.stringify(data);
+    const wrapper = mount(App, { props: { initialRanklist: data } });
+    const labels = () =>
+      wrapper.findAll('thead .srk-problem-header').map((cell) => cell.element.querySelector('span')?.textContent || '');
+    const toggle = () => wrapper.find<HTMLInputElement>('[aria-label="CCPC26 mode"]');
+    const selectMinute = async (minute: number) => {
+      const slider = wrapper.find<HTMLInputElement>('[aria-label="Time Travel"]');
+      await slider.trigger('mousedown');
+      slider.element.value = String(minute);
+      await slider.trigger('input');
+      await slider.trigger('mouseup');
+    };
+    try {
+      expect(labels()).toEqual(['A', 'B']);
+      await toggle().setValue(true);
+      expect(labels()).toEqual(['', '']);
+      await toggle().setValue(false);
+      expect(labels()).toEqual(['A', 'B']);
+      for (const [minute, enabled] of [
+        [0, true],
+        [7, true],
+        [8, false],
+        [7, true],
+        [10, false],
+      ] as const) {
+        await selectMinute(minute);
+        expect(toggle().element.checked).toBe(enabled);
+        expect(labels()).toEqual(enabled ? ['', ''] : ['A', 'B']);
+      }
+      expect(JSON.stringify(data)).toBe(before);
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it('passes anonymous details to the modal and closes details when toggling the mode', async () => {
+    const wrapper = mount(App, { props: { initialRanklist: makePreviewRanklist() } });
+    try {
+      await wrapper.find<HTMLInputElement>('[aria-label="CCPC26 mode"]').setValue(true);
+      await wrapper.find('tbody .srk-prest-status-block-accepted').trigger('click');
+      expect(wrapper.find('.srk-modal-title').text()).toBe('Solutions (Preview Team)');
+      await wrapper.find<HTMLInputElement>('[aria-label="CCPC26 mode"]').setValue(false);
+      expect(wrapper.find('.srk-animated-modal-root').attributes('data-srk-modal-state')).toBe('closing');
+      expect(wrapper.find('.srk-modal-title').text()).toBe('Solutions (Preview Team)');
     } finally {
       wrapper.unmount();
     }

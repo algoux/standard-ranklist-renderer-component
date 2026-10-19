@@ -35,6 +35,8 @@ export interface SolutionClickPayload {
   row: StaticRanklistRow;
   rowIndex: number;
   problemIndex: number;
+  /** Whether the problem identity is revealed. Omitted means true. */
+  problemRevealed?: boolean;
   problem: srk.Problem | undefined;
   status: srk.RankProblemStatus;
   solutions: srk.Solution[];

@@ -3,6 +3,7 @@ import {
   formatSolutionTimestamp,
   getSolutionModalTitle,
   getSolutionResultMeta,
+  getSolutionDisplayResult,
 } from '@algoux/standard-ranklist-renderer-component-core';
 import { createEffect, createSignal, For, Show } from 'solid-js';
 import { Modal, type ModalProps } from './Modal';
@@ -12,6 +13,7 @@ export interface DefaultSolutionModalProps
   user?: srk.User | null;
   problem?: srk.Problem;
   problemIndex: number;
+  problemRevealed?: boolean;
   solutions: srk.Solution[];
   title?: string;
   width?: number;
@@ -23,6 +25,7 @@ export function DefaultSolutionModal(props: DefaultSolutionModalProps) {
     user: srk.User;
     problem?: srk.Problem;
     problemIndex: number;
+    problemRevealed: boolean;
     solutions: srk.Solution[];
   } | null>(
     props.user
@@ -30,6 +33,7 @@ export function DefaultSolutionModal(props: DefaultSolutionModalProps) {
           user: props.user,
           problem: props.problem,
           problemIndex: props.problemIndex,
+          problemRevealed: props.problemRevealed ?? true,
           solutions: props.solutions || [],
         }
       : null,
@@ -41,6 +45,7 @@ export function DefaultSolutionModal(props: DefaultSolutionModalProps) {
         user: props.user,
         problem: props.problem,
         problemIndex: props.problemIndex,
+        problemRevealed: props.problemRevealed ?? true,
         solutions: props.solutions || [],
       });
     }
@@ -54,7 +59,10 @@ export function DefaultSolutionModal(props: DefaultSolutionModalProps) {
           onClose={props.onClose}
           rootClassName={props.rootClassName || 'srk-general-modal-root'}
           style={props.style}
-          title={props.title || getSolutionModalTitle(payload().problemIndex, payload().user, props.languages)}
+          title={
+            props.title ||
+            getSolutionModalTitle(payload().problemIndex, payload().user, props.languages, payload().problemRevealed)
+          }
           width={props.width || 320}
           wrapClassName={props.wrapClassName || 'srk-solutions-modal'}
         >
@@ -68,7 +76,8 @@ export function DefaultSolutionModal(props: DefaultSolutionModalProps) {
             <tbody>
               <For each={payload().solutions}>
                 {(solution) => {
-                  const meta = () => getSolutionResultMeta(solution.result);
+                  const meta = () =>
+                    getSolutionResultMeta(getSolutionDisplayResult(solution.result, payload().problemRevealed));
                   return (
                     <tr>
                       <td>

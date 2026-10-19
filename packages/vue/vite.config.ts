@@ -13,6 +13,7 @@ export default defineConfig({
     }),
   ],
   define: {
+    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
     SRK_SUPPORTED_VERSIONS: JSON.stringify(pkg.srkSupportedVersions),
   },
   build: {

@@ -88,7 +88,7 @@ describe('framework dev previews', () => {
   it('angular preview uses root bootstrap for interactive change detection', () => {
     const source = read('packages/angular/dev/main.ts');
 
-    expect(source).toMatch(/\bbootstrapApplication\(AppComponent\)/);
+    expect(source).toMatch(/\bbootstrapApplication\(\s*AppComponent\s*[,)]/);
     expect(source).not.toMatch(/\bcreateComponent\b/);
   });
 

@@ -18,10 +18,21 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(solution, index) in cachedPayload.solutions" :key="`${solution.result}_${solution.time?.[0]}_${index}`">
+        <tr
+          v-for="(solution, index) in cachedPayload.solutions"
+          :key="`${solution.result}_${solution.time?.[0]}_${index}`"
+        >
           <td>
-            <span class="srk-solution-result-text" :class="getSolutionResultMeta(solution.result).className">
-              {{ getSolutionResultMeta(solution.result).label }}
+            <span
+              class="srk-solution-result-text"
+              :class="
+                getSolutionResultMeta(getSolutionDisplayResult(solution.result, cachedPayload.problemRevealed))
+                  .className
+              "
+            >
+              {{
+                getSolutionResultMeta(getSolutionDisplayResult(solution.result, cachedPayload.problemRevealed)).label
+              }}
             </span>
           </td>
           <td class="srk--text-right">{{ formatSolutionTimestamp(solution) }}</td>
@@ -39,6 +50,7 @@ import {
   formatSolutionTimestamp,
   getSolutionModalTitle,
   getSolutionResultMeta,
+  getSolutionDisplayResult,
 } from '@algoux/standard-ranklist-renderer-component-core';
 import Modal from './Modal.vue';
 
@@ -48,6 +60,7 @@ const props = withDefaults(
     user?: srk.User | null;
     problem?: srk.Problem;
     problemIndex: number;
+    problemRevealed?: boolean;
     solutions: srk.Solution[];
     title?: string;
     width?: number;
@@ -58,6 +71,7 @@ const props = withDefaults(
   }>(),
   {
     solutions: () => [],
+    problemRevealed: true,
     width: 320,
     rootClassName: 'srk-general-modal-root',
     wrapClassName: 'srk-solutions-modal',
@@ -73,6 +87,7 @@ const cachedPayload = ref<{
   user: srk.User;
   problem?: srk.Problem;
   problemIndex: number;
+  problemRevealed: boolean;
   solutions: srk.Solution[];
 } | null>(
   props.user
@@ -80,19 +95,21 @@ const cachedPayload = ref<{
         user: props.user,
         problem: props.problem,
         problemIndex: props.problemIndex,
+        problemRevealed: props.problemRevealed,
         solutions: props.solutions,
       }
     : null,
 );
 
 watch(
-  [() => props.user, () => props.problem, () => props.problemIndex, () => props.solutions],
-  ([user, problem, problemIndex, solutions]) => {
+  [() => props.user, () => props.problem, () => props.problemIndex, () => props.solutions, () => props.problemRevealed],
+  ([user, problem, problemIndex, solutions, problemRevealed]) => {
     if (user) {
       cachedPayload.value = {
         user,
         problem,
         problemIndex,
+        problemRevealed,
         solutions,
       };
     }
@@ -100,8 +117,16 @@ watch(
   { immediate: true },
 );
 
-const resolvedTitle = computed(() =>
-  props.title ||
-  (cachedPayload.value ? getSolutionModalTitle(cachedPayload.value.problemIndex, cachedPayload.value.user, props.languages) : ''),
+const resolvedTitle = computed(
+  () =>
+    props.title ||
+    (cachedPayload.value
+      ? getSolutionModalTitle(
+          cachedPayload.value.problemIndex,
+          cachedPayload.value.user,
+          props.languages,
+          cachedPayload.value.problemRevealed,
+        )
+      : ''),
 );
 </script>

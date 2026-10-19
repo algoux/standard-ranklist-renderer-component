@@ -1,3 +1,4 @@
+import { getSolutionDisplayResult } from '@algoux/standard-ranklist-renderer-component-core';
 import type * as srk from '@algoux/standard-ranklist';
 import { CommonModule } from '@angular/common';
 import {
@@ -64,6 +65,7 @@ export class DefaultSolutionModalComponent implements OnChanges {
   @Input() user?: srk.User | null;
   @Input() problem?: srk.Problem;
   @Input() problemIndex = 0;
+  @Input() problemRevealed?: boolean = true;
   @Input() solutions: srk.Solution[] = [];
   @Input() title?: string;
   @Input() width = 320;
@@ -79,6 +81,7 @@ export class DefaultSolutionModalComponent implements OnChanges {
   cachedUser: srk.User | null = null;
   cachedProblem?: srk.Problem;
   cachedProblemIndex = 0;
+  cachedProblemRevealed = true;
   cachedSolutions: srk.Solution[] = [];
 
   ngOnChanges(_changes: SimpleChanges) {
@@ -86,16 +89,17 @@ export class DefaultSolutionModalComponent implements OnChanges {
       this.cachedUser = this.user;
       this.cachedProblem = this.problem;
       this.cachedProblemIndex = this.problemIndex;
+      this.cachedProblemRevealed = this.problemRevealed !== false;
       this.cachedSolutions = this.solutions;
     }
   }
 
   resolvedTitle() {
-    return this.title || (this.cachedUser ? getSolutionModalTitle(this.cachedProblemIndex, this.cachedUser, this.languages) : '');
+    return this.title || (this.cachedUser ? getSolutionModalTitle(this.cachedProblemIndex, this.cachedUser, this.languages, this.cachedProblemRevealed) : '');
   }
 
   solutionMeta(solution: srk.Solution): SolutionResultMeta {
-    return getSolutionResultMeta(solution.result);
+    return getSolutionResultMeta(getSolutionDisplayResult(solution.result, this.cachedProblemRevealed));
   }
 
   trackBySolution(index: number, solution: srk.Solution) {

@@ -12,6 +12,7 @@ export interface StatusCellTemplateContext {
   status: srk.RankProblemStatus;
   problem: srk.Problem | undefined;
   problemIndex: number;
+  problemRevealed?: boolean;
   user: srk.User;
   row: StaticRanklistRow;
   rowIndex: number;

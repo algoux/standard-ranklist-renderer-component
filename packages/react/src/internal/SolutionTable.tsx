@@ -1,12 +1,13 @@
 import type * as srk from '@algoux/standard-ranklist';
-import { formatSolutionTimestamp } from '@algoux/standard-ranklist-renderer-component-core';
+import { formatSolutionTimestamp, getSolutionDisplayResult } from '@algoux/standard-ranklist-renderer-component-core';
 import { SolutionResultLabel } from './SolutionResultLabel';
 
 export interface SolutionTableProps {
   solutions: srk.Solution[];
+  problemRevealed?: boolean;
 }
 
-export function SolutionTable({ solutions }: SolutionTableProps) {
+export function SolutionTable({ solutions, problemRevealed = true }: SolutionTableProps) {
   return (
     <table className="srk-common-table srk-solutions-table">
       <thead>
@@ -19,7 +20,7 @@ export function SolutionTable({ solutions }: SolutionTableProps) {
         {solutions.map((solution, index) => (
           <tr key={`${solution.result}_${solution.time[0]}_${index}`}>
             <td>
-              <SolutionResultLabel result={solution.result} />
+              <SolutionResultLabel result={getSolutionDisplayResult(solution.result, problemRevealed)} />
             </td>
             <td className="srk--text-right">{formatSolutionTimestamp(solution)}</td>
           </tr>

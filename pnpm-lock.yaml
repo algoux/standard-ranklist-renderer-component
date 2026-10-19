@@ -9,11 +9,11 @@ importers:
   .:
     devDependencies:
       '@algoux/standard-ranklist':
-        specifier: 0.3.13
-        version: 0.3.13
+        specifier: 0.3.14
+        version: 0.3.14
       '@algoux/standard-ranklist-utils':
-        specifier: ^0.3.1
-        version: 0.3.1(@algoux/standard-ranklist@0.3.13)
+        specifier: ^0.3.4
+        version: 0.3.4(@algoux/standard-ranklist@0.3.14)
       '@changesets/cli':
         specifier: ^2.31.0
         version: 2.31.0(@types/node@14.18.22)
@@ -107,19 +107,19 @@ importers:
 
   packages/angular:
     dependencies:
-      '@algoux/standard-ranklist':
-        specifier: '*'
-        version: 0.3.12
       '@algoux/standard-ranklist-renderer-component-core':
         specifier: workspace:*
         version: link:../core
       '@algoux/standard-ranklist-utils':
-        specifier: ^0.3.1
-        version: 0.3.1(@algoux/standard-ranklist@0.3.12)
+        specifier: ^0.3.4
+        version: 0.3.4(@algoux/standard-ranklist@0.3.14)
       tslib:
         specifier: ^2.3.0
         version: 2.4.0
     devDependencies:
+      '@algoux/standard-ranklist':
+        specifier: 0.3.14
+        version: 0.3.14
       '@algoux/standard-ranklist-renderer-component-styles':
         specifier: workspace:*
         version: link:../styles
@@ -156,24 +156,22 @@ importers:
 
   packages/core:
     dependencies:
-      '@algoux/standard-ranklist':
-        specifier: '*'
-        version: 0.3.12
       '@algoux/standard-ranklist-utils':
-        specifier: ^0.3.1
-        version: 0.3.1(@algoux/standard-ranklist@0.3.12)
+        specifier: ^0.3.4
+        version: 0.3.4(@algoux/standard-ranklist@0.3.14)
       color:
         specifier: ^4.2.3
         version: 4.2.3
       semver:
         specifier: ^7.3.7
         version: 7.5.4
+    devDependencies:
+      '@algoux/standard-ranklist':
+        specifier: 0.3.14
+        version: 0.3.14
 
   packages/react:
     dependencies:
-      '@algoux/standard-ranklist':
-        specifier: '*'
-        version: 0.3.12
       '@algoux/standard-ranklist-renderer-component-core':
         specifier: workspace:*
         version: link:../core
@@ -181,8 +179,8 @@ importers:
         specifier: workspace:*
         version: link:../styles
       '@algoux/standard-ranklist-utils':
-        specifier: ^0.3.1
-        version: 0.3.1(@algoux/standard-ranklist@0.3.12)
+        specifier: ^0.3.4
+        version: 0.3.4(@algoux/standard-ranklist@0.3.14)
       classnames:
         specifier: ^2.3.1
         version: 2.3.1
@@ -192,12 +190,13 @@ importers:
       react-dom:
         specifier: '>=16.9.0'
         version: 16.14.0(react@16.14.0)
+    devDependencies:
+      '@algoux/standard-ranklist':
+        specifier: 0.3.14
+        version: 0.3.14
 
   packages/solid:
     dependencies:
-      '@algoux/standard-ranklist':
-        specifier: '*'
-        version: 0.3.12
       '@algoux/standard-ranklist-renderer-component-core':
         specifier: workspace:*
         version: link:../core
@@ -205,19 +204,20 @@ importers:
         specifier: workspace:*
         version: link:../styles
       '@algoux/standard-ranklist-utils':
-        specifier: ^0.3.1
-        version: 0.3.1(@algoux/standard-ranklist@0.3.12)
+        specifier: ^0.3.4
+        version: 0.3.4(@algoux/standard-ranklist@0.3.14)
       solid-js:
         specifier: '>=1.9.0'
         version: 1.9.12
+    devDependencies:
+      '@algoux/standard-ranklist':
+        specifier: 0.3.14
+        version: 0.3.14
 
   packages/styles: {}
 
   packages/svelte:
     dependencies:
-      '@algoux/standard-ranklist':
-        specifier: '*'
-        version: 0.3.12
       '@algoux/standard-ranklist-renderer-component-core':
         specifier: workspace:*
         version: link:../core
@@ -225,17 +225,18 @@ importers:
         specifier: workspace:*
         version: link:../styles
       '@algoux/standard-ranklist-utils':
-        specifier: ^0.3.1
-        version: 0.3.1(@algoux/standard-ranklist@0.3.12)
+        specifier: ^0.3.4
+        version: 0.3.4(@algoux/standard-ranklist@0.3.14)
       svelte:
         specifier: '>=3.44.0'
         version: 3.59.2
+    devDependencies:
+      '@algoux/standard-ranklist':
+        specifier: 0.3.14
+        version: 0.3.14
 
   packages/vue:
     dependencies:
-      '@algoux/standard-ranklist':
-        specifier: '*'
-        version: 0.3.12
       '@algoux/standard-ranklist-renderer-component-core':
         specifier: workspace:*
         version: link:../core
@@ -243,11 +244,15 @@ importers:
         specifier: workspace:*
         version: link:../styles
       '@algoux/standard-ranklist-utils':
-        specifier: ^0.3.1
-        version: 0.3.1(@algoux/standard-ranklist@0.3.12)
+        specifier: ^0.3.4
+        version: 0.3.4(@algoux/standard-ranklist@0.3.14)
       vue:
         specifier: '>=3.4.0'
         version: 3.5.33(typescript@5.4.5)
+    devDependencies:
+      '@algoux/standard-ranklist':
+        specifier: 0.3.14
+        version: 0.3.14
 
 packages:
 
@@ -255,16 +260,13 @@ packages:
     resolution: {integrity: sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==}
     engines: {node: '>=0.10.0'}
 
-  '@algoux/standard-ranklist-utils@0.3.1':
-    resolution: {integrity: sha512-qxXZEd6D4zLCzif3/13d8iXfX37hf0enQ52X+I1GhwQwlTGmnH4jjdQKQzX4O13ntuFRPYxtlv9/qXoWf/4zxA==}
+  '@algoux/standard-ranklist-utils@0.3.4':
+    resolution: {integrity: sha512-7+yTxtFxbTmqdWK8GHQQ3/flEU5SHBTy92ot2Ygdr1SdlyM0uc4LXin9krjiecuBx0nUd11bJDxGHepvmyJtNg==}
     peerDependencies:
       '@algoux/standard-ranklist': '*'
 
-  '@algoux/standard-ranklist@0.3.12':
-    resolution: {integrity: sha512-O15MB6vtukM6sVZbbHxUNYbQqQWup4Q6FZIFHw+tPdK6RiHKlquQciAknAUPm2Ol14ewOzXxXVurY3dwvJkZGA==}
-
-  '@algoux/standard-ranklist@0.3.13':
-    resolution: {integrity: sha512-kwviR/kDwd/sSEQPQEyG6M3YDqyKnfeF4qPvQN+lkqggJaVjFD6NyJmwk8oByXnbAlAV+ljwAmhsXGF479fAgw==}
+  '@algoux/standard-ranklist@0.3.14':
+    resolution: {integrity: sha512-+MilB1Z8DmiV8EoKzOgbfvbn+TNIQ+7nuJCp+jsONhdJH9fsHKMiZhad2qJZAcXcNf3Xow5+gVMWIE6/NplBew==}
 
   '@ampproject/remapping@2.2.0':
     resolution: {integrity: sha512-qRmjj8nj9qmLTQXXmaR1cck3UXSRMPrbsLJAasZpF+t3riI71BXed5ebIOYwQntykeZuhjsdweEc9BxH5Jc26w==}
@@ -3839,27 +3841,16 @@ snapshots:
 
   '@aashutoshrathi/word-wrap@1.2.6': {}
 
-  '@algoux/standard-ranklist-utils@0.3.1(@algoux/standard-ranklist@0.3.12)':
+  '@algoux/standard-ranklist-utils@0.3.4(@algoux/standard-ranklist@0.3.14)':
     dependencies:
-      '@algoux/standard-ranklist': 0.3.12
+      '@algoux/standard-ranklist': 0.3.14
       '@types/semver': 7.7.0
       bcp-47-match: 2.0.2
       bignumber.js: 9.1.1
       semver: 7.5.4
       textcolor: 1.0.2
 
-  '@algoux/standard-ranklist-utils@0.3.1(@algoux/standard-ranklist@0.3.13)':
-    dependencies:
-      '@algoux/standard-ranklist': 0.3.13
-      '@types/semver': 7.7.0
-      bcp-47-match: 2.0.2
-      bignumber.js: 9.1.1
-      semver: 7.5.4
-      textcolor: 1.0.2
-
-  '@algoux/standard-ranklist@0.3.12': {}
-
-  '@algoux/standard-ranklist@0.3.13': {}
+  '@algoux/standard-ranklist@0.3.14': {}
 
   '@ampproject/remapping@2.2.0':
     dependencies:

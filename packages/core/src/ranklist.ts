@@ -491,8 +491,14 @@ export function calculateSEValue(
   return formatAverageHardnessValue(values.reduce((sum, value) => sum + value, 0) / values.length);
 }
 
-export function getSolutionModalTitle(problemIndex: number, user: srk.User, languages?: readonly string[]): string {
-  return `Solutions of ${numberToAlphabet(problemIndex)} (${resolveText(user.name, languages)})`;
+export function getSolutionModalTitle(
+  problemIndex: number,
+  user: srk.User,
+  languages?: readonly string[],
+  problemRevealed = true,
+): string {
+  const subject = problemRevealed ? `Solutions of ${numberToAlphabet(problemIndex)}` : 'Solutions';
+  return `${subject} (${resolveText(user.name, languages)})`;
 }
 
 export function formatSolutionTimestamp(solution: srk.Solution): string {

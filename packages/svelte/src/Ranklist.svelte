@@ -17,6 +17,8 @@
     formatProblemStatisticsAverageHardness,
     formatProblemStatisticsPercent,
     getMarkerPresentation,
+    getRanklistProblemPresentation,
+    getRankProblemDisplayStatus,
     getProblemHeaderBackgroundImageIfStyled,
     getRankProblemStatusCellClassName,
     getRankProblemStatusCellPresentation,
@@ -27,6 +29,7 @@
 
   export let data;
   export let theme = EnumTheme.light;
+  export let enableCCPC26 = false;
   export let rowBordered = false;
   export let columnBordered = false;
   export let rowStriped = false;
@@ -47,6 +50,9 @@
 
   $: showTimeColumn = shouldShowTimeColumn(data.rows);
   $: isSupportedVersion = caniuse(data.version);
+  $: problemPresentation = data.type === 'general' && isSupportedVersion
+    ? getRanklistProblemPresentation(data, enableCCPC26)
+    : undefined;
   $: showAvatarInOrganization = splitOrganization && userAvatarPlacement === 'organization';
   $: problemStatistics = showProblemStatisticsFooter || showSEColumn ? calculateProblemStatisticsFooter(data) : [];
   $: leftFooterColumnCount = data.series.length + 1 + 1 + (showTimeColumn ? 1 : 0) + (splitOrganization ? 1 : 0);
@@ -185,7 +191,7 @@
     return getStatusSolutions(status).length > 0;
   }
 
-  function statusCellClass(status, colorAsText) {
+  function statusCellClass(status, colorAsText, ranklist) {
     const classNames = ['srk-prest-status-block', 'srk--text-center', 'srk--nowrap'];
     if (hasSolutions(status)) {
       classNames.push('srk--cursor-pointer');
@@ -193,15 +199,15 @@
     if (colorAsText) {
       classNames.push('srk-prest-status-block-color-text');
     }
-    const resultClassName = getRankProblemStatusCellClassName(status, data);
+    const resultClassName = getRankProblemStatusCellClassName(status, ranklist);
     if (resultClassName) {
       classNames.push(resultClassName);
     }
     return classNames.join(' ');
   }
 
-  function statusPresentation(status, preset) {
-    return getRankProblemStatusCellPresentation(status, data, preset);
+  function statusPresentation(status, preset, ranklist) {
+    return getRankProblemStatusCellPresentation(status, ranklist, preset);
   }
 
   function footerCellPrimary(key, stat) {
@@ -281,6 +287,16 @@
     dispatch('problemClick', payload);
   }
 
+  function solutionClickHandler(row, rowIndex, problemIndex) {
+    return (event) => emitSolutionClick(
+      event,
+      row,
+      rowIndex,
+      row.statuses[problemIndex] || getRankProblemDisplayStatus(undefined),
+      problemIndex,
+    );
+  }
+
   function emitSolutionClick(event, row, rowIndex, status, problemIndex) {
     const solutions = getStatusSolutions(status);
     if (!solutions.length) {
@@ -304,6 +320,7 @@
       rowIndex,
       problemIndex,
       problem: data.problems[problemIndex],
+      problemRevealed: problemPresentation.problemRevealed[problemIndex],
       status,
       solutions,
       ranklist: data,
@@ -322,6 +339,11 @@
       class:srk-table-column-bordered={columnBordered}
       class:srk-table-row-striped={rowStriped}
     >
+      {#if problemPresentation.hasRevealDivider}
+        <colgroup span={leftFooterColumnCount}></colgroup>
+        <colgroup class="srk-ccpc26-revealed-columns" span={problemPresentation.revealedProblemCount}></colgroup>
+        <colgroup span={data.problems.length - problemPresentation.revealedProblemCount + (showDirtColumn ? 1 : 0) + (showSEColumn ? 1 : 0)}></colgroup>
+      {/if}
       <thead>
         <tr>
           {#each data.series as seriesItem, seriesIndex}
@@ -342,46 +364,54 @@
           {#if showTimeColumn}
             <th class="srk--text-right srk--nowrap">{resolveColumnTitle('time', 'Time', columnTitles)}</th>
           {/if}
-          {#each data.problems as problem, problemIndex}
-            <th
-              class="srk--nowrap srk-problem-header"
-              class:srk--cursor-pointer={!!onProblemClick}
-              style:background-image={getProblemHeaderBackgroundImageIfStyled(problem.style, theme)}
-              on:click={(event) => {
-                if (onProblemClick) {
-                  emitProblemClick(event, problem, problemIndex);
-                }
-              }}
-            >
-              <slot
-                name="problem-header-cell"
-                {problem}
-                {problemIndex}
-                index={problemIndex}
-                ranklist={data}
-                {theme}
-                {languages}
-                onClick={(event) => emitProblemClick(event, problem, problemIndex)}
+          {#each problemPresentation.problemColumns as problemIndex, columnIndex}
+            {#if problemIndex === null}
+              <th class="srk--nowrap srk-problem-header"></th>
+            {:else}
+              {@const problem = data.problems[problemIndex]}
+              <th
+                class={`srk--nowrap srk-problem-header ${problemPresentation.headerClassNames[columnIndex] || ''}`}
+                class:srk--cursor-pointer={!!onProblemClick}
+                style:background-image={getProblemHeaderBackgroundImageIfStyled(problem.style, theme)}
+                on:click={(event) => {
+                  if (onProblemClick) {
+                    emitProblemClick(event, problem, problemIndex);
+                  }
+                }}
               >
-                {#if problem.link && !onProblemClick}
-                  <a href={problem.link} target="_blank" rel="noopener noreferrer" style="color: unset">
+                <!-- className is a slot property, not a DOM attribute. -->
+                <!-- svelte-ignore invalid-html-attribute -->
+                <slot
+                  name="problem-header-cell"
+                  className={problemPresentation.headerClassNames[columnIndex]}
+                  {problem}
+                  {problemIndex}
+                  index={problemIndex}
+                  ranklist={data}
+                  {theme}
+                  {languages}
+                  onClick={(event) => emitProblemClick(event, data.problems[problemIndex], problemIndex)}
+                >
+                  {#if problem.link && !onProblemClick}
+                    <a href={problem.link} target="_blank" rel="noopener noreferrer" style="color: unset">
+                      <span class="srk--display-block">{problemAlias(problem, problemIndex)}</span>
+                      {#if problem.statistics}
+                        <span class="srk--display-block srk-problem-stats" title={problemStatsTitle(problem.statistics)}>
+                          {problem.statistics.accepted}
+                        </span>
+                      {/if}
+                    </a>
+                  {:else}
                     <span class="srk--display-block">{problemAlias(problem, problemIndex)}</span>
                     {#if problem.statistics}
                       <span class="srk--display-block srk-problem-stats" title={problemStatsTitle(problem.statistics)}>
                         {problem.statistics.accepted}
                       </span>
                     {/if}
-                  </a>
-                {:else}
-                  <span class="srk--display-block">{problemAlias(problem, problemIndex)}</span>
-                  {#if problem.statistics}
-                    <span class="srk--display-block srk-problem-stats" title={problemStatsTitle(problem.statistics)}>
-                      {problem.statistics.accepted}
-                    </span>
                   {/if}
-                {/if}
-              </slot>
-            </th>
+                </slot>
+              </th>
+            {/if}
           {/each}
           {#if showDirtColumn}
             <th class="srk-dirt-header srk--text-right srk--nowrap">{resolveColumnTitle('dirt', 'Dirt', columnTitles)}</th>
@@ -479,9 +509,13 @@
                 {row.score.time ? formatTimeDuration(row.score.time, 'min', Math.floor) : '-'}
               </td>
             {/if}
-            {#each row.statuses as status, problemIndex}
+            {#each problemPresentation.rowProblemIndexes[rowIndex] as problemIndex (problemIndex)}
+              {@const status = row.statuses[problemIndex] || getRankProblemDisplayStatus(undefined)}
+              {@const problemRevealed = problemPresentation.problemRevealed[problemIndex]}
+              {@const displayStatus = getRankProblemDisplayStatus(status, problemRevealed)}
               <slot
                 name="status-cell"
+                {problemRevealed}
                 {status}
                 problem={data.problems[problemIndex]}
                 {problemIndex}
@@ -494,16 +528,16 @@
                 statusColorAsText={statusColorAsText}
                 emptyStatusPlaceholder={emptyStatusPlaceholder}
                 {languages}
-                onClick={(event) => emitSolutionClick(event, row, rowIndex, status, problemIndex)}
+                onClick={solutionClickHandler(row, rowIndex, problemIndex)}
               >
-                {#if status.result === 'FB' || status.result === 'AC'}
-                  {@const presentation = statusPresentation(status, statusCellPreset)}
+                {#if displayStatus.result === 'FB' || displayStatus.result === 'AC'}
+                  {@const presentation = statusPresentation(displayStatus, statusCellPreset, data)}
                   <!-- svelte-ignore a11y-click-events-have-key-events -->
                   <td
-                    class={statusCellClass(status, statusColorAsText)}
+                    class={statusCellClass(displayStatus, statusColorAsText, data)}
                     on:click|preventDefault={(event) => emitSolutionClick(event, row, rowIndex, status, problemIndex)}
                   >
-                    {#if statusColorAsText && status.result === 'FB'}
+                    {#if statusColorAsText && displayStatus.result === 'FB'}
                       <span class="srk-prest-status-block-fb-star">{firstBloodStar}</span>
                     {/if}
                     {#if typeof presentation.score === 'number'}
@@ -518,11 +552,11 @@
                       {presentation.primary}
                     {/if}
                   </td>
-                {:else if status.result === '?' || status.result === 'RJ'}
-                  {@const presentation = statusPresentation(status, statusCellPreset)}
+                {:else if displayStatus.result === '?' || displayStatus.result === 'RJ'}
+                  {@const presentation = statusPresentation(displayStatus, statusCellPreset, data)}
                   <!-- svelte-ignore a11y-click-events-have-key-events -->
                   <td
-                    class={statusCellClass(status, statusColorAsText)}
+                    class={statusCellClass(displayStatus, statusColorAsText, data)}
                     on:click|preventDefault={(event) => emitSolutionClick(event, row, rowIndex, status, problemIndex)}
                   >
                     {#if typeof presentation.score === 'number'}
@@ -562,14 +596,19 @@
                   {footerRow.label}
                 </span>
               </td>
-              {#each problemStatistics as stat}
-                {@const secondary = footerCellSecondary(footerRow.key, stat)}
-                <td class="srk-problem-statistics-footer-cell srk--text-center srk--nowrap">
-                  <span class="srk-problem-statistics-footer-primary">{footerCellPrimary(footerRow.key, stat)}</span>
-                  {#if secondary !== undefined}
-                    {' '}<span class="srk-problem-statistics-footer-secondary">{secondary}</span>
-                  {/if}
-                </td>
+              {#each problemPresentation.problemColumns as problemIndex}
+                {#if problemIndex === null}
+                  <td class="srk-problem-statistics-footer-cell srk--text-center srk--nowrap"></td>
+                {:else}
+                  {@const stat = problemStatistics[problemIndex]}
+                  {@const secondary = footerCellSecondary(footerRow.key, stat)}
+                  <td class="srk-problem-statistics-footer-cell srk--text-center srk--nowrap">
+                    <span class="srk-problem-statistics-footer-primary">{footerCellPrimary(footerRow.key, stat)}</span>
+                    {#if secondary !== undefined}
+                      {' '}<span class="srk-problem-statistics-footer-secondary">{secondary}</span>
+                    {/if}
+                  </td>
+                {/if}
               {/each}
               {#if showDirtColumn}
                 <td class="srk-problem-statistics-footer-cell srk-extra-statistics-footer-cell srk-dirt-footer-cell srk--nowrap">
@@ -585,13 +624,18 @@
           {/each}
           <tr class="srk-problem-statistics-footer-row srk-problem-statistics-footer-problem-label-row">
             <td class="srk-problem-statistics-footer-labels srk--text-right srk--nowrap" colspan={leftFooterColumnCount}></td>
-            {#each data.problems as problem, problemIndex}
-              <td
-                class="srk-problem-statistics-footer-cell srk-problem-statistics-footer-problem-header srk-problem-header srk--text-center srk--nowrap"
-                style:background-image={getProblemHeaderBackgroundImageIfStyled(problem.style, theme, 0)}
-              >
-                <span class="srk--display-block">{problem.alias || numberToAlphabet(problemIndex)}</span>
-              </td>
+            {#each problemPresentation.problemColumns as problemIndex}
+              {#if problemIndex === null}
+                <td class="srk-problem-statistics-footer-cell srk-problem-statistics-footer-problem-header srk-problem-header srk--text-center srk--nowrap"></td>
+              {:else}
+                {@const problem = data.problems[problemIndex]}
+                <td
+                  class="srk-problem-statistics-footer-cell srk-problem-statistics-footer-problem-header srk-problem-header srk--text-center srk--nowrap"
+                  style:background-image={getProblemHeaderBackgroundImageIfStyled(problem.style, theme, 0)}
+                >
+                  <span class="srk--display-block">{problem.alias || numberToAlphabet(problemIndex)}</span>
+                </td>
+              {/if}
             {/each}
             {#if showDirtColumn}
               <td class="srk-problem-statistics-footer-cell srk-extra-statistics-footer-cell srk-dirt-footer-cell srk--nowrap">

@@ -6,10 +6,7 @@ import { defineConfig } from 'vitest/config';
 import pkg from './package.json';
 
 export default defineConfig({
-  plugins: [
-    react(),
-    vue(),
-  ],
+  plugins: [react(), vue()],
   define: {
     SRK_SUPPORTED_VERSIONS: JSON.stringify(pkg.srkSupportedVersions),
   },
@@ -23,6 +20,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     include: [
+      'packages/core/tests/**/*.spec.ts',
       'packages/react/**/*.spec.tsx',
       'tests/structure/**/*.spec.ts',
       'packages/vue/src/**/*.spec.ts',

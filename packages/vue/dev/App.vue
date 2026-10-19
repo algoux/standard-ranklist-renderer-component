@@ -41,6 +41,10 @@
       </div>
       <div class="preview-control-row">
         <label class="preview-field preview-toggle-field">
+          <input :checked="enableCCPC26" type="checkbox" aria-label="CCPC26 mode" @change="handleCCPC26Toggle" />
+          <span>CCPC26 mode</span>
+        </label>
+        <label class="preview-field preview-toggle-field">
           <input v-model="splitOrganization" type="checkbox" aria-label="Split organization" />
           <span>Split organization</span>
         </label>
@@ -77,6 +81,7 @@
     <div class="preview-spacer"></div>
     <Ranklist
       :data="staticRanklist"
+      :enable-c-c-p-c26="enableCCPC26"
       :theme="preferredTheme"
       row-striped
       :split-organization="splitOrganization"
@@ -108,6 +113,7 @@
       :user="activeSolutionClick?.user"
       :problem="activeSolutionClick?.problem"
       :problem-index="activeSolutionClick?.problemIndex ?? 0"
+      :problem-revealed="activeSolutionClick?.problemRevealed"
       :solutions="activeSolutionClick?.solutions || []"
       :languages="languages"
       @close="closeSolutionModal"
@@ -147,7 +153,7 @@ import {
   resolveText,
 } from '@algoux/standard-ranklist-utils';
 import { computed, ref } from 'vue';
-import demoData from '../../../demo.json';
+import { isBeforeContestFreeze } from '@algoux/standard-ranklist-renderer-component-core';
 import type {
   RanklistColumnTitles,
   RanklistStatusCellPreset,
@@ -158,7 +164,8 @@ import type {
 } from '../src';
 import { DefaultSolutionModal, DefaultUserModal, Modal, ProgressBar, Ranklist } from '../src';
 
-const originalRanklist = demoData as srk.Ranklist;
+const props = defineProps<{ initialRanklist: srk.Ranklist }>();
+const originalRanklist = props.initialRanklist;
 const sortedSolutions = getSortedCalculatedRawSolutions(originalRanklist.rows);
 const ranklist = ref<srk.Ranklist>(originalRanklist);
 const activeUserClick = ref<UserClickPayload | null>(null);
@@ -174,6 +181,7 @@ const showProblemStatisticsFooter = ref(true);
 const showDirtColumn = ref(true);
 const showSEColumn = ref(true);
 const rowBordered = ref(true);
+const enableCCPC26 = ref(false);
 const columnBordered = ref(true);
 const emptyStatusPlaceholder = ref<string | null>('·');
 const userAvatarPlacement = ref<RanklistUserAvatarPlacement>('organization');
@@ -188,7 +196,9 @@ const emptyStatusPlaceholderValue = computed({
 const languages = computed(() => (language.value === 'browser' ? undefined : [language.value]));
 const activeProblem = computed(() => activeProblemClick.value?.problem || null);
 const activeProblemIndex = computed(() => activeProblemClick.value?.problemIndex ?? 0);
-const activeProblemTitle = computed(() => (activeProblem.value ? resolveText(activeProblem.value.title, languages.value) : ''));
+const activeProblemTitle = computed(() =>
+  activeProblem.value ? resolveText(activeProblem.value.title, languages.value) : '',
+);
 
 const demoColumnTitles: RanklistColumnTitles = {
   series: (series, index) => (index === 0 ? 'Rank' : series.title || `Series ${index + 1}`),
@@ -237,6 +247,7 @@ function resolvePreferredTheme() {
 }
 
 function handleTimeTravel(time: number | null) {
+  enableCCPC26.value = isBeforeContestFreeze(originalRanklist.contest, time);
   if (time === null) {
     ranklist.value = originalRanklist;
   } else {
@@ -246,6 +257,12 @@ function handleTimeTravel(time: number | null) {
     ) as srk.Ranklist;
   }
   activeUserClick.value = null;
+  activeProblemClick.value = null;
+  activeSolutionClick.value = null;
+}
+
+function handleCCPC26Toggle(event: Event) {
+  enableCCPC26.value = (event.target as HTMLInputElement).checked;
   activeProblemClick.value = null;
   activeSolutionClick.value = null;
 }

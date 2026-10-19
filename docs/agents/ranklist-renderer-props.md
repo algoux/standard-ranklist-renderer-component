@@ -3,6 +3,52 @@
 This document is the agent-facing source of truth for the optional render props
 shared across the framework packages.
 
+All five frameworks support `enableCCPC26?: boolean` (default false) for SRK 0.3.14
+ICPC CCPC26 presentation through shared core presentation helpers and styles.
+`SolutionClickPayload.problemRevealed?: boolean` is shared metadata with
+omitted meaning true. The full contract is documented below.
+
+Default anonymous cells and submission details display FB as AC; raw callbacks keep FB.
+Custom header hooks receive `className` for the sticky separator, and custom status hooks
+receive `problemRevealed`. Preview mode switches and freeze transitions use the same core
+elapsed-time helper; components themselves own no contest clock.
+
+## CCPC26 Presentation
+
+`enableCCPC26` defaults to `false`. It takes effect only for an ICPC sorter configured
+with `extendedAlgorithms: [{ algorithm: 'CCPC26', config: { problemRevealAcceptedThreshold: ... } }]`
+as specified by SRK 0.3.14. Thresholds and per-row order use the published
+`@algoux/standard-ranklist-utils >=0.3.4` implementation. Supply the complete current
+contest snapshot so display-only filtering does not change the eligible population.
+
+- Revealed problems form a shared prefix in original `problems` order. Remaining
+  columns are ordered independently per row: AC/FB by acceptance time, then attempted
+  problems by latest submission time, then untouched problems in original order.
+- Anonymous header/footer cells are blank: no problem labels, problem colors,
+  statistics, links or problem-click handlers. Custom header hooks run only for
+  revealed problems. Dirt/SE still use the original problem indexes.
+- Anonymous FB cells use ordinary AC colors/content without a first-blood star.
+  Solution click events retain the real `problem`, original `problemIndex`, status
+  and submissions, and carry `problemRevealed`. Custom status hooks receive the same
+  flag and should apply the same presentation rule without modifying source data.
+- Pass `problemRevealed` into `DefaultSolutionModal` (Angular:
+  `DefaultSolutionModalComponent`). When false, the default title omits the problem
+  label and FB records display as Accepted. The cached flag also applies while the
+  modal closes. Explicit custom titles remain caller-controlled.
+- When both regions exist, a right separator follows the last revealed column across
+  header, body and footer. It is 1px normally and 3px with `columnBordered`. It is absent
+  when zero/all problems are revealed or when CCPC26 is disabled. Custom header hooks
+  receive `className` for the sticky-header separator; forward it to the header root
+  where the framework lets the hook replace that element.
+- The caller owns contest time and must turn the mode off at freeze. The renderer
+  does not read a clock or retain permanent reveal history. Disabling restores normal
+  problem order and labels without modifying scores, ranks or input arrays.
+
+React/Solid use callback props; Vue/Svelte/Angular retain their normal event APIs.
+Every dev preview provides a manual `CCPC26 mode` toggle. Replay changes update it from
+the selected time: enabled strictly before `duration - frozenDuration`, disabled at
+freeze or on replay exit. Tests use independently constructed fixtures, not demo data.
+
 ## Execution Constraints
 
 - Work happens on branch `feat/ranklist-render-options`.
@@ -16,6 +62,7 @@ The following optional props are available on React and Solid `RanklistProps`,
 with framework-idiomatic event/input names in Vue, Svelte, and Angular:
 
 ```ts
+enableCCPC26?: boolean;
 splitOrganization?: boolean;
 columnTitles?: RanklistColumnTitles;
 statusCellPreset?: 'classic' | 'detailed' | 'minimal' | 'compact';
@@ -63,6 +110,7 @@ Default labels are: series title from SRK, `Name`, `Organization`, `Score`,
 
 | Prop | Default | Contract |
 | --- | --- | --- |
+| `enableCCPC26` | `false` | Enables configured CCPC26 reveal/order presentation; the caller controls freeze timing. |
 | `splitOrganization` | `false` | Inserts an Organization column before User and hides organization text from the default User cell. |
 | `columnTitles` | SRK/default labels | Text-only title overrides for series, organization, user, score, time, dirt, and se columns. |
 | `statusCellPreset` | `classic` | Chooses the reusable status content preset: `classic`, `detailed`, `minimal`, or `compact`. |

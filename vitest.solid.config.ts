@@ -11,8 +11,8 @@ export default defineConfig({
   },
   resolve: {
     alias: [
-      { find: /^solid-js\/web$/, replacement: 'solid-js/web/dist/web.js' },
-      { find: /^solid-js$/, replacement: 'solid-js/dist/solid.js' },
+      { find: /^solid-js\/web$/, replacement: resolve(__dirname, 'node_modules/solid-js/web/dist/web.js') },
+      { find: /^solid-js$/, replacement: resolve(__dirname, 'node_modules/solid-js/dist/solid.js') },
       {
         find: '@algoux/standard-ranklist-renderer-component-core',
         replacement: resolve(__dirname, 'packages/core/src/index.ts'),
@@ -21,6 +21,8 @@ export default defineConfig({
     ],
   },
   test: {
+    // Keep JSX's web runtime and user signals on the same browser instance.
+    deps: { inline: [/solid-js/] },
     environment: 'jsdom',
     globals: true,
     include: ['packages/solid/src/**/*.spec.tsx'],

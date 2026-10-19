@@ -9,7 +9,6 @@ import type {
   StaticRanklist,
   UserClickPayload,
 } from '../src';
-import data from '../../../demo.json';
 import {
   DefaultSolutionModal,
   DefaultUserModal,
@@ -18,6 +17,7 @@ import {
   convertToStaticRanklist,
 } from '../src';
 import * as Utils from '@algoux/standard-ranklist-utils';
+import { isBeforeContestFreeze } from '@algoux/standard-ranklist-renderer-component-core';
 import { ProgressBar } from '../src';
 
 function resolvePreferredTheme() {
@@ -34,9 +34,14 @@ function resolvePreferredTheme() {
   }
 }
 
+interface AppProps {
+  initialRanklist: srk.Ranklist;
+}
+
 interface AppState {
   data: srk.Ranklist;
-  solutions: srk.Solution[];
+  solutions: ReturnType<typeof Utils.getSortedCalculatedRawSolutions>;
+  enableCCPC26: boolean;
   activeUserClick: UserClickPayload | null;
   activeProblemClick: ProblemClickPayload | null;
   activeSolutionClick: SolutionClickPayload | null;
@@ -90,14 +95,15 @@ const languageOptions: Array<{ value: LanguageOptionValue; label: string }> = [
   { value: 'en-US', label: 'en-US' },
 ];
 
-export default class App extends React.Component<Record<string, never>, AppState> {
+export default class App extends React.Component<AppProps, AppState> {
   private readonly preferredTheme = resolvePreferredTheme();
 
-  constructor(props: any) {
+  constructor(props: AppProps) {
     super(props);
     this.state = {
-      data: data as srk.Ranklist,
-      solutions: Utils.getSortedCalculatedRawSolutions((data as srk.Ranklist).rows),
+      data: props.initialRanklist,
+      solutions: Utils.getSortedCalculatedRawSolutions(props.initialRanklist.rows),
+      enableCCPC26: false,
       activeUserClick: null,
       activeProblemClick: null,
       activeSolutionClick: null,
@@ -125,7 +131,8 @@ export default class App extends React.Component<Record<string, never>, AppState
   handleTimeTravel = (time: number | null) => {
     if (time === null) {
       this.setState({
-        data: data as srk.Ranklist,
+        data: this.props.initialRanklist,
+        enableCCPC26: false,
         activeUserClick: null,
         activeProblemClick: null,
         activeSolutionClick: null,
@@ -133,13 +140,22 @@ export default class App extends React.Component<Record<string, never>, AppState
       return;
     }
     const filteredSolutions = Utils.filterSolutionsUntil(this.state.solutions, [time, 'ms']);
-    const newSrk = Utils.regenerateRanklistBySolutions(data, filteredSolutions);
+    const newSrk = Utils.regenerateRanklistBySolutions(this.props.initialRanklist, filteredSolutions);
     this.setState({
-      data: newSrk as srk.Ranklist,
+      data: newSrk,
+      enableCCPC26: isBeforeContestFreeze(this.props.initialRanklist.contest, time),
       activeUserClick: null,
       activeProblemClick: null,
       activeSolutionClick: null,
     });
+  };
+
+  toggleCCPC26 = () => {
+    this.setState((state) => ({
+      enableCCPC26: !state.enableCCPC26,
+      activeProblemClick: null,
+      activeSolutionClick: null,
+    }));
   };
 
   handleUserClick = (payload: UserClickPayload) => {
@@ -325,6 +341,11 @@ export default class App extends React.Component<Record<string, never>, AppState
           </div>
           <div className="preview-control-row">
             <ToggleField
+              label="CCPC26 mode"
+              checked={this.state.enableCCPC26}
+              onChange={this.toggleCCPC26}
+            />
+            <ToggleField
               label="Split organization"
               checked={this.state.splitOrganization}
               onChange={() => this.setBooleanOption('splitOrganization')}
@@ -369,6 +390,7 @@ export default class App extends React.Component<Record<string, never>, AppState
         <div className="preview-spacer" />
         <Ranklist
           data={staticRanklist}
+          enableCCPC26={this.state.enableCCPC26}
           theme={this.preferredTheme}
           rowStriped
           onUserClick={this.handleUserClick}
@@ -433,6 +455,7 @@ export default class App extends React.Component<Record<string, never>, AppState
           user={this.state.activeSolutionClick?.user}
           problem={this.state.activeSolutionClick?.problem}
           problemIndex={this.state.activeSolutionClick?.problemIndex || 0}
+          problemRevealed={this.state.activeSolutionClick?.problemRevealed}
           solutions={this.state.activeSolutionClick?.solutions || []}
           languages={languages}
           onClose={this.closeSolutionModal}

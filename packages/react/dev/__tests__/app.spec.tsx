@@ -2,15 +2,34 @@ import React from 'react';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { resetModalInteractionStateForTests } from '@algoux/standard-ranklist-renderer-component-core';
 import App from '../App';
+import { makePreviewRanklist } from '../../../../tests/shared/preview-ranklist-fixture';
 
-describe('Local demo app', () => {
+function selectTimeTravelMinute(minute: number) {
+  const slider = screen.getByRole('slider', { name: 'Time Travel' });
+  fireEvent.mouseDown(slider);
+  fireEvent.change(slider, { target: { value: `${minute}` } });
+  fireEvent.mouseUp(slider);
+}
+
+function problemHeaderLabels(container: HTMLElement) {
+  return Array.from(container.querySelectorAll('thead th.srk-problem-header')).map(
+    (header) => header.firstElementChild?.textContent || '',
+  );
+}
+
+describe('Local preview app', () => {
+  beforeEach(() => {
+    vi.spyOn(Date, 'now').mockReturnValue(new Date('2026-01-01T00:10:00Z').getTime());
+  });
+
   afterEach(() => {
     cleanup();
     resetModalInteractionStateForTests();
+    vi.restoreAllMocks();
   });
 
   it('composes the default user modal from Ranklist click events', () => {
-    const { container } = render(<App />);
+    const { container } = render(<App initialRanklist={makePreviewRanklist()} />);
 
     const userCell = container.querySelector('tbody td.srk-user-cell') as HTMLElement | null;
     expect(userCell).toBeTruthy();
@@ -21,7 +40,7 @@ describe('Local demo app', () => {
   });
 
   it('composes the default solution modal from Ranklist click events', () => {
-    const { container } = render(<App />);
+    const { container } = render(<App initialRanklist={makePreviewRanklist()} />);
 
     const statusCell = container.querySelector('tbody td.srk-prest-status-block-accepted') as HTMLElement | null;
     expect(statusCell).toBeTruthy();
@@ -32,15 +51,15 @@ describe('Local demo app', () => {
   });
 
   it('composes a custom problem modal from Ranklist problem click events', () => {
-    const { container } = render(<App />);
+    const { container } = render(<App initialRanklist={makePreviewRanklist()} />);
 
     const problemHeader = container.querySelector('th.srk-problem-header') as HTMLElement | null;
     expect(problemHeader).toBeTruthy();
     fireEvent.click(problemHeader!);
 
     expect(screen.getByText('Problem Info')).toBeTruthy();
-    expect(screen.getByText(/Some Title/)).toBeTruthy();
-    expect(screen.getByText('https://icpc.global')).toBeTruthy();
+    expect(screen.getByText('Title: Preview Problem')).toBeTruthy();
+    expect(screen.getByText('https://example.com/problem-a')).toBeTruthy();
     expect(container.ownerDocument.body.querySelector('.srk-general-modal-root')).toBeTruthy();
     expect(container.ownerDocument.body.querySelector('.srk-problem-modal')).toBeTruthy();
   });
@@ -65,7 +84,7 @@ describe('Local demo app', () => {
     };
 
     try {
-      const { container } = render(<App />);
+      const { container } = render(<App initialRanklist={makePreviewRanklist()} />);
 
       const userCell = container.querySelector('tbody td.srk-user-cell') as HTMLElement | null;
       expect(userCell).toBeTruthy();
@@ -83,7 +102,7 @@ describe('Local demo app', () => {
   });
 
   it('renders interactive examples for the new Ranklist render option props', () => {
-    const { container } = render(<App />);
+    const { container } = render(<App initialRanklist={makePreviewRanklist()} />);
 
     expect((screen.getByLabelText('Split organization') as HTMLInputElement).checked).toBe(true);
     expect((screen.getByLabelText('Custom column titles') as HTMLInputElement).checked).toBe(true);
@@ -116,7 +135,7 @@ describe('Local demo app', () => {
     expect((screen.getByLabelText('User avatar placement') as HTMLSelectElement).value).toBe('user');
     fireEvent.change(screen.getByLabelText('Language'), { target: { value: 'zh-CN' } });
     expect((screen.getByLabelText('Language') as HTMLSelectElement).value).toBe('zh-CN');
-    expect(screen.getByText('中二之力')).toBeTruthy();
+    expect(screen.getByText('测试队伍')).toBeTruthy();
 
     fireEvent.click(screen.getByText('Baseline'));
     expect((screen.getByLabelText('Split organization') as HTMLInputElement).checked).toBe(false);
@@ -130,5 +149,60 @@ describe('Local demo app', () => {
     expect((screen.getByLabelText('Status preset') as HTMLSelectElement).value).toBe('classic');
     expect((screen.getByLabelText('Empty status placeholder') as HTMLSelectElement).value).toBe('');
     expect((screen.getByLabelText('User avatar placement') as HTMLSelectElement).value).toBe('user');
+  });
+
+  it('supports manual CCPC26 preview and updates the switch when changing replay time', () => {
+    const ranklist = makePreviewRanklist();
+    const originalRanklist = JSON.stringify(ranklist);
+    const { container } = render(<App initialRanklist={ranklist} />);
+    const toggle = screen.getByRole('checkbox', { name: 'CCPC26 mode' }) as HTMLInputElement;
+
+    expect(problemHeaderLabels(container)).toEqual(['A', 'B']);
+    expect(toggle.checked).toBe(false);
+
+    fireEvent.click(toggle);
+    expect(toggle.checked).toBe(true);
+    expect(problemHeaderLabels(container)).toEqual(['', '']);
+    fireEvent.click(toggle);
+    expect(problemHeaderLabels(container)).toEqual(['A', 'B']);
+
+    selectTimeTravelMinute(0);
+    expect(toggle.checked).toBe(true);
+    expect(problemHeaderLabels(container)).toEqual(['', '']);
+    expect(container.querySelector('tbody .srk-prest-status-block-accepted')).toBeFalsy();
+
+    selectTimeTravelMinute(7);
+    expect(problemHeaderLabels(container)).toEqual(['', '']);
+    expect(container.querySelector('tbody .srk-prest-status-block-accepted')).toBeTruthy();
+
+    selectTimeTravelMinute(8);
+    expect(toggle.checked).toBe(false);
+    expect(problemHeaderLabels(container)).toEqual(['A', 'B']);
+
+    selectTimeTravelMinute(7);
+    expect(problemHeaderLabels(container)).toEqual(['', '']);
+
+    selectTimeTravelMinute(10);
+    expect(toggle.checked).toBe(false);
+    expect(problemHeaderLabels(container)).toEqual(['A', 'B']);
+    expect(screen.queryByText('Time Travel Mode')).toBeNull();
+    expect(JSON.stringify(ranklist)).toBe(originalRanklist);
+  });
+
+  it('keeps the solution modal anonymous during CCPC26 and clears it when changing the slice', async () => {
+    const { container } = render(<App initialRanklist={makePreviewRanklist()} />);
+
+    selectTimeTravelMinute(7);
+    fireEvent.click(container.querySelector('tbody .srk-prest-status-block-accepted')!);
+    expect(screen.getByText('Solutions (Preview Team)')).toBeTruthy();
+    expect(screen.queryByText(/Solutions of/)).toBeNull();
+
+    selectTimeTravelMinute(8);
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+    fireEvent.click(container.querySelector('tbody .srk-prest-status-block-accepted')!);
+    expect(screen.getByText('Solutions of A (Preview Team)')).toBeTruthy();
+
+    selectTimeTravelMinute(10);
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
   });
 });

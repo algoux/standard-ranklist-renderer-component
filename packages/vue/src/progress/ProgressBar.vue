@@ -156,7 +156,8 @@ watch(
 );
 
 watch(
-  () => props.data.contest.title,
+  // Replay snapshots clone i18n title objects without changing the contest.
+  () => JSON.stringify(props.data.contest.title),
   () => {
     timeTravelIsChanging.value = false;
     timeTravelCurrentValue.value = maxAvailableMinutes.value;

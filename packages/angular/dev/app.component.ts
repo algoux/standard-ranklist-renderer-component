@@ -1,6 +1,7 @@
 import type * as srk from '@algoux/standard-ranklist';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, InjectionToken, inject } from '@angular/core';
+import { isBeforeContestFreeze } from '@algoux/standard-ranklist-renderer-component-core';
 import {
   EnumTheme,
   convertToStaticRanklist,
@@ -9,7 +10,6 @@ import {
   regenerateRanklistBySolutions,
   resolveText,
 } from '@algoux/standard-ranklist-utils';
-import demoData from '../../../demo.json';
 import {
   DefaultSolutionModalComponent,
   DefaultUserModalComponent,
@@ -24,6 +24,8 @@ import {
   type StaticRanklist,
   type UserClickPayload,
 } from '../src/lib/index';
+
+export const PREVIEW_RANKLIST = new InjectionToken<srk.Ranklist>('PREVIEW_RANKLIST');
 
 function resolvePreferredTheme() {
   if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
@@ -129,6 +131,15 @@ type LanguageOptionValue = 'browser' | 'zh-CN' | 'en-US';
           <label class="preview-field preview-toggle-field">
             <input
               type="checkbox"
+              aria-label="CCPC26 mode"
+              [checked]="enableCCPC26"
+              (change)="setCCPC26Mode($any($event.target).checked)"
+            />
+            <span>CCPC26 mode</span>
+          </label>
+          <label class="preview-field preview-toggle-field">
+            <input
+              type="checkbox"
               aria-label="Split organization"
               [checked]="splitOrganization"
               (change)="splitOrganization = $any($event.target).checked"
@@ -203,6 +214,7 @@ type LanguageOptionValue = 'browser' | 'zh-CN' | 'en-US';
       <div class="preview-spacer"></div>
       <srk-ranklist
         [data]="staticRanklist"
+        [enableCCPC26]="enableCCPC26"
         [theme]="preferredTheme"
         [rowStriped]="true"
         [splitOrganization]="splitOrganization"
@@ -255,6 +267,7 @@ type LanguageOptionValue = 'browser' | 'zh-CN' | 'en-US';
         [user]="activeSolutionClick?.user"
         [problem]="activeSolutionClick?.problem"
         [problemIndex]="activeSolutionClick?.problemIndex ?? 0"
+        [problemRevealed]="activeSolutionClick?.problemRevealed ?? true"
         [solutions]="activeSolutionClick?.solutions || []"
         [languages]="languages"
         (close)="closeSolutionModal()"
@@ -274,7 +287,7 @@ type LanguageOptionValue = 'browser' | 'zh-CN' | 'en-US';
 export class AppComponent {
   readonly EnumTheme = EnumTheme;
   readonly preferredTheme = resolvePreferredTheme();
-  readonly originalRanklist = demoData as srk.Ranklist;
+  readonly originalRanklist = inject(PREVIEW_RANKLIST);
   readonly sortedSolutions = getSortedCalculatedRawSolutions(this.originalRanklist.rows);
   readonly demoColumnTitles: RanklistColumnTitles = {
     series: (series, index) => (index === 0 ? 'Rank' : series.title || `Series ${index + 1}`),
@@ -309,6 +322,7 @@ export class AppComponent {
   activeUserClick: UserClickPayload | null = null;
   activeProblemClick: ProblemClickPayload | null = null;
   activeSolutionClick: SolutionClickPayload | null = null;
+  enableCCPC26 = false;
   splitOrganization = true;
   useCustomColumnTitles = true;
   statusCellPreset: RanklistStatusCellPreset = 'compact';
@@ -358,7 +372,14 @@ export class AppComponent {
     return this.activeProblem ? resolveText(this.activeProblem.title, this.languages) : '';
   }
 
+  setCCPC26Mode(enabled: boolean) {
+    this.enableCCPC26 = enabled;
+    this.activeProblemClick = null;
+    this.activeSolutionClick = null;
+  }
+
   handleTimeTravel(time: number | null) {
+    this.enableCCPC26 = isBeforeContestFreeze(this.originalRanklist.contest, time);
     if (time === null) {
       this.ranklist = this.originalRanklist;
     } else {

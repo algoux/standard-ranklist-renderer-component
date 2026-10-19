@@ -2,12 +2,15 @@ import { fireEvent, waitFor } from '@testing-library/dom';
 import { afterEach, describe, expect, it } from 'vitest';
 import { render } from 'solid-js/web';
 import { resetModalInteractionStateForTests } from '@algoux/standard-ranklist-renderer-component-core';
-import App from '../../dev/App';
+
+import { makePreviewRanklist } from '../../../../tests/shared/preview-ranklist-fixture';
+
+const { default: App } = await import('../../dev/App');
 
 function renderSolidApp() {
   const root = document.createElement('div');
   document.body.appendChild(root);
-  const dispose = render(() => <App />, root);
+  const dispose = render(() => <App initialRanklist={makePreviewRanklist()} />, root);
   return { root, dispose };
 }
 
@@ -22,9 +25,7 @@ function getField(container: HTMLElement, label: string) {
 }
 
 function getButton(container: HTMLElement, label: string) {
-  const button = Array.from(container.querySelectorAll('button')).find(
-    (item) => item.textContent?.trim() === label,
-  );
+  const button = Array.from(container.querySelectorAll('button')).find((item) => item.textContent?.trim() === label);
 
   if (!button) {
     throw new Error(`Button "${label}" was not found`);
@@ -84,7 +85,7 @@ describe('Solid local demo app', () => {
     await Promise.resolve();
     await new Promise((resolve) => setTimeout(resolve, 0));
     expect(languageSelect.value).toBe('zh-CN');
-    expect(root.textContent).toContain('中二之力');
+    expect(root.textContent).toContain('测试队伍');
 
     getButton(root, 'Baseline').click();
     await Promise.resolve();
@@ -119,9 +120,9 @@ describe('Solid local demo app', () => {
     expect(document.body.textContent).toContain('Problem Info');
     await waitFor(() => {
       expect(document.body.textContent).toContain('Alias: A');
-      expect(document.body.textContent).toContain('Title: Some Title');
-      expect(document.body.textContent).toContain('Link: https://icpc.global');
-      expect(document.body.textContent).toContain('Stats: 320 accepted / 596 submitted');
+      expect(document.body.textContent).toContain('Title: Preview Problem');
+      expect(document.body.textContent).toContain('Link: https://example.com/problem-a');
+      expect(document.body.textContent).toContain('Stats: 1 accepted / 1 submitted');
     });
     dispose();
   });
@@ -180,7 +181,9 @@ describe('Solid local demo app', () => {
     fireEvent.mouseDown(wrap!);
     await Promise.resolve();
 
-    expect(document.body.querySelector('.srk-animated-modal-root')?.getAttribute('data-srk-modal-state')).toBe('closing');
+    expect(document.body.querySelector('.srk-animated-modal-root')?.getAttribute('data-srk-modal-state')).toBe(
+      'closing',
+    );
     dispose();
   });
 
@@ -199,7 +202,74 @@ describe('Solid local demo app', () => {
     fireEvent.click(closeButton!);
     await Promise.resolve();
 
-    expect(document.body.querySelector('.srk-animated-modal-root')?.getAttribute('data-srk-modal-state')).toBe('closing');
+    expect(document.body.querySelector('.srk-animated-modal-root')?.getAttribute('data-srk-modal-state')).toBe(
+      'closing',
+    );
     dispose();
+  });
+});
+
+describe('Solid CCPC26 preview controls', () => {
+  it('toggles manually and follows the exact freeze boundary, rewind and replay exit', async () => {
+    const data = makePreviewRanklist();
+    const before = JSON.stringify(data);
+    const root = document.createElement('div');
+    document.body.appendChild(root);
+    const dispose = render(() => <App initialRanklist={data} />, root);
+    const labels = () =>
+      Array.from(root.querySelectorAll('thead .srk-problem-header')).map(
+        (cell) => cell.querySelector('span')?.textContent || '',
+      );
+    const toggle = () => getField(root, 'CCPC26 mode') as HTMLInputElement;
+    const selectMinute = (minute: number) => {
+      const slider = root.querySelector<HTMLInputElement>('[aria-label="Time Travel"]')!;
+      fireEvent.mouseDown(slider);
+      fireEvent.input(slider, { target: { value: String(minute) } });
+      fireEvent.mouseUp(slider);
+    };
+    try {
+      await Promise.resolve();
+      expect(labels()).toEqual(['A', 'B']);
+      fireEvent.click(toggle());
+      expect(labels()).toEqual(['', '']);
+      fireEvent.click(toggle());
+      expect(labels()).toEqual(['A', 'B']);
+      for (const [minute, enabled] of [
+        [0, true],
+        [7, true],
+        [8, false],
+        [7, true],
+        [10, false],
+      ] as const) {
+        selectMinute(minute);
+        expect(toggle().checked).toBe(enabled);
+        expect(labels()).toEqual(enabled ? ['', ''] : ['A', 'B']);
+      }
+      expect(JSON.stringify(data)).toBe(before);
+    } finally {
+      dispose();
+      root.remove();
+    }
+  });
+
+  it('passes anonymous details to the modal and closes details when toggling the mode', async () => {
+    const { root, dispose } = renderSolidApp();
+    try {
+      await Promise.resolve();
+      fireEvent.click(getField(root, 'CCPC26 mode'));
+      fireEvent.click(root.querySelector('tbody .srk-prest-status-block-accepted')!);
+      expect(root.querySelector('.srk-solutions-modal .srk-modal-title')?.textContent).toBe('Solutions (Preview Team)');
+      fireEvent.click(getField(root, 'CCPC26 mode'));
+      expect(
+        root
+          .querySelector('.srk-solutions-modal')
+          ?.closest('.srk-animated-modal-root')
+          ?.getAttribute('data-srk-modal-state'),
+      ).toBe('closing');
+      expect(root.querySelector('.srk-solutions-modal .srk-modal-title')?.textContent).toBe('Solutions (Preview Team)');
+    } finally {
+      dispose();
+      root.remove();
+    }
   });
 });

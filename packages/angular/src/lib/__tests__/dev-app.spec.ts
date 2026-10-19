@@ -8,7 +8,9 @@ import {
 import { createApplication } from '@angular/platform-browser';
 import { EnumTheme } from '@algoux/standard-ranklist-utils';
 import { afterEach, describe, expect, it } from 'vitest';
-import { AppComponent } from '../../../dev/app.component';
+import { AppComponent, PREVIEW_RANKLIST } from '../../../dev/app.component';
+import { makePreviewRanklist } from '../../../../../tests/shared/preview-ranklist-fixture';
+import type * as srk from '@algoux/standard-ranklist';
 
 interface RenderedApp {
   appRef: ApplicationRef;
@@ -19,10 +21,10 @@ interface RenderedApp {
 const renderedApps: RenderedApp[] = [];
 const originalMatchMedia = window.matchMedia;
 
-async function renderDevApp() {
+async function renderDevApp(data: srk.Ranklist = makePreviewRanklist()) {
   const hostElement = document.createElement('div');
   document.body.appendChild(hostElement);
-  const appRef = await createApplication();
+  const appRef = await createApplication({ providers: [{ provide: PREVIEW_RANKLIST, useValue: data }] });
   const componentRef = createComponent(AppComponent, {
     environmentInjector: appRef.injector,
     hostElement,
@@ -43,6 +45,44 @@ describe('Angular dev app', () => {
       rendered.hostElement.remove();
     }
     window.matchMedia = originalMatchMedia;
+  });
+
+  it('keeps the manual CCPC26 preview switch synchronized with replay and clears stale details', async () => {
+    const data = makePreviewRanklist();
+    data.sorter = {
+      algorithm: 'ICPC',
+      config: { extendedAlgorithms: [{ algorithm: 'CCPC26', config: { problemRevealAcceptedThreshold: { count: 2 } } }] },
+    };
+    const { componentRef, hostElement } = await renderDevApp(data);
+    const app = componentRef.instance;
+    const toggle = () => hostElement.querySelector<HTMLInputElement>('input[aria-label="CCPC26 mode"]')!;
+    const labels = () => Array.from(hostElement.querySelectorAll('thead .srk-problem-header')).map((cell) => cell.textContent?.trim());
+    expect(toggle().checked).toBe(false);
+    (hostElement.querySelector('thead .srk-problem-header') as HTMLElement).click();
+    expect(app.activeProblemClick).not.toBeNull();
+    toggle().checked = true;
+    toggle().dispatchEvent(new Event('change', { bubbles: true }));
+    componentRef.changeDetectorRef.detectChanges();
+    expect(app.activeProblemClick).toBeNull();
+    expect(labels()).toEqual(['', '']);
+    (hostElement.querySelector('tbody .srk-prest-status-block') as HTMLElement).click();
+    componentRef.changeDetectorRef.detectChanges();
+    expect(app.activeSolutionClick?.problemRevealed).toBe(false);
+    expect(hostElement.querySelector('.srk-modal-title')?.textContent).toBe('Solutions (Preview Team)');
+    app.setCCPC26Mode(false);
+    componentRef.changeDetectorRef.detectChanges();
+    expect(app.activeSolutionClick).toBeNull();
+    expect(toggle().checked).toBe(false);
+    for (const [time, enabled] of [[7 * 60_000, true], [8 * 60_000, false], [0, true], [null, false]] as const) {
+      app.handleTimeTravel(time);
+      componentRef.changeDetectorRef.detectChanges();
+      expect(toggle().checked).toBe(enabled);
+      expect(labels().every((label) => label === '')).toBe(enabled);
+    }
+    app.setCCPC26Mode(true);
+    app.useBaselineOptions();
+    app.useShowcaseOptions();
+    expect(app.enableCCPC26).toBe(true);
   });
 
   it('resolves the preview theme from the system dark preference', async () => {
@@ -70,7 +110,7 @@ describe('Angular dev app', () => {
     expect((componentRef.instance as any).preferredTheme).toBe(EnumTheme.light);
   });
 
-  it('renders the preview ranklist table with the demo data', async () => {
+  it('renders the preview ranklist table with the synthetic fixture', async () => {
     const { hostElement } = await renderDevApp();
 
     expect(hostElement.querySelector('.srk-progress-bar')).not.toBeNull();
@@ -130,7 +170,7 @@ describe('Angular dev app', () => {
     expect(getSelect('Empty status placeholder').value).toBe('-');
     expect(getSelect('User avatar placement').value).toBe('user');
     expect(getSelect('Language').value).toBe('zh-CN');
-    expect(hostElement.textContent).toContain('中二之力');
+    expect(hostElement.textContent).toContain('测试队伍');
 
     componentRef.instance.useBaselineOptions();
     componentRef.changeDetectorRef.detectChanges();
@@ -182,9 +222,9 @@ describe('Angular dev app', () => {
     expect(hostElement.querySelector('.srk-problem-modal')).toBeTruthy();
     expect(hostElement.textContent).toContain('Problem Info');
     expect(hostElement.textContent).toContain('Alias: A');
-    expect(hostElement.textContent).toContain('Title: Some Title');
-    expect(hostElement.textContent).toContain('Link: https://icpc.global');
-    expect(hostElement.textContent).toContain('Stats: 320 accepted / 596 submitted');
+    expect(hostElement.textContent).toContain('Title: Preview Problem');
+    expect(hostElement.textContent).toContain('Link: https://example.com/problem-a');
+    expect(hostElement.textContent).toContain('Stats: 1 accepted / 1 submitted');
   });
 
   it('applies default modal widths like the other framework previews', async () => {
@@ -217,7 +257,7 @@ describe('Angular dev app', () => {
     const firstRowBefore = hostElement.querySelector('tbody tr')?.textContent;
 
     slider.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
-    slider.value = '60';
+    slider.value = '0';
     slider.dispatchEvent(new Event('input', { bubbles: true }));
     slider.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
     componentRef.changeDetectorRef.detectChanges();

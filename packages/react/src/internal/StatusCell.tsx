@@ -6,6 +6,7 @@ import {
   captureModalTriggerPointFromMouseEvent,
   getRankProblemStatusCellClassName,
   getRankProblemStatusCellPresentation,
+  getRankProblemDisplayStatus,
 } from '@algoux/standard-ranklist-renderer-component-core';
 import type {
   RanklistStatusCellPreset,
@@ -18,6 +19,8 @@ export interface StatusCellProps {
   status: srk.RankProblemStatus;
   problem: srk.Problem | undefined;
   problemIndex: number;
+  /** Whether the problem identity and first-blood distinction are revealed; defaults to true. */
+  problemRevealed?: boolean;
   user: srk.User;
   row: StaticRanklistRow;
   rowIndex: number;
@@ -33,6 +36,7 @@ export function StatusCell({
   status,
   problem,
   problemIndex,
+  problemRevealed = true,
   user,
   row,
   rowIndex,
@@ -53,52 +57,55 @@ export function StatusCell({
     'srk-prest-status-block-color-text': statusColorAsText,
   });
   const onClick = isClickable
-    ? (event: React.MouseEvent) =>
-        {
-          event.preventDefault();
-          captureModalTriggerPointFromMouseEvent(event.nativeEvent, {
-            source: 'status-cell',
-            context: {
-              rowIndex,
-              problemIndex,
-              problemAlias: problem?.alias || null,
-              problemTitle,
-              userId: user.id || null,
-            },
-          });
-          onSolutionClick?.({
-            user,
-            row,
+    ? (event: React.MouseEvent) => {
+        event.preventDefault();
+        captureModalTriggerPointFromMouseEvent(event.nativeEvent, {
+          source: 'status-cell',
+          context: {
             rowIndex,
             problemIndex,
-            problem,
-            status,
-            solutions,
-            ranklist,
-          });
-        }
+            problemAlias: problem?.alias || null,
+            problemTitle,
+            userId: user.id || null,
+          },
+        });
+        onSolutionClick?.({
+          user,
+          row,
+          rowIndex,
+          problemIndex,
+          problemRevealed,
+          problem,
+          status,
+          solutions,
+          ranklist,
+        });
+      }
     : undefined;
 
-  if (status.result === 'FB') {
+  // Keep the raw status in click payloads; anonymity changes presentation only.
+  const displayStatus = getRankProblemDisplayStatus(status, problemRevealed);
+
+  if (displayStatus.result === 'FB') {
     return (
       <td
         key={problemKey}
         onClick={onClick}
-        className={classnames(commonClassName, getRankProblemStatusCellClassName(status, ranklist))}
+        className={classnames(commonClassName, getRankProblemStatusCellClassName(displayStatus, ranklist))}
       >
         {statusColorAsText && <span className="srk-prest-status-block-fb-star">★</span>}
-        {renderStatusBody(status, ranklist, statusCellPreset)}
+        {renderStatusBody(displayStatus, ranklist, statusCellPreset)}
       </td>
     );
   }
-  if (status.result === 'AC') {
+  if (displayStatus.result === 'AC') {
     return (
       <td
         key={problemKey}
         onClick={onClick}
-        className={classnames(commonClassName, getRankProblemStatusCellClassName(status, ranklist))}
+        className={classnames(commonClassName, getRankProblemStatusCellClassName(displayStatus, ranklist))}
       >
-        {renderStatusBody(status, ranklist, statusCellPreset)}
+        {renderStatusBody(displayStatus, ranklist, statusCellPreset)}
       </td>
     );
   }
@@ -132,11 +139,7 @@ export function StatusCell({
   );
 }
 
-function renderStatusBody(
-  status: srk.RankProblemStatus,
-  ranklist: StaticRanklist,
-  preset: RanklistStatusCellPreset,
-) {
+function renderStatusBody(status: srk.RankProblemStatus, ranklist: StaticRanklist, preset: RanklistStatusCellPreset) {
   return renderStatusPresentation(getRankProblemStatusCellPresentation(status, ranklist, preset));
 }
 
@@ -157,8 +160,7 @@ function renderScoreStatus(score: number, details: string | undefined) {
 function renderTwoLineStatusBody(primary: string, secondary: string) {
   return (
     <>
-      <span className="srk-prest-status-block-primary">{primary}</span>
-      {' '}
+      <span className="srk-prest-status-block-primary">{primary}</span>{' '}
       <span className="srk-prest-status-block-secondary">{secondary}</span>
     </>
   );

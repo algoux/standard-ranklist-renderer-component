@@ -1,16 +1,32 @@
 <template>
-  <td v-if="status.result === 'FB'" :class="[commonClassName, statusResultClassName]" @click.prevent="emitSolutionClick">
+  <td
+    v-if="displayStatus.result === 'FB'"
+    :class="[commonClassName, statusResultClassName]"
+    @click.prevent="emitSolutionClick"
+  >
     <span v-if="statusColorAsText" class="srk-prest-status-block-fb-star">{{ fbStar }}</span>
-    <StatusBody :status="status" :ranklist="ranklist" :preset="statusCellPreset" />
+    <StatusBody :status="displayStatus" :ranklist="ranklist" :preset="statusCellPreset" />
   </td>
-  <td v-else-if="status.result === 'AC'" :class="[commonClassName, statusResultClassName]" @click.prevent="emitSolutionClick">
-    <StatusBody :status="status" :ranklist="ranklist" :preset="statusCellPreset" />
+  <td
+    v-else-if="displayStatus.result === 'AC'"
+    :class="[commonClassName, statusResultClassName]"
+    @click.prevent="emitSolutionClick"
+  >
+    <StatusBody :status="displayStatus" :ranklist="ranklist" :preset="statusCellPreset" />
   </td>
-  <td v-else-if="status.result === '?'" :class="[commonClassName, statusResultClassName]" @click.prevent="emitSolutionClick">
-    <StatusBody :status="status" :ranklist="ranklist" :preset="statusCellPreset" />
+  <td
+    v-else-if="displayStatus.result === '?'"
+    :class="[commonClassName, statusResultClassName]"
+    @click.prevent="emitSolutionClick"
+  >
+    <StatusBody :status="displayStatus" :ranklist="ranklist" :preset="statusCellPreset" />
   </td>
-  <td v-else-if="status.result === 'RJ'" :class="[commonClassName, statusResultClassName]" @click.prevent="emitSolutionClick">
-    <StatusBody :status="status" :ranklist="ranklist" :preset="statusCellPreset" />
+  <td
+    v-else-if="displayStatus.result === 'RJ'"
+    :class="[commonClassName, statusResultClassName]"
+    @click.prevent="emitSolutionClick"
+  >
+    <StatusBody :status="displayStatus" :ranklist="ranklist" :preset="statusCellPreset" />
   </td>
   <td v-else class="srk-status-placeholder-cell srk--text-center srk--nowrap">{{ emptyStatusPlaceholder }}</td>
 </template>
@@ -22,6 +38,7 @@ import { resolveText } from '@algoux/standard-ranklist-utils';
 import {
   captureModalTriggerPointFromMouseEvent,
   getRankProblemStatusCellClassName,
+  getRankProblemDisplayStatus,
   getRankProblemStatusCellPresentation,
 } from '@algoux/standard-ranklist-renderer-component-core';
 import type {
@@ -36,6 +53,7 @@ const props = withDefaults(
     status: srk.RankProblemStatus;
     problem?: srk.Problem;
     problemIndex: number;
+    problemRevealed?: boolean;
     user: srk.User;
     row: StaticRanklistRow;
     rowIndex: number;
@@ -48,15 +66,17 @@ const props = withDefaults(
   }>(),
   {
     statusCellPreset: 'classic',
+    problemRevealed: true,
     statusColorAsText: false,
     emptyStatusPlaceholder: null,
   },
 );
 
+const displayStatus = computed(() => getRankProblemDisplayStatus(props.status, props.problemRevealed));
 const fbStar = '\u2605';
 const solutions = computed(() => [...(props.status.solutions || [])].reverse());
 const isClickable = computed(() => solutions.value.length > 0 && !!props.onSolutionClick);
-const statusResultClassName = computed(() => getRankProblemStatusCellClassName(props.status, props.ranklist));
+const statusResultClassName = computed(() => getRankProblemStatusCellClassName(displayStatus.value, props.ranklist));
 const commonClassName = computed(() => [
   'srk-prest-status-block',
   'srk--text-center',
@@ -86,6 +106,7 @@ function emitSolutionClick(event: MouseEvent) {
     row: props.row,
     rowIndex: props.rowIndex,
     problemIndex: props.problemIndex,
+    problemRevealed: props.problemRevealed,
     problem: props.problem,
     status: props.status,
     solutions: solutions.value,

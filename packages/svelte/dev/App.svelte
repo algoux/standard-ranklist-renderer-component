@@ -7,12 +7,15 @@
     regenerateRanklistBySolutions,
     resolveText,
   } from '@algoux/standard-ranklist-utils';
-  import demoData from '../../../demo.json';
+  import { isBeforeContestFreeze } from '@algoux/standard-ranklist-renderer-component-core';
   import { DefaultSolutionModal, DefaultUserModal, Modal, ProgressBar, Ranklist } from '../src';
 
-  const originalRanklist = demoData;
+  export let initialRanklist;
+
+  const originalRanklist = initialRanklist;
   const sortedSolutions = getSortedCalculatedRawSolutions(originalRanklist.rows);
   let ranklist = originalRanklist;
+  let enableCCPC26 = false;
   let activeUserClick = null;
   let activeProblemClick = null;
   let activeSolutionClick = null;
@@ -80,6 +83,7 @@
 
   function handleTimeTravel(event) {
     const time = event.detail;
+    enableCCPC26 = isBeforeContestFreeze(originalRanklist.contest, time);
     if (time === null) {
       ranklist = originalRanklist;
     } else {
@@ -89,6 +93,12 @@
       );
     }
     activeUserClick = null;
+    activeProblemClick = null;
+    activeSolutionClick = null;
+  }
+
+  function handleCCPC26Change(event) {
+    enableCCPC26 = event.currentTarget.checked;
     activeProblemClick = null;
     activeSolutionClick = null;
   }
@@ -188,6 +198,10 @@
     </div>
     <div class="preview-control-row">
       <label class="preview-field preview-toggle-field">
+        <input type="checkbox" aria-label="CCPC26 mode" checked={enableCCPC26} on:change={handleCCPC26Change} />
+        <span>CCPC26 mode</span>
+      </label>
+      <label class="preview-field preview-toggle-field">
         <input type="checkbox" aria-label="Split organization" bind:checked={splitOrganization} />
         <span>Split organization</span>
       </label>
@@ -224,6 +238,7 @@
   <div class="preview-spacer"></div>
   <Ranklist
     data={staticRanklist}
+    {enableCCPC26}
     theme={preferredTheme}
     rowStriped
     {splitOrganization}
@@ -279,6 +294,7 @@
     user={activeSolutionClick && activeSolutionClick.user}
     problem={activeSolutionClick && activeSolutionClick.problem}
     problemIndex={(activeSolutionClick && activeSolutionClick.problemIndex) || 0}
+    problemRevealed={activeSolutionClick ? activeSolutionClick.problemRevealed : undefined}
     solutions={(activeSolutionClick && activeSolutionClick.solutions) || []}
     {languages}
     on:close={() => (activeSolutionClick = null)}

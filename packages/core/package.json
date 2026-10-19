@@ -32,9 +32,12 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@algoux/standard-ranklist-utils": "^0.3.1",
+    "@algoux/standard-ranklist-utils": "^0.3.4",
     "color": "^4.2.3",
     "semver": "^7.3.7"
+  },
+  "devDependencies": {
+    "@algoux/standard-ranklist": "0.3.14"
   },
   "peerDependencies": {
     "@algoux/standard-ranklist": "*"

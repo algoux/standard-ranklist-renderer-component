@@ -6,10 +6,7 @@ import {
   captureModalTriggerPointFromMouseEvent,
   getProblemHeaderBackgroundImageIfStyled,
 } from '@algoux/standard-ranklist-renderer-component-core';
-import type {
-  ProblemClickPayload,
-  StaticRanklist,
-} from '@algoux/standard-ranklist-renderer-component-core';
+import type { ProblemClickPayload, StaticRanklist } from '@algoux/standard-ranklist-renderer-component-core';
 
 export interface ProblemHeaderCellProps {
   problem: srk.Problem;
@@ -18,6 +15,8 @@ export interface ProblemHeaderCellProps {
   theme: EnumTheme;
   onProblemClick?: (payload: ProblemClickPayload) => void | Promise<void>;
   languages?: readonly string[];
+  /** Forward to the header element to preserve table presentation such as the CCPC26 separator. */
+  className?: string;
 }
 
 export function getProblemHeaderBackgroundStyle(
@@ -41,6 +40,7 @@ export function ProblemHeaderCell({
   theme,
   onProblemClick,
   languages,
+  className,
 }: ProblemHeaderCellProps) {
   const alias = problem.alias ? problem.alias : numberToAlphabet(index);
   const title = resolveText(problem.title, languages);
@@ -60,17 +60,18 @@ export function ProblemHeaderCell({
       ) : null}
     </>
   );
-  const cellComp = problem.link && !onProblemClick ? (
-    <a href={problem.link} target="_blank" rel="noopener noreferrer" style={{ color: 'unset' }}>
-      {innerComp}
-    </a>
-  ) : (
-    innerComp
-  );
+  const cellComp =
+    problem.link && !onProblemClick ? (
+      <a href={problem.link} target="_blank" rel="noopener noreferrer" style={{ color: 'unset' }}>
+        {innerComp}
+      </a>
+    ) : (
+      innerComp
+    );
 
   return (
     <th
-      className={classnames('srk--nowrap srk-problem-header', {
+      className={classnames('srk--nowrap srk-problem-header', className, {
         'srk--cursor-pointer': !!onProblemClick,
       })}
       key={problem.alias || title}

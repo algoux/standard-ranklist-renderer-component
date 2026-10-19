@@ -5,7 +5,7 @@ const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 export function makeI18nRanklist(): srk.Ranklist {
   return clone({
     type: 'general',
-    version: '0.3.13',
+    version: '0.3.14',
     contest: {
       title: 'I18n Contest',
       startAt: '2026-04-23T10:00:00+08:00',
