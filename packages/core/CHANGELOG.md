@@ -1,5 +1,11 @@
 # @algoux/standard-ranklist-renderer-component-core
 
+## 0.7.1
+
+### Patch Changes
+
+- e0e20af: Accept a precomputed `ccpc26ProblemLayout` so display-only row filters preserve reveal decisions from the complete contest slice across all frameworks.
+
 ## 0.7.0
 
 ### Minor Changes
