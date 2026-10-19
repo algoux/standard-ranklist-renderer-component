@@ -133,6 +133,10 @@ presented as ordinary AC. The shared stylesheet separates the regions with a 1px
 border, or 3px when `columnBordered` is enabled; no divider appears when zero or all
 problems are revealed.
 
+When filtering rows for display, pass `ccpc26ProblemLayout` from utils
+`getCCPC26ProblemLayout(completeSlice)` before filtering. Original problem indexes must
+match `data`; the layout is ignored when CCPC26 is disabled or its configuration is absent.
+
 `on:solutionClick` retains original indexes, statuses and submission records, adding
 `problemRevealed`. Forward it to `DefaultSolutionModal` as shown above to hide the
 problem label and first-blood result in anonymous details, including the closing

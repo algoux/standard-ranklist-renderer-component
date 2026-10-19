@@ -287,7 +287,7 @@ import {
   resolveStyle,
   resolveText,
 } from '@algoux/standard-ranklist-utils';
-import type { ThemeColor } from '@algoux/standard-ranklist-utils';
+import type { CCPC26ProblemLayout, ThemeColor } from '@algoux/standard-ranklist-utils';
 import { computed, getCurrentInstance } from 'vue';
 import {
   calculateDirtPercentage,
@@ -324,6 +324,7 @@ const props = withDefaults(
   defineProps<{
     data: StaticRanklist;
     enableCCPC26?: boolean;
+    ccpc26ProblemLayout?: CCPC26ProblemLayout;
     theme?: EnumTheme;
     rowBordered?: boolean;
     columnBordered?: boolean;
@@ -364,7 +365,9 @@ const emit = defineEmits<{
 }>();
 
 const instance = getCurrentInstance();
-const problemPresentation = computed(() => getRanklistProblemPresentation(props.data, props.enableCCPC26));
+const problemPresentation = computed(() =>
+  getRanklistProblemPresentation(props.data, props.enableCCPC26, props.ccpc26ProblemLayout),
+);
 const resolvedTheme = computed(() => props.theme);
 const hasProblemClickListener = computed(() => Boolean(instance?.vnode.props?.onProblemClick));
 const supportedVersions = srkSupportedVersions;

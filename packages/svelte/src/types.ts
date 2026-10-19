@@ -1,5 +1,5 @@
 import type * as srk from '@algoux/standard-ranklist';
-import type { EnumTheme } from '@algoux/standard-ranklist-utils';
+import type { CCPC26ProblemLayout, EnumTheme } from '@algoux/standard-ranklist-utils';
 import type {
   RanklistColumnTitles,
   RanklistStatusCellPreset,
@@ -16,6 +16,8 @@ export interface RanklistProps {
   theme?: EnumTheme;
   /** Opt in to CCPC26 presentation; the caller owns freeze timing. */
   enableCCPC26?: boolean;
+  /** Layout from the complete current slice before filtering rows, using data's original problem indexes. */
+  ccpc26ProblemLayout?: CCPC26ProblemLayout;
   rowBordered?: boolean;
   columnBordered?: boolean;
   rowStriped?: boolean;

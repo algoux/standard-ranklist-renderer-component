@@ -1,5 +1,6 @@
 import React from 'react';
 import type * as srk from '@algoux/standard-ranklist';
+import { getCCPC26ProblemLayout } from '@algoux/standard-ranklist-utils';
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { MODAL_ANIMATION_DURATION_MS } from '@algoux/standard-ranklist-renderer-component-core';
 import {
@@ -111,6 +112,40 @@ describe('React CCPC26 presentation', () => {
       ).toEqual(['true', 'true', 'false', 'false', 'false', 'false', 'false']);
     });
     expect(JSON.stringify(data)).toBe(before);
+  });
+
+  it('uses a complete-slice layout for filtered rows while preserving anonymous FB click identity', () => {
+    const complete = makeRanklist();
+    complete.rows[0].statuses[3].result = 'FB';
+    complete.rows[0].statuses[3].solutions![0].result = 'FB';
+    const layout = getCCPC26ProblemLayout(complete)!;
+    const filtered = { ...complete, rows: [complete.rows[0]] };
+    const before = JSON.stringify({ complete, filtered, layout });
+    const onSolutionClick = vi.fn();
+    const { container, rerender } = render(
+      <Ranklist data={filtered} enableCCPC26 ccpc26ProblemLayout={layout} onSolutionClick={onSolutionClick} />,
+    );
+
+    expect(headerLabels(container)).toEqual(['A', 'C', '', '', '', '', '']);
+    const anonymousFB = defaultStatusCells(bodyRows(container)[0])[2];
+    expect(anonymousFB.classList.contains('srk-prest-status-block-accepted')).toBe(true);
+    expect(anonymousFB.classList.contains('srk-prest-status-block-fb')).toBe(false);
+    fireEvent.click(anonymousFB);
+    expect(onSolutionClick).toHaveBeenCalledWith(
+      expect.objectContaining({
+        problemIndex: 3,
+        problemRevealed: false,
+        status: complete.rows[0].statuses[3],
+        solutions: complete.rows[0].statuses[3].solutions,
+      }),
+    );
+    expect(onSolutionClick.mock.calls[0][0].status.result).toBe('FB');
+    expect(JSON.stringify({ complete, filtered, layout })).toBe(before);
+
+    rerender(<Ranklist data={filtered} enableCCPC26 />);
+    expect(headerLabels(container)).toEqual(Array(7).fill(''));
+    rerender(<Ranklist data={filtered} ccpc26ProblemLayout={layout} />);
+    expect(headerLabels(container)).toEqual(['A', 'B', 'C', 'D', 'E', 'F', 'G']);
   });
 
   it.each([false, true])(

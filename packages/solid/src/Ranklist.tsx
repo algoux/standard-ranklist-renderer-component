@@ -7,7 +7,7 @@ import {
   resolveText,
   resolveUserMarkers,
 } from '@algoux/standard-ranklist-utils';
-import type { ThemeColor } from '@algoux/standard-ranklist-utils';
+import type { CCPC26ProblemLayout, ThemeColor } from '@algoux/standard-ranklist-utils';
 import type { JSX } from 'solid-js';
 import { createMemo, For, Show } from 'solid-js';
 import {
@@ -92,6 +92,8 @@ export interface RanklistParts {
 export interface RanklistProps {
   /** Opt in to configured CCPC26 presentation; the caller owns freeze timing. */
   enableCCPC26?: boolean;
+  /** Layout from the complete current slice before filtering rows, using data's original problem indexes. */
+  ccpc26ProblemLayout?: CCPC26ProblemLayout;
   data: StaticRanklist;
   theme?: EnumTheme;
   rowBordered?: boolean;
@@ -117,7 +119,7 @@ export interface RanklistProps {
 export function Ranklist(props: RanklistProps) {
   const presentation = createMemo(() =>
     props.data.type === 'general' && caniuse(props.data.version)
-      ? getRanklistProblemPresentation(props.data, props.enableCCPC26)
+      ? getRanklistProblemPresentation(props.data, props.enableCCPC26, props.ccpc26ProblemLayout)
       : undefined,
   );
   // Only the supported-ranklist branch below reads the presentation.

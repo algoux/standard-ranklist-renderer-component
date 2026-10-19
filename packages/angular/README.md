@@ -169,6 +169,10 @@ CCPC26 presentation (normally before the freeze). The input defaults to false an
 component owns no clock. Pass a complete contest snapshot; core and utils compute the
 shared revealed prefix and each participant's anonymous problem order.
 
+When filtering rows for display, pass `[ccpc26ProblemLayout]` from utils
+`getCCPC26ProblemLayout(completeSlice)` before filtering. Original problem indexes must
+match `data`; the layout is ignored when CCPC26 is disabled or its configuration is absent.
+
 Anonymous headers and footer cells remain blank. The final revealed column has a shared
 1px right separator, or 3px with `columnBordered`; no separator appears if none or all
 problems are revealed. Anonymous FB cells and submission records display as ordinary AC,

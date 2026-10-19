@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { getCCPC26ProblemLayout } from '@algoux/standard-ranklist-utils';
 import {
   getRanklistProblemPresentation,
   getRankProblemDisplayStatus,
@@ -33,6 +34,34 @@ describe('shared CCPC26 presentation', () => {
     expect(ordinary.problemColumns).toEqual([0, 1, 2, 3, 4]);
     expect(ordinary.problemRevealed).toEqual([true, true, true, true, true]);
     expect(ordinary.hasRevealDivider).toBe(false);
+  });
+
+  it('keeps the complete-slice layout when display filtering removes accepted teams', () => {
+    const complete = makeCCPC26Ranklist();
+    const layout = getCCPC26ProblemLayout(complete)!;
+    const filtered = { ...complete, rows: [complete.rows[0]] };
+    const before = JSON.stringify({ complete, filtered, layout });
+
+    expect(getRanklistProblemPresentation(filtered, true).problemColumns).toEqual(Array(5).fill(null));
+    const presentation = getRanklistProblemPresentation(filtered, true, layout);
+    expect(presentation.problemColumns).toEqual([0, 2, null, null, null]);
+    expect(presentation.problemRevealed).toEqual([true, false, true, false, false]);
+    expect(presentation.rowProblemIndexes).toEqual([[0, 2, 1, 4, 3]]);
+    expect(presentation.hasRevealDivider).toBe(true);
+    expect(JSON.stringify({ complete, filtered, layout })).toBe(before);
+  });
+
+  it('ignores a supplied layout when disabled or without standard CCPC26 configuration', () => {
+    const data = makeCCPC26Ranklist();
+    const layout = getCCPC26ProblemLayout(data)!;
+    const originalColumns = [0, 1, 2, 3, 4];
+    expect(getRanklistProblemPresentation(data, false, layout).problemColumns).toEqual(originalColumns);
+    expect(
+      getRanklistProblemPresentation({ ...data, sorter: { algorithm: 'ICPC', config: {} } }, true, layout)
+        .problemColumns,
+    ).toEqual(originalColumns);
+    const scoreData = { ...data, sorter: { ...data.sorter, algorithm: 'score' as const } };
+    expect(getRanklistProblemPresentation(scoreData, true, layout).problemColumns).toEqual(originalColumns);
   });
 
   it('projects anonymous FB without changing raw status or solution history', () => {

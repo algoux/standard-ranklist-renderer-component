@@ -137,6 +137,10 @@ CCPC26 extended algorithm. Supply the complete current contest slice; the caller
 when to disable the mode at the freeze boundary. For an explicit elapsed time, core exports
 `isBeforeContestFreeze(contest, elapsedMilliseconds)` (`null` exits replay).
 
+When filtering rows for display, pass `ccpc26ProblemLayout` from utils
+`getCCPC26ProblemLayout(completeSlice)` before filtering. Original problem indexes must
+match `data`; the layout is ignored when CCPC26 is disabled or its configuration is absent.
+
 ```tsx
 <Ranklist data={staticRanklist()} enableCCPC26={beforeFreeze()} />
 ```

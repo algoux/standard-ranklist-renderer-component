@@ -30,6 +30,7 @@
   export let data;
   export let theme = EnumTheme.light;
   export let enableCCPC26 = false;
+  export let ccpc26ProblemLayout = undefined;
   export let rowBordered = false;
   export let columnBordered = false;
   export let rowStriped = false;
@@ -51,7 +52,7 @@
   $: showTimeColumn = shouldShowTimeColumn(data.rows);
   $: isSupportedVersion = caniuse(data.version);
   $: problemPresentation = data.type === 'general' && isSupportedVersion
-    ? getRanklistProblemPresentation(data, enableCCPC26)
+    ? getRanklistProblemPresentation(data, enableCCPC26, ccpc26ProblemLayout)
     : undefined;
   $: showAvatarInOrganization = splitOrganization && userAvatarPlacement === 'organization';
   $: problemStatistics = showProblemStatisticsFooter || showSEColumn ? calculateProblemStatisticsFooter(data) : [];

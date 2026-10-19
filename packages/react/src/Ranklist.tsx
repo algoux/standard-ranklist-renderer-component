@@ -8,7 +8,7 @@ import {
   EnumTheme,
   resolveStyle,
 } from '@algoux/standard-ranklist-utils';
-import type { ThemeColor } from '@algoux/standard-ranklist-utils';
+import type { CCPC26ProblemLayout, ThemeColor } from '@algoux/standard-ranklist-utils';
 import {
   calculateDirtPercentage,
   calculateProblemStatisticsFooter,
@@ -98,6 +98,8 @@ export interface RanklistProps {
   languages?: readonly string[];
   /** Enable CCPC26 problem reveal/order for a configured ICPC ranklist. The caller owns freeze timing. */
   enableCCPC26?: boolean;
+  /** Layout from the complete current slice, before filtering rows; problem indexes must match data. */
+  ccpc26ProblemLayout?: CCPC26ProblemLayout;
 }
 
 interface State {
@@ -436,7 +438,11 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     const showTimeColumn = shouldShowTimeColumn(rows);
     const showAvatarInOrganization = !!splitOrganization && userAvatarPlacement === 'organization';
     const problemStatistics = showProblemStatisticsFooter || showSEColumn ? calculateProblemStatisticsFooter(data) : [];
-    const problemPresentation = getRanklistProblemPresentation(data, this.props.enableCCPC26);
+    const problemPresentation = getRanklistProblemPresentation(
+      data,
+      this.props.enableCCPC26,
+      this.props.ccpc26ProblemLayout,
+    );
     const { problemColumns, revealedProblemCount, hasRevealDivider } = problemPresentation;
 
     return (

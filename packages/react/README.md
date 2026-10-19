@@ -100,6 +100,7 @@ See [CCPC26 render options](../../docs/agents/ranklist-renderer-props.md#ccpc26-
 
 - `languages`: preferred BCP 47 language tags used by SRK i18n text fields; defaults to browser languages when omitted.
 - `enableCCPC26`: enables CCPC26 presentation for an ICPC ranklist with the SRK 0.3.14 extended algorithm configuration; defaults to `false`. The caller decides whether the snapshot is before freeze.
+- `ccpc26ProblemLayout`: optional utils `getCCPC26ProblemLayout(completeSlice)` result calculated before display-only row filtering. Original problem indexes must match `data`; ignored when CCPC26 is disabled or its configuration is absent.
 - `splitOrganization`: moves user organization into its own column before the user column.
 - `columnTitles`: overrides text labels for series, organization, user, score, time, Dirt, and SE columns.
 - `statusCellPreset`: uses `classic`, `detailed`, `minimal`, or `compact` status cell content.

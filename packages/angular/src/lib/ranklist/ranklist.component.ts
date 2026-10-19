@@ -18,7 +18,7 @@ import {
   resolveText,
   resolveUserMarkers,
 } from '@algoux/standard-ranklist-utils';
-import type { ThemeColor } from '@algoux/standard-ranklist-utils';
+import type { CCPC26ProblemLayout, ThemeColor } from '@algoux/standard-ranklist-utils';
 import {
   calculateDirtPercentage,
   calculateProblemStatisticsFooter,
@@ -441,6 +441,8 @@ import {
 export class RanklistComponent implements OnChanges {
   @Input({ required: true }) data!: StaticRanklist;
   @Input() enableCCPC26 = false;
+  /** Layout from the complete current slice before filtering rows, using data's original problem indexes. */
+  @Input() ccpc26ProblemLayout?: CCPC26ProblemLayout;
   @Input() theme: EnumTheme = EnumTheme.light;
   @Input() rowBordered = false;
   @Input() columnBordered = false;
@@ -475,8 +477,8 @@ export class RanklistComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.data.type !== 'general' || !this.isSupportedVersion()) return;
-    if (changes['data'] || changes['enableCCPC26'] || !this.problemPresentation) {
-      this.problemPresentation = getRanklistProblemPresentation(this.data, this.enableCCPC26);
+    if (changes['data'] || changes['enableCCPC26'] || changes['ccpc26ProblemLayout'] || !this.problemPresentation) {
+      this.problemPresentation = getRanklistProblemPresentation(this.data, this.enableCCPC26, this.ccpc26ProblemLayout);
     }
   }
 

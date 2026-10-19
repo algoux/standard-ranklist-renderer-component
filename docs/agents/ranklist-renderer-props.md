@@ -18,8 +18,17 @@ elapsed-time helper; components themselves own no contest clock.
 `enableCCPC26` defaults to `false`. It takes effect only for an ICPC sorter configured
 with `extendedAlgorithms: [{ algorithm: 'CCPC26', config: { problemRevealAcceptedThreshold: ... } }]`
 as specified by SRK 0.3.14. Thresholds and per-row order use the published
-`@algoux/standard-ranklist-utils >=0.3.4` implementation. Supply the complete current
-contest snapshot so display-only filtering does not change the eligible population.
+`@algoux/standard-ranklist-utils >=0.3.4` implementation. By default, supply the complete
+current contest snapshot so display-only filtering does not change the eligible population.
+
+When filtering rows for display, first call utils `getCCPC26ProblemLayout(completeSlice)`
+and pass its result as `ccpc26ProblemLayout?: CCPC26ProblemLayout` alongside the filtered
+`data`. All five frameworks accept this optional prop/input. Its problem indexes must refer
+to the same original `problems` array as `data`; recalculate it whenever the complete time
+slice changes. The renderer uses it for reveal decisions without recounting the filtered
+population, while ordering each displayed row normally. This prop is ignored when
+`enableCCPC26` is false or the standard CCPC26 configuration is absent. It does not change
+scores, ranking or the data used for display statistics.
 
 - Revealed problems form a shared prefix in original `problems` order. Remaining
   columns are ordered independently per row: AC/FB by acceptance time, then attempted
@@ -63,6 +72,7 @@ with framework-idiomatic event/input names in Vue, Svelte, and Angular:
 
 ```ts
 enableCCPC26?: boolean;
+ccpc26ProblemLayout?: CCPC26ProblemLayout; // imported from @algoux/standard-ranklist-utils
 splitOrganization?: boolean;
 columnTitles?: RanklistColumnTitles;
 statusCellPreset?: 'classic' | 'detailed' | 'minimal' | 'compact';
@@ -111,6 +121,7 @@ Default labels are: series title from SRK, `Name`, `Organization`, `Score`,
 | Prop | Default | Contract |
 | --- | --- | --- |
 | `enableCCPC26` | `false` | Enables configured CCPC26 reveal/order presentation; the caller controls freeze timing. |
+| `ccpc26ProblemLayout` | — | Optional layout computed from the complete current slice before row filtering; requires matching original problem indexes and enabled, configured CCPC26. |
 | `splitOrganization` | `false` | Inserts an Organization column before User and hides organization text from the default User cell. |
 | `columnTitles` | SRK/default labels | Text-only title overrides for series, organization, user, score, time, dirt, and se columns. |
 | `statusCellPreset` | `classic` | Chooses the reusable status content preset: `classic`, `detailed`, `minimal`, or `compact`. |

@@ -1,5 +1,6 @@
 import type * as srk from '@algoux/standard-ranklist';
 import { formatTimeDuration, getCCPC26ProblemLayout, getCCPC26RowProblemOrder } from '@algoux/standard-ranklist-utils';
+import type { CCPC26ProblemLayout } from '@algoux/standard-ranklist-utils';
 
 /** Display indexes retain their original SRK identity; null headers are anonymous slots. */
 export interface RanklistProblemPresentation {
@@ -11,12 +12,21 @@ export interface RanklistProblemPresentation {
   headerClassNames: Array<string | undefined>;
 }
 
-/** Derive one framework-independent presentation from the complete current snapshot. */
+/** Derive a presentation, optionally using a layout calculated before display-only row filtering. */
 export function getRanklistProblemPresentation(
   ranklist: srk.Ranklist,
   enableCCPC26 = false,
+  ccpc26ProblemLayout?: CCPC26ProblemLayout,
 ): RanklistProblemPresentation {
-  const layout = enableCCPC26 ? getCCPC26ProblemLayout(ranklist) : undefined;
+  // A supplied layout avoids recomputing reveal thresholds against a filtered population.
+  // It must not bypass the same standard configuration requirement as the utils helper.
+  const extendedAlgorithms =
+    ranklist.sorter?.algorithm === 'ICPC' ? ranklist.sorter.config?.extendedAlgorithms : undefined;
+  const threshold = Array.isArray(extendedAlgorithms)
+    ? extendedAlgorithms.find((item) => item?.algorithm === 'CCPC26')?.config?.problemRevealAcceptedThreshold
+    : undefined;
+  const configured = !!threshold && typeof threshold === 'object' && !Array.isArray(threshold);
+  const layout = enableCCPC26 && configured ? ccpc26ProblemLayout ?? getCCPC26ProblemLayout(ranklist) : undefined;
   const revealed = layout ? new Set(layout.revealedProblemIndexes) : undefined;
   const revealedProblemCount = layout ? layout.revealedProblemIndexes.length : ranklist.problems.length;
   const hasRevealDivider = !!layout && revealedProblemCount > 0 && layout.hiddenProblemIndexes.length > 0;

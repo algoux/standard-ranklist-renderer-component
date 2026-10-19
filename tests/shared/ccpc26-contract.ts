@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import type * as srk from '@algoux/standard-ranklist';
+import { getCCPC26ProblemLayout, type CCPC26ProblemLayout } from '@algoux/standard-ranklist-utils';
 import type {
   StaticRanklist,
   SolutionClickPayload,
@@ -10,6 +11,7 @@ import { makeCCPC26Ranklist } from './ccpc26-fixture';
 export interface CCPC26RanklistProps {
   data: StaticRanklist;
   enableCCPC26?: boolean;
+  ccpc26ProblemLayout?: CCPC26ProblemLayout;
   statusCellPreset?: 'classic' | 'detailed' | 'minimal' | 'compact';
   statusColorAsText?: boolean;
   showProblemStatisticsFooter?: boolean;
@@ -129,6 +131,24 @@ export function describeCCPC26Contract(adapter: CCPC26Adapter) {
       await view.flush();
       expect(problems[0]?.problemIndex).toBe(2);
       expect(JSON.stringify(data)).toBe(before);
+    });
+
+    it('accepts complete-slice reveal decisions independently of display filtering', async () => {
+      const complete = makeCCPC26Ranklist();
+      const layout = getCCPC26ProblemLayout(complete)!;
+      const data = { ...complete, rows: [complete.rows[0]] };
+      const before = JSON.stringify({ complete, data, layout });
+      const props: CCPC26RanklistProps = { data, enableCCPC26: true };
+      const view = await render(props);
+      expect(labels(view.container)).toEqual(['', '', '', '', '']);
+
+      // Updating only the layout must recompute the presentation in every framework.
+      await view.update({ ...props, ccpc26ProblemLayout: layout });
+      expect(labels(view.container)).toEqual(['A', 'C', '', '', '']);
+      expect(cells(rows(view.container)[0])[2].classList.contains('srk-prest-status-block-fb')).toBe(false);
+      await view.update({ ...props, ccpc26ProblemLayout: layout, enableCCPC26: false });
+      expect(labels(view.container)).toEqual(['A', 'B', 'C', 'D', 'E']);
+      expect(JSON.stringify({ complete, data, layout })).toBe(before);
     });
 
     it('reacts to reveal, rewind and disabling without changing original cell identity', async () => {
