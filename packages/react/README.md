@@ -86,11 +86,20 @@ For custom interaction flows, `Ranklist` exposes three semantic click props:
 
 Custom `components.problemHeaderCell` implementations receive `ranklist`, `onProblemClick`, and an `onClick` helper so they can opt into the same problem-click payload path.
 
+In CCPC26 mode, only revealed problems invoke the custom problem-header component.
+Forward its optional `className` to the root header element to retain the revealed-region
+separator, including while the header is sticky.
+Custom status cells receive `problemRevealed`. Solution clicks retain real problem data
+and the original `problemIndex`; forward `payload.problemRevealed` to
+`DefaultSolutionModal` to hide unrevealed problem labels. Omitted means true.
+See [CCPC26 render options](../../docs/agents/ranklist-renderer-props.md#ccpc26-presentation).
+
 ## Ranklist Render Options
 
 `Ranklist` includes optional render props for changing the table structure and status presentation while keeping the default behavior unchanged:
 
 - `languages`: preferred BCP 47 language tags used by SRK i18n text fields; defaults to browser languages when omitted.
+- `enableCCPC26`: enables CCPC26 presentation for an ICPC ranklist with the SRK 0.3.14 extended algorithm configuration; defaults to `false`. The caller decides whether the snapshot is before freeze.
 - `splitOrganization`: moves user organization into its own column before the user column.
 - `columnTitles`: overrides text labels for series, organization, user, score, time, Dirt, and SE columns.
 - `statusCellPreset`: uses `classic`, `detailed`, `minimal`, or `compact` status cell content.

@@ -65,6 +65,7 @@ function Board(props: { ranklist: any }) {
         user={activeSolution()?.user}
         problem={activeSolution()?.problem}
         problemIndex={activeSolution()?.problemIndex || 0}
+        problemRevealed={activeSolution()?.problemRevealed}
         solutions={activeSolution()?.solutions || []}
         onClose={() => setActiveSolution(null)}
       />
@@ -128,3 +129,30 @@ Custom `problemHeaderCell` parts receive `ranklist`, `onProblemClick`, and an `o
   }}
 />
 ```
+
+## CCPC26 presentation
+
+`enableCCPC26` defaults to `false` and requires an ICPC ranklist with the SRK 0.3.14
+CCPC26 extended algorithm. Supply the complete current contest slice; the caller decides
+when to disable the mode at the freeze boundary. For an explicit elapsed time, core exports
+`isBeforeContestFreeze(contest, elapsedMilliseconds)` (`null` exits replay).
+
+```tsx
+<Ranklist data={staticRanklist()} enableCCPC26={beforeFreeze()} />
+```
+
+Revealed problems share a fixed prefix; remaining status cells are ordered per participant.
+Anonymous headers and footer cells are blank. A shared right separator appears only when
+both regions exist: 1px normally, or 3px with `columnBordered`. Anonymous FB cells and
+submission records display as AC, while raw event payloads preserve FB and original indexes.
+
+Custom `problemHeaderCell` parts receive `className`; forward it to the root `<th>` to keep the sticky separator. `statusCell` parts receive `problemRevealed`. Header hooks are not invoked for anonymous slots.
+Use core's `getRankProblemDisplayStatus(status, problemRevealed)` and
+`getSolutionDisplayResult(result, problemRevealed)` when customizing these presentations.
+Pass the click payload's `problemRevealed` to `DefaultSolutionModal` as shown above to hide
+the problem label and FB distinction, including during its closing animation. Omitted
+`problemRevealed` means true.
+
+The dev page includes a `CCPC26 mode` switch. Replay changes update it from the freeze
+boundary; toggling closes problem/submission details. Demo data is loaded only by the dev
+entry, while preview tests inject small synthetic contests.

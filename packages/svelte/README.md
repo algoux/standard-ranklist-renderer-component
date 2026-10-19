@@ -58,6 +58,7 @@ $: staticRanklist = convertToStaticRanklist(ranklist);
   problem={activeSolution && activeSolution.problem}
   problemIndex={(activeSolution && activeSolution.problemIndex) || 0}
   solutions={(activeSolution && activeSolution.solutions) || []}
+  problemRevealed={activeSolution ? activeSolution.problemRevealed : undefined}
   on:close={() => (activeSolution = null)}
 />
 ```
@@ -121,3 +122,28 @@ const columnTitles = {
   {columnTitles}
 />
 ```
+
+## CCPC26 presentation
+
+Set `enableCCPC26` on `Ranklist` for a complete ICPC snapshot configured with the SRK
+CCPC26 extension. It defaults to false; the caller decides whether the contest is
+before the freeze boundary. Revealed columns remain fixed and anonymous cells are
+ordered separately per team. Anonymous headers and footer cells are blank, and FB is
+presented as ordinary AC. The shared stylesheet separates the regions with a 1px
+border, or 3px when `columnBordered` is enabled; no divider appears when zero or all
+problems are revealed.
+
+`on:solutionClick` retains original indexes, statuses and submission records, adding
+`problemRevealed`. Forward it to `DefaultSolutionModal` as shown above to hide the
+problem label and first-blood result in anonymous details, including the closing
+animation. Omitted flags mean revealed.
+
+The `status-cell` slot receives `problemRevealed` with the original status. Use core's
+`getRankProblemDisplayStatus(status, problemRevealed)` for custom display projections.
+The `problem-header-cell` slot is called only for revealed problems and receives a
+`className` containing the boundary style when applicable. Shared core owns ordering,
+reveal metadata and projections; Svelte only binds them reactively.
+
+The dev page provides a **CCPC26 mode** checkbox. Replay changes update it from the
+freeze boundary. Preview data is loaded only by the dev entry; automated tests inject
+independent synthetic fixtures.

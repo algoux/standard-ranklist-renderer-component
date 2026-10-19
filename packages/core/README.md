@@ -18,6 +18,11 @@ npm i -S @algoux/standard-ranklist-renderer-component-core
 - `UserClickPayload`
 - `ProblemClickPayload`
 - `SolutionClickPayload`
+- `getRanklistProblemPresentation`
+- `RanklistProblemPresentation`
+- `getRankProblemDisplayStatus`
+- `getSolutionDisplayResult`
+- `isBeforeContestFreeze`
 
 ## Usage
 
@@ -25,3 +30,14 @@ npm i -S @algoux/standard-ranklist-renderer-component-core
 import { caniuse } from '@algoux/standard-ranklist-renderer-component-core';
 import { convertToStaticRanklist } from '@algoux/standard-ranklist-utils';
 ```
+
+## CCPC26 presentation
+
+`getRanklistProblemPresentation(data, enableCCPC26)` returns anonymous header/footer
+slots, original per-row indexes, reveal flags and separator metadata. It delegates the
+contest's threshold and ordering rules to utils. The display-status/result helpers hide
+anonymous first blood without mutating payloads. `isBeforeContestFreeze(contest, elapsed)`
+uses caller-provided milliseconds or null, and never reads a clock.
+
+All framework packages use these helpers and the common styles. See
+[CCPC26 render options](../../docs/agents/ranklist-renderer-props.md#ccpc26-presentation) for the shared contract.

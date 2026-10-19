@@ -161,3 +161,30 @@ export class BoardComponent {
   [columnTitles]="columnTitles"
 ></srk-ranklist>
 ```
+
+## CCPC26 presentation
+
+Set `[enableCCPC26]="true"` only when the caller wants SRK 0.3.14's configured ICPC
+CCPC26 presentation (normally before the freeze). The input defaults to false and the
+component owns no clock. Pass a complete contest snapshot; core and utils compute the
+shared revealed prefix and each participant's anonymous problem order.
+
+Anonymous headers and footer cells remain blank. The final revealed column has a shared
+1px right separator, or 3px with `columnBordered`; no separator appears if none or all
+problems are revealed. Anonymous FB cells and submission records display as ordinary AC,
+while click outputs preserve original indexes, status objects and results.
+
+Pass `[problemRevealed]="activeSolution?.problemRevealed ?? true"` to
+`srk-default-solution-modal` to hide the problem label and first-blood result, including
+during its closing animation. The modal input defaults to true.
+
+`srkStatusCell` templates receive optional `problemRevealed` metadata and original status
+objects. Custom cells can use core's `getRankProblemDisplayStatus(status, problemRevealed)`
+to apply the same anonymous FB presentation. `srkProblemHeaderCell` templates run only for
+revealed problems. The owning `<th>` applies the sticky separator; its `className` is also
+available in the template context. Core and styles own the shared presentation rules and styling.
+
+The development preview includes a `CCPC26 mode` checkbox. Replay updates it at the freeze
+boundary; manual toggles close stale problem and solution details. Only `dev/main.ts` loads
+`demo.json`; tests inject small synthetic contests through the dev-only `PREVIEW_RANKLIST`
+token. See [CCPC26 render options](../../docs/agents/ranklist-renderer-props.md#ccpc26-presentation).
