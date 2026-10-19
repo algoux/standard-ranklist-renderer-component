@@ -1,5 +1,19 @@
 # @algoux/standard-ranklist-renderer-component-react
 
+## 0.7.0
+
+### Minor Changes
+
+- aed1f47: - Supported srk@0.3.14.
+  - Supported `CCPC26` mode.
+  - Updated `@algoux/standard-ranklist-utils` to `^0.3.4`.
+
+### Patch Changes
+
+- Updated dependencies [aed1f47]
+  - @algoux/standard-ranklist-renderer-component-core@0.7.0
+  - @algoux/standard-ranklist-renderer-component-styles@0.7.0
+
 ## 0.6.5
 
 ### Patch Changes
