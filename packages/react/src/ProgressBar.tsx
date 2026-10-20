@@ -19,6 +19,11 @@ export interface ProgressBarProps {
    * @default 0
    */
   td?: number;
+  /** Replace the active center state content. Omitted slots keep the default DOM. */
+  slots?: {
+    timeMachine?: () => React.ReactNode;
+    live?: () => React.ReactNode;
+  };
   /**
    * Called when time travel is entered and the time slider is moved.
    * @param time The selected time in ms. `null` if time travel is exited.
@@ -231,12 +236,20 @@ export class ProgressBar extends React.Component<ProgressBarProps, State> {
             Elapsed: {secToTimeStr(Math.round(progressMetrics.elapsed / 1000))}
           </div>
           <div className="srk-progress-secondary-area-center">
-            {this.state.inTimeMachine ? (
-              <div className="srk-progress-time-machine-status">
-                <div className="srk-progress-time-machine-text">Time Travel Mode</div>
-              </div>
+            {inTimeMachine ? (
+              this.props.slots?.timeMachine ? (
+                this.props.slots.timeMachine()
+              ) : (
+                <div className="srk-progress-time-machine-status">
+                  <div className="srk-progress-time-machine-text">Time Travel Mode</div>
+                </div>
+              )
             ) : live && !this.isEnded ? (
-              <div className="srk-progress-live-text">Live</div>
+              this.props.slots?.live ? (
+                this.props.slots.live()
+              ) : (
+                <div className="srk-progress-live-text">Live</div>
+              )
             ) : (
               <div style={{ visibility: 'hidden' }}>SRK</div>
             )}

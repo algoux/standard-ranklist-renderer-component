@@ -15,7 +15,7 @@ import {
   unlockModalBodyScroll,
 } from '@algoux/standard-ranklist-renderer-component-core';
 import type { JSX } from 'solid-js';
-import { createEffect, createMemo, createSignal, onCleanup, untrack } from 'solid-js';
+import { createEffect, createMemo, createSignal, onCleanup, Show, untrack } from 'solid-js';
 import { render as renderSolid } from 'solid-js/web';
 import type {
   RanklistColumnTitles,
@@ -238,6 +238,34 @@ export default function App(props: { initialRanklist: srk.Ranklist }) {
         live
         enableTimeTravel
         onTimeTravel={handleTimeTravel}
+        slots={{
+          timeMachine: () => (
+            <div class="srk-progress-time-machine-status preview-time-machine-status">
+              <div class="srk-progress-time-machine-text">Time Travel Mode</div>
+              <Show
+                when={
+                  originalRanklist.sorter.algorithm === 'ICPC' &&
+                  originalRanklist.sorter.config?.extendedAlgorithms?.some((item) => item.algorithm === 'CCPC26')
+                }
+              >
+                <label class="preview-ccpc26-switch">
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    aria-label="CCPC26 mode"
+                    checked={enableCCPC26()}
+                    onChange={(event) => {
+                      setEnableCCPC26(event.currentTarget.checked);
+                      setActiveProblemClick(null);
+                      setActiveSolutionClick(null);
+                    }}
+                  />
+                  <span>CCPC26</span>
+                </label>
+              </Show>
+            </div>
+          ),
+        }}
       />
       <div class="preview-spacer" />
       <section class="preview-controls" aria-label="Ranklist render options">
@@ -305,15 +333,6 @@ export default function App(props: { initialRanklist: srk.Ranklist }) {
           </button>
         </div>
         <div class="preview-control-row">
-          <ToggleField
-            label="CCPC26 mode"
-            checked={enableCCPC26}
-            onChange={(checked) => {
-              setEnableCCPC26(checked);
-              setActiveProblemClick(null);
-              setActiveSolutionClick(null);
-            }}
-          />
           <ToggleField label="Split organization" checked={splitOrganization} onChange={setSplitOrganization} />
           <ToggleField
             label="Custom column titles"

@@ -14,6 +14,7 @@ export type {
   ProblemHeaderCellSlotProps,
   ProgressBarEvents,
   ProgressBarProps,
+  ProgressBarSlots,
   RanklistColumnTitles,
   RanklistEvents,
   RanklistProps,

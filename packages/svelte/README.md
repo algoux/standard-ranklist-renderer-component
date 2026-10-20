@@ -75,6 +75,24 @@ For custom interaction flows, `Ranklist` exposes three semantic click hooks:
 
 `problem-header-cell` slots receive `ranklist` and an `onClick` helper so they can opt into the same problem-click payload path.
 
+## ProgressBar status slots
+
+`ProgressBar` accepts optional named slots `timeMachine` and `live`. Each replaces the
+complete DOM for that state directly inside `.srk-progress-secondary-area-center`;
+neither receives slot props. Omitted slots retain the default label and wrapper.
+Replay takes priority over live, and the live slot appears only while `live` is true
+and the contest has not ended. The inactive placeholder and replay events are unchanged.
+The package exports `ProgressBarSlots` for the slot type contract.
+
+```svelte
+<ProgressBar data={ranklist} enableTimeTravel live on:timeTravel={handleTimeTravel}>
+  <div slot="timeMachine" class="srk-progress-time-machine-status">
+    <div class="srk-progress-time-machine-text">Replay</div>
+  </div>
+  <div slot="live" class="srk-progress-live-text">Live standings</div>
+</ProgressBar>
+```
+
 ## Ranklist Render Options
 
 `Ranklist` includes optional render props for changing the table structure and status presentation while keeping the default behavior unchanged:
@@ -148,6 +166,8 @@ The `problem-header-cell` slot is called only for revealed problems and receives
 `className` containing the boundary style when applicable. Shared core owns ordering,
 reveal metadata and projections; Svelte only binds them reactively.
 
-The dev page provides a **CCPC26 mode** checkbox. Replay changes update it from the
-freeze boundary. Preview data is loaded only by the dev entry; automated tests inject
-independent synthetic fixtures.
+The dev page uses the `timeMachine` slot to show a `CCPC26` switch to the right of the
+centered replay label, without including the switch in its centering. It appears only
+during replay for contests declaring the CCPC26 extension. Replay changes update it
+from the freeze boundary, and toggling closes problem/submission details. Preview data
+is loaded only by the dev entry; automated tests inject independent synthetic fixtures.

@@ -110,6 +110,30 @@ For custom interaction flows, `RanklistComponent` exposes three semantic outputs
 
 `SrkProblemHeaderCellTemplateDirective` contexts receive `ranklist` and an `onClick` helper so they can opt into the same problem-click payload path.
 
+## ProgressBar Status Templates
+
+`ProgressBarComponent` accepts optional `timeMachineTemplate` and `liveTemplate` inputs
+of type `TemplateRef<unknown>`. Each template replaces the complete active status DOM
+inside `.srk-progress-secondary-area-center`. Omitted templates keep the default
+status. Time travel takes priority over live status; templates are mounted only while
+their state is active, and the idle/ended placeholder stays unchanged.
+
+```html
+<srk-progress-bar
+  [data]="ranklist"
+  [live]="true"
+  [enableTimeTravel]="true"
+  [timeMachineTemplate]="timeMachineStatus"
+  [liveTemplate]="liveStatus"
+></srk-progress-bar>
+<ng-template #timeMachineStatus>
+  <span>Replay</span>
+</ng-template>
+<ng-template #liveStatus>
+  <strong>Live updates</strong>
+</ng-template>
+```
+
 ## Ranklist Render Options
 
 `RanklistComponent` includes optional render inputs for changing the table structure and status presentation while keeping the default behavior unchanged:
@@ -188,7 +212,9 @@ to apply the same anonymous FB presentation. `srkProblemHeaderCell` templates ru
 revealed problems. The owning `<th>` applies the sticky separator; its `className` is also
 available in the template context. Core and styles own the shared presentation rules and styling.
 
-The development preview includes a `CCPC26 mode` checkbox. Replay updates it at the freeze
-boundary; manual toggles close stale problem and solution details. Only `dev/main.ts` loads
+The development preview uses `timeMachineTemplate` to show a `CCPC26` switch beside the
+centered time-travel label, only during replay for contests declaring the ICPC `CCPC26`
+extension. Replay updates it at the freeze boundary; manual toggles close stale problem
+and solution details. Only `dev/main.ts` loads
 `demo.json`; tests inject small synthetic contests through the dev-only `PREVIEW_RANKLIST`
 token. See [CCPC26 render options](../../docs/agents/ranklist-renderer-props.md#ccpc26-presentation).

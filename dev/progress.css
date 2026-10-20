@@ -1,0 +1,79 @@
+.preview-time-machine-status {
+  position: relative;
+  white-space: nowrap;
+}
+
+.preview-ccpc26-switch {
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 24px;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--preview-body-text);
+  cursor: pointer;
+}
+
+.preview-ccpc26-switch input {
+  appearance: none;
+  position: relative;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 16px;
+  margin: 0;
+  border: 1px solid rgba(127, 127, 127, 0.65);
+  border-radius: 8px;
+  background: rgba(127, 127, 127, 0.35);
+  cursor: pointer;
+}
+
+.preview-ccpc26-switch input::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.preview-ccpc26-switch input:checked {
+  border-color: #2e68ff;
+  background: #2e68ff;
+}
+
+.preview-ccpc26-switch input:checked::after {
+  transform: translateX(12px);
+}
+
+.preview-ccpc26-switch input:focus-visible {
+  outline: 2px solid var(--color-progress-bar-time-machine-text-color);
+  outline-offset: 3px;
+}
+
+/* Keep elapsed/remaining below the centered label when horizontal room is limited. */
+@media (max-width: 760px) {
+  .preview-shell .srk-progress-bar-container .srk-progress-secondary-area {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 12px;
+  }
+
+  .preview-shell .srk-progress-bar-container .srk-progress-secondary-area .srk-progress-secondary-area-center {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    justify-self: center;
+  }
+
+  .preview-shell .srk-progress-bar-container .srk-progress-secondary-area .srk-progress-secondary-area-left,
+  .preview-shell .srk-progress-bar-container .srk-progress-secondary-area .srk-progress-secondary-area-right {
+    min-width: 0;
+    grid-row: 2;
+    font-size: 12px;
+  }
+}

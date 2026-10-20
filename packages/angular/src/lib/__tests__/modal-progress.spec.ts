@@ -131,6 +131,35 @@ class ProgressHostComponent {
   timeTravelEvents: Array<number | null> = [];
 }
 
+@Component({
+  standalone: true,
+  imports: [ProgressBarComponent],
+  template: `
+    <srk-progress-bar
+      [data]="ranklist"
+      [enableTimeTravel]="true"
+      [live]="live"
+      [td]="td"
+      [timeMachineTemplate]="customTimeMachine ? timeMachineStatus : undefined"
+      [liveTemplate]="customLive ? liveStatus : undefined"
+    ></srk-progress-bar>
+    <ng-template #timeMachineStatus>
+      <button class="custom-replay" (click)="clicks = clicks + 1">Replay {{ clicks }}</button>
+    </ng-template>
+    <ng-template #liveStatus>
+      <span class="custom-live">Live updates</span>
+    </ng-template>
+  `,
+})
+class ProgressTemplateHostComponent {
+  ranklist = makeRanklist();
+  live = true;
+  td = Date.now() - new Date(this.ranklist.contest.startAt).getTime() - 180 * 60_000;
+  customTimeMachine = true;
+  customLive = true;
+  clicks = 0;
+}
+
 interface RenderedHost<T> {
   appRef: ApplicationRef;
   componentRef: ComponentRef<T>;
@@ -346,5 +375,61 @@ describe('Angular modal and progress components', () => {
 
     expect(componentRef.instance.timeTravelEvents[0]).toBe(120 * 60 * 1000);
     expect(hostElement.querySelector('.srk-progress-time-machine-status')).not.toBeNull();
+  });
+
+  it('mounts only the active status template with replay taking priority over live', async () => {
+    const { componentRef, hostElement } = await renderHost(ProgressTemplateHostComponent);
+    const center = hostElement.querySelector('.srk-progress-secondary-area-center')!;
+    const slider = hostElement.querySelector('input[type="range"]') as HTMLInputElement;
+
+    expect(center.querySelector('.custom-live')?.textContent).toBe('Live updates');
+    expect(center.querySelector('.srk-progress-live-text')).toBeNull();
+    expect(center.querySelector('.custom-replay')).toBeNull();
+
+    slider.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+    slider.value = '120';
+    slider.dispatchEvent(new Event('input', { bubbles: true }));
+    slider.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+    componentRef.changeDetectorRef.detectChanges();
+
+    expect(center.querySelector('.custom-live')).toBeNull();
+    expect(center.querySelector('.srk-progress-time-machine-status')).toBeNull();
+    (center.querySelector('.custom-replay') as HTMLButtonElement).click();
+    componentRef.changeDetectorRef.detectChanges();
+    expect(center.querySelector('.custom-replay')?.textContent).toBe('Replay 1');
+
+    slider.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+    slider.value = '300';
+    slider.dispatchEvent(new Event('input', { bubbles: true }));
+    slider.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+    componentRef.changeDetectorRef.detectChanges();
+    expect(center.querySelector('.custom-replay')).toBeNull();
+    expect(center.querySelector('.custom-live')).not.toBeNull();
+
+    componentRef.instance.td = Date.now() - new Date(componentRef.instance.ranklist.contest.startAt).getTime() - 301 * 60_000;
+    componentRef.changeDetectorRef.detectChanges();
+    expect(center.querySelector('.custom-live')).toBeNull();
+    expect((center.querySelector('div') as HTMLElement).style.visibility).toBe('hidden');
+  });
+
+  it('falls back independently for omitted templates and hides templates while idle', async () => {
+    const { componentRef, hostElement } = await renderHost(ProgressTemplateHostComponent);
+    const center = hostElement.querySelector('.srk-progress-secondary-area-center')!;
+    componentRef.instance.customLive = false;
+    componentRef.changeDetectorRef.detectChanges();
+    expect(center.querySelector('.srk-progress-live-text')?.textContent).toBe('Live');
+
+    componentRef.instance.live = false;
+    componentRef.changeDetectorRef.detectChanges();
+    expect(center.querySelector('.custom-replay')).toBeNull();
+    expect(center.querySelector('.srk-progress-live-text')).toBeNull();
+    expect((center.querySelector('div') as HTMLElement).style.visibility).toBe('hidden');
+
+    componentRef.instance.customTimeMachine = false;
+    const slider = hostElement.querySelector('input[type="range"]') as HTMLInputElement;
+    slider.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+    componentRef.changeDetectorRef.detectChanges();
+    expect(center.querySelector('.srk-progress-time-machine-text')?.textContent).toBe('Time Travel Mode');
+    expect(center.querySelector('.custom-replay')).toBeNull();
   });
 });

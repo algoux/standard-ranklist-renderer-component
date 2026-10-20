@@ -155,15 +155,18 @@ describe('Local preview app', () => {
     const ranklist = makePreviewRanklist();
     const originalRanklist = JSON.stringify(ranklist);
     const { container } = render(<App initialRanklist={ranklist} />);
-    const toggle = screen.getByRole('checkbox', { name: 'CCPC26 mode' }) as HTMLInputElement;
 
     expect(problemHeaderLabels(container)).toEqual(['A', 'B']);
-    expect(toggle.checked).toBe(false);
+    expect(screen.queryByRole('switch', { name: 'CCPC26 mode' })).toBeNull();
 
-    fireEvent.click(toggle);
+    selectTimeTravelMinute(7);
+    const toggle = screen.getByRole('switch', { name: 'CCPC26 mode' }) as HTMLInputElement;
+    expect(toggle.closest('.srk-progress-secondary-area-center')).toBeTruthy();
+    expect(container.querySelector('.preview-controls input[aria-label="CCPC26 mode"]')).toBeNull();
     expect(toggle.checked).toBe(true);
     expect(problemHeaderLabels(container)).toEqual(['', '']);
     fireEvent.click(toggle);
+    expect(toggle.checked).toBe(false);
     expect(problemHeaderLabels(container)).toEqual(['A', 'B']);
 
     selectTimeTravelMinute(0);
@@ -183,10 +186,21 @@ describe('Local preview app', () => {
     expect(problemHeaderLabels(container)).toEqual(['', '']);
 
     selectTimeTravelMinute(10);
-    expect(toggle.checked).toBe(false);
+    expect(screen.queryByRole('switch', { name: 'CCPC26 mode' })).toBeNull();
     expect(problemHeaderLabels(container)).toEqual(['A', 'B']);
     expect(screen.queryByText('Time Travel Mode')).toBeNull();
     expect(JSON.stringify(ranklist)).toBe(originalRanklist);
+  });
+
+  it('keeps replay available without a CCPC26 switch for contests without the declaration', () => {
+    const ranklist = makePreviewRanklist();
+    ranklist.sorter = { algorithm: 'ICPC', config: {} };
+    render(<App initialRanklist={ranklist} />);
+
+    selectTimeTravelMinute(7);
+    expect(screen.getByText('Time Travel Mode')).toBeTruthy();
+    expect(screen.queryByRole('switch', { name: 'CCPC26 mode' })).toBeNull();
+    expect(screen.queryByLabelText('CCPC26 mode')).toBeNull();
   });
 
   it('keeps the solution modal anonymous during CCPC26 and clears it when changing the slice', async () => {

@@ -54,9 +54,13 @@ scores, ranking or the data used for display statistics.
   problem order and labels without modifying scores, ranks or input arrays.
 
 React/Solid use callback props; Vue/Svelte/Angular retain their normal event APIs.
-Every dev preview provides a manual `CCPC26 mode` toggle. Replay changes update it from
-the selected time: enabled strictly before `duration - frozenDuration`, disabled at
-freeze or on replay exit. Tests use independently constructed fixtures, not demo data.
+Every dev preview provides a manual `CCPC26 mode` switch in ProgressBar's time-machine
+slot, only while replay is active and the ICPC contest declares the CCPC26 algorithm.
+The switch sits to the right of the label without affecting its center. Replay changes
+update it from the selected time: enabled strictly before `duration - frozenDuration`,
+disabled at freeze or on replay exit. Tests use independently constructed fixtures,
+not demo data. See [ProgressBar state slots](../progress-bar-slots.md) for the
+cross-framework customization API.
 
 ## Execution Constraints
 

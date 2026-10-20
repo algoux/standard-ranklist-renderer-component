@@ -158,6 +158,25 @@ export default class App extends React.Component<AppProps, AppState> {
     }));
   };
 
+  renderTimeMachineStatus = () => (
+    <div className="srk-progress-time-machine-status preview-time-machine-status">
+      <div className="srk-progress-time-machine-text">Time Travel Mode</div>
+      {this.props.initialRanklist.sorter?.algorithm === 'ICPC' &&
+        this.props.initialRanklist.sorter.config?.extendedAlgorithms?.some((item) => item.algorithm === 'CCPC26') && (
+          <label className="preview-ccpc26-switch">
+            <input
+              type="checkbox"
+              role="switch"
+              aria-label="CCPC26 mode"
+              checked={this.state.enableCCPC26}
+              onChange={this.toggleCCPC26}
+            />
+            <span>CCPC26</span>
+          </label>
+        )}
+    </div>
+  );
+
   handleUserClick = (payload: UserClickPayload) => {
     this.setState({
       activeUserClick: payload,
@@ -272,6 +291,7 @@ export default class App extends React.Component<AppProps, AppState> {
           live
           enableTimeTravel
           onTimeTravel={this.handleTimeTravel}
+          slots={{ timeMachine: this.renderTimeMachineStatus }}
         />
         <div className="preview-spacer" />
         <section className="preview-controls" aria-label="Ranklist render options">
@@ -340,11 +360,6 @@ export default class App extends React.Component<AppProps, AppState> {
             </button>
           </div>
           <div className="preview-control-row">
-            <ToggleField
-              label="CCPC26 mode"
-              checked={this.state.enableCCPC26}
-              onChange={this.toggleCCPC26}
-            />
             <ToggleField
               label="Split organization"
               checked={this.state.splitOrganization}

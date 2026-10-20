@@ -1,3 +1,5 @@
+@import '../../../dev/progress.css';
+
 :root {
   --preview-body-text: #333;
   --preview-body-bg: #fff;

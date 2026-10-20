@@ -176,11 +176,15 @@
     </div>
     <div class="srk-progress-secondary-area-center">
       {#if inTimeMachine}
-        <div class="srk-progress-time-machine-status">
-          <div class="srk-progress-time-machine-text">Time Travel Mode</div>
-        </div>
+        <slot name="timeMachine">
+          <div class="srk-progress-time-machine-status">
+            <div class="srk-progress-time-machine-text">Time Travel Mode</div>
+          </div>
+        </slot>
       {:else if live && !isEnded}
-        <div class="srk-progress-live-text">Live</div>
+        <slot name="live">
+          <div class="srk-progress-live-text">Live</div>
+        </slot>
       {:else}
         <div style="visibility: hidden">SRK</div>
       {/if}

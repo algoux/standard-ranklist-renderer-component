@@ -129,7 +129,7 @@ describe('Svelte local demo app', () => {
     };
     const before = JSON.stringify(ranklist);
     const { container } = render(App, { props: { initialRanklist: ranklist } });
-    const toggle = getField(container, 'CCPC26 mode') as HTMLInputElement;
+    const toggle = () => container.querySelector<HTMLInputElement>('[aria-label="CCPC26 mode"]');
     const headers = () =>
       Array.from(container.querySelectorAll('thead .srk-problem-header')).map(
         (cell) => cell.querySelector('span')?.textContent || '',
@@ -142,40 +142,54 @@ describe('Svelte local demo app', () => {
       await tick();
     }
 
-    expect(toggle.checked).toBe(false);
+    expect(toggle()).toBeNull();
+    expect(container.querySelector('.preview-controls [aria-label="CCPC26 mode"]')).toBeNull();
     expect(headers()).toEqual(['A', 'B']);
-    await fireEvent.click(toggle);
-    expect(toggle.checked).toBe(true);
+    await selectMinute(7);
+    expect(container.querySelector('.srk-progress-secondary-area-center [role="switch"]')).toBeTruthy();
+    expect(toggle()!.checked).toBe(true);
     expect(headers()).toEqual(['', '']);
     await fireEvent.click(getButton(container, 'Baseline'));
-    expect(toggle.checked).toBe(true);
-    await fireEvent.click(toggle);
+    expect(toggle()!.checked).toBe(true);
+    await fireEvent.click(toggle()!);
     expect(headers()).toEqual(['A', 'B']);
 
     await selectMinute(0);
-    expect(toggle.checked).toBe(true);
+    expect(toggle()!.checked).toBe(true);
     expect(headers()).toEqual(['', '']);
     expect(container.querySelector('tbody .srk-prest-status-block-accepted')).toBeNull();
     await selectMinute(7);
     await fireEvent.click(getAcceptedStatusCell(container));
     expect(textOf(container.querySelector('.srk-modal-title'))).toBe('Solutions (Preview Team)');
-    await fireEvent.click(toggle);
+    await fireEvent.click(toggle()!);
     await waitFor(() => expect(container.querySelector('.srk-modal-root')).toBeNull());
     expect(headers()).toEqual(['A', 'B']);
 
     await selectMinute(7);
-    expect(toggle.checked).toBe(true);
+    expect(toggle()!.checked).toBe(true);
     await fireEvent.click(getAcceptedStatusCell(container));
     await selectMinute(8);
-    expect(toggle.checked).toBe(false);
+    expect(toggle()!.checked).toBe(false);
     expect(headers()).toEqual(['A', 'B']);
     await waitFor(() => expect(container.querySelector('.srk-modal-root')).toBeNull());
     await selectMinute(7);
     expect(headers()).toEqual(['', '']);
     await selectMinute(10);
-    expect(toggle.checked).toBe(false);
+    expect(toggle()).toBeNull();
     expect(headers()).toEqual(['A', 'B']);
     expect(container.textContent).not.toContain('Time Travel Mode');
     expect(JSON.stringify(ranklist)).toBe(before);
+  });
+
+  it('does not show a CCPC26 switch during replay without the extension declaration', async () => {
+    const ranklist = makePreviewRanklist();
+    ranklist.sorter = { algorithm: 'ICPC', config: {} };
+    const { container } = render(App, { props: { initialRanklist: ranklist } });
+    const slider = container.querySelector<HTMLInputElement>('[aria-label="Time Travel"]')!;
+    await fireEvent.mouseDown(slider);
+    await fireEvent.input(slider, { target: { value: '7' } });
+    await fireEvent.mouseUp(slider);
+    expect(container.querySelector('.srk-progress-time-machine-text')?.textContent).toBe('Time Travel Mode');
+    expect(container.querySelector('[aria-label="CCPC26 mode"]')).toBeNull();
   });
 });

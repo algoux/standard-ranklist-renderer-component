@@ -86,6 +86,24 @@ For custom interaction flows, `Ranklist` exposes three semantic click props:
 
 Custom `problemHeaderCell` parts receive `ranklist`, `onProblemClick`, and an `onClick` helper so they can opt into the same problem-click payload path.
 
+`ProgressBar` accepts optional `slots.timeMachine` and `slots.live` render functions
+(`() => JSX.Element`). Each replaces the complete active status DOM inside
+`.srk-progress-secondary-area-center`. Omitted slots retain the default content; a
+provided slot returning `null` intentionally renders nothing. Time travel takes
+precedence over live, and only the active slot is invoked.
+
+```tsx
+<ProgressBar
+  data={props.ranklist}
+  enableTimeTravel
+  live
+  slots={{
+    timeMachine: () => <span>Custom replay status</span>,
+    live: () => <span>Updating live</span>,
+  }}
+/>
+```
+
 ## Ranklist Render Options
 
 `Ranklist` includes optional render props for changing the table structure and status presentation while keeping the default behavior unchanged:
@@ -157,6 +175,8 @@ Pass the click payload's `problemRevealed` to `DefaultSolutionModal` as shown ab
 the problem label and FB distinction, including during its closing animation. Omitted
 `problemRevealed` means true.
 
-The dev page includes a `CCPC26 mode` switch. Replay changes update it from the freeze
-boundary; toggling closes problem/submission details. Demo data is loaded only by the dev
-entry, while preview tests inject small synthetic contests.
+For contests declaring the CCPC26 extended algorithm, the dev page uses the time-machine
+slot to show a `CCPC26 mode` switch to the right of the centered replay label. The switch
+appears only during time travel and does not affect the label's centering. Replay changes
+update it from the freeze boundary; toggling closes problem/submission details. Demo data
+is loaded only by the dev entry, while preview tests inject small synthetic contests.

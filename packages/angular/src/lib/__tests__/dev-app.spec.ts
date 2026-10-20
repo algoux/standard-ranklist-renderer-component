@@ -57,6 +57,21 @@ describe('Angular dev app', () => {
     const app = componentRef.instance;
     const toggle = () => hostElement.querySelector<HTMLInputElement>('input[aria-label="CCPC26 mode"]')!;
     const labels = () => Array.from(hostElement.querySelectorAll('thead .srk-problem-header')).map((cell) => cell.textContent?.trim());
+    const originalLabels = labels();
+    const travelTo = (minutes: number) => {
+      const slider = hostElement.querySelector('input.srk-progress-slider') as HTMLInputElement;
+      slider.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+      slider.value = String(minutes);
+      slider.dispatchEvent(new Event('input', { bubbles: true }));
+      slider.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+      componentRef.changeDetectorRef.detectChanges();
+    };
+    expect(toggle()).toBeNull();
+    expect(hostElement.querySelector('.preview-controls input[aria-label="CCPC26 mode"]')).toBeNull();
+    travelTo(8);
+    expect(toggle().getAttribute('role')).toBe('switch');
+    expect(toggle().closest('.srk-progress-secondary-area-center')).not.toBeNull();
+    expect(hostElement.querySelector('.preview-ccpc26-switch span')?.textContent).toBe('CCPC26');
     expect(toggle().checked).toBe(false);
     (hostElement.querySelector('thead .srk-problem-header') as HTMLElement).click();
     expect(app.activeProblemClick).not.toBeNull();
@@ -73,16 +88,37 @@ describe('Angular dev app', () => {
     componentRef.changeDetectorRef.detectChanges();
     expect(app.activeSolutionClick).toBeNull();
     expect(toggle().checked).toBe(false);
-    for (const [time, enabled] of [[7 * 60_000, true], [8 * 60_000, false], [0, true], [null, false]] as const) {
-      app.handleTimeTravel(time);
-      componentRef.changeDetectorRef.detectChanges();
+    for (const [minutes, enabled] of [[7, true], [8, false], [0, true]] as const) {
+      travelTo(minutes);
       expect(toggle().checked).toBe(enabled);
       expect(labels().every((label) => label === '')).toBe(enabled);
     }
+    travelTo(10);
+    expect(toggle()).toBeNull();
+    expect(app.enableCCPC26).toBe(false);
+    expect(labels()).toEqual(originalLabels);
     app.setCCPC26Mode(true);
     app.useBaselineOptions();
     app.useShowcaseOptions();
     expect(app.enableCCPC26).toBe(true);
+  });
+
+  it('does not show the replay switch for contests without a CCPC26 declaration', async () => {
+    const data = makePreviewRanklist();
+    data.sorter = { algorithm: 'ICPC', config: {} };
+    const { componentRef, hostElement } = await renderDevApp(data);
+    const labels = () => Array.from(hostElement.querySelectorAll('thead .srk-problem-header')).map((cell) => cell.textContent?.trim());
+    const originalLabels = labels();
+    const slider = hostElement.querySelector('input.srk-progress-slider') as HTMLInputElement;
+    slider.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+    slider.value = '7';
+    slider.dispatchEvent(new Event('input', { bubbles: true }));
+    slider.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+    componentRef.changeDetectorRef.detectChanges();
+
+    expect(hostElement.querySelector('.srk-progress-time-machine-text')?.textContent).toBe('Time Travel Mode');
+    expect(hostElement.querySelector('input[aria-label="CCPC26 mode"]')).toBeNull();
+    expect(labels()).toEqual(originalLabels);
   });
 
   it('resolves the preview theme from the system dark preference', async () => {

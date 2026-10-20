@@ -76,6 +76,28 @@ function Board({ ranklist }) {
 
 ## Advanced Usage
 
+`ProgressBar` accepts optional `slots.timeMachine` and `slots.live` render functions.
+Each replaces the entire active state's content inside
+`.srk-progress-secondary-area-center`. Omitted functions retain the default DOM;
+returning `null` intentionally leaves that state empty. Replay takes priority over
+live, and inactive functions are not called.
+
+```tsx
+<ProgressBar
+  data={ranklist}
+  live
+  enableTimeTravel
+  slots={{
+    timeMachine: () => <span>Custom replay controls</span>,
+    live: () => <strong>Live updates</strong>,
+  }}
+/>
+```
+
+The Dev preview uses the time-machine slot for a CCPC26 switch, shown only for
+ICPC contests declaring the CCPC26 algorithm while replay is active. The switch
+sits to the right of the centered label without changing its position.
+
 Use `Modal` directly when you want custom modal content. `Ranklist` also accepts `components` such as `userCell` and `statusCell` when you need to replace selected table cells while keeping the rest of the renderer.
 
 For custom interaction flows, `Ranklist` exposes three semantic click props:

@@ -1,6 +1,22 @@
 <template>
   <main class="preview-shell">
-    <ProgressBar :data="ranklist" enable-time-travel live @time-travel="handleTimeTravel" />
+    <ProgressBar :data="ranklist" enable-time-travel live @time-travel="handleTimeTravel">
+      <template #timeMachine>
+        <div class="srk-progress-time-machine-status preview-time-machine-status">
+          <div class="srk-progress-time-machine-text">Time Travel Mode</div>
+          <label v-if="hasCCPC26" class="preview-ccpc26-switch">
+            <input
+              :checked="enableCCPC26"
+              type="checkbox"
+              role="switch"
+              aria-label="CCPC26 mode"
+              @change="handleCCPC26Toggle"
+            />
+            <span>CCPC26</span>
+          </label>
+        </div>
+      </template>
+    </ProgressBar>
     <div class="preview-spacer"></div>
     <section class="preview-controls" aria-label="Ranklist render options">
       <div class="preview-control-row preview-control-row-primary">
@@ -40,10 +56,6 @@
         <button type="button" class="preview-action" @click="useBaselineOptions">Baseline</button>
       </div>
       <div class="preview-control-row">
-        <label class="preview-field preview-toggle-field">
-          <input :checked="enableCCPC26" type="checkbox" aria-label="CCPC26 mode" @change="handleCCPC26Toggle" />
-          <span>CCPC26 mode</span>
-        </label>
         <label class="preview-field preview-toggle-field">
           <input v-model="splitOrganization" type="checkbox" aria-label="Split organization" />
           <span>Split organization</span>
@@ -166,6 +178,9 @@ import { DefaultSolutionModal, DefaultUserModal, Modal, ProgressBar, Ranklist } 
 
 const props = defineProps<{ initialRanklist: srk.Ranklist }>();
 const originalRanklist = props.initialRanklist;
+const hasCCPC26 =
+  originalRanklist.sorter.algorithm === 'ICPC' &&
+  originalRanklist.sorter.config?.extendedAlgorithms?.some((extension) => extension.algorithm === 'CCPC26');
 const sortedSolutions = getSortedCalculatedRawSolutions(originalRanklist.rows);
 const ranklist = ref<srk.Ranklist>(originalRanklist);
 const activeUserClick = ref<UserClickPayload | null>(null);

@@ -47,10 +47,14 @@
         Elapsed: {{ secToTimeStr(Math.round(progressMetrics.elapsed / 1000)) }}
       </div>
       <div class="srk-progress-secondary-area-center">
-        <div v-if="inTimeMachine" class="srk-progress-time-machine-status">
-          <div class="srk-progress-time-machine-text">Time Travel Mode</div>
-        </div>
-        <div v-else-if="live && !isEnded" class="srk-progress-live-text">Live</div>
+        <slot v-if="inTimeMachine" name="timeMachine">
+          <div class="srk-progress-time-machine-status">
+            <div class="srk-progress-time-machine-text">Time Travel Mode</div>
+          </div>
+        </slot>
+        <slot v-else-if="live && !isEnded" name="live">
+          <div class="srk-progress-live-text">Live</div>
+        </slot>
         <div v-else style="visibility: hidden">SRK</div>
       </div>
       <div class="srk-progress-secondary-area-right" :style="live || inTimeMachine ? {} : { display: 'none' }">

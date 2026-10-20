@@ -89,6 +89,27 @@ For custom interaction flows, `Ranklist` emits three semantic click events:
 
 `problem-header-cell` slots receive `ranklist` and an `onClick` helper so they can opt into the same problem-click payload path.
 
+## ProgressBar status slots
+
+`ProgressBar` accepts optional named slots `timeMachine` and `live`. Each replaces the
+complete DOM for that state directly inside `.srk-progress-secondary-area-center`;
+neither receives slot props. Omitted slots retain the default label and wrapper.
+Replay takes priority over live, and the live slot appears only while `live` is true
+and the contest has not ended. The inactive placeholder and replay events are unchanged.
+
+```vue
+<ProgressBar :data="ranklist" enable-time-travel live @time-travel="handleTimeTravel">
+  <template #timeMachine>
+    <div class="srk-progress-time-machine-status">
+      <div class="srk-progress-time-machine-text">Replay</div>
+    </div>
+  </template>
+  <template #live>
+    <div class="srk-progress-live-text">Live standings</div>
+  </template>
+</ProgressBar>
+```
+
 ## Ranklist Render Options
 
 `Ranklist` includes optional render props for changing the table structure and status presentation while keeping the default behavior unchanged:
@@ -166,6 +187,8 @@ Pass the click payload's `problemRevealed` to `DefaultSolutionModal` as shown ab
 the problem label and FB distinction, including during its closing animation. Omitted
 `problemRevealed` means true.
 
-The dev page includes a `CCPC26 mode` switch. Replay changes update it from the freeze
-boundary; toggling closes problem/submission details. Demo data is loaded only by the dev
-entry, while preview tests inject small synthetic contests.
+The dev page uses the `timeMachine` slot to show a `CCPC26` switch to the right of the
+centered replay label, without including the switch in its centering. It appears only
+during replay for contests declaring the CCPC26 extension. Replay changes update it
+from the freeze boundary; toggling closes problem/submission details. Demo data is
+loaded only by the dev entry, while preview tests inject small synthetic contests.

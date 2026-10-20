@@ -83,6 +83,11 @@ export interface ProgressBarProps {
   td?: number;
 }
 
+export interface ProgressBarSlots {
+  timeMachine: Record<string, never>;
+  live: Record<string, never>;
+}
+
 export interface ModalProps {
   open: boolean;
   title?: string;

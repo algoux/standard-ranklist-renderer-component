@@ -59,8 +59,24 @@ type LanguageOptionValue = 'browser' | 'zh-CN' | 'en-US';
         [td]="timeDiff"
         [live]="true"
         [enableTimeTravel]="true"
+        [timeMachineTemplate]="timeMachineStatus"
         (timeTravel)="handleTimeTravel($event)"
       />
+      <ng-template #timeMachineStatus>
+        <div class="srk-progress-time-machine-status preview-time-machine-status">
+          <div class="srk-progress-time-machine-text">Time Travel Mode</div>
+          <label *ngIf="hasCCPC26" class="preview-ccpc26-switch">
+            <input
+              type="checkbox"
+              role="switch"
+              aria-label="CCPC26 mode"
+              [checked]="enableCCPC26"
+              (change)="setCCPC26Mode($any($event.target).checked)"
+            />
+            <span>CCPC26</span>
+          </label>
+        </div>
+      </ng-template>
       <div class="preview-spacer"></div>
       <section class="preview-controls" aria-label="Ranklist render options">
         <div class="preview-control-row preview-control-row-primary">
@@ -128,15 +144,6 @@ type LanguageOptionValue = 'browser' | 'zh-CN' | 'en-US';
           <button type="button" class="preview-action" (click)="useBaselineOptions()">Baseline</button>
         </div>
         <div class="preview-control-row">
-          <label class="preview-field preview-toggle-field">
-            <input
-              type="checkbox"
-              aria-label="CCPC26 mode"
-              [checked]="enableCCPC26"
-              (change)="setCCPC26Mode($any($event.target).checked)"
-            />
-            <span>CCPC26 mode</span>
-          </label>
           <label class="preview-field preview-toggle-field">
             <input
               type="checkbox"
@@ -288,6 +295,8 @@ export class AppComponent {
   readonly EnumTheme = EnumTheme;
   readonly preferredTheme = resolvePreferredTheme();
   readonly originalRanklist = inject(PREVIEW_RANKLIST);
+  readonly hasCCPC26 = this.originalRanklist.sorter?.algorithm === 'ICPC' &&
+    !!this.originalRanklist.sorter.config?.extendedAlgorithms?.some(({ algorithm }) => algorithm === 'CCPC26');
   readonly sortedSolutions = getSortedCalculatedRawSolutions(this.originalRanklist.rows);
   readonly demoColumnTitles: RanklistColumnTitles = {
     series: (series, index) => (index === 0 ? 'Rank' : series.title || `Series ${index + 1}`),

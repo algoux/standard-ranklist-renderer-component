@@ -13,6 +13,9 @@
   export let initialRanklist;
 
   const originalRanklist = initialRanklist;
+  const hasCCPC26 =
+    originalRanklist.sorter.algorithm === 'ICPC' &&
+    originalRanklist.sorter.config?.extendedAlgorithms?.some((extension) => extension.algorithm === 'CCPC26');
   const sortedSolutions = getSortedCalculatedRawSolutions(originalRanklist.rows);
   let ranklist = originalRanklist;
   let enableCCPC26 = false;
@@ -157,7 +160,23 @@
     live
     enableTimeTravel
     on:timeTravel={handleTimeTravel}
-  />
+  >
+    <div slot="timeMachine" class="srk-progress-time-machine-status preview-time-machine-status">
+      <div class="srk-progress-time-machine-text">Time Travel Mode</div>
+      {#if hasCCPC26}
+        <label class="preview-ccpc26-switch">
+          <input
+            type="checkbox"
+            role="switch"
+            aria-label="CCPC26 mode"
+            checked={enableCCPC26}
+            on:change={handleCCPC26Change}
+          />
+          <span>CCPC26</span>
+        </label>
+      {/if}
+    </div>
+  </ProgressBar>
   <div class="preview-spacer"></div>
   <section class="preview-controls" aria-label="Ranklist render options">
     <div class="preview-control-row preview-control-row-primary">
@@ -197,10 +216,6 @@
       <button type="button" class="preview-action" on:click={useBaselineOptions}>Baseline</button>
     </div>
     <div class="preview-control-row">
-      <label class="preview-field preview-toggle-field">
-        <input type="checkbox" aria-label="CCPC26 mode" checked={enableCCPC26} on:change={handleCCPC26Change} />
-        <span>CCPC26 mode</span>
-      </label>
       <label class="preview-field preview-toggle-field">
         <input type="checkbox" aria-label="Split organization" bind:checked={splitOrganization} />
         <span>Split organization</span>

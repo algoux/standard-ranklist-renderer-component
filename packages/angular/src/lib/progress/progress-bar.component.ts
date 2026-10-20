@@ -7,6 +7,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  type TemplateRef,
 } from '@angular/core';
 import { secToTimeStr } from '@algoux/standard-ranklist-utils';
 import {
@@ -76,12 +77,20 @@ import {
           Elapsed: {{ secToTimeStr(progressMetrics().elapsed / 1000) }}
         </div>
         <div class="srk-progress-secondary-area-center">
-          <div *ngIf="inTimeMachine" class="srk-progress-time-machine-status">
-            <div class="srk-progress-time-machine-text">Time Travel Mode</div>
-          </div>
-          <div *ngIf="!inTimeMachine && live && !isEnded()" class="srk-progress-live-text">
-            Live
-          </div>
+          <ng-container *ngIf="inTimeMachine">
+            <ng-container *ngTemplateOutlet="timeMachineTemplate || defaultTimeMachine"></ng-container>
+          </ng-container>
+          <ng-template #defaultTimeMachine>
+            <div class="srk-progress-time-machine-status">
+              <div class="srk-progress-time-machine-text">Time Travel Mode</div>
+            </div>
+          </ng-template>
+          <ng-container *ngIf="!inTimeMachine && live && !isEnded()">
+            <ng-container *ngTemplateOutlet="liveTemplate || defaultLive"></ng-container>
+          </ng-container>
+          <ng-template #defaultLive>
+            <div class="srk-progress-live-text">Live</div>
+          </ng-template>
           <div *ngIf="!inTimeMachine && (!live || isEnded())" style="visibility: hidden">
             SRK
           </div>
@@ -101,6 +110,8 @@ export class ProgressBarComponent implements OnInit, OnDestroy {
   @Input() enableTimeTravel = false;
   @Input() live = false;
   @Input() td = 0;
+  @Input() timeMachineTemplate?: TemplateRef<unknown>;
+  @Input() liveTemplate?: TemplateRef<unknown>;
 
   @Output() timeTravel = new EventEmitter<number | null>();
 

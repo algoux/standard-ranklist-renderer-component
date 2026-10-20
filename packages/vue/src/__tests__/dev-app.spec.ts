@@ -142,10 +142,15 @@ describe('Vue CCPC26 preview controls', () => {
     };
     try {
       expect(labels()).toEqual(['A', 'B']);
-      await toggle().setValue(true);
+      expect(toggle().exists()).toBe(false);
+      expect(wrapper.find('.preview-controls [aria-label="CCPC26 mode"]').exists()).toBe(false);
+      await selectMinute(7);
+      expect(wrapper.find('.srk-progress-secondary-area-center [role="switch"]').exists()).toBe(true);
       expect(labels()).toEqual(['', '']);
       await toggle().setValue(false);
       expect(labels()).toEqual(['A', 'B']);
+      await toggle().setValue(true);
+      expect(labels()).toEqual(['', '']);
       for (const [minute, enabled] of [
         [0, true],
         [7, true],
@@ -154,7 +159,11 @@ describe('Vue CCPC26 preview controls', () => {
         [10, false],
       ] as const) {
         await selectMinute(minute);
-        expect(toggle().element.checked).toBe(enabled);
+        if (minute === 10) {
+          expect(toggle().exists()).toBe(false);
+        } else {
+          expect(toggle().element.checked).toBe(enabled);
+        }
         expect(labels()).toEqual(enabled ? ['', ''] : ['A', 'B']);
       }
       expect(JSON.stringify(data)).toBe(before);
@@ -166,12 +175,31 @@ describe('Vue CCPC26 preview controls', () => {
   it('passes anonymous details to the modal and closes details when toggling the mode', async () => {
     const wrapper = mount(App, { props: { initialRanklist: makePreviewRanklist() } });
     try {
-      await wrapper.find<HTMLInputElement>('[aria-label="CCPC26 mode"]').setValue(true);
+      const slider = wrapper.find<HTMLInputElement>('[aria-label="Time Travel"]');
+      await slider.trigger('mousedown');
+      await slider.setValue('7');
+      await slider.trigger('mouseup');
       await wrapper.find('tbody .srk-prest-status-block-accepted').trigger('click');
       expect(wrapper.find('.srk-modal-title').text()).toBe('Solutions (Preview Team)');
       await wrapper.find<HTMLInputElement>('[aria-label="CCPC26 mode"]').setValue(false);
       expect(wrapper.find('.srk-animated-modal-root').attributes('data-srk-modal-state')).toBe('closing');
       expect(wrapper.find('.srk-modal-title').text()).toBe('Solutions (Preview Team)');
+    } finally {
+      wrapper.unmount();
+    }
+  });
+
+  it('does not show a CCPC26 switch during replay without the extension declaration', async () => {
+    const data = makePreviewRanklist();
+    data.sorter = { algorithm: 'ICPC', config: {} };
+    const wrapper = mount(App, { props: { initialRanklist: data } });
+    try {
+      const slider = wrapper.find<HTMLInputElement>('[aria-label="Time Travel"]');
+      await slider.trigger('mousedown');
+      await slider.setValue('7');
+      await slider.trigger('mouseup');
+      expect(wrapper.find('.srk-progress-time-machine-text').text()).toBe('Time Travel Mode');
+      expect(wrapper.find('[aria-label="CCPC26 mode"]').exists()).toBe(false);
     } finally {
       wrapper.unmount();
     }

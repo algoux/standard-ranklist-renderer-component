@@ -7,6 +7,7 @@ import {
   isProgressEnded,
 } from '@algoux/standard-ranklist-renderer-component-core';
 import { createEffect, createSignal, onCleanup, onMount, Show } from 'solid-js';
+import type { JSX } from 'solid-js';
 
 export interface ProgressBarProps {
   data: srk.Ranklist;
@@ -14,6 +15,10 @@ export interface ProgressBarProps {
   live?: boolean;
   td?: number;
   onTimeTravel?: (time: number | null) => void | Promise<void>;
+  slots?: {
+    timeMachine?: () => JSX.Element;
+    live?: () => JSX.Element;
+  };
 }
 
 const timeTravelKeys = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown']);
@@ -172,20 +177,23 @@ export function ProgressBar(props: ProgressBarProps) {
           Elapsed: {secToTimeStr(Math.round(progressMetrics().elapsed / 1000))}
         </div>
         <div class="srk-progress-secondary-area-center">
-          <Show
-            when={inTimeMachine()}
-            fallback={
-              props.live && !ended() ? (
-                <div class="srk-progress-live-text">Live</div>
-              ) : (
-                <div style={{ visibility: 'hidden' }}>SRK</div>
-              )
-            }
-          >
-            <div class="srk-progress-time-machine-status">
-              <div class="srk-progress-time-machine-text">Time Travel Mode</div>
-            </div>
-          </Show>
+          {inTimeMachine() ? (
+            props.slots?.timeMachine ? (
+              props.slots.timeMachine()
+            ) : (
+              <div class="srk-progress-time-machine-status">
+                <div class="srk-progress-time-machine-text">Time Travel Mode</div>
+              </div>
+            )
+          ) : props.live && !ended() ? (
+            props.slots?.live ? (
+              props.slots.live()
+            ) : (
+              <div class="srk-progress-live-text">Live</div>
+            )
+          ) : (
+            <div style={{ visibility: 'hidden' }}>SRK</div>
+          )}
         </div>
         <div class="srk-progress-secondary-area-right" style={props.live || inTimeMachine() ? {} : { display: 'none' }}>
           Remaining: {secToTimeStr(Math.round(progressMetrics().remaining / 1000))}

@@ -230,21 +230,29 @@ describe('Solid CCPC26 preview controls', () => {
     try {
       await Promise.resolve();
       expect(labels()).toEqual(['A', 'B']);
-      fireEvent.click(toggle());
+      expect(root.querySelector('[aria-label="CCPC26 mode"]')).toBeNull();
+      selectMinute(7);
+      expect(toggle().closest('.srk-progress-secondary-area-center')).not.toBeNull();
+      expect(toggle().getAttribute('role')).toBe('switch');
+      expect(root.querySelector('.preview-controls [aria-label="CCPC26 mode"]')).toBeNull();
       expect(labels()).toEqual(['', '']);
       fireEvent.click(toggle());
       expect(labels()).toEqual(['A', 'B']);
+      fireEvent.click(toggle());
+      expect(labels()).toEqual(['', '']);
       for (const [minute, enabled] of [
         [0, true],
         [7, true],
         [8, false],
         [7, true],
-        [10, false],
       ] as const) {
         selectMinute(minute);
         expect(toggle().checked).toBe(enabled);
         expect(labels()).toEqual(enabled ? ['', ''] : ['A', 'B']);
       }
+      selectMinute(10);
+      expect(root.querySelector('[aria-label="CCPC26 mode"]')).toBeNull();
+      expect(labels()).toEqual(['A', 'B']);
       expect(JSON.stringify(data)).toBe(before);
     } finally {
       dispose();
@@ -256,7 +264,10 @@ describe('Solid CCPC26 preview controls', () => {
     const { root, dispose } = renderSolidApp();
     try {
       await Promise.resolve();
-      fireEvent.click(getField(root, 'CCPC26 mode'));
+      const slider = getField(root, 'Time Travel');
+      fireEvent.mouseDown(slider);
+      fireEvent.input(slider, { target: { value: '7' } });
+      fireEvent.mouseUp(slider);
       fireEvent.click(root.querySelector('tbody .srk-prest-status-block-accepted')!);
       expect(root.querySelector('.srk-solutions-modal .srk-modal-title')?.textContent).toBe('Solutions (Preview Team)');
       fireEvent.click(getField(root, 'CCPC26 mode'));
@@ -267,6 +278,28 @@ describe('Solid CCPC26 preview controls', () => {
           ?.getAttribute('data-srk-modal-state'),
       ).toBe('closing');
       expect(root.querySelector('.srk-solutions-modal .srk-modal-title')?.textContent).toBe('Solutions (Preview Team)');
+    } finally {
+      dispose();
+      root.remove();
+    }
+  });
+
+  it('shows the replay label without a switch for contests without a CCPC26 declaration', () => {
+    const data = makePreviewRanklist();
+    if (data.sorter.algorithm === 'ICPC') {
+      data.sorter.config = {};
+    }
+    const root = document.createElement('div');
+    document.body.appendChild(root);
+    const dispose = render(() => <App initialRanklist={data} />, root);
+    try {
+      expect(root.querySelector('[aria-label="CCPC26 mode"]')).toBeNull();
+      const slider = getField(root, 'Time Travel');
+      fireEvent.mouseDown(slider);
+      fireEvent.input(slider, { target: { value: '7' } });
+      fireEvent.mouseUp(slider);
+      expect(root.querySelector('.srk-progress-time-machine-text')?.textContent).toBe('Time Travel Mode');
+      expect(root.querySelector('[aria-label="CCPC26 mode"]')).toBeNull();
     } finally {
       dispose();
       root.remove();
