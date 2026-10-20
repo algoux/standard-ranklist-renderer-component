@@ -1,0 +1,25 @@
+{
+  "utc": "2026-10-20T06:59:10.7880408Z",
+  "targets": [
+    {
+      "id": "DE70621CA7A81161BE16BB911EA87E01",
+      "type": "page",
+      "url": "about:blank"
+    }
+  ],
+  "pressureProcessRunning": false,
+  "memory": {
+    "AvailableMBytes": 2654,
+    "CommittedBytes": 3797413888,
+    "CommitLimit": 6838484992,
+    "PercentCommittedBytesInUse": 55,
+    "PagesPersec": 0,
+    "PageReadsPersec": 0,
+    "PageWritesPersec": 0
+  },
+  "pageFile": {
+    "AllocatedBaseSize": 384,
+    "CurrentUsage": 102,
+    "PeakUsage": 149
+  }
+}

@@ -1,0 +1,796 @@
+{
+  "name": "mac-fixed-2",
+  "browser": "151.0.7922.34",
+  "errors": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "samples": [
+    {
+      "ms": 0,
+      "processes": [
+        {
+          "type": "browser",
+          "pid": 12702,
+          "cpu": 0.291412,
+          "rssKiB": 213344
+        },
+        {
+          "type": "renderer",
+          "pid": 12753,
+          "cpu": 0.041214,
+          "rssKiB": 99888
+        },
+        {
+          "type": "renderer",
+          "pid": 12754,
+          "cpu": 0.049292,
+          "rssKiB": 122944
+        },
+        {
+          "type": "GPU",
+          "pid": 12748,
+          "cpu": 0.13484,
+          "rssKiB": 131744
+        },
+        {
+          "type": "network.mojom.NetworkService",
+          "pid": 12749,
+          "cpu": 0.046786,
+          "rssKiB": 98256
+        },
+        {
+          "type": "storage.mojom.StorageService",
+          "pid": 12750,
+          "cpu": 0.031528,
+          "rssKiB": 81936
+        }
+      ]
+    },
+    {
+      "ms": 264,
+      "processes": [
+        {
+          "type": "browser",
+          "pid": 12702,
+          "cpu": 0.325125,
+          "rssKiB": 216800
+        },
+        {
+          "type": "renderer",
+          "pid": 12753,
+          "cpu": 0.041492,
+          "rssKiB": 99904
+        },
+        {
+          "type": "renderer",
+          "pid": 12754,
+          "cpu": 0.293507,
+          "rssKiB": 382512
+        },
+        {
+          "type": "GPU",
+          "pid": 12748,
+          "cpu": 0.161232,
+          "rssKiB": 132960
+        },
+        {
+          "type": "network.mojom.NetworkService",
+          "pid": 12749,
+          "cpu": 0.056674,
+          "rssKiB": 99856
+        },
+        {
+          "type": "storage.mojom.StorageService",
+          "pid": 12750,
+          "cpu": 0.031972,
+          "rssKiB": 82768
+        }
+      ]
+    },
+    {
+      "ms": 527,
+      "processes": [
+        {
+          "type": "browser",
+          "pid": 12702,
+          "cpu": 0.342378,
+          "rssKiB": 221040
+        },
+        {
+          "type": "renderer",
+          "pid": 12753,
+          "cpu": 0.041514,
+          "rssKiB": 99904
+        },
+        {
+          "type": "renderer",
+          "pid": 12754,
+          "cpu": 0.575007,
+          "rssKiB": 531792
+        },
+        {
+          "type": "GPU",
+          "pid": 12748,
+          "cpu": 0.170948,
+          "rssKiB": 133072
+        },
+        {
+          "type": "network.mojom.NetworkService",
+          "pid": 12749,
+          "cpu": 0.063395,
+          "rssKiB": 99840
+        },
+        {
+          "type": "storage.mojom.StorageService",
+          "pid": 12750,
+          "cpu": 0.031972,
+          "rssKiB": 82768
+        }
+      ]
+    },
+    {
+      "ms": 791,
+      "processes": [
+        {
+          "type": "browser",
+          "pid": 12702,
+          "cpu": 0.360331,
+          "rssKiB": 223008
+        },
+        {
+          "type": "renderer",
+          "pid": 12753,
+          "cpu": 0.041514,
+          "rssKiB": 99904
+        },
+        {
+          "type": "renderer",
+          "pid": 12754,
+          "cpu": 0.862732,
+          "rssKiB": 760144
+        },
+        {
+          "type": "GPU",
+          "pid": 12748,
+          "cpu": 0.18458,
+          "rssKiB": 133184
+        },
+        {
+          "type": "network.mojom.NetworkService",
+          "pid": 12749,
+          "cpu": 0.065776,
+          "rssKiB": 100112
+        },
+        {
+          "type": "storage.mojom.StorageService",
+          "pid": 12750,
+          "cpu": 0.031972,
+          "rssKiB": 82768
+        }
+      ]
+    },
+    {
+      "ms": 1054,
+      "processes": [
+        {
+          "type": "browser",
+          "pid": 12702,
+          "cpu": 0.375251,
+          "rssKiB": 223056
+        },
+        {
+          "type": "renderer",
+          "pid": 12753,
+          "cpu": 0.041514,
+          "rssKiB": 99904
+        },
+        {
+          "type": "renderer",
+          "pid": 12754,
+          "cpu": 1.648207,
+          "rssKiB": 959456
+        },
+        {
+          "type": "GPU",
+          "pid": 12748,
+          "cpu": 0.201399,
+          "rssKiB": 133296
+        },
+        {
+          "type": "network.mojom.NetworkService",
+          "pid": 12749,
+          "cpu": 0.065878,
+          "rssKiB": 100112
+        },
+        {
+          "type": "storage.mojom.StorageService",
+          "pid": 12750,
+          "cpu": 0.031972,
+          "rssKiB": 82768
+        }
+      ]
+    },
+    {
+      "ms": 1317,
+      "processes": [
+        {
+          "type": "browser",
+          "pid": 12702,
+          "cpu": 0.384489,
+          "rssKiB": 223936
+        },
+        {
+          "type": "renderer",
+          "pid": 12753,
+          "cpu": 0.041514,
+          "rssKiB": 99904
+        },
+        {
+          "type": "renderer",
+          "pid": 12754,
+          "cpu": 2.085152,
+          "rssKiB": 1095232
+        },
+        {
+          "type": "GPU",
+          "pid": 12748,
+          "cpu": 0.225291,
+          "rssKiB": 143584
+        },
+        {
+          "type": "network.mojom.NetworkService",
+          "pid": 12749,
+          "cpu": 0.067701,
+          "rssKiB": 100192
+        },
+        {
+          "type": "storage.mojom.StorageService",
+          "pid": 12750,
+          "cpu": 0.031972,
+          "rssKiB": 82768
+        }
+      ]
+    },
+    {
+      "ms": 1583,
+      "processes": [
+        {
+          "type": "browser",
+          "pid": 12702,
+          "cpu": 0.40072,
+          "rssKiB": 223952
+        },
+        {
+          "type": "renderer",
+          "pid": 12753,
+          "cpu": 0.041514,
+          "rssKiB": 99904
+        },
+        {
+          "type": "renderer",
+          "pid": 12754,
+          "cpu": 2.66556,
+          "rssKiB": 1177104
+        },
+        {
+          "type": "GPU",
+          "pid": 12748,
+          "cpu": 0.442523,
+          "rssKiB": 177856
+        },
+        {
+          "type": "network.mojom.NetworkService",
+          "pid": 12749,
+          "cpu": 0.069106,
+          "rssKiB": 100192
+        },
+        {
+          "type": "storage.mojom.StorageService",
+          "pid": 12750,
+          "cpu": 0.031972,
+          "rssKiB": 82768
+        }
+      ]
+    },
+    {
+      "ms": 1847,
+      "processes": [
+        {
+          "type": "browser",
+          "pid": 12702,
+          "cpu": 0.402722,
+          "rssKiB": 223968
+        },
+        {
+          "type": "renderer",
+          "pid": 12753,
+          "cpu": 0.041514,
+          "rssKiB": 99904
+        },
+        {
+          "type": "renderer",
+          "pid": 12754,
+          "cpu": 2.743579,
+          "rssKiB": 1183968
+        },
+        {
+          "type": "GPU",
+          "pid": 12748,
+          "cpu": 0.542627,
+          "rssKiB": 177872
+        },
+        {
+          "type": "network.mojom.NetworkService",
+          "pid": 12749,
+          "cpu": 0.069341,
+          "rssKiB": 100192
+        },
+        {
+          "type": "storage.mojom.StorageService",
+          "pid": 12750,
+          "cpu": 0.031972,
+          "rssKiB": 82768
+        }
+      ]
+    },
+    {
+      "ms": 2112,
+      "processes": [
+        {
+          "type": "browser",
+          "pid": 12702,
+          "cpu": 0.404202,
+          "rssKiB": 223984
+        },
+        {
+          "type": "renderer",
+          "pid": 12753,
+          "cpu": 0.041514,
+          "rssKiB": 99904
+        },
+        {
+          "type": "renderer",
+          "pid": 12754,
+          "cpu": 2.779517,
+          "rssKiB": 1184096
+        },
+        {
+          "type": "GPU",
+          "pid": 12748,
+          "cpu": 0.641366,
+          "rssKiB": 178224
+        },
+        {
+          "type": "network.mojom.NetworkService",
+          "pid": 12749,
+          "cpu": 0.069489,
+          "rssKiB": 100192
+        },
+        {
+          "type": "storage.mojom.StorageService",
+          "pid": 12750,
+          "cpu": 0.031972,
+          "rssKiB": 82768
+        }
+      ]
+    },
+    {
+      "ms": 2376,
+      "processes": [
+        {
+          "type": "browser",
+          "pid": 12702,
+          "cpu": 0.404933,
+          "rssKiB": 223984
+        },
+        {
+          "type": "renderer",
+          "pid": 12753,
+          "cpu": 0.041514,
+          "rssKiB": 99904
+        },
+        {
+          "type": "renderer",
+          "pid": 12754,
+          "cpu": 2.779795,
+          "rssKiB": 1184096
+        },
+        {
+          "type": "GPU",
+          "pid": 12748,
+          "cpu": 0.64225,
+          "rssKiB": 178208
+        },
+        {
+          "type": "network.mojom.NetworkService",
+          "pid": 12749,
+          "cpu": 0.069599,
+          "rssKiB": 100192
+        },
+        {
+          "type": "storage.mojom.StorageService",
+          "pid": 12750,
+          "cpu": 0.031972,
+          "rssKiB": 82768
+        }
+      ]
+    },
+    {
+      "ms": 2642,
+      "processes": [
+        {
+          "type": "browser",
+          "pid": 12702,
+          "cpu": 0.405722,
+          "rssKiB": 223984
+        },
+        {
+          "type": "renderer",
+          "pid": 12753,
+          "cpu": 0.041514,
+          "rssKiB": 99904
+        },
+        {
+          "type": "renderer",
+          "pid": 12754,
+          "cpu": 2.780525,
+          "rssKiB": 1184096
+        },
+        {
+          "type": "GPU",
+          "pid": 12748,
+          "cpu": 0.64276,
+          "rssKiB": 178208
+        },
+        {
+          "type": "network.mojom.NetworkService",
+          "pid": 12749,
+          "cpu": 0.069807,
+          "rssKiB": 100192
+        },
+        {
+          "type": "storage.mojom.StorageService",
+          "pid": 12750,
+          "cpu": 0.031972,
+          "rssKiB": 82768
+        }
+      ]
+    },
+    {
+      "ms": 2909,
+      "processes": [
+        {
+          "type": "browser",
+          "pid": 12702,
+          "cpu": 0.407275,
+          "rssKiB": 223984
+        },
+        {
+          "type": "renderer",
+          "pid": 12753,
+          "cpu": 0.041514,
+          "rssKiB": 99904
+        },
+        {
+          "type": "renderer",
+          "pid": 12754,
+          "cpu": 2.781219,
+          "rssKiB": 1184096
+        },
+        {
+          "type": "GPU",
+          "pid": 12748,
+          "cpu": 0.643303,
+          "rssKiB": 178208
+        },
+        {
+          "type": "network.mojom.NetworkService",
+          "pid": 12749,
+          "cpu": 0.070044,
+          "rssKiB": 100192
+        },
+        {
+          "type": "storage.mojom.StorageService",
+          "pid": 12750,
+          "cpu": 0.031972,
+          "rssKiB": 82768
+        }
+      ]
+    },
+    {
+      "ms": 3177,
+      "processes": [
+        {
+          "type": "browser",
+          "pid": 12702,
+          "cpu": 0.40816,
+          "rssKiB": 223920
+        },
+        {
+          "type": "renderer",
+          "pid": 12753,
+          "cpu": 0.041514,
+          "rssKiB": 99904
+        },
+        {
+          "type": "renderer",
+          "pid": 12754,
+          "cpu": 2.781602,
+          "rssKiB": 1184096
+        },
+        {
+          "type": "GPU",
+          "pid": 12748,
+          "cpu": 0.645066,
+          "rssKiB": 178144
+        },
+        {
+          "type": "network.mojom.NetworkService",
+          "pid": 12749,
+          "cpu": 0.070276,
+          "rssKiB": 100192
+        },
+        {
+          "type": "storage.mojom.StorageService",
+          "pid": 12750,
+          "cpu": 0.031972,
+          "rssKiB": 82768
+        }
+      ]
+    },
+    {
+      "ms": 3441,
+      "processes": [
+        {
+          "type": "browser",
+          "pid": 12702,
+          "cpu": 0.408948,
+          "rssKiB": 223920
+        },
+        {
+          "type": "renderer",
+          "pid": 12753,
+          "cpu": 0.041514,
+          "rssKiB": 99904
+        },
+        {
+          "type": "renderer",
+          "pid": 12754,
+          "cpu": 2.781752,
+          "rssKiB": 1184096
+        },
+        {
+          "type": "GPU",
+          "pid": 12748,
+          "cpu": 0.645566,
+          "rssKiB": 178144
+        },
+        {
+          "type": "network.mojom.NetworkService",
+          "pid": 12749,
+          "cpu": 0.070508,
+          "rssKiB": 100192
+        },
+        {
+          "type": "storage.mojom.StorageService",
+          "pid": 12750,
+          "cpu": 0.031972,
+          "rssKiB": 82768
+        }
+      ]
+    },
+    {
+      "ms": 3708,
+      "processes": [
+        {
+          "type": "browser",
+          "pid": 12702,
+          "cpu": 0.410842,
+          "rssKiB": 223936
+        },
+        {
+          "type": "renderer",
+          "pid": 12753,
+          "cpu": 0.041514,
+          "rssKiB": 99904
+        },
+        {
+          "type": "renderer",
+          "pid": 12754,
+          "cpu": 3.086537,
+          "rssKiB": 1188496
+        },
+        {
+          "type": "GPU",
+          "pid": 12748,
+          "cpu": 0.646208,
+          "rssKiB": 178144
+        },
+        {
+          "type": "network.mojom.NetworkService",
+          "pid": 12749,
+          "cpu": 0.070803,
+          "rssKiB": 100192
+        },
+        {
+          "type": "storage.mojom.StorageService",
+          "pid": 12750,
+          "cpu": 0.031972,
+          "rssKiB": 82768
+        }
+      ]
+    }
+  ],
+  "page": {
+    "url": "http://127.0.0.1:4178/collection/official?rankId=icpc2026preliminary-1",
+    "title": "2026 ICPC Asia EC网络预选赛 - 第一场 - 榜单合集 | RankLand",
+    "rows": 2535,
+    "elements": 68848,
+    "probe": {
+      "longTasks": [
+        {
+          "start": 748.8000000715256,
+          "duration": 381
+        },
+        {
+          "start": 1211.7000000476837,
+          "duration": 76
+        },
+        {
+          "start": 1352.3000000715256,
+          "duration": 104
+        }
+      ],
+      "errors": [],
+      "workerEvents": [
+        {
+          "type": "created",
+          "ms": 1197.4000000953674,
+          "url": "http://127.0.0.1:4178/dist/assets/rank-time-data.worker-f3bcf541.js"
+        },
+        {
+          "type": "request",
+          "ms": 1197.5,
+          "kind": "prepare",
+          "requestId": 1,
+          "rows": 2535,
+          "solutions": 30772
+        },
+        {
+          "type": "response",
+          "ms": 1634,
+          "url": "http://127.0.0.1:4178/dist/assets/rank-time-data.worker-f3bcf541.js",
+          "kind": "prepare",
+          "requestId": 1
+        }
+      ],
+      "marks": [
+        {
+          "name": "DOMContentLoaded",
+          "ms": 430.7000000476837
+        },
+        {
+          "name": "load",
+          "ms": 726.4000000953674
+        },
+        {
+          "name": "hydration-revealed",
+          "ms": 1294.7000000476837,
+          "rows": 2535
+        },
+        {
+          "name": "hydration-and-worker-ready",
+          "ms": 1636.3000000715256
+        }
+      ]
+    },
+    "devHmr": "undefined",
+    "hasVNode": false
+  },
+  "beforeGC": {
+    "heap": {
+      "usedSize": 224028224,
+      "totalSize": 274055168,
+      "embedderHeapUsedSize": 127362752,
+      "backingStorageSize": 4880706
+    },
+    "dom": {
+      "documents": 1,
+      "nodes": 199588,
+      "jsEventListeners": 15991
+    }
+  },
+  "afterGC": {
+    "heap": {
+      "usedSize": 195103076,
+      "totalSize": 198803456,
+      "embedderHeapUsedSize": 123030056,
+      "backingStorageSize": 2221522
+    },
+    "dom": {
+      "documents": 1,
+      "nodes": 199507,
+      "jsEventListeners": 15989
+    }
+  },
+  "metrics": {
+    "Timestamp": 844168.72993,
+    "AudioHandlers": 0,
+    "AudioWorkletProcessors": 0,
+    "Documents": 1,
+    "Frames": 1,
+    "JSEventListeners": 15989,
+    "LayoutObjects": 97681,
+    "MediaKeySessions": 0,
+    "MediaKeys": 0,
+    "Nodes": 199507,
+    "Resources": 7,
+    "ContextLifecycleStateObservers": 11,
+    "V8PerContextDatas": 2,
+    "WorkerGlobalScopes": 1,
+    "UACSSResources": 0,
+    "RTCPeerConnections": 0,
+    "ResourceFetchers": 1,
+    "AdSubframes": 0,
+    "DetachedScriptStates": 0,
+    "ArrayBufferContents": 12,
+    "LayoutCount": 15,
+    "RecalcStyleCount": 52,
+    "LayoutDuration": 0.326748,
+    "RecalcStyleDuration": 0.262813,
+    "DevToolsCommandDuration": 0.008361,
+    "ScriptDuration": 0.09108,
+    "V8CompileDuration": 0.006361,
+    "TaskDuration": 1.634009,
+    "TaskOtherDuration": 0.938646,
+    "ThreadTime": 1.586834,
+    "ProcessTime": 3.520125,
+    "JSHeapUsedSize": 195103076,
+    "JSHeapTotalSize": 198803456,
+    "FirstMeaningfulPaint": 844166.290091,
+    "DomContentLoaded": 844165.33288,
+    "NavigationStart": 844164.902209
+  },
+  "connected": 199495,
+  "tableTextHash": "8bb5d9b10832481ca53f9536faf4c3bbb802fd924cadcad9a4ef266a47315915",
+  "interaction": {
+    "text": "清华大学\n\n刘恒熙 / 汪直方 / 邱梓轩",
+    "chart": true,
+    "workerEvents": [
+      {
+        "type": "created",
+        "ms": 1197.4000000953674,
+        "url": "http://127.0.0.1:4178/dist/assets/rank-time-data.worker-f3bcf541.js"
+      },
+      {
+        "type": "request",
+        "ms": 1197.5,
+        "kind": "prepare",
+        "requestId": 1,
+        "rows": 2535,
+        "solutions": 30772
+      },
+      {
+        "type": "response",
+        "ms": 1634,
+        "url": "http://127.0.0.1:4178/dist/assets/rank-time-data.worker-f3bcf541.js",
+        "kind": "prepare",
+        "requestId": 1
+      },
+      {
+        "type": "request",
+        "ms": 4362,
+        "kind": "select",
+        "requestId": 2
+      },
+      {
+        "type": "response",
+        "ms": 4388.300000071526,
+        "url": "http://127.0.0.1:4178/dist/assets/rank-time-data.worker-f3bcf541.js",
+        "kind": "select",
+        "requestId": 2,
+        "points": 301
+      }
+    ]
+  }
+}

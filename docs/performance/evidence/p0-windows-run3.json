@@ -1,0 +1,685 @@
+﻿{
+    "name":  "p0-windows-run3",
+    "browser":  "Edg/154.0.4258.37",
+    "navigationUtc":  "2026-10-20T08:42:25.9402832Z",
+    "endUtc":  "2026-10-20T08:42:38.1480520Z",
+    "ready":  {
+                  "ready":  true,
+                  "ms":  4438.399999999441,
+                  "rows":  2535
+              },
+    "document":  {
+                     "probe":  {
+                                   "longTasks":  [
+                                                     {
+                                                         "start":  1197.699999999255,
+                                                         "duration":  52
+                                                     },
+                                                     {
+                                                         "start":  1329.3999999994412,
+                                                         "duration":  61
+                                                     },
+                                                     {
+                                                         "start":  2055.699999999255,
+                                                         "duration":  828
+                                                     },
+                                                     {
+                                                         "start":  2884,
+                                                         "duration":  57
+                                                     },
+                                                     {
+                                                         "start":  2943.0999999996275,
+                                                         "duration":  113
+                                                     },
+                                                     {
+                                                         "start":  3056.899999999441,
+                                                         "duration":  125
+                                                     }
+                                                 ],
+                                   "errors":  [
+
+                                              ],
+                                   "workerEvents":  [
+                                                        {
+                                                            "type":  "created",
+                                                            "ms":  3031,
+                                                            "url":  "http://127.0.0.1:4178/dist/assets/rank-time-data.worker-f3bcf541.js"
+                                                        },
+                                                        {
+                                                            "type":  "request",
+                                                            "ms":  3031,
+                                                            "kind":  "prepare",
+                                                            "requestId":  1,
+                                                            "rows":  2535,
+                                                            "solutions":  30772
+                                                        },
+                                                        {
+                                                            "type":  "response",
+                                                            "ms":  4342.299999999814,
+                                                            "url":  "http://127.0.0.1:4178/dist/assets/rank-time-data.worker-f3bcf541.js",
+                                                            "kind":  "prepare",
+                                                            "requestId":  1
+                                                        }
+                                                    ],
+                                   "marks":  [
+                                                 {
+                                                     "name":  "ssr-rows-observed",
+                                                     "ms":  1331.3999999994412,
+                                                     "rows":  2535
+                                                 },
+                                                 {
+                                                     "name":  "DOMContentLoaded",
+                                                     "ms":  1388.5999999996275
+                                                 },
+                                                 {
+                                                     "name":  "load",
+                                                     "ms":  1979.3999999994412
+                                                 },
+                                                 {
+                                                     "name":  "hydration-revealed",
+                                                     "ms":  3189.899999999441,
+                                                     "rows":  2535
+                                                 },
+                                                 {
+                                                     "name":  "hydration-and-worker-ready",
+                                                     "ms":  4342.5
+                                                 }
+                                             ]
+                               },
+                     "title":  "2026 ICPC Asia EC网络预选赛 - 第一场 - 榜单合集 | RankLand",
+                     "url":  "http://127.0.0.1:4178/collection/official?rankId=icpc2026preliminary-1",
+                     "elements":  68834,
+                     "connectedNodes":  199475,
+                     "retainedSSRRows":  2535,
+                     "rows":  2535,
+                     "height":  147367,
+                     "hydrated":  "true",
+                     "devKeys":  [
+                                     "__VUE_INSTANCE_SETTERS__",
+                                     "__VUE_SSR_SETTERS__",
+                                     "__VUE__"
+                                 ],
+                     "navigation":  [
+                                        {
+                                            "name":  "http://127.0.0.1:4178/collection/official?rankId=icpc2026preliminary-1",
+                                            "entryType":  "navigation",
+                                            "startTime":  0,
+                                            "duration":  1979.3999999994412,
+                                            "navigationId":  2913,
+                                            "initiatorType":  "navigation",
+                                            "deliveryType":  "",
+                                            "nextHopProtocol":  "http/1.1",
+                                            "renderBlockingStatus":  "non-blocking",
+                                            "contentType":  "text/html",
+                                            "contentEncoding":  "",
+                                            "workerStart":  0,
+                                            "workerRouterEvaluationStart":  0,
+                                            "workerCacheLookupStart":  0,
+                                            "workerMatchedSourceType":  "",
+                                            "workerFinalSourceType":  "",
+                                            "redirectStart":  0,
+                                            "redirectEnd":  0,
+                                            "fetchStart":  1.2999999998137355,
+                                            "domainLookupStart":  1.2999999998137355,
+                                            "domainLookupEnd":  1.2999999998137355,
+                                            "connectStart":  1.2999999998137355,
+                                            "secureConnectionStart":  0,
+                                            "connectEnd":  1.2999999998137355,
+                                            "requestStart":  18.199999999254942,
+                                            "responseStart":  77.19999999925494,
+                                            "firstInterimResponseStart":  0,
+                                            "finalResponseHeadersStart":  77.19999999925494,
+                                            "responseEnd":  233.69999999925494,
+                                            "transferSize":  8641574,
+                                            "encodedBodySize":  8641274,
+                                            "decodedBodySize":  8641274,
+                                            "responseStatus":  200,
+                                            "serverTiming":  [
+
+                                                             ],
+                                            "unloadEventStart":  0,
+                                            "unloadEventEnd":  0,
+                                            "domInteractive":  1329.3999999994412,
+                                            "domContentLoadedEventStart":  1388.5999999996275,
+                                            "domContentLoadedEventEnd":  1388.5999999996275,
+                                            "domComplete":  1979.0999999996275,
+                                            "loadEventStart":  1979.2999999998137,
+                                            "loadEventEnd":  1979.3999999994412,
+                                            "type":  "navigate",
+                                            "redirectCount":  0,
+                                            "activationStart":  0,
+                                            "criticalCHRestart":  0,
+                                            "notRestoredReasons":  null,
+                                            "confidence":  {
+
+                                                           }
+                                        }
+                                    ],
+                     "paint":  [
+                                   {
+                                       "name":  "first-paint",
+                                       "entryType":  "paint",
+                                       "startTime":  956,
+                                       "duration":  0,
+                                       "navigationId":  2913,
+                                       "paintTime":  277,
+                                       "presentationTime":  956
+                                   },
+                                   {
+                                       "name":  "first-contentful-paint",
+                                       "entryType":  "paint",
+                                       "startTime":  3404,
+                                       "duration":  0,
+                                       "navigationId":  2913,
+                                       "paintTime":  3373.0999999996275,
+                                       "presentationTime":  3404
+                                   }
+                               ],
+                     "resources":  [
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/index-4f4b6864.js",
+                                           "start":  89.59999999962747,
+                                           "duration":  153.59999999962747,
+                                           "transferSize":  457176,
+                                           "decodedBodySize":  456876
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/index-3b42f12f.css",
+                                           "start":  90.19999999925494,
+                                           "duration":  150.90000000037253,
+                                           "transferSize":  71816,
+                                           "decodedBodySize":  71516
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/icpc_logo_black-f8742b2d.png",
+                                           "start":  90.3999999994412,
+                                           "duration":  145.40000000037253,
+                                           "transferSize":  9603,
+                                           "decodedBodySize":  9303
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/ccpc_logo_black-364d9f9d.png",
+                                           "start":  90.3999999994412,
+                                           "duration":  147.90000000037253,
+                                           "transferSize":  8366,
+                                           "decodedBodySize":  8066
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/rankland-logo-8e9c8237.png",
+                                           "start":  90.3999999994412,
+                                           "duration":  169.70000000018626,
+                                           "transferSize":  15809,
+                                           "decodedBodySize":  15509
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/ucup_logo_black-8927fd72.png",
+                                           "start":  90.5,
+                                           "duration":  170.09999999962747,
+                                           "transferSize":  9827,
+                                           "decodedBodySize":  9527
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/collection.view-2da096b3.js",
+                                           "start":  1379.5999999996275,
+                                           "duration":  4.900000000372529,
+                                           "transferSize":  42150,
+                                           "decodedBodySize":  41850
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/Prop-05419680.js",
+                                           "start":  1380.3999999994412,
+                                           "duration":  35.40000000037253,
+                                           "transferSize":  484,
+                                           "decodedBodySize":  184
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/StyledRanklist.vue_vue_type_script_setup_true_lang-5e72e231.js",
+                                           "start":  1381.3999999994412,
+                                           "duration":  9.100000000558794,
+                                           "transferSize":  408943,
+                                           "decodedBodySize":  408643
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/BeianLink.vue_vue_type_script_setup_true_lang-26bac6bc.js",
+                                           "start":  1382.199999999255,
+                                           "duration":  34.200000000186265,
+                                           "transferSize":  155852,
+                                           "decodedBodySize":  155552
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/BeianLink-e223a5d3.css",
+                                           "start":  1383.699999999255,
+                                           "duration":  48.200000000186265,
+                                           "transferSize":  27624,
+                                           "decodedBodySize":  27324
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/search-3b32a311.js",
+                                           "start":  1384.699999999255,
+                                           "duration":  48.700000000186265,
+                                           "transferSize":  1065,
+                                           "decodedBodySize":  765
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/StyledRanklist-8ce70fca.css",
+                                           "start":  1385.5,
+                                           "duration":  48.89999999944121,
+                                           "transferSize":  23375,
+                                           "decodedBodySize":  23075
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/page-error-468bf9ce.js",
+                                           "start":  1386.199999999255,
+                                           "duration":  49.5,
+                                           "transferSize":  997,
+                                           "decodedBodySize":  697
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/title-format-78a0aa5a.js",
+                                           "start":  1387.3999999994412,
+                                           "duration":  49.700000000186265,
+                                           "transferSize":  424,
+                                           "decodedBodySize":  124
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/view-reporter-ae2cb9c8.js",
+                                           "start":  1388.5,
+                                           "duration":  49.799999999813735,
+                                           "transferSize":  664,
+                                           "decodedBodySize":  364
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4322/vin.txt",
+                                           "start":  2881,
+                                           "duration":  6.099999999627471,
+                                           "transferSize":  0,
+                                           "decodedBodySize":  0
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/rank-time-data.worker-f3bcf541.js",
+                                           "start":  3242.2999999998137,
+                                           "duration":  -207.1000000005588,
+                                           "transferSize":  64433,
+                                           "decodedBodySize":  64133
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/index-db6782db.js",
+                                           "start":  3385.2999999998137,
+                                           "duration":  138.20000000018626,
+                                           "transferSize":  965739,
+                                           "decodedBodySize":  965439
+                                       },
+                                       {
+                                           "name":  "http://127.0.0.1:4178/dist/assets/index-3b42f12f.css",
+                                           "start":  3388.5,
+                                           "duration":  77.8999999994412,
+                                           "transferSize":  71816,
+                                           "decodedBodySize":  71516
+                                       }
+                                   ]
+                 },
+    "metrics":  {
+                    "metrics":  [
+                                    {
+                                        "name":  "Timestamp",
+                                        "value":  8063.350079
+                                    },
+                                    {
+                                        "name":  "AudioHandlers",
+                                        "value":  0
+                                    },
+                                    {
+                                        "name":  "AudioWorkletProcessors",
+                                        "value":  0
+                                    },
+                                    {
+                                        "name":  "Documents",
+                                        "value":  1
+                                    },
+                                    {
+                                        "name":  "Frames",
+                                        "value":  1
+                                    },
+                                    {
+                                        "name":  "JSEventListeners",
+                                        "value":  15975
+                                    },
+                                    {
+                                        "name":  "LayoutObjects",
+                                        "value":  97662
+                                    },
+                                    {
+                                        "name":  "MediaKeySessions",
+                                        "value":  0
+                                    },
+                                    {
+                                        "name":  "MediaKeys",
+                                        "value":  0
+                                    },
+                                    {
+                                        "name":  "Nodes",
+                                        "value":  199497
+                                    },
+                                    {
+                                        "name":  "Resources",
+                                        "value":  10
+                                    },
+                                    {
+                                        "name":  "ContextLifecycleStateObservers",
+                                        "value":  10
+                                    },
+                                    {
+                                        "name":  "V8PerContextDatas",
+                                        "value":  1
+                                    },
+                                    {
+                                        "name":  "WorkerGlobalScopes",
+                                        "value":  1
+                                    },
+                                    {
+                                        "name":  "UACSSResources",
+                                        "value":  0
+                                    },
+                                    {
+                                        "name":  "RTCPeerConnections",
+                                        "value":  0
+                                    },
+                                    {
+                                        "name":  "ResourceFetchers",
+                                        "value":  1
+                                    },
+                                    {
+                                        "name":  "AdSubframes",
+                                        "value":  0
+                                    },
+                                    {
+                                        "name":  "DetachedScriptStates",
+                                        "value":  0
+                                    },
+                                    {
+                                        "name":  "ArrayBufferContents",
+                                        "value":  12
+                                    },
+                                    {
+                                        "name":  "LayoutCount",
+                                        "value":  14
+                                    },
+                                    {
+                                        "name":  "RecalcStyleCount",
+                                        "value":  41
+                                    },
+                                    {
+                                        "name":  "LayoutDuration",
+                                        "value":  1.062006
+                                    },
+                                    {
+                                        "name":  "RecalcStyleDuration",
+                                        "value":  0.375097
+                                    },
+                                    {
+                                        "name":  "DevToolsCommandDuration",
+                                        "value":  0.014096
+                                    },
+                                    {
+                                        "name":  "ScriptDuration",
+                                        "value":  0.216051
+                                    },
+                                    {
+                                        "name":  "V8CompileDuration",
+                                        "value":  0.02511
+                                    },
+                                    {
+                                        "name":  "TaskDuration",
+                                        "value":  3.361037
+                                    },
+                                    {
+                                        "name":  "TaskOtherDuration",
+                                        "value":  1.668677
+                                    },
+                                    {
+                                        "name":  "ThreadTime",
+                                        "value":  2.90625
+                                    },
+                                    {
+                                        "name":  "ProcessTime",
+                                        "value":  4.859375
+                                    },
+                                    {
+                                        "name":  "JSHeapUsedSize",
+                                        "value":  223176060
+                                    },
+                                    {
+                                        "name":  "JSHeapTotalSize",
+                                        "value":  275898368
+                                    },
+                                    {
+                                        "name":  "FirstMeaningfulPaint",
+                                        "value":  8060.286098
+                                    },
+                                    {
+                                        "name":  "DomContentLoaded",
+                                        "value":  8058.271506
+                                    },
+                                    {
+                                        "name":  "NavigationStart",
+                                        "value":  8056.88285
+                                    }
+                                ]
+                },
+    "beforeGC":  {
+                     "heap":  {
+                                  "usedSize":  223176060,
+                                  "totalSize":  275898368,
+                                  "embedderHeapUsedSize":  131130248,
+                                  "backingStorageSize":  4887710
+                              },
+                     "dom":  {
+                                 "documents":  1,
+                                 "nodes":  199497,
+                                 "jsEventListeners":  15975
+                             }
+                 },
+    "afterGC":  {
+                    "heap":  {
+                                 "usedSize":  194707716,
+                                 "totalSize":  197603328,
+                                 "embedderHeapUsedSize":  126616024,
+                                 "backingStorageSize":  2217262
+                             },
+                    "dom":  {
+                                "documents":  1,
+                                "nodes":  199486,
+                                "jsEventListeners":  15973
+                            }
+                },
+    "initialProcesses":  [
+                             {
+                                 "type":  "browser",
+                                 "id":  11192,
+                                 "cpuTime":  4.515625
+                             },
+                             {
+                                 "type":  "renderer",
+                                 "id":  1748,
+                                 "cpuTime":  0
+                             },
+                             {
+                                 "type":  "renderer",
+                                 "id":  8400,
+                                 "cpuTime":  0.0625
+                             },
+                             {
+                                 "type":  "GPU",
+                                 "id":  8276,
+                                 "cpuTime":  5.140625
+                             },
+                             {
+                                 "type":  "network.mojom.NetworkService",
+                                 "id":  1524,
+                                 "cpuTime":  0.484375
+                             },
+                             {
+                                 "type":  "storage.mojom.StorageService",
+                                 "id":  6428,
+                                 "cpuTime":  0.046875
+                             },
+                             {
+                                 "type":  "edge_search_indexer.mojom.SearchIndexerInterfaceBroker",
+                                 "id":  752,
+                                 "cpuTime":  0.15625
+                             }
+                         ],
+    "processes":  [
+                      {
+                          "type":  "browser",
+                          "id":  11192,
+                          "workingSetBytes":  198438912,
+                          "privateBytes":  64454656,
+                          "cpuTime":  4.953125
+                      },
+                      {
+                          "type":  "renderer",
+                          "id":  1748,
+                          "workingSetBytes":  42631168,
+                          "privateBytes":  21250048,
+                          "cpuTime":  0.0625
+                      },
+                      {
+                          "type":  "renderer",
+                          "id":  8400,
+                          "workingSetBytes":  849547264,
+                          "privateBytes":  777519104,
+                          "cpuTime":  5.859375
+                      },
+                      {
+                          "type":  "GPU",
+                          "id":  8276,
+                          "workingSetBytes":  231702528,
+                          "privateBytes":  155271168,
+                          "cpuTime":  5.859375
+                      },
+                      {
+                          "type":  "network.mojom.NetworkService",
+                          "id":  1524,
+                          "workingSetBytes":  48791552,
+                          "privateBytes":  14344192,
+                          "cpuTime":  0.546875
+                      },
+                      {
+                          "type":  "storage.mojom.StorageService",
+                          "id":  6428,
+                          "workingSetBytes":  23040000,
+                          "privateBytes":  9519104,
+                          "cpuTime":  0.046875
+                      },
+                      {
+                          "type":  "edge_search_indexer.mojom.SearchIndexerInterfaceBroker",
+                          "id":  752,
+                          "workingSetBytes":  36950016,
+                          "privateBytes":  10985472,
+                          "cpuTime":  0.15625
+                      }
+                  ],
+    "targets":  [
+                    {
+                        "targetId":  "FBE7125ADC223021BF931740924FF360",
+                        "type":  "worker",
+                        "title":  "",
+                        "url":  "",
+                        "attached":  false,
+                        "parentId":  "30D6CF971E1E0F0861A421D5A48AD551",
+                        "canAccessOpener":  false,
+                        "parentFrameId":  "30D6CF971E1E0F0861A421D5A48AD551",
+                        "browserContextId":  "4CA518750CB71B6EB45C2724DC2C6901",
+                        "pid":  0
+                    },
+                    {
+                        "targetId":  "30D6CF971E1E0F0861A421D5A48AD551",
+                        "type":  "page",
+                        "title":  "2026 ICPC Asia EC网络预选赛 - 第一场 - 榜单合集 | RankLand",
+                        "url":  "http://127.0.0.1:4178/collection/official?rankId=icpc2026preliminary-1",
+                        "attached":  false,
+                        "canAccessOpener":  false,
+                        "browserContextId":  "4CA518750CB71B6EB45C2724DC2C6901",
+                        "pid":  8400
+                    }
+                ],
+    "systemMemory":  {
+                         "AvailableMBytes":  1711,
+                         "CommittedBytes":  4696481792,
+                         "CommitLimit":  6838484992,
+                         "PercentCommittedBytesInUse":  68,
+                         "PagesPersec":  0,
+                         "PageReadsPersec":  0,
+                         "PageWritesPersec":  0
+                     },
+    "interaction":  {
+                        "introDismissed":  null,
+                        "clicked":  {
+                                        "name":  "PERFECT GIRL\n\n清华大学",
+                                        "x":  634,
+                                        "y":  397.27734375,
+                                        "ms":  8097.5999999996275
+                                    },
+                        "chart":  {
+                                      "ready":  true,
+                                      "ms":  8343.5,
+                                      "modalText":  "清华大学\n\n刘恒熙 / 汪直方 / 邱梓轩",
+                                      "canvas":  {
+                                                     "width":  1840,
+                                                     "height":  800
+                                                 },
+                                      "select":  {
+                                                     "type":  "response",
+                                                     "ms":  8225.099999999627,
+                                                     "url":  "http://127.0.0.1:4178/dist/assets/rank-time-data.worker-f3bcf541.js",
+                                                     "kind":  "select",
+                                                     "requestId":  2,
+                                                     "points":  301
+                                                 }
+                                  },
+                        "afterClose":  {
+                                           "modalOpen":  false,
+                                           "rows":  2535,
+                                           "errors":  [
+
+                                                      ],
+                                           "workerEvents":  [
+                                                                {
+                                                                    "type":  "created",
+                                                                    "ms":  3031,
+                                                                    "url":  "http://127.0.0.1:4178/dist/assets/rank-time-data.worker-f3bcf541.js"
+                                                                },
+                                                                {
+                                                                    "type":  "request",
+                                                                    "ms":  3031,
+                                                                    "kind":  "prepare",
+                                                                    "requestId":  1,
+                                                                    "rows":  2535,
+                                                                    "solutions":  30772
+                                                                },
+                                                                {
+                                                                    "type":  "response",
+                                                                    "ms":  4342.299999999814,
+                                                                    "url":  "http://127.0.0.1:4178/dist/assets/rank-time-data.worker-f3bcf541.js",
+                                                                    "kind":  "prepare",
+                                                                    "requestId":  1
+                                                                },
+                                                                {
+                                                                    "type":  "request",
+                                                                    "ms":  8185.199999999255,
+                                                                    "kind":  "select",
+                                                                    "requestId":  2
+                                                                },
+                                                                {
+                                                                    "type":  "response",
+                                                                    "ms":  8225.099999999627,
+                                                                    "url":  "http://127.0.0.1:4178/dist/assets/rank-time-data.worker-f3bcf541.js",
+                                                                    "kind":  "select",
+                                                                    "requestId":  2,
+                                                                    "points":  301
+                                                                }
+                                                            ]
+                                       }
+                    }
+}

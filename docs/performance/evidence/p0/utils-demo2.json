@@ -1,0 +1,20 @@
+{
+  "original": {
+    "elapsedMs": 130.60316699999998,
+    "idReads": 6428760,
+    "rowCount": 2535,
+    "sha256": "7b8e64a2eea333a32109105f9f2d62b8de82de91b78ef5e2ad853a5bfdef43c6"
+  },
+  "patched": {
+    "elapsedMs": 3.9832090000000164,
+    "idReads": 5070,
+    "rowCount": 2535,
+    "sha256": "7b8e64a2eea333a32109105f9f2d62b8de82de91b78ef5e2ad853a5bfdef43c6"
+  },
+  "patchedCjs": {
+    "elapsedMs": 4.115541000000007,
+    "idReads": 5070,
+    "rowCount": 2535,
+    "sha256": "7b8e64a2eea333a32109105f9f2d62b8de82de91b78ef5e2ad853a5bfdef43c6"
+  }
+}

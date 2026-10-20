@@ -1,0 +1,94 @@
+﻿{
+    "utc":  "2026-10-20T08:35:29.2704043Z",
+    "serverPid":  7540,
+    "browserPid":  11192,
+    "browser":  "Edg/154.0.4258.37",
+    "vinStatus":  200,
+    "vinBytes":  0,
+    "vinCors":  "http://127.0.0.1:4178",
+    "targets":  {
+                    "value":  [
+                                  {
+                                      "description":  "",
+                                      "devtoolsFrontendUrl":  "https://aka.ms/docs-landing-page/serve_rev/@f6ddc7bb8d2ad05a6979ebc09b83893c2d128a62/inspector.html?ws=127.0.0.1:9223/devtools/page/613EB49A21A68D8F7890279EAAB7D5A8",
+                                      "id":  "613EB49A21A68D8F7890279EAAB7D5A8",
+                                      "title":  "Microsoft Voices",
+                                      "type":  "background_page",
+                                      "url":  "chrome-extension://jdiccldimpdaibmpdkjnbmckianbfold/_generated_background_page.html",
+                                      "webSocketDebuggerUrl":  "ws://127.0.0.1:9223/devtools/page/613EB49A21A68D8F7890279EAAB7D5A8"
+                                  },
+                                  {
+                                      "description":  "",
+                                      "devtoolsFrontendUrl":  "https://aka.ms/docs-landing-page/serve_rev/@f6ddc7bb8d2ad05a6979ebc09b83893c2d128a62/inspector.html?ws=127.0.0.1:9223/devtools/page/1342D571ADFCABE93E716646C1FB547F",
+                                      "id":  "1342D571ADFCABE93E716646C1FB547F",
+                                      "title":  "WebRTC Internals Extension",
+                                      "type":  "background_page",
+                                      "url":  "chrome-extension://ncbjelpjchkpbikbpkcchkhkblodoama/_generated_background_page.html",
+                                      "webSocketDebuggerUrl":  "ws://127.0.0.1:9223/devtools/page/1342D571ADFCABE93E716646C1FB547F"
+                                  },
+                                  {
+                                      "description":  "",
+                                      "devtoolsFrontendUrl":  "https://aka.ms/docs-landing-page/serve_rev/@f6ddc7bb8d2ad05a6979ebc09b83893c2d128a62/inspector.html?ws=127.0.0.1:9223/devtools/page/14E99FE499A61034503E9A0AF3A20243",
+                                      "id":  "14E99FE499A61034503E9A0AF3A20243",
+                                      "title":  "Media Internals Services Extension",
+                                      "type":  "background_page",
+                                      "url":  "chrome-extension://fikbjbembnmfhppjfnmfkahdhfohhjmg/_generated_background_page.html",
+                                      "webSocketDebuggerUrl":  "ws://127.0.0.1:9223/devtools/page/14E99FE499A61034503E9A0AF3A20243"
+                                  },
+                                  {
+                                      "description":  "",
+                                      "devtoolsFrontendUrl":  "https://aka.ms/docs-landing-page/serve_rev/@f6ddc7bb8d2ad05a6979ebc09b83893c2d128a62/inspector.html?ws=127.0.0.1:9223/devtools/page/27FDDED0BD68265322B532C48F59D2F3",
+                                      "id":  "27FDDED0BD68265322B532C48F59D2F3",
+                                      "title":  "Edge 反馈",
+                                      "type":  "background_page",
+                                      "url":  "chrome-extension://ihmafllikibpmigkcoadcmckbfhibefp/_generated_background_page.html",
+                                      "webSocketDebuggerUrl":  "ws://127.0.0.1:9223/devtools/page/27FDDED0BD68265322B532C48F59D2F3"
+                                  },
+                                  {
+                                      "description":  "",
+                                      "devtoolsFrontendUrl":  "https://aka.ms/docs-landing-page/serve_rev/@f6ddc7bb8d2ad05a6979ebc09b83893c2d128a62/inspector.html?ws=127.0.0.1:9223/devtools/page/8AD17B3CF6B2F9F57362F67BB01A5042",
+                                      "id":  "8AD17B3CF6B2F9F57362F67BB01A5042",
+                                      "title":  "WebRTC Extension",
+                                      "type":  "background_page",
+                                      "url":  "chrome-extension://nkeimhogjdpnpccoofpliimaahmaaome/background.html",
+                                      "webSocketDebuggerUrl":  "ws://127.0.0.1:9223/devtools/page/8AD17B3CF6B2F9F57362F67BB01A5042"
+                                  },
+                                  {
+                                      "description":  "",
+                                      "devtoolsFrontendUrl":  "https://aka.ms/docs-landing-page/serve_rev/@f6ddc7bb8d2ad05a6979ebc09b83893c2d128a62/inspector.html?ws=127.0.0.1:9223/devtools/page/2B4666598C73AC82EBC4D0007590C65C",
+                                      "id":  "2B4666598C73AC82EBC4D0007590C65C",
+                                      "title":  "about:blank",
+                                      "type":  "page",
+                                      "url":  "about:blank",
+                                      "webSocketDebuggerUrl":  "ws://127.0.0.1:9223/devtools/page/2B4666598C73AC82EBC4D0007590C65C"
+                                  },
+                                  {
+                                      "description":  "",
+                                      "devtoolsFrontendUrl":  "https://aka.ms/docs-landing-page/serve_rev/@f6ddc7bb8d2ad05a6979ebc09b83893c2d128a62/worker_app.html?ws=127.0.0.1:9223/devtools/page/F40A5DAAEA4F845F611CE4E5773DF044",
+                                      "id":  "F40A5DAAEA4F845F611CE4E5773DF044",
+                                      "title":  "Service Worker chrome-extension://ndcpkimcihhghdcddljkfmmjccdmcmof/background.rollup.js",
+                                      "type":  "service_worker",
+                                      "url":  "chrome-extension://ndcpkimcihhghdcddljkfmmjccdmcmof/background.rollup.js",
+                                      "webSocketDebuggerUrl":  "ws://127.0.0.1:9223/devtools/page/F40A5DAAEA4F845F611CE4E5773DF044"
+                                  }
+                              ],
+                    "Count":  7
+                },
+    "listeners":  [
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  9223,
+                          "OwningProcess":  11192
+                      },
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  4322,
+                          "OwningProcess":  4
+                      },
+                      {
+                          "LocalAddress":  "127.0.0.1",
+                          "LocalPort":  4178,
+                          "OwningProcess":  4
+                      }
+                  ]
+}

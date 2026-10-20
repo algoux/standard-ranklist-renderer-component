@@ -1,0 +1,37 @@
+[
+  {
+    "title": "shows the v2 view count and increments it locally after a successful report",
+    "status": "failed",
+    "errors": [
+      "Error: expect(locator).toHaveText(expected) failed\n\nLocator:  locator('.srk-ranklist-meta-item')\nExpected: \"1\"\nReceived: \" 0\"\nTimeout:  10000ms\n\n"
+    ]
+  },
+  {
+    "title": "restores ranklist toolbar and title metadata interactions",
+    "status": "failed",
+    "errors": [
+      "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 1\n\n  Object {\n-   \"dropdown\": 180,\n+   \"dropdown\": 288,\n    \"trigger\": 180,\n  }\n\n  459 |       };\n  460 |     });\n> 461 |     expect(selectWidths).toEqual({ trigger: 180, dropdown: 180 });\n      |                          ^\n  462 |     await page.locator('[data-id=\"ranklist-org-search\"]').fill('Beta');\n  463 |     await page.locator('[data-id=\"ranklist-org-option-Beta University\"]').click();\n  464 |     await expect(page.locator('[data-id=\"ranklist-org-selected-count\"]')).toHaveText('已选择 1 个');\n    at /private/tmp/srk-p0-20261020/baseline-e2e/ranklist.spec.ts:461:26"
+    ]
+  },
+  {
+    "title": "uses Switch and ToggleGroup controls in the ranklist preferences modal",
+    "status": "failed",
+    "errors": [
+      "Error: expect(received).toBeGreaterThanOrEqual(expected)\n\nExpected: >= 1000\nReceived:    50\n\n  69 |   expect(paintState.visibility).toBe('visible');\n  70 |   expect(paintState.opacity).toBeGreaterThan(0.9);\n> 71 |   expect(paintState.zIndex).toBeGreaterThanOrEqual(1000);\n     |                             ^\n  72 |   expect(paintState.backgroundColor).not.toBe('rgba(0, 0, 0, 0)');\n  73 |   expect(paintState.containsTopElement).toBe(true);\n  74 | }\n    at expectPopoverPaintedOnTop (/private/tmp/srk-p0-20261020/baseline-e2e/ranklist.spec.ts:71:29)\n    at /private/tmp/srk-p0-20261020/baseline-e2e/ranklist.spec.ts:669:5"
+    ]
+  },
+  {
+    "title": "shows ranklist settings info popovers on mobile tap",
+    "status": "failed",
+    "errors": [
+      "Error: expect(received).toBeGreaterThanOrEqual(expected)\n\nExpected: >= 1000\nReceived:    50\n\n  69 |   expect(paintState.visibility).toBe('visible');\n  70 |   expect(paintState.opacity).toBeGreaterThan(0.9);\n> 71 |   expect(paintState.zIndex).toBeGreaterThanOrEqual(1000);\n     |                             ^\n  72 |   expect(paintState.backgroundColor).not.toBe('rgba(0, 0, 0, 0)');\n  73 |   expect(paintState.containsTopElement).toBe(true);\n  74 | }\n    at expectPopoverPaintedOnTop (/private/tmp/srk-p0-20261020/baseline-e2e/ranklist.spec.ts:71:29)\n    at /private/tmp/srk-p0-20261020/baseline-e2e/ranklist.spec.ts:691:5"
+    ]
+  },
+  {
+    "title": "shows Ranklist Not Found when the v2 contest does not exist",
+    "status": "failed",
+    "errors": [
+      "Error: expect(locator).toBeVisible() failed\n\nLocator: locator('[data-id=\"ranklist-not-found\"]')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\n"
+    ]
+  }
+]

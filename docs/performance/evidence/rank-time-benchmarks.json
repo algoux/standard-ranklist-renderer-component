@@ -1,0 +1,281 @@
+[
+  {
+    "repeat": 1,
+    "variant": "original",
+    "node": "v26.0.0",
+    "rows": 2535,
+    "minutes": 300,
+    "curveMs": 4530.4,
+    "before": {
+      "rss": 107.72,
+      "heapTotal": 29.19,
+      "heapUsed": 19.33,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "after": {
+      "rss": 367.92,
+      "heapTotal": 277.19,
+      "heapUsed": 227.8,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "afterGC": {
+      "rss": 367.75,
+      "heapTotal": 129.19,
+      "heapUsed": 64,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "maxRSSMiB": 367.92,
+    "hash": "9f3b6af0100c47bb929ef1d1d82ea2f1141e45263ad5c28dc0a1f6f85ceb419a"
+  },
+  {
+    "repeat": 1,
+    "variant": "set",
+    "node": "v26.0.0",
+    "rows": 2535,
+    "minutes": 300,
+    "curveMs": 493.1,
+    "before": {
+      "rss": 118.59,
+      "heapTotal": 29.13,
+      "heapUsed": 20.02,
+      "external": 4.3,
+      "arrayBuffers": 2.06
+    },
+    "after": {
+      "rss": 382.36,
+      "heapTotal": 281.38,
+      "heapUsed": 226.08,
+      "external": 4.3,
+      "arrayBuffers": 2.06
+    },
+    "afterGC": {
+      "rss": 382.33,
+      "heapTotal": 132.88,
+      "heapUsed": 64.68,
+      "external": 4.3,
+      "arrayBuffers": 2.06
+    },
+    "maxRSSMiB": 382.36,
+    "hash": "9f3b6af0100c47bb929ef1d1d82ea2f1141e45263ad5c28dc0a1f6f85ceb419a"
+  },
+  {
+    "repeat": 1,
+    "variant": "set-stream",
+    "node": "v26.0.0",
+    "rows": 2535,
+    "minutes": 300,
+    "curveMs": 439.6,
+    "before": {
+      "rss": 107.81,
+      "heapTotal": 28.88,
+      "heapUsed": 19.75,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "after": {
+      "rss": 238.89,
+      "heapTotal": 153.38,
+      "heapUsed": 116.78,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "afterGC": {
+      "rss": 239.16,
+      "heapTotal": 147.13,
+      "heapUsed": 64.43,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "maxRSSMiB": 238.89,
+    "hash": "9f3b6af0100c47bb929ef1d1d82ea2f1141e45263ad5c28dc0a1f6f85ceb419a"
+  },
+  {
+    "repeat": 2,
+    "variant": "original",
+    "node": "v26.0.0",
+    "rows": 2535,
+    "minutes": 300,
+    "curveMs": 4473.2,
+    "before": {
+      "rss": 107.8,
+      "heapTotal": 28.44,
+      "heapUsed": 19.33,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "after": {
+      "rss": 369.31,
+      "heapTotal": 277.44,
+      "heapUsed": 227.79,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "afterGC": {
+      "rss": 369.11,
+      "heapTotal": 129.44,
+      "heapUsed": 63.99,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "maxRSSMiB": 369.31,
+    "hash": "9f3b6af0100c47bb929ef1d1d82ea2f1141e45263ad5c28dc0a1f6f85ceb419a"
+  },
+  {
+    "repeat": 2,
+    "variant": "set",
+    "node": "v26.0.0",
+    "rows": 2535,
+    "minutes": 300,
+    "curveMs": 506.4,
+    "before": {
+      "rss": 107.78,
+      "heapTotal": 28.63,
+      "heapUsed": 19.75,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "after": {
+      "rss": 372.34,
+      "heapTotal": 280.88,
+      "heapUsed": 230.42,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "afterGC": {
+      "rss": 372.34,
+      "heapTotal": 131.63,
+      "heapUsed": 64.42,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "maxRSSMiB": 372.34,
+    "hash": "9f3b6af0100c47bb929ef1d1d82ea2f1141e45263ad5c28dc0a1f6f85ceb419a"
+  },
+  {
+    "repeat": 2,
+    "variant": "set-stream",
+    "node": "v26.0.0",
+    "rows": 2535,
+    "minutes": 300,
+    "curveMs": 404.2,
+    "before": {
+      "rss": 108.19,
+      "heapTotal": 28.13,
+      "heapUsed": 19.75,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "after": {
+      "rss": 239.81,
+      "heapTotal": 153.88,
+      "heapUsed": 110.56,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "afterGC": {
+      "rss": 240.27,
+      "heapTotal": 148.13,
+      "heapUsed": 64.43,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "maxRSSMiB": 239.81,
+    "hash": "9f3b6af0100c47bb929ef1d1d82ea2f1141e45263ad5c28dc0a1f6f85ceb419a"
+  },
+  {
+    "repeat": 3,
+    "variant": "original",
+    "node": "v26.0.0",
+    "rows": 2535,
+    "minutes": 300,
+    "curveMs": 4738,
+    "before": {
+      "rss": 107.08,
+      "heapTotal": 28.19,
+      "heapUsed": 19.33,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "after": {
+      "rss": 371.48,
+      "heapTotal": 280.19,
+      "heapUsed": 225.03,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "afterGC": {
+      "rss": 371.52,
+      "heapTotal": 131.69,
+      "heapUsed": 64,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "maxRSSMiB": 371.48,
+    "hash": "9f3b6af0100c47bb929ef1d1d82ea2f1141e45263ad5c28dc0a1f6f85ceb419a"
+  },
+  {
+    "repeat": 3,
+    "variant": "set",
+    "node": "v26.0.0",
+    "rows": 2535,
+    "minutes": 300,
+    "curveMs": 506,
+    "before": {
+      "rss": 108.17,
+      "heapTotal": 28.88,
+      "heapUsed": 19.75,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "after": {
+      "rss": 371.94,
+      "heapTotal": 280.63,
+      "heapUsed": 230.43,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "afterGC": {
+      "rss": 371.98,
+      "heapTotal": 132.13,
+      "heapUsed": 64.42,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "maxRSSMiB": 371.95,
+    "hash": "9f3b6af0100c47bb929ef1d1d82ea2f1141e45263ad5c28dc0a1f6f85ceb419a"
+  },
+  {
+    "repeat": 3,
+    "variant": "set-stream",
+    "node": "v26.0.0",
+    "rows": 2535,
+    "minutes": 300,
+    "curveMs": 418.5,
+    "before": {
+      "rss": 108.52,
+      "heapTotal": 28.63,
+      "heapUsed": 19.75,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "after": {
+      "rss": 239.38,
+      "heapTotal": 153.38,
+      "heapUsed": 116.6,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "afterGC": {
+      "rss": 240,
+      "heapTotal": 148.63,
+      "heapUsed": 64.43,
+      "external": 4.27,
+      "arrayBuffers": 2.03
+    },
+    "maxRSSMiB": 239.38,
+    "hash": "9f3b6af0100c47bb929ef1d1d82ea2f1141e45263ad5c28dc0a1f6f85ceb419a"
+  }
+]

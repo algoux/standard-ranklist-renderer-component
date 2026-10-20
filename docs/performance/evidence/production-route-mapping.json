@@ -1,0 +1,96 @@
+{
+  "htmlPath": "/private/tmp/srk-performance-20261020/rankland-prod-client/prod.html",
+  "clientRoot": "/private/tmp/srk-performance-20261020/rankland-prod-client/client",
+  "manifestPath": "/private/tmp/srk-performance-20261020/rankland-prod-client/client/manifest.json",
+  "ssrManifestPath": "/private/tmp/srk-performance-20261020/rankland-prod-client/client/ssr-manifest.json",
+  "builtEmptyShellHtmlPath": "/private/tmp/srk-performance-20261020/rankland-prod-client/client/index.html",
+  "resourceReplacements": {
+    "https://cdn.algoux.cn/rankland/dist/assets/index-1507c630.js": "https://cdn.algoux.cn/rankland/dist/assets/index-882b7395.js",
+    "https://cdn.algoux.cn/rankland/dist/assets/StyledRanklist-98a3b095.js": "https://cdn.algoux.cn/rankland/dist/assets/StyledRanklist.vue_vue_type_script_setup_true_lang-1078c7d1.js",
+    "https://cdn.algoux.cn/rankland/dist/assets/StyledRanklist-ea6bb1c3.css": "https://cdn.algoux.cn/rankland/dist/assets/StyledRanklist-e732bb70.css",
+    "https://cdn.algoux.cn/rankland/dist/assets/BeianLink-df4d7eb5.js": "https://cdn.algoux.cn/rankland/dist/assets/BeianLink.vue_vue_type_script_setup_true_lang-40b353ff.js"
+  },
+  "entries": {
+    "index": "https://cdn.algoux.cn/rankland/dist/assets/index-882b7395.js",
+    "styled": "https://cdn.algoux.cn/rankland/dist/assets/StyledRanklist.vue_vue_type_script_setup_true_lang-1078c7d1.js",
+    "mainCss": "https://cdn.algoux.cn/rankland/dist/assets/index-3b42f12f.css",
+    "styledCss": "https://cdn.algoux.cn/rankland/dist/assets/StyledRanklist-e732bb70.css"
+  },
+  "assetRoutes": [
+    {
+      "origin": "https://cdn.algoux.cn",
+      "pathnamePrefix": "/rankland/dist/",
+      "localRoot": "/private/tmp/srk-performance-20261020/rankland-prod-client/client"
+    },
+    {
+      "origin": "https://rl.algoux.cn",
+      "pathnamePrefix": "/dist/",
+      "localRoot": "/private/tmp/srk-performance-20261020/rankland-prod-client/client"
+    }
+  ],
+  "stableKeyOverride": {
+    "requestUrl": "https://cdn.algoux.cn/rankland/dist/assets/StyledRanklist.vue_vue_type_script_setup_true_lang-1078c7d1.js",
+    "localPath": "/private/tmp/srk-performance-20261020/rankland-prod-client/prod-stable-key/assets/StyledRanklist.vue_vue_type_script_setup_true_lang-1078c7d1.js",
+    "originalKeyExpression": "key:Ae.value?\"client-ranklist\":\"ssr-ranklist\"",
+    "stableKeyExpression": "key:\"client-ranklist\"",
+    "sameByteLength": true,
+    "originalSha256": "a1ff93cf0610ad551a47bee9f6f86893b3088a9dd8a664b4293e10b3da013506",
+    "stableSha256": "a4fbd29f4a7ae690e1c16c27806c62d4c44d255c96ffd2a7d7a7a9b9fbc83104"
+  },
+  "scopeMap": [
+    {
+      "file": "src/client/components/ranklist/RankCurve.vue",
+      "dev": "data-v-dcc893ef",
+      "prod": "data-v-0ffd446c"
+    },
+    {
+      "file": "src/client/modules/live/ScrollSolution.vue",
+      "dev": "data-v-594b0b2e",
+      "prod": "data-v-b5e7e77c"
+    },
+    {
+      "file": "src/client/modules/playground/PlaygroundEditor.vue",
+      "dev": "data-v-afb29fe0",
+      "prod": "data-v-0379f26f"
+    }
+  ],
+  "ssrAdaptation": {
+    "originalScopeIds": [],
+    "scopeAttributesChanged": 0,
+    "resourceReplacementsPerformed": 4,
+    "originalBodySha256": "96df7f3091a867d2ba52a4cf3ecf9595b8b41bf9fdb86e70fbac03dd172f683a",
+    "adaptedBodySha256": "96df7f3091a867d2ba52a4cf3ecf9595b8b41bf9fdb86e70fbac03dd172f683a",
+    "inlineScriptBodiesUnchanged": true
+  },
+  "cssScopeVerification": {
+    "originalOnlineCssAsset": "StyledRanklist-ea6bb1c3.css",
+    "newCssAsset": "assets/StyledRanklist-e732bb70.css",
+    "newCssSha256": "e732bb7087723d9539d9c385ef7fd6ae2e2189347fed3ce59b44ae5d9dc9e798",
+    "reverseScopeCssSha256": "ea6bb1c3bed6a67a996a0126bd8cb5dc2aa33371062611e5f077684253592368",
+    "reverseScopeHashPrefixMatchesOnlineFilename": true,
+    "originalOnlineCssContentDownloaded": false
+  },
+  "sourceChecks": [
+    {
+      "mapFile": "/tmp/rankland-investigation-index.js.map",
+      "comparedFiles": 47,
+      "mismatches": [],
+      "excludedGeneratedAssetModules": [
+        "src/client/assets/rankland-logo.png"
+      ]
+    },
+    {
+      "mapFile": "/tmp/rankland-investigation-styled-origin.js.map",
+      "comparedFiles": 42,
+      "mismatches": []
+    }
+  ],
+  "assetSourceMapExplanation": {
+    "asset": "src/client/assets/rankland-logo.png",
+    "onlineSourcesContent": "export default \"__VITE_ASSET__35b6ba71__\"",
+    "reason": "Vite sourcemap sourcesContent for an imported binary asset is the generated JavaScript asset module, not PNG bytes; excluded from source-text equivalence checks.",
+    "localInputAndOutputByteIdentical": true,
+    "localInputAndOutputSha256": "8e9c8237ad0b34e1277a444738fcf7c8bc30510c47559e16bd45eec9f36f9edb",
+    "emittedAsset": "assets/rankland-logo-8e9c8237.png"
+  }
+}

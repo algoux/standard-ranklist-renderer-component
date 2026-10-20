@@ -1,0 +1,461 @@
+{
+  "browser": "Edg/154.0.4258.37",
+  "navigationRequestedUtc": "2026-10-20T06:57:44.7098202Z",
+  "utc": "2026-10-20T06:58:23.6973026Z",
+  "ready": {
+    "ready": true,
+    "ms": 3264.5,
+    "rows": 2535
+  },
+  "document": {
+    "performanceTimeOrigin": 1792479464726.1,
+    "performanceNow": 33392.90000000014,
+    "devtools": {
+      "windowKeys": [
+        "__VUE_HMR_RUNTIME__",
+        "__VUE_INSTANCE_SETTERS__",
+        "__VUE_SSR_SETTERS__",
+        "__VUE__",
+        "__VUE_DEVTOOLS_HOOK_REPLAY__",
+        "__VUE_DEVTOOLS_PLUGINS__"
+      ],
+      "hookType": "undefined"
+    },
+    "probe": {
+      "longTasks": [
+        {
+          "start": 2864,
+          "duration": 242
+        },
+        {
+          "start": 3265.1999999999534,
+          "duration": 4200
+        },
+        {
+          "start": 7466,
+          "duration": 82
+        },
+        {
+          "start": 7550.699999999953,
+          "duration": 102
+        },
+        {
+          "start": 7652.800000000047,
+          "duration": 139
+        }
+      ],
+      "errors": []
+    },
+    "title": "2026 ICPC Asia EC网络预选赛 - 第一场 - 榜单合集 | RankLand",
+    "url": "https://rl.algoux.cn/collection/official?rankId=icpc2026preliminary-1",
+    "elements": 68850,
+    "rows": 2535,
+    "height": 900,
+    "bodyText": "探索\n榜单合集\n演练场\n折叠\nICPC\nICPC 2026 (51st)\n2026-04-11 深圳邀请赛\n2026-05-02 西安邀请赛\n2026-05-17 南昌邀请赛\n2026-05-17 武汉邀请赛\n2026-07-29 沈阳邀请赛\n2026-09-06 网络赛第一场\n2026-09-12 网络赛第二场\n2026-10-18 西安站\nICPC 2025 (50th)\nICPC 2024 (49th)\nICPC 2023 (48th)\nICPC 2022 (47th)\nICPC 2021 (46th)\nICPC 2020 (45th)\nICPC 2019 (44th)\nICPC 2018 (43rd)\nICPC 2017 (42nd)\nICPC 2016 (41st)\nICPC 2015 (40th)\nICPC 2014 (39th)\nICPC 2013 (38th)\nICPC 2012 (37th)\nICPC 2011 (36th)\nICPC 2010 (35th)\nICPC 2009 (34th)\nCCPC\n省赛\n校赛\nUniversal Cup\n榜单合集\n2026 ICP",
+    "navigation": [
+      {
+        "name": "https://rl.algoux.cn/collection/official?rankId=icpc2026preliminary-1",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 2998.9000000001397,
+        "navigationId": 4042,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "h2",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "gzip",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 1.1000000000931323,
+        "domainLookupStart": 1.1000000000931323,
+        "domainLookupEnd": 1.1000000000931323,
+        "connectStart": 1.1000000000931323,
+        "secureConnectionStart": 1.1000000000931323,
+        "connectEnd": 1.1000000000931323,
+        "requestStart": 11,
+        "responseStart": 1863.1000000000931,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 1863.1000000000931,
+        "responseEnd": 1976.1000000000931,
+        "transferSize": 752030,
+        "encodedBodySize": 751730,
+        "decodedBodySize": 8641961,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 2916.1999999999534,
+        "domContentLoadedEventStart": 2973.6999999999534,
+        "domContentLoadedEventEnd": 2973.6999999999534,
+        "domComplete": 2998.4000000001397,
+        "loadEventStart": 2998.8000000000466,
+        "loadEventEnd": 2998.9000000001397,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {}
+      }
+    ],
+    "paint": [
+      {
+        "name": "first-paint",
+        "entryType": "paint",
+        "startTime": 2624,
+        "duration": 0,
+        "navigationId": 4042,
+        "paintTime": 1959.1000000000931,
+        "presentationTime": 2624
+      },
+      {
+        "name": "first-contentful-paint",
+        "entryType": "paint",
+        "startTime": 8280,
+        "duration": 0,
+        "navigationId": 4042,
+        "paintTime": 8257.5,
+        "presentationTime": 8280
+      }
+    ],
+    "resources": [
+      {
+        "name": "https://cdn.algoux.cn/rankland/vin.txt",
+        "start": 7014.600000000093,
+        "duration": 159.30000000004657,
+        "transferSize": 0,
+        "decodedBodySize": 0
+      },
+      {
+        "name": "https://www.google-analytics.com/g/collect?v=2&tid=G-D6CVTJBDZT&gtm=45je6ag1v890593959za208zd890593959xf1&_p=1792479467983&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&cid=1836591233.1792478753&frm=0&ngs=1&pscdl=noapi&rcb=0&sr=1512x910&uaa=arm&uab=64&uafvl=Chromium%3B154.0.8037.58%7CMicrosoft%2520Edge%3B154.0.4258.37%7CNot%2520A(Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=zh-cn&_s=1&tag_exp=115938465~115938468~118897920~118897930~120213116~120385423~120469145~120469153~121246026~121246034&dp=%2F&dl=https%3A%2F%2Frl.algoux.cn%2F&sid=1792478753&sct=1&seg=1&dt=2026%20ICPC%20Asia%20EC%E7%BD%91%E7%BB%9C%E9%A2%84%E9%80%89%E8%B5%9B%20-%20%E7%AC%AC%E4%B8%80%E5%9C%BA%20-%20%E6%A6%9C%E5%8D%95%E5%90%88%E9%9B%86%20%7C%20RankLand&en=page_view&_ee=1&tfd=7840",
+        "start": 7839.800000000047,
+        "duration": 182.69999999995343,
+        "transferSize": 0,
+        "decodedBodySize": 0
+      },
+      {
+        "name": "https://www.google-analytics.com/g/collect?v=2&tid=G-D6CVTJBDZT&gtm=45je6ag1v890593959za208zd890593959xf1&_p=1792479467983&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAACAAQ&cid=1836591233.1792478753&frm=0&ngs=1&pscdl=noapi&rcb=0&sr=1512x910&uaa=arm&uab=64&uafvl=Chromium%3B154.0.8037.58%7CMicrosoft%2520Edge%3B154.0.4258.37%7CNot%2520A(Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=zh-cn&_s=2&tag_exp=115938465~115938468~118897920~118897930~120213116~120385423~120469145~120469153~121246026~121246034&dp=%2Fcollection%2Fofficial%3FrankId%3Dicpc2026preliminary-1&dl=https%3A%2F%2Frl.algoux.cn%2Fcollection%2Fofficial%3FrankId%3Dicpc2026preliminary-1&sid=1792478753&sct=1&seg=1&dt=2026%20ICPC%20Asia%20EC%E7%BD%91%E7%BB%9C%E9%A2%84%E9%80%89%E8%B5%9B%20-%20%E7%AC%AC%E4%B8%80%E5%9C%BA%20-%20%E6%A6%9C%E5%8D%95%E5%90%88%E9%9B%86%20%7C%20RankLand&en=page_view&_ee=1&_et=4&tfd=7843",
+        "start": 7843.40000000014,
+        "duration": 179.29999999981374,
+        "transferSize": 0,
+        "decodedBodySize": 0
+      },
+      {
+        "name": "https://www.google-analytics.com/g/collect?v=2&tid=G-D6CVTJBDZT&gtm=45je6ag1v890593959za200zd890593959xf1&_p=1792479467983&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AEAAAAQ&ae=a&cid=1836591233.1792478753&frm=0&ngs=1&pscdl=noapi&rcb=0&sr=1512x910&uaa=arm&uab=64&uafvl=Chromium%3B154.0.8037.58%7CMicrosoft%2520Edge%3B154.0.4258.37%7CNot%2520A(Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=zh-cn&_s=3&tag_exp=115938465~115938468~118897920~118897930~120213116~120385423~120469145~120469153~121246026~121246034&dp=%2Fcollection%2Fofficial%3FrankId%3Dicpc2026preliminary-1&dl=https%3A%2F%2Frl.algoux.cn%2Fcollection%2Fofficial%3FrankId%3Dicpc2026preliminary-1&sid=1792478753&sct=1&seg=1&dt=2026%20ICPC%20Asia%20EC%E7%BD%91%E7%BB%9C%E9%A2%84%E9%80%89%E8%B5%9B%20-%20%E7%AC%AC%E4%B8%80%E5%9C%BA%20-%20%E6%A6%9C%E5%8D%95%E5%90%88%E9%9B%86%20%7C%20RankLand&en=scroll&epn.percent_scrolled=90&_et=2&tfd=12844",
+        "start": 12844.600000000093,
+        "duration": 177.19999999995343,
+        "transferSize": 0,
+        "decodedBodySize": 0
+      }
+    ]
+  },
+  "metrics": {
+    "metrics": [
+      {
+        "name": "Timestamp",
+        "value": 1809.253311
+      },
+      {
+        "name": "AudioHandlers",
+        "value": 0
+      },
+      {
+        "name": "AudioWorkletProcessors",
+        "value": 0
+      },
+      {
+        "name": "Documents",
+        "value": 1
+      },
+      {
+        "name": "Frames",
+        "value": 1
+      },
+      {
+        "name": "JSEventListeners",
+        "value": 31609
+      },
+      {
+        "name": "LayoutObjects",
+        "value": 97685
+      },
+      {
+        "name": "MediaKeySessions",
+        "value": 0
+      },
+      {
+        "name": "MediaKeys",
+        "value": 0
+      },
+      {
+        "name": "Nodes",
+        "value": 398319
+      },
+      {
+        "name": "Resources",
+        "value": 21
+      },
+      {
+        "name": "ContextLifecycleStateObservers",
+        "value": 11
+      },
+      {
+        "name": "V8PerContextDatas",
+        "value": 1
+      },
+      {
+        "name": "WorkerGlobalScopes",
+        "value": 1
+      },
+      {
+        "name": "UACSSResources",
+        "value": 0
+      },
+      {
+        "name": "RTCPeerConnections",
+        "value": 0
+      },
+      {
+        "name": "ResourceFetchers",
+        "value": 1
+      },
+      {
+        "name": "AdSubframes",
+        "value": 0
+      },
+      {
+        "name": "DetachedScriptStates",
+        "value": 0
+      },
+      {
+        "name": "ArrayBufferContents",
+        "value": 12
+      },
+      {
+        "name": "LayoutCount",
+        "value": 14
+      },
+      {
+        "name": "RecalcStyleCount",
+        "value": 34
+      },
+      {
+        "name": "LayoutDuration",
+        "value": 1.062097
+      },
+      {
+        "name": "RecalcStyleDuration",
+        "value": 0.203952
+      },
+      {
+        "name": "DevToolsCommandDuration",
+        "value": 0.074672
+      },
+      {
+        "name": "ScriptDuration",
+        "value": 0.227206
+      },
+      {
+        "name": "V8CompileDuration",
+        "value": 0.022084
+      },
+      {
+        "name": "TaskDuration",
+        "value": 7.130093
+      },
+      {
+        "name": "TaskOtherDuration",
+        "value": 5.540082
+      },
+      {
+        "name": "ThreadTime",
+        "value": 6.375
+      },
+      {
+        "name": "ProcessTime",
+        "value": 15.15625
+      },
+      {
+        "name": "JSHeapUsedSize",
+        "value": 606532048
+      },
+      {
+        "name": "JSHeapTotalSize",
+        "value": 675233792
+      },
+      {
+        "name": "FirstMeaningfulPaint",
+        "value": 1783.91398
+      },
+      {
+        "name": "DomContentLoaded",
+        "value": 1778.608443
+      },
+      {
+        "name": "NavigationStart",
+        "value": 1775.634734
+      }
+    ]
+  },
+  "heap": {
+    "usedSize": 606532048,
+    "totalSize": 675233792,
+    "embedderHeapUsedSize": 155626016,
+    "backingStorageSize": 5908487
+  },
+  "dom": {
+    "documents": 1,
+    "nodes": 398319,
+    "jsEventListeners": 31609
+  },
+  "afterGC": {
+    "usedSize": 606148024,
+    "totalSize": 613367808,
+    "embedderHeapUsedSize": 151767072,
+    "backingStorageSize": 3093714
+  },
+  "afterGCDom": {
+    "documents": 1,
+    "nodes": 398319,
+    "jsEventListeners": 31609
+  },
+  "targets": [
+    {
+      "targetId": "AA84ACF7D1E859FB916E9F897B7D6502",
+      "type": "worker",
+      "title": "",
+      "url": "",
+      "attached": false,
+      "parentId": "9766A821B6414EAC1059A1420E152EC5",
+      "canAccessOpener": false,
+      "parentFrameId": "9766A821B6414EAC1059A1420E152EC5",
+      "browserContextId": "A1B673983FBF8E7F1124C86F37C1F5C8",
+      "pid": 0
+    },
+    {
+      "targetId": "9766A821B6414EAC1059A1420E152EC5",
+      "type": "page",
+      "title": "2026 ICPC Asia EC网络预选赛 - 第一场 - 榜单合集 | RankLand",
+      "url": "https://rl.algoux.cn/collection/official?rankId=icpc2026preliminary-1",
+      "attached": false,
+      "canAccessOpener": false,
+      "browserContextId": "A1B673983FBF8E7F1124C86F37C1F5C8",
+      "pid": 10820
+    }
+  ],
+  "processes3sLater": [
+    {
+      "type": "browser",
+      "id": 4176,
+      "cpuTime": 7.3125
+    },
+    {
+      "type": "renderer",
+      "id": 9208,
+      "cpuTime": 0.078125
+    },
+    {
+      "type": "renderer",
+      "id": 10820,
+      "cpuTime": 17.84375
+    },
+    {
+      "type": "GPU",
+      "id": 4292,
+      "cpuTime": 5.171875
+    },
+    {
+      "type": "network.mojom.NetworkService",
+      "id": 5292,
+      "cpuTime": 1.140625
+    },
+    {
+      "type": "storage.mojom.StorageService",
+      "id": 9236,
+      "cpuTime": 0.046875
+    },
+    {
+      "type": "edge_search_indexer.mojom.SearchIndexerInterfaceBroker",
+      "id": 1756,
+      "cpuTime": 0.171875
+    },
+    {
+      "type": "edge_xpay_wallet.mojom.EdgeXPayWalletService",
+      "id": 11196,
+      "cpuTime": 0.046875
+    }
+  ],
+  "processes": [
+    {
+      "type": "browser",
+      "id": 4176,
+      "workingSetBytes": 198160384,
+      "privateBytes": 66408448,
+      "cpuTime": 7.3125
+    },
+    {
+      "type": "renderer",
+      "id": 9208,
+      "workingSetBytes": 41824256,
+      "privateBytes": 20467712,
+      "cpuTime": 0.078125
+    },
+    {
+      "type": "renderer",
+      "id": 10820,
+      "workingSetBytes": 1376993280,
+      "privateBytes": 1310625792,
+      "cpuTime": 17.59375
+    },
+    {
+      "type": "GPU",
+      "id": 4292,
+      "workingSetBytes": 175931392,
+      "privateBytes": 110837760,
+      "cpuTime": 5.140625
+    },
+    {
+      "type": "network.mojom.NetworkService",
+      "id": 5292,
+      "workingSetBytes": 50159616,
+      "privateBytes": 15249408,
+      "cpuTime": 1.140625
+    },
+    {
+      "type": "storage.mojom.StorageService",
+      "id": 9236,
+      "workingSetBytes": 22073344,
+      "privateBytes": 9318400,
+      "cpuTime": 0.046875
+    },
+    {
+      "type": "edge_search_indexer.mojom.SearchIndexerInterfaceBroker",
+      "id": 1756,
+      "workingSetBytes": 36167680,
+      "privateBytes": 10874880,
+      "cpuTime": 0.171875
+    },
+    {
+      "type": "edge_xpay_wallet.mojom.EdgeXPayWalletService",
+      "id": 11196,
+      "workingSetBytes": 21680128,
+      "privateBytes": 9183232,
+      "cpuTime": 0.046875
+    }
+  ],
+  "systemMemory": {
+    "AvailableMBytes": 1482,
+    "CommittedBytes": 5030002688,
+    "CommitLimit": 6838484992,
+    "PercentCommittedBytesInUse": 73,
+    "PagesPersec": 0,
+    "PageReadsPersec": 0,
+    "PageWritesPersec": 0
+  }
+}

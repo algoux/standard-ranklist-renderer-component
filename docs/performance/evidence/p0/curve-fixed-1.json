@@ -1,0 +1,30 @@
+{
+  "variant": "p0-fixed",
+  "node": "v24.19.0",
+  "rows": 2535,
+  "minutes": 300,
+  "curveMs": 398.8,
+  "before": {
+    "rss": 127.5,
+    "heapTotal": 53.58,
+    "heapUsed": 20.24,
+    "external": 4.58,
+    "arrayBuffers": 2.26
+  },
+  "after": {
+    "rss": 321.02,
+    "heapTotal": 216.58,
+    "heapUsed": 112.61,
+    "external": 4.58,
+    "arrayBuffers": 2.26
+  },
+  "afterGC": {
+    "rss": 321.25,
+    "heapTotal": 211.33,
+    "heapUsed": 64.9,
+    "external": 4.58,
+    "arrayBuffers": 2.26
+  },
+  "maxRSSMiB": 321.02,
+  "hash": "9f3b6af0100c47bb929ef1d1d82ea2f1141e45263ad5c28dc0a1f6f85ceb419a"
+}

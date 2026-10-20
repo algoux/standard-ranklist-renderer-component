@@ -1,0 +1,98 @@
+{
+  "version": "0.3.5",
+  "runtimeByteIdenticalToPatched034": true,
+  "resolved": [
+    {
+      "name": "renderer root",
+      "version": "0.3.5",
+      "entry": "/Users/bLue/GitProjects/algoux/standard-ranklist-renderer-component/node_modules/.pnpm/@algoux+standard-ranklist-utils@0.3.5_@algoux+standard-ranklist@0.3.14/node_modules/@algoux/standard-ranklist-utils/dist/index.cjs",
+      "hashes": {
+        "index.mjs": "0a2d5bd626320ce8d797399c43aee98f2c229d8d930c1d4e15c52926d3e3e58f",
+        "index.cjs": "8412d54ef96eaa35d5544820c4dc5afded606526ab8d8b966ec64196de534a62"
+      }
+    },
+    {
+      "name": "renderer core",
+      "version": "0.3.5",
+      "entry": "/Users/bLue/GitProjects/algoux/standard-ranklist-renderer-component/node_modules/.pnpm/@algoux+standard-ranklist-utils@0.3.5_@algoux+standard-ranklist@0.3.14/node_modules/@algoux/standard-ranklist-utils/dist/index.cjs",
+      "hashes": {
+        "index.mjs": "0a2d5bd626320ce8d797399c43aee98f2c229d8d930c1d4e15c52926d3e3e58f",
+        "index.cjs": "8412d54ef96eaa35d5544820c4dc5afded606526ab8d8b966ec64196de534a62"
+      }
+    },
+    {
+      "name": "renderer react",
+      "version": "0.3.5",
+      "entry": "/Users/bLue/GitProjects/algoux/standard-ranklist-renderer-component/node_modules/.pnpm/@algoux+standard-ranklist-utils@0.3.5_@algoux+standard-ranklist@0.3.14/node_modules/@algoux/standard-ranklist-utils/dist/index.cjs",
+      "hashes": {
+        "index.mjs": "0a2d5bd626320ce8d797399c43aee98f2c229d8d930c1d4e15c52926d3e3e58f",
+        "index.cjs": "8412d54ef96eaa35d5544820c4dc5afded606526ab8d8b966ec64196de534a62"
+      }
+    },
+    {
+      "name": "renderer vue",
+      "version": "0.3.5",
+      "entry": "/Users/bLue/GitProjects/algoux/standard-ranklist-renderer-component/node_modules/.pnpm/@algoux+standard-ranklist-utils@0.3.5_@algoux+standard-ranklist@0.3.14/node_modules/@algoux/standard-ranklist-utils/dist/index.cjs",
+      "hashes": {
+        "index.mjs": "0a2d5bd626320ce8d797399c43aee98f2c229d8d930c1d4e15c52926d3e3e58f",
+        "index.cjs": "8412d54ef96eaa35d5544820c4dc5afded606526ab8d8b966ec64196de534a62"
+      }
+    },
+    {
+      "name": "renderer solid",
+      "version": "0.3.5",
+      "entry": "/Users/bLue/GitProjects/algoux/standard-ranklist-renderer-component/node_modules/.pnpm/@algoux+standard-ranklist-utils@0.3.5_@algoux+standard-ranklist@0.3.14/node_modules/@algoux/standard-ranklist-utils/dist/index.cjs",
+      "hashes": {
+        "index.mjs": "0a2d5bd626320ce8d797399c43aee98f2c229d8d930c1d4e15c52926d3e3e58f",
+        "index.cjs": "8412d54ef96eaa35d5544820c4dc5afded606526ab8d8b966ec64196de534a62"
+      }
+    },
+    {
+      "name": "renderer svelte",
+      "version": "0.3.5",
+      "entry": "/Users/bLue/GitProjects/algoux/standard-ranklist-renderer-component/node_modules/.pnpm/@algoux+standard-ranklist-utils@0.3.5_@algoux+standard-ranklist@0.3.14/node_modules/@algoux/standard-ranklist-utils/dist/index.cjs",
+      "hashes": {
+        "index.mjs": "0a2d5bd626320ce8d797399c43aee98f2c229d8d930c1d4e15c52926d3e3e58f",
+        "index.cjs": "8412d54ef96eaa35d5544820c4dc5afded606526ab8d8b966ec64196de534a62"
+      }
+    },
+    {
+      "name": "renderer angular",
+      "version": "0.3.5",
+      "entry": "/Users/bLue/GitProjects/algoux/standard-ranklist-renderer-component/node_modules/.pnpm/@algoux+standard-ranklist-utils@0.3.5_@algoux+standard-ranklist@0.3.14/node_modules/@algoux/standard-ranklist-utils/dist/index.cjs",
+      "hashes": {
+        "index.mjs": "0a2d5bd626320ce8d797399c43aee98f2c229d8d930c1d4e15c52926d3e3e58f",
+        "index.cjs": "8412d54ef96eaa35d5544820c4dc5afded606526ab8d8b966ec64196de534a62"
+      }
+    },
+    {
+      "name": "RankLand root",
+      "version": "0.3.5",
+      "entry": "/Users/bLue/GitProjects/algoux/rankland-web/node_modules/.pnpm/@algoux+standard-ranklist-utils@0.3.5_@algoux+standard-ranklist@0.3.14/node_modules/@algoux/standard-ranklist-utils/dist/index.cjs",
+      "hashes": {
+        "index.mjs": "0a2d5bd626320ce8d797399c43aee98f2c229d8d930c1d4e15c52926d3e3e58f",
+        "index.cjs": "8412d54ef96eaa35d5544820c4dc5afded606526ab8d8b966ec64196de534a62"
+      }
+    },
+    {
+      "name": "RankLand core",
+      "version": "0.3.5",
+      "entry": "/Users/bLue/GitProjects/algoux/rankland-web/node_modules/.pnpm/@algoux+standard-ranklist-utils@0.3.5_@algoux+standard-ranklist@0.3.14/node_modules/@algoux/standard-ranklist-utils/dist/index.cjs",
+      "hashes": {
+        "index.mjs": "0a2d5bd626320ce8d797399c43aee98f2c229d8d930c1d4e15c52926d3e3e58f",
+        "index.cjs": "8412d54ef96eaa35d5544820c4dc5afded606526ab8d8b966ec64196de534a62"
+      }
+    },
+    {
+      "name": "RankLand vue",
+      "version": "0.3.5",
+      "entry": "/Users/bLue/GitProjects/algoux/rankland-web/node_modules/.pnpm/@algoux+standard-ranklist-utils@0.3.5_@algoux+standard-ranklist@0.3.14/node_modules/@algoux/standard-ranklist-utils/dist/index.cjs",
+      "hashes": {
+        "index.mjs": "0a2d5bd626320ce8d797399c43aee98f2c229d8d930c1d4e15c52926d3e3e58f",
+        "index.cjs": "8412d54ef96eaa35d5544820c4dc5afded606526ab8d8b966ec64196de534a62"
+      }
+    }
+  ],
+  "rows": 2535,
+  "staticRanklistSha256": "7b8e64a2eea333a32109105f9f2d62b8de82de91b78ef5e2ad853a5bfdef43c6"
+}

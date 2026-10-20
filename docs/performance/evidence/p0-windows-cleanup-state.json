@@ -1,0 +1,15 @@
+﻿{
+    "utc":  "2026-10-20T08:43:33.7483918Z",
+    "listeners":  [
+
+                  ],
+    "remainingProcesses":  [
+
+                           ],
+    "memory":  {
+                   "AvailableMBytes":  2816,
+                   "CommittedBytes":  3448446976,
+                   "CommitLimit":  6838484992,
+                   "PercentCommittedBytesInUse":  50
+               }
+}

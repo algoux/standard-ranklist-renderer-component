@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2026-10-20T08:31:55.181Z",
+  "source": "actual client/SSR build via scripts/e2e-build.cjs",
+  "dataInjection": "Collection.asyncData fixture returns original public page state; all SSR components and client/worker assets are built from fixed product source",
+  "node": "v24.19.0",
+  "rows": 2535,
+  "problems": 14,
+  "htmlBytes": 8641274,
+  "bodySha256": "86bf231a0fc9f55c197ad760a8d0bfcbb63b50e195515f44fd487007c8f6bd05",
+  "dataSha256": "8ca3ddf111c255b352021678000f4bac0040aa3e3f2cd827fd2fdc260f0dbd0b",
+  "worker": "rank-time-data.worker-f3bcf541.js",
+  "workerSha256": "45bd666337c23f9aa0fe16725a7b6c9ae3f06bdab29b2c8b89d306dbc090f7fb",
+  "entry": "/dist/assets/index-4f4b6864.js",
+  "site": "/private/tmp/srk-p0-20261020/site"
+}

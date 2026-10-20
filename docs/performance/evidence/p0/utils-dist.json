@@ -1,0 +1,16 @@
+[
+  {
+    "file": "index.mjs",
+    "originalSha256": "9d4a734ce77ac2e3ba545447e8d842e1a22d3c8202d4ed59433a76730e6adbea",
+    "patchedSha256": "0a2d5bd626320ce8d797399c43aee98f2c229d8d930c1d4e15c52926d3e3e58f",
+    "buildSha256": "0a2d5bd626320ce8d797399c43aee98f2c229d8d930c1d4e15c52926d3e3e58f",
+    "exactBuildMatch": true
+  },
+  {
+    "file": "index.cjs",
+    "originalSha256": "862acdaa4d733c5c41e2570ca20e739036f8005df1157631c895335170785c32",
+    "patchedSha256": "8412d54ef96eaa35d5544820c4dc5afded606526ab8d8b966ec64196de534a62",
+    "buildSha256": "8412d54ef96eaa35d5544820c4dc5afded606526ab8d8b966ec64196de534a62",
+    "exactBuildMatch": true
+  }
+]

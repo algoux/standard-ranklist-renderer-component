@@ -1,0 +1,91 @@
+{
+  "name": "online-fragment-retainer",
+  "browser": "151.0.7922.34",
+  "url": "https://rl.algoux.cn/collection/official?rankId=icpc2026preliminary-1",
+  "connected": {
+    "1": 68850,
+    "3": 120323,
+    "8": 10324,
+    "9": 1,
+    "10": 1
+  },
+  "dom": {
+    "documents": 1,
+    "nodes": 398338,
+    "jsEventListeners": 31624
+  },
+  "afterGC": {
+    "heap": {
+      "usedSize": 608439812,
+      "totalSize": 648134656,
+      "embedderHeapUsedSize": 150955048,
+      "backingStorageSize": 3097412
+    },
+    "dom": {
+      "documents": 1,
+      "nodes": 398319,
+      "jsEventListeners": 31622
+    }
+  },
+  "fragmentRetainers": [
+    {
+      "parentTag": "DIV",
+      "parentId": "",
+      "parentClass": "pb-8",
+      "commentConnected": true,
+      "index": 14,
+      "key": "ssr-ranklist",
+      "isUnmounted": true,
+      "oldRootConnected": false,
+      "oldRows": 2535
+    }
+  ],
+  "devRetention": {
+    "hmrRuntime": "object",
+    "hookReplay": "null",
+    "nodes": [
+      {
+        "selector": ".srk-ranklist-table-scroll",
+        "found": true,
+        "hasVNode": true,
+        "vnode": {
+          "type": "div",
+          "key": null,
+          "connected": true
+        },
+        "children": [
+          {
+            "type": "Ranklist",
+            "key": "client-ranklist",
+            "isUnmounted": false,
+            "connected": true,
+            "subTreeConnected": true
+          }
+        ]
+      },
+      {
+        "selector": ".srk-main",
+        "found": true,
+        "hasVNode": true,
+        "vnode": {
+          "type": "Ranklist",
+          "key": "client-ranklist",
+          "isUnmounted": false,
+          "connected": true,
+          "subTreeConnected": true
+        },
+        "children": null
+      },
+      {
+        "selector": ".collection-ranklist-content",
+        "found": false,
+        "hasVNode": false,
+        "vnode": {
+          "type": "undefined"
+        },
+        "children": null
+      }
+    ]
+  },
+  "errors": []
+}

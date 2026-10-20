@@ -1,0 +1,47 @@
+[
+  {
+    "variant": "baseline",
+    "runs": 3,
+    "mountMs": 346.5,
+    "firstFrameMs": 664.9000000953674,
+    "gcHeapMiB": 170.7568473815918,
+    "tableTextSha256": "8bb5d9b10832481ca53f9536faf4c3bbb802fd924cadcad9a4ef266a47315915",
+    "firstViewportPixelIdenticalToBaseline": true
+  },
+  {
+    "variant": "shared-status-body",
+    "runs": 3,
+    "mountMs": 336.7000000476837,
+    "firstFrameMs": 662.3999999761581,
+    "gcHeapMiB": 160.53704452514648,
+    "tableTextSha256": "8bb5d9b10832481ca53f9536faf4c3bbb802fd924cadcad9a4ef266a47315915",
+    "firstViewportPixelIdenticalToBaseline": true
+  },
+  {
+    "variant": "lazy-slot-props",
+    "runs": 3,
+    "mountMs": 325.5,
+    "firstFrameMs": 674.6000000238419,
+    "gcHeapMiB": 170.76124954223633,
+    "tableTextSha256": "8bb5d9b10832481ca53f9536faf4c3bbb802fd924cadcad9a4ef266a47315915",
+    "firstViewportPixelIdenticalToBaseline": true
+  },
+  {
+    "variant": "lazy-solutions",
+    "runs": 3,
+    "mountMs": 346.2000000476837,
+    "firstFrameMs": 669.2000000476837,
+    "gcHeapMiB": 169.78875350952148,
+    "tableTextSha256": "8bb5d9b10832481ca53f9536faf4c3bbb802fd924cadcad9a4ef266a47315915",
+    "firstViewportPixelIdenticalToBaseline": true
+  },
+  {
+    "variant": "inline-status-body",
+    "runs": 3,
+    "mountMs": 321.3000000715256,
+    "firstFrameMs": 645.2000000476837,
+    "gcHeapMiB": 149.24450302124023,
+    "tableTextSha256": "8bb5d9b10832481ca53f9536faf4c3bbb802fd924cadcad9a4ef266a47315915",
+    "firstViewportPixelIdenticalToBaseline": true
+  }
+]

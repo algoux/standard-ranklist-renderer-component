@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@algoux/standard-ranklist-renderer-component-core": "workspace:*",
-    "@algoux/standard-ranklist-utils": "^0.3.4",
+    "@algoux/standard-ranklist-utils": "^0.3.5",
     "tslib": "^2.3.0"
   },
   "peerDependencies": {

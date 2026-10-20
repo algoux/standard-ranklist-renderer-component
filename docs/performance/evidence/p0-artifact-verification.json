@@ -1,0 +1,367 @@
+﻿{
+    "utc":  "2026-10-20T08:34:48.6893150Z",
+    "siteManifestSha256":  "6e5366145df2547c33481b16888fef1fc3e53a037f46b23367be61d9aa5ce460",
+    "filesChecked":  72,
+    "files":  [
+                  {
+                      "path":  "demo2.json",
+                      "bytes":  2708072,
+                      "sha256":  "8ca3ddf111c255b352021678000f4bac0040aa3e3f2cd827fd2fdc260f0dbd0b"
+                  },
+                  {
+                      "path":  "dist/assets/BeianLink-e223a5d3.css",
+                      "bytes":  27324,
+                      "sha256":  "e223a5d3e9531dfdcb6d9696eb28358dba4387656294a2a6f16ca448a3880196"
+                  },
+                  {
+                      "path":  "dist/assets/BeianLink.vue_vue_type_script_setup_true_lang-26bac6bc.js",
+                      "bytes":  155552,
+                      "sha256":  "3c39059bac7012f768d0506776bce790dc6b4c4f66fa8b5d8f4ba75d35bdc401"
+                  },
+                  {
+                      "path":  "dist/assets/BeianLink.vue_vue_type_script_setup_true_lang-26bac6bc.js.map",
+                      "bytes":  695580,
+                      "sha256":  "1f4228374d33ae617c8dc5519c6f316bfe923f6827eef4d9b4dacb4a5734b4ff"
+                  },
+                  {
+                      "path":  "dist/assets/Prop-05419680.js",
+                      "bytes":  184,
+                      "sha256":  "f08c0fce53de66f6086184b725c74fe0fe16f5157e079e8750eb5ee64ea9d28b"
+                  },
+                  {
+                      "path":  "dist/assets/Prop-05419680.js.map",
+                      "bytes":  954,
+                      "sha256":  "8a53f0b79fbf897331eec583d75498f37cbf00fc24f17d467ebbf792905a95e1"
+                  },
+                  {
+                      "path":  "dist/assets/StyledRanklist-8ce70fca.css",
+                      "bytes":  23075,
+                      "sha256":  "8ce70fca4ab77be1432c6ac556b763eda44e52ccbc56e2c7866be82c8e364e47"
+                  },
+                  {
+                      "path":  "dist/assets/StyledRanklist.vue_vue_type_script_setup_true_lang-5e72e231.js",
+                      "bytes":  408643,
+                      "sha256":  "cf2d1c27072c0025bda4ab2adcb8a29b48e97d83531f1f76b28c88757ad5be78"
+                  },
+                  {
+                      "path":  "dist/assets/StyledRanklist.vue_vue_type_script_setup_true_lang-5e72e231.js.map",
+                      "bytes":  1845172,
+                      "sha256":  "3a7713ac627227bbf7a890220c5bea6a2a05b1628c710e2e7310d44762bed664"
+                  },
+                  {
+                      "path":  "dist/assets/ZCOOLXiaoWei-Regular-0ebdbcd1.woff2",
+                      "bytes":  2593064,
+                      "sha256":  "0ebdbcd1f9de86912df4c8ca47b48a3d5a6b1cdffce6d081f5ff29710ecb09e2"
+                  },
+                  {
+                      "path":  "dist/assets/algo-bootstrap_logo-eb0c9b3b.png",
+                      "bytes":  79888,
+                      "sha256":  "eb0c9b3bc03ee6f6d3f515362aa5b7bfb84bcc2d722a888e4eed87360624d757"
+                  },
+                  {
+                      "path":  "dist/assets/ccpc_logo_black-364d9f9d.png",
+                      "bytes":  8066,
+                      "sha256":  "364d9f9d01b810b7de5824d8b50ee64823711583197055e08e04f39e11213bb1"
+                  },
+                  {
+                      "path":  "dist/assets/ccpc_logo_white-76727071.png",
+                      "bytes":  8569,
+                      "sha256":  "76727071bc490bc3cf467b4756c7f57db5dd6bab79be7e6b9fb718b0b45d47c1"
+                  },
+                  {
+                      "path":  "dist/assets/codicon-9d25513c.ttf",
+                      "bytes":  121972,
+                      "sha256":  "9d25513c861704be650eacef8c4588aceabdc8b668857747b5e42b299e926918"
+                  },
+                  {
+                      "path":  "dist/assets/collection.view-2da096b3.js",
+                      "bytes":  41850,
+                      "sha256":  "66aebc1e3c9f13af27dc4814fcb56e1e68f55abea4a0ea95087a0bbe81f8b67e"
+                  },
+                  {
+                      "path":  "dist/assets/collection.view-2da096b3.js.map",
+                      "bytes":  79489,
+                      "sha256":  "f723cf599de0b426781c87fc890bd88425e27db2f38d4406bd88c1472bea3da2"
+                  },
+                  {
+                      "path":  "dist/assets/editor-383292ad.css",
+                      "bytes":  74708,
+                      "sha256":  "383292ad272946a297efb2c6601984334dfa6af82fc20b19381207eebec3a48a"
+                  },
+                  {
+                      "path":  "dist/assets/editor.api-694d771f.js",
+                      "bytes":  558,
+                      "sha256":  "9f9522b27ecaf00c3f57835cc7048ea18ad2ce91473865e2e5a8e747f6acbbc9"
+                  },
+                  {
+                      "path":  "dist/assets/editor.api-694d771f.js.map",
+                      "bytes":  670,
+                      "sha256":  "5dab473a55e8c1051b931899fa42535c62d3735f34079ab195895fc5b3c53013"
+                  },
+                  {
+                      "path":  "dist/assets/editor.api2-e94d82cd.js",
+                      "bytes":  2607597,
+                      "sha256":  "9d8f0dd85d1bdae7eb469530979bf6ab91106b7e6a1e8c2c029c353b43e0e32f"
+                  },
+                  {
+                      "path":  "dist/assets/editor.api2-e94d82cd.js.map",
+                      "bytes":  10019863,
+                      "sha256":  "566ac11a5fe8c3328ef259ce3733cea2f227d80d76430acc53b77084f6606518"
+                  },
+                  {
+                      "path":  "dist/assets/editor.worker-7a35bb28.js",
+                      "bytes":  284457,
+                      "sha256":  "4605617a3490efb5f136bdec7aca9f57aca838ca431cff7b5877baf48c7bae19"
+                  },
+                  {
+                      "path":  "dist/assets/editor.worker-7a35bb28.js.map",
+                      "bytes":  1240455,
+                      "sha256":  "c18d3ca9668c2bb3086e3a10159d8b5d2f85f826d581695285fac983864157d8"
+                  },
+                  {
+                      "path":  "dist/assets/home.view-024d0e68.js",
+                      "bytes":  9468,
+                      "sha256":  "1342870334035d886f9e63d57edd73361dde0c2cf269139002819a71be87c1c7"
+                  },
+                  {
+                      "path":  "dist/assets/home.view-024d0e68.js.map",
+                      "bytes":  19402,
+                      "sha256":  "e6de86ab9d30ea98f5cde52bc2f9d0a3f37e8ee8b737d6c8a84e3c25922e136e"
+                  },
+                  {
+                      "path":  "dist/assets/icpc_logo_black-f8742b2d.png",
+                      "bytes":  9303,
+                      "sha256":  "f8742b2dacd9733e261585d0cd490d1d48974463910cec47c780330c1547b8a2"
+                  },
+                  {
+                      "path":  "dist/assets/icpc_logo_white-c12dc429.png",
+                      "bytes":  10057,
+                      "sha256":  "c12dc4290bc8a9d18d5ba61ec914222ebc774b3e716d7c51b1f1b3ba912e8f5d"
+                  },
+                  {
+                      "path":  "dist/assets/index-3b42f12f.css",
+                      "bytes":  71516,
+                      "sha256":  "3b42f12f1fad9ffd26825589701d1a9838d1ce4445a894b047a5fae27b508871"
+                  },
+                  {
+                      "path":  "dist/assets/index-4f4b6864.js",
+                      "bytes":  456876,
+                      "sha256":  "2eb541129a28a272adbc5e8fa804cf2ef1335fb37af2d66916009556ed752a87"
+                  },
+                  {
+                      "path":  "dist/assets/index-4f4b6864.js.map",
+                      "bytes":  2671297,
+                      "sha256":  "6c9404159338357fa6bdd7900ffd0b5892d119a07d0f4abb626dff9e1038e638"
+                  },
+                  {
+                      "path":  "dist/assets/index-db6782db.js",
+                      "bytes":  965439,
+                      "sha256":  "0c3963d43804c18c1c9f69d02cd626ad4d40fe94bf7c1f49989e3a3f277e68fc"
+                  },
+                  {
+                      "path":  "dist/assets/index-db6782db.js.map",
+                      "bytes":  4496511,
+                      "sha256":  "b75e798ab7d2ff8bfde639e51b31e0c99a2887f7bc9ddbd4af554a77a7a96896"
+                  },
+                  {
+                      "path":  "dist/assets/json.worker-432a81d8.js",
+                      "bytes":  416524,
+                      "sha256":  "5017c18bb348aaa914c8f4540187cbbcc8e0840400b961e167ef2826f65ce2fa"
+                  },
+                  {
+                      "path":  "dist/assets/json.worker-432a81d8.js.map",
+                      "bytes":  1822404,
+                      "sha256":  "503c7706ba1552e88923a478af77418a7c8c3ad8e0342b828359279589a34db1"
+                  },
+                  {
+                      "path":  "dist/assets/jsonMode-02680997.js",
+                      "bytes":  42082,
+                      "sha256":  "f33aff06f153ef8db03d7afcdb02c9ca015c45bf859dc567fcff531aa4669837"
+                  },
+                  {
+                      "path":  "dist/assets/jsonMode-02680997.js.map",
+                      "bytes":  227280,
+                      "sha256":  "9477b715be86afc21499ce273436405f5de766e21aa3baafe69d4bdd7076346c"
+                  },
+                  {
+                      "path":  "dist/assets/live.view-9186b1bd.js",
+                      "bytes":  18744,
+                      "sha256":  "cf3ca8dc6e88a1e2c201ae3baa0456940df641f78d4b18e16d880086f274863b"
+                  },
+                  {
+                      "path":  "dist/assets/live.view-9186b1bd.js.map",
+                      "bytes":  86417,
+                      "sha256":  "bed2f42652d4c8a53a960e8cce6bc21235d4fd314f9d748295bc34ee39f8db83"
+                  },
+                  {
+                      "path":  "dist/assets/live.view-a9e5533f.css",
+                      "bytes":  2224,
+                      "sha256":  "a9e5533f253567731f1cc75ac4f761a170b3e0f6c7a6e2b29dff56b554520105"
+                  },
+                  {
+                      "path":  "dist/assets/monaco.contribution-26077491.js",
+                      "bytes":  1104607,
+                      "sha256":  "80b5be9ddad448b32cb0c0ba917532ba2c2900d1aaeacf4babdb608ba243f036"
+                  },
+                  {
+                      "path":  "dist/assets/monaco.contribution-26077491.js.map",
+                      "bytes":  4302973,
+                      "sha256":  "afc3327e718ae03a2260ac0db3a5efef27cfa220bf707da3c701f59e8bfc4aa3"
+                  },
+                  {
+                      "path":  "dist/assets/monaco.contribution-a4c6d3b4.css",
+                      "bytes":  72326,
+                      "sha256":  "a4c6d3b4510c59067026c90da9a4865f625d0b02097e35aed9df5d421a182571"
+                  },
+                  {
+                      "path":  "dist/assets/not-found.view-bd2ab6cf.js",
+                      "bytes":  598,
+                      "sha256":  "bf8663f846d9a23cba142787c96b1af8cbfe030cfd70f203df7f2d1693977486"
+                  },
+                  {
+                      "path":  "dist/assets/not-found.view-bd2ab6cf.js.map",
+                      "bytes":  969,
+                      "sha256":  "6d6c901973c74679c3804b32555148ffe5e341a2b6d36af365353e77b2ac92e5"
+                  },
+                  {
+                      "path":  "dist/assets/page-error-468bf9ce.js",
+                      "bytes":  697,
+                      "sha256":  "803da36242c08851e4656d13fa48c2a6298282f5275cf817c5b7fb906f4dfc94"
+                  },
+                  {
+                      "path":  "dist/assets/page-error-468bf9ce.js.map",
+                      "bytes":  3035,
+                      "sha256":  "26efbb5b3bb05a6407c9a8620fe4dc2a7d35a0c410e8783bf1e3fd45a53759d7"
+                  },
+                  {
+                      "path":  "dist/assets/paste-then-ac_logo-46b89b1d.png",
+                      "bytes":  18434,
+                      "sha256":  "46b89b1d9b39bd1a5194b65d08fa7c4f24ad2febf63982a222767854ad5dfa03"
+                  },
+                  {
+                      "path":  "dist/assets/playground.view-73282f1b.js",
+                      "bytes":  37688,
+                      "sha256":  "5d2be7f7e3e833279885abd2ffb2c3f14f805310aa5dc97d2fc567e62ca61f26"
+                  },
+                  {
+                      "path":  "dist/assets/playground.view-73282f1b.js.map",
+                      "bytes":  48835,
+                      "sha256":  "34ece72cc26ecb01a086933d383e256adff81a37df7bea6176206c87c7fbe019"
+                  },
+                  {
+                      "path":  "dist/assets/playground.view-cc6eb236.css",
+                      "bytes":  2967,
+                      "sha256":  "cc6eb2368c184b38395fd3ef1bb21602a2dc4b0d620f260d458da79913ea761a"
+                  },
+                  {
+                      "path":  "dist/assets/rank-time-data.worker-f3bcf541.js",
+                      "bytes":  64133,
+                      "sha256":  "45bd666337c23f9aa0fe16725a7b6c9ae3f06bdab29b2c8b89d306dbc090f7fb"
+                  },
+                  {
+                      "path":  "dist/assets/rank-time-data.worker-f3bcf541.js.map",
+                      "bytes":  418975,
+                      "sha256":  "6ea3e79077652fce12691c2adde92a4e06c95cff4d2ceb163f7648cbb7c6340d"
+                  },
+                  {
+                      "path":  "dist/assets/rankland-logo-8e9c8237.png",
+                      "bytes":  15509,
+                      "sha256":  "8e9c8237ad0b34e1277a444738fcf7c8bc30510c47559e16bd45eec9f36f9edb"
+                  },
+                  {
+                      "path":  "dist/assets/rankland_qqgroup-c2ccb19e.jpg",
+                      "bytes":  95365,
+                      "sha256":  "c2ccb19ecd5825623d03b8e3e05dc64f599beb3db262225dcb74bb09e0b24750"
+                  },
+                  {
+                      "path":  "dist/assets/ranklist.view-690f118c.js",
+                      "bytes":  4569,
+                      "sha256":  "b8fb4a92b43718acba149356d74a3057998d1462ab4bc786c08b5d43d4c41a61"
+                  },
+                  {
+                      "path":  "dist/assets/ranklist.view-690f118c.js.map",
+                      "bytes":  9371,
+                      "sha256":  "ac7f277a6639ea1f6721dba8f3e9970f56b38f0554969bce6fa7d0d4ef7c3fd5"
+                  },
+                  {
+                      "path":  "dist/assets/search-3b32a311.js",
+                      "bytes":  765,
+                      "sha256":  "c7133ce66eca981e555626c90c5e287702bf218790fde056ff4df0e980e6c1ba"
+                  },
+                  {
+                      "path":  "dist/assets/search-3b32a311.js.map",
+                      "bytes":  1879,
+                      "sha256":  "f2fe5a91db126bfd5ddeea1ee29e808bf26cbaa66ed2412fc4443be4bfa03b9b"
+                  },
+                  {
+                      "path":  "dist/assets/search.view-b2dca9e7.js",
+                      "bytes":  33872,
+                      "sha256":  "ce5feeb6e7253d44b359787a6aacb70c78748a19a7a4b54179bde31f93376095"
+                  },
+                  {
+                      "path":  "dist/assets/search.view-b2dca9e7.js.map",
+                      "bytes":  490953,
+                      "sha256":  "8bbaf6b22b30c013015b8540c8ce69bd6d2dcacbe3b008abc5f8f4a525c04945"
+                  },
+                  {
+                      "path":  "dist/assets/title-format-78a0aa5a.js",
+                      "bytes":  124,
+                      "sha256":  "723c078ef6576e75818fe5f263e7149dea679ad5dc9705bd505b74252f753ef8"
+                  },
+                  {
+                      "path":  "dist/assets/title-format-78a0aa5a.js.map",
+                      "bytes":  410,
+                      "sha256":  "097329c836245f61ec2ae7dc2a120f85d76781133d3abb1de2041210c6a8fd10"
+                  },
+                  {
+                      "path":  "dist/assets/ucup_logo_black-8927fd72.png",
+                      "bytes":  9527,
+                      "sha256":  "8927fd72c21d5326ece73d1440586f82de8cd5766da1228a328110b791d99c4a"
+                  },
+                  {
+                      "path":  "dist/assets/ucup_logo_white-de15fe26.png",
+                      "bytes":  10146,
+                      "sha256":  "de15fe261adf9df6e8706226112f1a1eb420e46c924ede0f2d74ed69dae27217"
+                  },
+                  {
+                      "path":  "dist/assets/view-reporter-ae2cb9c8.js",
+                      "bytes":  364,
+                      "sha256":  "289412f2faa0417d5d14c8822952a9cae98bf67a83b368649d4a19c355a67630"
+                  },
+                  {
+                      "path":  "dist/assets/view-reporter-ae2cb9c8.js.map",
+                      "bytes":  1418,
+                      "sha256":  "f700bf2afc1b77368dbb26623525fa347d83196b3e7df6b6d73a3762c202deb4"
+                  },
+                  {
+                      "path":  "dist/favicon.ico",
+                      "bytes":  74249,
+                      "sha256":  "f3524400679ee884e2a83a3986b579aa516a84b280c71bb271077b798970a144"
+                  },
+                  {
+                      "path":  "dist/index.html",
+                      "bytes":  2582,
+                      "sha256":  "2b06a2fcc9d2395999bde2799f28f4876e9b352440b08942a10c0257d6e58838"
+                  },
+                  {
+                      "path":  "dist/robots.txt",
+                      "bytes":  72,
+                      "sha256":  "5394cb17126e3e6f85f3c51e8f7ca212c91a2c9fc8c20a771d4ad5f2c4d46dc0"
+                  },
+                  {
+                      "path":  "dist/ssr-manifest.json",
+                      "bytes":  450350,
+                      "sha256":  "c2eba306b289a4f820b7e2fa71ef419a2212b3cf6e66e18a09fb4914d73fbfeb"
+                  },
+                  {
+                      "path":  "index.html",
+                      "bytes":  8641274,
+                      "sha256":  "7c592b942b461380da868360200ecef7386ef8e0e4394448e2c28e87d0497913"
+                  },
+                  {
+                      "path":  "vin.txt",
+                      "bytes":  0,
+                      "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+                  }
+              ]
+}

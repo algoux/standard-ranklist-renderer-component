@@ -8,4 +8,4 @@ allowBuilds:
   esbuild: true
 minimumReleaseAgeExclude:
   - '@algoux/standard-ranklist@0.3.13 || 0.3.14'
-  - '@algoux/standard-ranklist-utils@0.3.4'
+  - '@algoux/standard-ranklist-utils@0.3.5'

@@ -1,0 +1,229 @@
+[
+  {
+    "run": 1,
+    "longestTaskMs": 904,
+    "longTasks": [
+      {
+        "start": 1153.0999999996275,
+        "duration": 51
+      },
+      {
+        "start": 1283.0999999996275,
+        "duration": 65
+      },
+      {
+        "start": 2543.5999999996275,
+        "duration": 904
+      },
+      {
+        "start": 3447.9000000003725,
+        "duration": 54
+      },
+      {
+        "start": 3504.9000000003725,
+        "duration": 88
+      },
+      {
+        "start": 3599.4000000003725,
+        "duration": 141
+      }
+    ],
+    "marks": [
+      {
+        "name": "DOMContentLoaded",
+        "ms": 1346.7999999998137
+      },
+      {
+        "name": "load",
+        "ms": 2473.2000000001863
+      },
+      {
+        "name": "hydration-revealed",
+        "ms": 3744.0999999996275,
+        "rows": 2535
+      },
+      {
+        "name": "hydration-and-worker-ready",
+        "ms": 4970.700000000186
+      }
+    ],
+    "workerPrepareMs": 1387.699999999255,
+    "gcHeapMiB": 185.40768814086914,
+    "embedderMiB": 120.78449249267578,
+    "nodes": 199507,
+    "elements": 68848,
+    "connectedNodes": null,
+    "retainedSSRRows": null,
+    "devKeys": [
+      "__VUE_INSTANCE_SETTERS__",
+      "__VUE_SSR_SETTERS__",
+      "__VUE__"
+    ],
+    "mainPid": 8760,
+    "mainStableWSMiB": 793.1640625,
+    "mainStablePrivateMiB": 722.7421875,
+    "mainPeakWSMiB": 1191.58203125,
+    "mainPeakPrivateMiB": 1122.67578125,
+    "samples": 35,
+    "peakCommitPct": 73.79566494484749,
+    "minAvailableMiB": 1402.46484375,
+    "stableCommit": 69,
+    "stableAvailable": 1676,
+    "errors": [],
+    "remoteResources": []
+  },
+  {
+    "run": 2,
+    "longestTaskMs": 907,
+    "longTasks": [
+      {
+        "start": 1367.5,
+        "duration": 63
+      },
+      {
+        "start": 2617.600000000559,
+        "duration": 907
+      },
+      {
+        "start": 3524.9000000003725,
+        "duration": 53
+      },
+      {
+        "start": 3580.5,
+        "duration": 99
+      },
+      {
+        "start": 3680,
+        "duration": 151
+      }
+    ],
+    "marks": [
+      {
+        "name": "ssr-rows-observed",
+        "ms": 1369.2000000001863,
+        "rows": 2535
+      },
+      {
+        "name": "DOMContentLoaded",
+        "ms": 1428.7999999998137
+      },
+      {
+        "name": "load",
+        "ms": 2545.7000000001863
+      },
+      {
+        "name": "hydration-revealed",
+        "ms": 3838.2999999998137,
+        "rows": 2535
+      },
+      {
+        "name": "hydration-and-worker-ready",
+        "ms": 5001.200000000186
+      }
+    ],
+    "workerPrepareMs": 1325.7000000001863,
+    "gcHeapMiB": 185.6742286682129,
+    "embedderMiB": 120.73710632324219,
+    "nodes": 199486,
+    "elements": 68834,
+    "connectedNodes": 199475,
+    "retainedSSRRows": 2535,
+    "devKeys": [
+      "__VUE_INSTANCE_SETTERS__",
+      "__VUE_SSR_SETTERS__",
+      "__VUE__"
+    ],
+    "mainPid": 356,
+    "mainStableWSMiB": 813.6875,
+    "mainStablePrivateMiB": 745.96875,
+    "mainPeakWSMiB": 1191.1640625,
+    "mainPeakPrivateMiB": 1122.9921875,
+    "samples": 31,
+    "peakCommitPct": 73.78823780271594,
+    "minAvailableMiB": 1385.79296875,
+    "stableCommit": 69,
+    "stableAvailable": 1679,
+    "errors": [],
+    "remoteResources": [],
+    "disconnectedDelta": 11
+  },
+  {
+    "run": 3,
+    "longestTaskMs": 828,
+    "longTasks": [
+      {
+        "start": 1197.699999999255,
+        "duration": 52
+      },
+      {
+        "start": 1329.3999999994412,
+        "duration": 61
+      },
+      {
+        "start": 2055.699999999255,
+        "duration": 828
+      },
+      {
+        "start": 2884,
+        "duration": 57
+      },
+      {
+        "start": 2943.0999999996275,
+        "duration": 113
+      },
+      {
+        "start": 3056.899999999441,
+        "duration": 125
+      }
+    ],
+    "marks": [
+      {
+        "name": "ssr-rows-observed",
+        "ms": 1331.3999999994412,
+        "rows": 2535
+      },
+      {
+        "name": "DOMContentLoaded",
+        "ms": 1388.5999999996275
+      },
+      {
+        "name": "load",
+        "ms": 1979.3999999994412
+      },
+      {
+        "name": "hydration-revealed",
+        "ms": 3189.899999999441,
+        "rows": 2535
+      },
+      {
+        "name": "hydration-and-worker-ready",
+        "ms": 4342.5
+      }
+    ],
+    "workerPrepareMs": 1311.2999999998137,
+    "gcHeapMiB": 185.68774795532227,
+    "embedderMiB": 120.75045013427734,
+    "nodes": 199486,
+    "elements": 68834,
+    "connectedNodes": 199475,
+    "retainedSSRRows": 2535,
+    "devKeys": [
+      "__VUE_INSTANCE_SETTERS__",
+      "__VUE_SSR_SETTERS__",
+      "__VUE__"
+    ],
+    "mainPid": 8400,
+    "mainStableWSMiB": 810.19140625,
+    "mainStablePrivateMiB": 741.5,
+    "mainPeakWSMiB": 999.10546875,
+    "mainPeakPrivateMiB": 936.046875,
+    "samples": 28,
+    "peakCommitPct": 71.62891602058517,
+    "minAvailableMiB": 1523.37109375,
+    "stableCommit": 68,
+    "stableAvailable": 1711,
+    "errors": [],
+    "remoteResources": [],
+    "disconnectedDelta": 11
+  }
+]

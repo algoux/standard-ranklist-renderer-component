@@ -1,0 +1,315 @@
+{
+  "browser": "Edg/154.0.4258.37",
+  "utc": "2026-10-20T06:45:55.5914100Z",
+  "ready": {
+    "ready": true,
+    "ms": 3442.3000000000466,
+    "rows": 2535
+  },
+  "document": {
+    "probe": {
+      "longTasks": [
+        {
+          "start": 3282.1999999999534,
+          "duration": 60
+        }
+      ],
+      "errors": []
+    },
+    "title": "2026 ICPC Asia EC网络预选赛 - 第一场 - 榜单合集 | RankLand",
+    "url": "https://rl.algoux.cn/collection/official?rankId=icpc2026preliminary-1",
+    "elements": 68846,
+    "rows": 2535,
+    "height": 900,
+    "bodyText": "探索\n榜单合集\n演练场\n折叠\nICPC\nICPC 2026 (51st)\n2026-04-11 深圳邀请赛\n2026-05-02 西安邀请赛\n2026-05-17 南昌邀请赛\n2026-05-17 武汉邀请赛\n2026-07-29 沈阳邀请赛\n2026-09-06 网络赛第一场\n2026-09-12 网络赛第二场\n2026-10-18 西安站\nICPC 2025 (50th)\nICPC 2024 (49th)\nICPC 2023 (48th)\nICPC 2022 (47th)\nICPC 2021 (46th)\nICPC 2020 (45th)\nICPC 2019 (44th)\nICPC 2018 (43rd)\nICPC 2017 (42nd)\nICPC 2016 (41st)\nICPC 2015 (40th)\nICPC 2014 (39th)\nICPC 2013 (38th)\nICPC 2012 (37th)\nICPC 2011 (36th)\nICPC 2010 (35th)\nICPC 2009 (34th)\nCCPC\n省赛\n校赛\nUniversal Cup\n榜单合集\n2026 ICP",
+    "navigation": [
+      {
+        "name": "https://rl.algoux.cn/collection/official?rankId=icpc2026preliminary-1",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 3341.0999999998603,
+        "navigationId": 5381,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "h2",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "gzip",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 4.699999999953434,
+        "domainLookupStart": 5.800000000046566,
+        "domainLookupEnd": 5.800000000046566,
+        "connectStart": 5.800000000046566,
+        "secureConnectionStart": 8.5,
+        "connectEnd": 36.0999999998603,
+        "requestStart": 36.5,
+        "responseStart": 2026.8000000000466,
+        "firstInterimResponseStart": 0,
+        "finalResponseHeadersStart": 2026.8000000000466,
+        "responseEnd": 2131,
+        "transferSize": 752032,
+        "encodedBodySize": 751732,
+        "decodedBodySize": 8641961,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 3282.1999999999534,
+        "domContentLoadedEventStart": 3338.899999999907,
+        "domContentLoadedEventEnd": 3339.0999999998603,
+        "domComplete": 3340.8000000000466,
+        "loadEventStart": 3341,
+        "loadEventEnd": 3341.0999999998603,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {}
+      }
+    ],
+    "paint": [
+      {
+        "name": "first-paint",
+        "entryType": "paint",
+        "startTime": 2872,
+        "duration": 0,
+        "navigationId": 5381,
+        "paintTime": 2158.899999999907,
+        "presentationTime": 2872
+      }
+    ],
+    "resources": []
+  },
+  "metrics": {
+    "metrics": [
+      {
+        "name": "Timestamp",
+        "value": 1063.702122
+      },
+      {
+        "name": "AudioHandlers",
+        "value": 0
+      },
+      {
+        "name": "AudioWorkletProcessors",
+        "value": 0
+      },
+      {
+        "name": "Documents",
+        "value": 1
+      },
+      {
+        "name": "Frames",
+        "value": 1
+      },
+      {
+        "name": "JSEventListeners",
+        "value": 31595
+      },
+      {
+        "name": "LayoutObjects",
+        "value": 194981
+      },
+      {
+        "name": "MediaKeySessions",
+        "value": 0
+      },
+      {
+        "name": "MediaKeys",
+        "value": 0
+      },
+      {
+        "name": "Nodes",
+        "value": 398324
+      },
+      {
+        "name": "Resources",
+        "value": 22
+      },
+      {
+        "name": "ContextLifecycleStateObservers",
+        "value": 5
+      },
+      {
+        "name": "V8PerContextDatas",
+        "value": 1
+      },
+      {
+        "name": "WorkerGlobalScopes",
+        "value": 0
+      },
+      {
+        "name": "UACSSResources",
+        "value": 0
+      },
+      {
+        "name": "RTCPeerConnections",
+        "value": 0
+      },
+      {
+        "name": "ResourceFetchers",
+        "value": 1
+      },
+      {
+        "name": "AdSubframes",
+        "value": 0
+      },
+      {
+        "name": "DetachedScriptStates",
+        "value": 0
+      },
+      {
+        "name": "ArrayBufferContents",
+        "value": 9
+      },
+      {
+        "name": "LayoutCount",
+        "value": 12
+      },
+      {
+        "name": "RecalcStyleCount",
+        "value": 18
+      },
+      {
+        "name": "LayoutDuration",
+        "value": 0.976029
+      },
+      {
+        "name": "RecalcStyleDuration",
+        "value": 0.181942
+      },
+      {
+        "name": "DevToolsCommandDuration",
+        "value": 0.016414
+      },
+      {
+        "name": "ScriptDuration",
+        "value": 0.094549
+      },
+      {
+        "name": "V8CompileDuration",
+        "value": 0.021949
+      },
+      {
+        "name": "TaskDuration",
+        "value": 4.996806
+      },
+      {
+        "name": "TaskOtherDuration",
+        "value": 3.705923
+      },
+      {
+        "name": "ThreadTime",
+        "value": 4.515625
+      },
+      {
+        "name": "ProcessTime",
+        "value": 6.375
+      },
+      {
+        "name": "JSHeapUsedSize",
+        "value": 737883160
+      },
+      {
+        "name": "JSHeapTotalSize",
+        "value": 797003776
+      },
+      {
+        "name": "FirstMeaningfulPaint",
+        "value": 0
+      },
+      {
+        "name": "DomContentLoaded",
+        "value": 1059.952298
+      },
+      {
+        "name": "NavigationStart",
+        "value": 1056.613359
+      }
+    ]
+  },
+  "heap": {
+    "usedSize": 755919992,
+    "totalSize": 812675072,
+    "embedderHeapUsedSize": 396822192,
+    "backingStorageSize": 4955171
+  },
+  "dom": {
+    "documents": 1,
+    "nodes": 398329,
+    "jsEventListeners": 31611
+  },
+  "afterGC": {
+    "usedSize": 604706920,
+    "totalSize": 654524416,
+    "embedderHeapUsedSize": 152554000,
+    "backingStorageSize": 2128243
+  },
+  "processes": [
+    {
+      "type": "browser",
+      "id": 4176,
+      "workingSetBytes": 202280960,
+      "privateBytes": 68419584,
+      "cpuTime": 3.3125
+    },
+    {
+      "type": "renderer",
+      "id": 5528,
+      "workingSetBytes": 42369024,
+      "privateBytes": 21127168,
+      "cpuTime": 0.03125
+    },
+    {
+      "type": "renderer",
+      "id": 10024,
+      "workingSetBytes": 1244372992,
+      "privateBytes": 1172459520,
+      "cpuTime": 9.625
+    },
+    {
+      "type": "GPU",
+      "id": 4292,
+      "workingSetBytes": 205860864,
+      "privateBytes": 128290816,
+      "cpuTime": 1.34375
+    },
+    {
+      "type": "network.mojom.NetworkService",
+      "id": 5292,
+      "workingSetBytes": 50380800,
+      "privateBytes": 16162816,
+      "cpuTime": 0.5
+    },
+    {
+      "type": "storage.mojom.StorageService",
+      "id": 9236,
+      "workingSetBytes": 22024192,
+      "privateBytes": 9400320,
+      "cpuTime": 0.046875
+    },
+    {
+      "type": "edge_search_indexer.mojom.SearchIndexerInterfaceBroker",
+      "id": 1756,
+      "workingSetBytes": 35987456,
+      "privateBytes": 10833920,
+      "cpuTime": 0.109375
+    }
+  ],
+  "systemMemory": {
+    "AvailableMBytes": 1127,
+    "CommittedBytes": 4996845568,
+    "CommitLimit": 6838484992,
+    "PercentCommittedBytesInUse": 73,
+    "PagesPersec": 0,
+    "PageReadsPersec": 0,
+    "PageWritesPersec": 0
+  }
+}

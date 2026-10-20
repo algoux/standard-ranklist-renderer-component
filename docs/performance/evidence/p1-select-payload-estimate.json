@@ -1,0 +1,7 @@
+{
+  "rows": 2535,
+  "method": "JSON byte length of current select metadata vs a possible single-user payload; not a structured-clone timing measurement",
+  "currentBytes": 2998934,
+  "singleUserCandidateBytes": 586,
+  "reductionPercent": 99.98045972335503
+}

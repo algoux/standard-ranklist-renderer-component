@@ -1,0 +1,3455 @@
+{
+  "note": "Lossless array of the analyzer stdout JSON records; weak/console/ephemeron paths excluded by analyzer.",
+  "records": [
+    {
+      "summary": {
+        "N": 1276346,
+        "E": 7451713,
+        "detachedCounts": [
+          [
+            "native:Comment",
+            4108
+          ],
+          [
+            "native:Text",
+            988
+          ],
+          [
+            "native:<td class=\"srk-prest-status-block srk--text-center srk--nowrap srk--cursor-pointer srk-prest-status-block-accepted\">",
+            908
+          ],
+          [
+            "native:<td class=\"srk-status-placeholder-cell srk--text-center srk--nowrap\">",
+            412
+          ],
+          [
+            "native:<td class=\"srk--text-right srk--nowrap\">",
+            200
+          ],
+          [
+            "native:<td class=\"srk--text-right srk--nowrap\" style=\"\">",
+            200
+          ],
+          [
+            "native:<tr>",
+            101
+          ],
+          [
+            "native:<td class=\"srk--text-left srk--nowrap srk-user-cell srk--cursor-pointer\" title=\"\">",
+            100
+          ],
+          [
+            "native:<div class=\"srk-user-cell-content\">",
+            100
+          ],
+          [
+            "native:<p class=\"srk-user-secondary-text srk--text-ellipsis\" title=\"\">",
+            100
+          ],
+          [
+            "native:<div class=\"srk-user-body\">",
+            100
+          ],
+          [
+            "native:<div class=\"srk-user-name-row\">",
+            100
+          ],
+          [
+            "native:<span class=\"srk-marker-dot-group\">",
+            100
+          ],
+          [
+            "native:<td class=\"srk--text-right srk--nowrap srk-series-segmented-column\" style=\"\">",
+            100
+          ],
+          [
+            "native:<td class=\"srk-prest-status-block srk--text-center srk--nowrap srk--cursor-pointer srk-prest-status-block-failed\">",
+            70
+          ],
+          [
+            "native:<span class=\"srk--display-block\">",
+            14
+          ],
+          [
+            "native:<td class=\"srk-prest-status-block srk--text-center srk--nowrap srk--cursor-pointer srk-prest-status-block-fb\">",
+            10
+          ],
+          [
+            "native:<th class=\"srk-series-header srk--text-right srk--nowrap\">",
+            2
+          ],
+          [
+            "native:<th class=\"srk--text-right srk--nowrap\">",
+            2
+          ],
+          [
+            "code:system / Code / ArrayBufferPrototypeGetDetached (builtin)",
+            1
+          ],
+          [
+            "code:system / Code / ThrowDataViewDetachedError (builtin)",
+            1
+          ],
+          [
+            "string:hideWhenDetached",
+            1
+          ],
+          [
+            "string:ArrayBufferPrototypeGetDetached",
+            1
+          ],
+          [
+            "native:<template>",
+            1
+          ],
+          [
+            "native:<a href=\"https://rl.algoux.cn/collection/official?rankId=icpc2026preliminary-1\">",
+            1
+          ],
+          [
+            "native:<div>",
+            1
+          ],
+          [
+            "native:<span class=\"srk-user-name-text\" title=\"遥不可及\">",
+            1
+          ],
+          [
+            "native:<thead>",
+            1
+          ],
+          [
+            "native:<th class=\"srk--nowrap srk-problem-header srk--cursor-pointer\" style=\"background-image:linear-gradient(180deg, rgb(154, 60, 55) 0%, rgb(154, 60, 55) 10%, rgba(154, 60, 55, 0.27) 10%, transparent 100%);\">",
+            1
+          ],
+          [
+            "native:<span class=\"srk--display-block srk-problem-stats\" title=\"89 / 248 (35.9%)\">",
+            1
+          ],
+          [
+            "native:<span class=\"srk-user-name-text\" title=\"PERFECT GIRL\">",
+            1
+          ],
+          [
+            "native:<th class=\"srk-series-header srk--text-right srk--nowrap srk-series-segmented-column\">",
+            1
+          ],
+          [
+            "native:<th class=\"srk--text-left srk--nowrap\">",
+            1
+          ],
+          [
+            "native:<th class=\"srk--nowrap srk-problem-header srk--cursor-pointer\" style=\"background-image:linear-gradient(180deg, rgb(255, 59, 48) 0%, rgb(255, 59, 48) 10%, rgba(255, 59, 48, 0.27) 10%, transparent 100%);\">",
+            1
+          ],
+          [
+            "native:<span class=\"srk--display-block srk-problem-stats\" title=\"100 / 223 (44.8%)\">",
+            1
+          ],
+          [
+            "native:<th class=\"srk--nowrap srk-problem-header srk--cursor-pointer\" style=\"background-image:linear-gradient(180deg, rgb(238, 117, 40) 0%, rgb(238, 117, 40) 10%, rgba(238, 117, 40, 0.27) 10%, transparent 100%);\">",
+            1
+          ],
+          [
+            "native:<span class=\"srk--display-block srk-problem-stats\" title=\"0 / 10 (0.0%)\">",
+            1
+          ],
+          [
+            "native:<th class=\"srk--nowrap srk-problem-header srk--cursor-pointer\" style=\"background-image:linear-gradient(180deg, rgb(253, 224, 71) 0%, rgb(253, 224, 71) 10%, rgba(253, 224, 71, 0.27) 10%, transparent 100%);\">",
+            1
+          ],
+          [
+            "native:<span class=\"srk--display-block srk-problem-stats\" title=\"100 / 119 (84.0%)\">",
+            1
+          ],
+          [
+            "native:<th class=\"srk--nowrap srk-problem-header srk--cursor-pointer\" style=\"background-image:linear-gradient(180deg, rgb(0, 170, 0) 0%, rgb(0, 170, 0) 10%, rgba(0, 170, 0, 0.27) 10%, transparent 100%);\">",
+            1
+          ]
+        ],
+        "nativeExamples": [
+          {
+            "index": 2115,
+            "id": 4231,
+            "type": "code",
+            "name": "system / Code / ArrayBufferPrototypeGetDetached (builtin)",
+            "size": 0,
+            "detachedness": 0
+          },
+          {
+            "index": 2658,
+            "id": 5317,
+            "type": "code",
+            "name": "system / Code / ThrowDataViewDetachedError (builtin)",
+            "size": 0,
+            "detachedness": 0
+          },
+          {
+            "index": 3638,
+            "id": 7277,
+            "type": "native",
+            "name": "Comment",
+            "size": 96,
+            "detachedness": 2
+          },
+          {
+            "index": 21992,
+            "id": 43985,
+            "type": "string",
+            "name": "hideWhenDetached",
+            "size": 28,
+            "detachedness": 0
+          },
+          {
+            "index": 30238,
+            "id": 60477,
+            "type": "string",
+            "name": "ArrayBufferPrototypeGetDetached",
+            "size": 0,
+            "detachedness": 0
+          },
+          {
+            "index": 67674,
+            "id": 135351,
+            "type": "native",
+            "name": "<template>",
+            "size": 120,
+            "detachedness": 2
+          },
+          {
+            "index": 83290,
+            "id": 166587,
+            "type": "native",
+            "name": "<a href=\"https://rl.algoux.cn/collection/official?rankId=icpc2026preliminary-1\">",
+            "size": 160,
+            "detachedness": 2
+          },
+          {
+            "index": 103415,
+            "id": 206855,
+            "type": "native",
+            "name": "<div>",
+            "size": 104,
+            "detachedness": 2
+          },
+          {
+            "index": 133018,
+            "id": 266045,
+            "type": "native",
+            "name": "<td class=\"srk-prest-status-block srk--text-center srk--nowrap srk--cursor-pointer srk-prest-status-block-accepted\">",
+            "size": 104,
+            "detachedness": 2
+          },
+          {
+            "index": 138767,
+            "id": 277545,
+            "type": "native",
+            "name": "<td class=\"srk--text-left srk--nowrap srk-user-cell srk--cursor-pointer\" title=\"\">",
+            "size": 104,
+            "detachedness": 2
+          },
+          {
+            "index": 138773,
+            "id": 277557,
+            "type": "native",
+            "name": "<td class=\"srk-prest-status-block srk--text-center srk--nowrap srk--cursor-pointer srk-prest-status-block-accepted\">",
+            "size": 104,
+            "detachedness": 2
+          },
+          {
+            "index": 138778,
+            "id": 277567,
+            "type": "native",
+            "name": "<td class=\"srk-prest-status-block srk--text-center srk--nowrap srk--cursor-pointer srk-prest-status-block-accepted\">",
+            "size": 104,
+            "detachedness": 2
+          }
+        ],
+        "tableCandidates": [
+          {
+            "index": 37023,
+            "id": 74047,
+            "type": "object",
+            "name": "HTMLTableElement (internal cache) / https://rl.algoux.cn",
+            "size": 16,
+            "detachedness": 0
+          },
+          {
+            "index": 49442,
+            "id": 98887,
+            "type": "object",
+            "name": "HTMLTableElement (prototype) / https://rl.algoux.cn",
+            "size": 28,
+            "detachedness": 0
+          },
+          {
+            "index": 135820,
+            "id": 271651,
+            "type": "object",
+            "name": "HTMLTableElement (prototype) / https://rl.algoux.cn",
+            "size": 28,
+            "detachedness": 0
+          },
+          {
+            "index": 573563,
+            "id": 1147153,
+            "type": "native",
+            "name": "<div class=\"srk-common-table srk-main\">",
+            "size": 104,
+            "detachedness": 1
+          },
+          {
+            "index": 692275,
+            "id": 1384591,
+            "type": "native",
+            "name": "<table class=\"srk-table-row-striped\">",
+            "size": 120,
+            "detachedness": 1
+          },
+          {
+            "index": 898144,
+            "id": 1796309,
+            "type": "object",
+            "name": "HTMLTableElement (internal cache) / https://rl.algoux.cn",
+            "size": 16,
+            "detachedness": 0
+          },
+          {
+            "index": 1009769,
+            "id": 2019551,
+            "type": "native",
+            "name": "<table class=\"srk-table-row-striped\">",
+            "size": 120,
+            "detachedness": 2
+          },
+          {
+            "index": 1009771,
+            "id": 2019555,
+            "type": "native",
+            "name": "<div class=\"srk-common-table srk-main\">",
+            "size": 104,
+            "detachedness": 2
+          },
+          {
+            "index": 1009775,
+            "id": 2019563,
+            "type": "object",
+            "name": "HTMLTableElement",
+            "size": 16,
+            "detachedness": 0
+          },
+          {
+            "index": 1145585,
+            "id": 2291171,
+            "type": "object",
+            "name": "HTMLTableElement",
+            "size": 16,
+            "detachedness": 0
+          },
+          {
+            "index": 1145586,
+            "id": 2291173,
+            "type": "object",
+            "name": "HTMLTableElement",
+            "size": 16,
+            "detachedness": 0
+          }
+        ],
+        "rankNames": [
+          {
+            "index": 13896,
+            "id": 27793,
+            "type": "string",
+            "name": "ssr-ranklist",
+            "size": 24,
+            "detachedness": 0
+          },
+          {
+            "index": 14126,
+            "id": 28253,
+            "type": "string",
+            "name": "client-ranklist",
+            "size": 28,
+            "detachedness": 0
+          },
+          {
+            "index": 24122,
+            "id": 48245,
+            "type": "string",
+            "name": "Ranklist",
+            "size": 20,
+            "detachedness": 0
+          }
+        ]
+      }
+    },
+    {
+      "target": {
+        "index": 138769,
+        "id": 277549,
+        "type": "object",
+        "name": "Object",
+        "size": 244,
+        "detachedness": 0
+      },
+      "outgoing": [
+        {
+          "edgeType": "property",
+          "edge": "uid",
+          "to": {
+            "index": 141241,
+            "id": 282493,
+            "type": "number",
+            "name": "smi number",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "vnode",
+          "to": {
+            "index": 876759,
+            "id": 1753555,
+            "type": "object",
+            "name": "Object",
+            "size": 120,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "type",
+          "to": {
+            "index": 92731,
+            "id": 185471,
+            "type": "object",
+            "name": "Object",
+            "size": 28,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "to": {
+            "index": 133041,
+            "id": 266091,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "appContext",
+          "to": {
+            "index": 72461,
+            "id": 144935,
+            "type": "object",
+            "name": "Object",
+            "size": 48,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "root",
+          "to": {
+            "index": 72460,
+            "id": 144933,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "next",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "subTree",
+          "to": {
+            "index": 141246,
+            "id": 282503,
+            "type": "object",
+            "name": "Object",
+            "size": 120,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "effect",
+          "to": {
+            "index": 141243,
+            "id": 282497,
+            "type": "object",
+            "name": "ry",
+            "size": 52,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "update",
+          "to": {
+            "index": 1009757,
+            "id": 2019527,
+            "type": "closure",
+            "name": "native_bind",
+            "size": 24,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "job",
+          "to": {
+            "index": 141240,
+            "id": 282491,
+            "type": "closure",
+            "name": "native_bind",
+            "size": 24,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "scope",
+          "to": {
+            "index": 141393,
+            "id": 282797,
+            "type": "object",
+            "name": "ey",
+            "size": 48,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "render",
+          "to": {
+            "index": 141397,
+            "id": 282805,
+            "type": "closure",
+            "name": "",
+            "size": 28,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "proxy",
+          "to": {
+            "index": 141400,
+            "id": 282811,
+            "type": "native",
+            "name": "system / JSProxy",
+            "size": 20,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "exposed",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "exposeProxy",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "withProxy",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "provides",
+          "to": {
+            "index": 97773,
+            "id": 195569,
+            "type": "object",
+            "name": "Object",
+            "size": 28,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "ids",
+          "to": {
+            "index": 98796,
+            "id": 197613,
+            "type": "object",
+            "name": "Array",
+            "size": 16,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "accessCache",
+          "to": {
+            "index": 141402,
+            "id": 282815,
+            "type": "object",
+            "name": "Object",
+            "size": 12,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "renderCache",
+          "to": {
+            "index": 141404,
+            "id": 282819,
+            "type": "object",
+            "name": "Array",
+            "size": 16,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "components",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "directives",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "propsOptions",
+          "to": {
+            "index": 478620,
+            "id": 957267,
+            "type": "object",
+            "name": "Array",
+            "size": 16,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "emitsOptions",
+          "to": {
+            "index": 479999,
+            "id": 960025,
+            "type": "object",
+            "name": "Object",
+            "size": 28,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "emit",
+          "to": {
+            "index": 141405,
+            "id": 282821,
+            "type": "closure",
+            "name": "native_bind",
+            "size": 24,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "emitted",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "propsDefaults",
+          "to": {
+            "index": 141407,
+            "id": 282825,
+            "type": "object",
+            "name": "Object",
+            "size": 12,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "inheritAttrs",
+          "to": {
+            "index": 30,
+            "id": 61,
+            "type": "native",
+            "name": "undefined",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "ctx",
+          "to": {
+            "index": 141401,
+            "id": 282813,
+            "type": "object",
+            "name": "Object",
+            "size": 12,
+            "detachedness": 0
+          }
+        }
+      ],
+      "incoming": [
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 133020,
+            "id": 266049,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "context",
+          "edge": "e",
+          "from": {
+            "index": 135552,
+            "id": 271113,
+            "type": "object",
+            "name": "system / Context / scope @89689",
+            "size": 24,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "context",
+          "edge": "n",
+          "from": {
+            "index": 135707,
+            "id": 271425,
+            "type": "object",
+            "name": "system / Context / scope @271423",
+            "size": 140,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 136006,
+            "id": 272023,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 136071,
+            "id": 272153,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 136121,
+            "id": 272253,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 136172,
+            "id": 272355,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 136222,
+            "id": 272455,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 136276,
+            "id": 272563,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 136330,
+            "id": 272671,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 136380,
+            "id": 272771,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 136438,
+            "id": 272887,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 136490,
+            "id": 272991,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 136544,
+            "id": 273099,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 136602,
+            "id": 273215,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 136652,
+            "id": 273315,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 136702,
+            "id": 273415,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 136764,
+            "id": 273539,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 136841,
+            "id": 273693,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 136957,
+            "id": 273925,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 137064,
+            "id": 274139,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 137171,
+            "id": 274353,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 137279,
+            "id": 274569,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 137386,
+            "id": 274783,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 137493,
+            "id": 274997,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 137600,
+            "id": 275211,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 137716,
+            "id": 275443,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 137826,
+            "id": 275663,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 137942,
+            "id": 275895,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 138056,
+            "id": 276123,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 138163,
+            "id": 276337,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 138270,
+            "id": 276551,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 138373,
+            "id": 276757,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 138438,
+            "id": 276887,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 138545,
+            "id": 277101,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 138654,
+            "id": 277319,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 138761,
+            "id": 277533,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "ctx",
+          "from": {
+            "index": 138764,
+            "id": 277539,
+            "type": "object",
+            "name": "Object",
+            "size": 120,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "parent",
+          "from": {
+            "index": 138766,
+            "id": 277543,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "ctx",
+          "from": {
+            "index": 138770,
+            "id": 277551,
+            "type": "object",
+            "name": "Object",
+            "size": 120,
+            "detachedness": 0
+          }
+        }
+      ],
+      "rootPath": {
+        "visited": 951548,
+        "found": true,
+        "chain": [
+          {
+            "from": {
+              "index": 0,
+              "id": 1,
+              "type": "synthetic",
+              "name": "",
+              "size": 0,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "1",
+            "to": {
+              "index": 1,
+              "id": 3,
+              "type": "synthetic",
+              "name": "(GC roots)",
+              "size": 0,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 1,
+              "id": 3,
+              "type": "synthetic",
+              "name": "(GC roots)",
+              "size": 0,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "10",
+            "to": {
+              "index": 11,
+              "id": 23,
+              "type": "synthetic",
+              "name": "(Global handles)",
+              "size": 0,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 11,
+              "id": 23,
+              "type": "synthetic",
+              "name": "(Global handles)",
+              "size": 0,
+              "detachedness": 0
+            },
+            "edgeType": "internal",
+            "edge": "41 / blink::ScriptStateProtectingContext::context_",
+            "to": {
+              "index": 3658,
+              "id": 7317,
+              "type": "native",
+              "name": "system / NativeContext / https://rl.algoux.cn",
+              "size": 1256,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 3658,
+              "id": 7317,
+              "type": "native",
+              "name": "system / NativeContext / https://rl.algoux.cn",
+              "size": 1256,
+              "detachedness": 0
+            },
+            "edgeType": "internal",
+            "edge": "global_proxy_object",
+            "to": {
+              "index": 39355,
+              "id": 78713,
+              "type": "native",
+              "name": "Window / https://rl.algoux.cn",
+              "size": 904,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 39355,
+              "id": 78713,
+              "type": "native",
+              "name": "Window / https://rl.algoux.cn",
+              "size": 904,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "5",
+            "to": {
+              "index": 582858,
+              "id": 1165743,
+              "type": "native",
+              "name": "HTMLDocument",
+              "size": 3352,
+              "detachedness": 1
+            }
+          },
+          {
+            "from": {
+              "index": 582858,
+              "id": 1165743,
+              "type": "native",
+              "name": "HTMLDocument",
+              "size": 3352,
+              "detachedness": 1
+            },
+            "edgeType": "element",
+            "edge": "37",
+            "to": {
+              "index": 1275303,
+              "id": 189758,
+              "type": "native",
+              "name": "blink::HeapHashTableBacking<blink::HashTable<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, blink::KeyValuePair<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, unsigned int>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HashTraits<unsigned int>>, blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HeapAllocator>>",
+              "size": 264,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 1275303,
+              "id": 189758,
+              "type": "native",
+              "name": "blink::HeapHashTableBacking<blink::HashTable<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, blink::KeyValuePair<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, unsigned int>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HashTraits<unsigned int>>, blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HeapAllocator>>",
+              "size": 264,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "1",
+            "to": {
+              "index": 847606,
+              "id": 1695249,
+              "type": "native",
+              "name": "<div class=\"pb-8\" data-id=\"collection-ranklist-content\" data-ranklist-id=\"icpc2026preliminary-1\" data-row-count=\"100\">",
+              "size": 104,
+              "detachedness": 1
+            }
+          },
+          {
+            "from": {
+              "index": 847606,
+              "id": 1695249,
+              "type": "native",
+              "name": "<div class=\"pb-8\" data-id=\"collection-ranklist-content\" data-ranklist-id=\"icpc2026preliminary-1\" data-row-count=\"100\">",
+              "size": 104,
+              "detachedness": 1
+            },
+            "edgeType": "element",
+            "edge": "9",
+            "to": {
+              "index": 593292,
+              "id": 1186615,
+              "type": "native",
+              "name": "Comment",
+              "size": 96,
+              "detachedness": 1
+            }
+          },
+          {
+            "from": {
+              "index": 593292,
+              "id": 1186615,
+              "type": "native",
+              "name": "Comment",
+              "size": 96,
+              "detachedness": 1
+            },
+            "edgeType": "property",
+            "edge": "__vnode",
+            "to": {
+              "index": 876742,
+              "id": 1753521,
+              "type": "object",
+              "name": "Object",
+              "size": 120,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 876742,
+              "id": 1753521,
+              "type": "object",
+              "name": "Object",
+              "size": 120,
+              "detachedness": 0
+            },
+            "edgeType": "property",
+            "edge": "dynamicChildren",
+            "to": {
+              "index": 876746,
+              "id": 1753529,
+              "type": "object",
+              "name": "Array",
+              "size": 16,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 876746,
+              "id": 1753529,
+              "type": "object",
+              "name": "Array",
+              "size": 16,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "14",
+            "to": {
+              "index": 876759,
+              "id": 1753555,
+              "type": "object",
+              "name": "Object",
+              "size": 120,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 876759,
+              "id": 1753555,
+              "type": "object",
+              "name": "Object",
+              "size": 120,
+              "detachedness": 0
+            },
+            "edgeType": "property",
+            "edge": "component",
+            "to": {
+              "index": 138769,
+              "id": 277549,
+              "type": "object",
+              "name": "Object",
+              "size": 244,
+              "detachedness": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "target": {
+        "index": 593292,
+        "id": 1186615,
+        "type": "native",
+        "name": "Comment",
+        "size": 96,
+        "detachedness": 1
+      },
+      "outgoing": [
+        {
+          "edgeType": "property",
+          "edge": "__vnode",
+          "to": {
+            "index": 876742,
+            "id": 1753521,
+            "type": "object",
+            "name": "Object",
+            "size": 120,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "__vueParentComponent",
+          "to": {
+            "index": 133041,
+            "id": 266091,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "__proto__",
+          "to": {
+            "index": 87480,
+            "id": 174965,
+            "type": "object",
+            "name": "Comment (prototype) / https://rl.algoux.cn",
+            "size": 28,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "internal",
+          "edge": "properties",
+          "to": {
+            "index": 876741,
+            "id": 1753519,
+            "type": "native",
+            "name": "system / PropertyArray",
+            "size": 20,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "internal",
+          "edge": "map",
+          "to": {
+            "index": 87518,
+            "id": 175041,
+            "type": "object shape",
+            "name": "system / Map",
+            "size": 52,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "6",
+          "to": {
+            "index": 582858,
+            "id": 1165743,
+            "type": "native",
+            "name": "HTMLDocument",
+            "size": 3352,
+            "detachedness": 1
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "7",
+          "to": {
+            "index": 847606,
+            "id": 1695249,
+            "type": "native",
+            "name": "<div class=\"pb-8\" data-id=\"collection-ranklist-content\" data-ranklist-id=\"icpc2026preliminary-1\" data-row-count=\"100\">",
+            "size": 104,
+            "detachedness": 1
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "8",
+          "to": {
+            "index": 593293,
+            "id": 1186617,
+            "type": "native",
+            "name": "Comment",
+            "size": 96,
+            "detachedness": 1
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "9",
+          "to": {
+            "index": 593251,
+            "id": 1186533,
+            "type": "native",
+            "name": "Comment",
+            "size": 96,
+            "detachedness": 1
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "10",
+          "to": {
+            "index": 593292,
+            "id": 1186615,
+            "type": "native",
+            "name": "Comment",
+            "size": 96,
+            "detachedness": 1
+          }
+        }
+      ],
+      "incoming": [
+        {
+          "edgeType": "property",
+          "edge": "el",
+          "from": {
+            "index": 347143,
+            "id": 694313,
+            "type": "object",
+            "name": "Object",
+            "size": 120,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "8",
+          "from": {
+            "index": 593251,
+            "id": 1186533,
+            "type": "native",
+            "name": "Comment",
+            "size": 96,
+            "detachedness": 1
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "el",
+          "from": {
+            "index": 593289,
+            "id": 1186609,
+            "type": "object",
+            "name": "Object",
+            "size": 120,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "10",
+          "from": {
+            "index": 593292,
+            "id": 1186615,
+            "type": "native",
+            "name": "Comment",
+            "size": 96,
+            "detachedness": 1
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "9",
+          "from": {
+            "index": 847606,
+            "id": 1695249,
+            "type": "native",
+            "name": "<div class=\"pb-8\" data-id=\"collection-ranklist-content\" data-ranklist-id=\"icpc2026preliminary-1\" data-row-count=\"100\">",
+            "size": 104,
+            "detachedness": 1
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "el",
+          "from": {
+            "index": 876742,
+            "id": 1753521,
+            "type": "object",
+            "name": "Object",
+            "size": 120,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "el",
+          "from": {
+            "index": 1073505,
+            "id": 2147019,
+            "type": "object",
+            "name": "Object",
+            "size": 120,
+            "detachedness": 0
+          }
+        }
+      ],
+      "rootPath": {
+        "visited": 949344,
+        "found": true,
+        "chain": [
+          {
+            "from": {
+              "index": 0,
+              "id": 1,
+              "type": "synthetic",
+              "name": "",
+              "size": 0,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "1",
+            "to": {
+              "index": 1,
+              "id": 3,
+              "type": "synthetic",
+              "name": "(GC roots)",
+              "size": 0,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 1,
+              "id": 3,
+              "type": "synthetic",
+              "name": "(GC roots)",
+              "size": 0,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "10",
+            "to": {
+              "index": 11,
+              "id": 23,
+              "type": "synthetic",
+              "name": "(Global handles)",
+              "size": 0,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 11,
+              "id": 23,
+              "type": "synthetic",
+              "name": "(Global handles)",
+              "size": 0,
+              "detachedness": 0
+            },
+            "edgeType": "internal",
+            "edge": "41 / blink::ScriptStateProtectingContext::context_",
+            "to": {
+              "index": 3658,
+              "id": 7317,
+              "type": "native",
+              "name": "system / NativeContext / https://rl.algoux.cn",
+              "size": 1256,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 3658,
+              "id": 7317,
+              "type": "native",
+              "name": "system / NativeContext / https://rl.algoux.cn",
+              "size": 1256,
+              "detachedness": 0
+            },
+            "edgeType": "internal",
+            "edge": "global_proxy_object",
+            "to": {
+              "index": 39355,
+              "id": 78713,
+              "type": "native",
+              "name": "Window / https://rl.algoux.cn",
+              "size": 904,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 39355,
+              "id": 78713,
+              "type": "native",
+              "name": "Window / https://rl.algoux.cn",
+              "size": 904,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "5",
+            "to": {
+              "index": 582858,
+              "id": 1165743,
+              "type": "native",
+              "name": "HTMLDocument",
+              "size": 3352,
+              "detachedness": 1
+            }
+          },
+          {
+            "from": {
+              "index": 582858,
+              "id": 1165743,
+              "type": "native",
+              "name": "HTMLDocument",
+              "size": 3352,
+              "detachedness": 1
+            },
+            "edgeType": "element",
+            "edge": "37",
+            "to": {
+              "index": 1275303,
+              "id": 189758,
+              "type": "native",
+              "name": "blink::HeapHashTableBacking<blink::HashTable<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, blink::KeyValuePair<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, unsigned int>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HashTraits<unsigned int>>, blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HeapAllocator>>",
+              "size": 264,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 1275303,
+              "id": 189758,
+              "type": "native",
+              "name": "blink::HeapHashTableBacking<blink::HashTable<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, blink::KeyValuePair<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, unsigned int>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HashTraits<unsigned int>>, blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HeapAllocator>>",
+              "size": 264,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "1",
+            "to": {
+              "index": 847606,
+              "id": 1695249,
+              "type": "native",
+              "name": "<div class=\"pb-8\" data-id=\"collection-ranklist-content\" data-ranklist-id=\"icpc2026preliminary-1\" data-row-count=\"100\">",
+              "size": 104,
+              "detachedness": 1
+            }
+          },
+          {
+            "from": {
+              "index": 847606,
+              "id": 1695249,
+              "type": "native",
+              "name": "<div class=\"pb-8\" data-id=\"collection-ranklist-content\" data-ranklist-id=\"icpc2026preliminary-1\" data-row-count=\"100\">",
+              "size": 104,
+              "detachedness": 1
+            },
+            "edgeType": "element",
+            "edge": "9",
+            "to": {
+              "index": 593292,
+              "id": 1186615,
+              "type": "native",
+              "name": "Comment",
+              "size": 96,
+              "detachedness": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "target": {
+        "index": 876759,
+        "id": 1753555,
+        "type": "object",
+        "name": "Object",
+        "size": 120,
+        "detachedness": 0
+      },
+      "outgoing": [
+        {
+          "edgeType": "property",
+          "edge": "__v_isVNode",
+          "to": {
+            "index": 33,
+            "id": 67,
+            "type": "native",
+            "name": "true",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "__v_skip",
+          "to": {
+            "index": 33,
+            "id": 67,
+            "type": "native",
+            "name": "true",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "type",
+          "to": {
+            "index": 92731,
+            "id": 185471,
+            "type": "object",
+            "name": "Object",
+            "size": 28,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "props",
+          "to": {
+            "index": 1073503,
+            "id": 2147015,
+            "type": "object",
+            "name": "Object",
+            "size": 96,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "key",
+          "to": {
+            "index": 13896,
+            "id": 27793,
+            "type": "string",
+            "name": "ssr-ranklist",
+            "size": 24,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "ref",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "scopeId",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "slotScopeIds",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "children",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "component",
+          "to": {
+            "index": 138769,
+            "id": 277549,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "suspense",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "ssContent",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "ssFallback",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "dirs",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "transition",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "el",
+          "to": {
+            "index": 1009771,
+            "id": 2019555,
+            "type": "native",
+            "name": "<div class=\"srk-common-table srk-main\">",
+            "size": 104,
+            "detachedness": 2
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "anchor",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "target",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "targetStart",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "targetAnchor",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "staticCount",
+          "to": {
+            "index": 32990,
+            "id": 65981,
+            "type": "number",
+            "name": "smi number",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "shapeFlag",
+          "to": {
+            "index": 34785,
+            "id": 69571,
+            "type": "number",
+            "name": "smi number",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "patchFlag",
+          "to": {
+            "index": 35294,
+            "id": 70589,
+            "type": "number",
+            "name": "smi number",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "dynamicProps",
+          "to": {
+            "index": 876790,
+            "id": 1753617,
+            "type": "object",
+            "name": "Array",
+            "size": 16,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "dynamicChildren",
+          "to": {
+            "index": 876791,
+            "id": 1753619,
+            "type": "object",
+            "name": "Array",
+            "size": 16,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "appContext",
+          "to": {
+            "index": 32,
+            "id": 65,
+            "type": "native",
+            "name": "null",
+            "size": 0,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "ctx",
+          "to": {
+            "index": 133041,
+            "id": 266091,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "__proto__",
+          "to": {
+            "index": 38007,
+            "id": 76017,
+            "type": "object",
+            "name": "Object",
+            "size": 28,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "internal",
+          "edge": "map",
+          "to": {
+            "index": 87399,
+            "id": 174803,
+            "type": "object shape",
+            "name": "system / Map",
+            "size": 40,
+            "detachedness": 0
+          }
+        }
+      ],
+      "incoming": [
+        {
+          "edgeType": "property",
+          "edge": "vnode",
+          "from": {
+            "index": 138769,
+            "id": 277549,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "14",
+          "from": {
+            "index": 876746,
+            "id": 1753529,
+            "type": "object",
+            "name": "Array",
+            "size": 16,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "internal",
+          "edge": "14",
+          "from": {
+            "index": 876765,
+            "id": 1753567,
+            "type": "array",
+            "name": "(object elements)",
+            "size": 180,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "internal",
+          "edge": "0",
+          "from": {
+            "index": 876772,
+            "id": 1753581,
+            "type": "array",
+            "name": "(object elements)",
+            "size": 12,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "0",
+          "from": {
+            "index": 1073508,
+            "id": 2147025,
+            "type": "object",
+            "name": "Array",
+            "size": 16,
+            "detachedness": 0
+          }
+        }
+      ],
+      "rootPath": {
+        "visited": 951548,
+        "found": true,
+        "chain": [
+          {
+            "from": {
+              "index": 0,
+              "id": 1,
+              "type": "synthetic",
+              "name": "",
+              "size": 0,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "1",
+            "to": {
+              "index": 1,
+              "id": 3,
+              "type": "synthetic",
+              "name": "(GC roots)",
+              "size": 0,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 1,
+              "id": 3,
+              "type": "synthetic",
+              "name": "(GC roots)",
+              "size": 0,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "10",
+            "to": {
+              "index": 11,
+              "id": 23,
+              "type": "synthetic",
+              "name": "(Global handles)",
+              "size": 0,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 11,
+              "id": 23,
+              "type": "synthetic",
+              "name": "(Global handles)",
+              "size": 0,
+              "detachedness": 0
+            },
+            "edgeType": "internal",
+            "edge": "41 / blink::ScriptStateProtectingContext::context_",
+            "to": {
+              "index": 3658,
+              "id": 7317,
+              "type": "native",
+              "name": "system / NativeContext / https://rl.algoux.cn",
+              "size": 1256,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 3658,
+              "id": 7317,
+              "type": "native",
+              "name": "system / NativeContext / https://rl.algoux.cn",
+              "size": 1256,
+              "detachedness": 0
+            },
+            "edgeType": "internal",
+            "edge": "global_proxy_object",
+            "to": {
+              "index": 39355,
+              "id": 78713,
+              "type": "native",
+              "name": "Window / https://rl.algoux.cn",
+              "size": 904,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 39355,
+              "id": 78713,
+              "type": "native",
+              "name": "Window / https://rl.algoux.cn",
+              "size": 904,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "5",
+            "to": {
+              "index": 582858,
+              "id": 1165743,
+              "type": "native",
+              "name": "HTMLDocument",
+              "size": 3352,
+              "detachedness": 1
+            }
+          },
+          {
+            "from": {
+              "index": 582858,
+              "id": 1165743,
+              "type": "native",
+              "name": "HTMLDocument",
+              "size": 3352,
+              "detachedness": 1
+            },
+            "edgeType": "element",
+            "edge": "37",
+            "to": {
+              "index": 1275303,
+              "id": 189758,
+              "type": "native",
+              "name": "blink::HeapHashTableBacking<blink::HashTable<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, blink::KeyValuePair<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, unsigned int>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HashTraits<unsigned int>>, blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HeapAllocator>>",
+              "size": 264,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 1275303,
+              "id": 189758,
+              "type": "native",
+              "name": "blink::HeapHashTableBacking<blink::HashTable<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, blink::KeyValuePair<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, unsigned int>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HashTraits<unsigned int>>, blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HeapAllocator>>",
+              "size": 264,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "1",
+            "to": {
+              "index": 847606,
+              "id": 1695249,
+              "type": "native",
+              "name": "<div class=\"pb-8\" data-id=\"collection-ranklist-content\" data-ranklist-id=\"icpc2026preliminary-1\" data-row-count=\"100\">",
+              "size": 104,
+              "detachedness": 1
+            }
+          },
+          {
+            "from": {
+              "index": 847606,
+              "id": 1695249,
+              "type": "native",
+              "name": "<div class=\"pb-8\" data-id=\"collection-ranklist-content\" data-ranklist-id=\"icpc2026preliminary-1\" data-row-count=\"100\">",
+              "size": 104,
+              "detachedness": 1
+            },
+            "edgeType": "element",
+            "edge": "9",
+            "to": {
+              "index": 593292,
+              "id": 1186615,
+              "type": "native",
+              "name": "Comment",
+              "size": 96,
+              "detachedness": 1
+            }
+          },
+          {
+            "from": {
+              "index": 593292,
+              "id": 1186615,
+              "type": "native",
+              "name": "Comment",
+              "size": 96,
+              "detachedness": 1
+            },
+            "edgeType": "property",
+            "edge": "__vnode",
+            "to": {
+              "index": 876742,
+              "id": 1753521,
+              "type": "object",
+              "name": "Object",
+              "size": 120,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 876742,
+              "id": 1753521,
+              "type": "object",
+              "name": "Object",
+              "size": 120,
+              "detachedness": 0
+            },
+            "edgeType": "property",
+            "edge": "dynamicChildren",
+            "to": {
+              "index": 876746,
+              "id": 1753529,
+              "type": "object",
+              "name": "Array",
+              "size": 16,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 876746,
+              "id": 1753529,
+              "type": "object",
+              "name": "Array",
+              "size": 16,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "14",
+            "to": {
+              "index": 876759,
+              "id": 1753555,
+              "type": "object",
+              "name": "Object",
+              "size": 120,
+              "detachedness": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "target": {
+        "index": 1009769,
+        "id": 2019551,
+        "type": "native",
+        "name": "<table class=\"srk-table-row-striped\">",
+        "size": 120,
+        "detachedness": 2
+      },
+      "outgoing": [
+        {
+          "edgeType": "property",
+          "edge": "__vnode",
+          "to": {
+            "index": 141251,
+            "id": 282513,
+            "type": "object",
+            "name": "Object",
+            "size": 120,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "__vueParentComponent",
+          "to": {
+            "index": 138769,
+            "id": 277549,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "__proto__",
+          "to": {
+            "index": 135820,
+            "id": 271651,
+            "type": "object",
+            "name": "HTMLTableElement (prototype) / https://rl.algoux.cn",
+            "size": 28,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "internal",
+          "edge": "properties",
+          "to": {
+            "index": 141256,
+            "id": 282523,
+            "type": "native",
+            "name": "system / PropertyArray",
+            "size": 20,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "internal",
+          "edge": "map",
+          "to": {
+            "index": 781121,
+            "id": 1562279,
+            "type": "object shape",
+            "name": "system / Map",
+            "size": 52,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "6",
+          "to": {
+            "index": 1236908,
+            "id": 112968,
+            "type": "native",
+            "name": "blink::MutableCSSPropertyValueSet",
+            "size": 104,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "7",
+          "to": {
+            "index": 1221517,
+            "id": 82186,
+            "type": "native",
+            "name": "blink::ShareableElementData",
+            "size": 48,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "8",
+          "to": {
+            "index": 141984,
+            "id": 283979,
+            "type": "native",
+            "name": "Comment",
+            "size": 96,
+            "detachedness": 2
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "9",
+          "to": {
+            "index": 582858,
+            "id": 1165743,
+            "type": "native",
+            "name": "HTMLDocument",
+            "size": 3352,
+            "detachedness": 1
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "10",
+          "to": {
+            "index": 1009771,
+            "id": 2019555,
+            "type": "native",
+            "name": "<div class=\"srk-common-table srk-main\">",
+            "size": 104,
+            "detachedness": 2
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "11",
+          "to": {
+            "index": 1009769,
+            "id": 2019551,
+            "type": "native",
+            "name": "<table class=\"srk-table-row-striped\">",
+            "size": 120,
+            "detachedness": 2
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "12",
+          "to": {
+            "index": 1009769,
+            "id": 2019551,
+            "type": "native",
+            "name": "<table class=\"srk-table-row-striped\">",
+            "size": 120,
+            "detachedness": 2
+          }
+        }
+      ],
+      "incoming": [
+        {
+          "edgeType": "property",
+          "edge": "el",
+          "from": {
+            "index": 141251,
+            "id": 282513,
+            "type": "object",
+            "name": "Object",
+            "size": 120,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "7",
+          "from": {
+            "index": 141984,
+            "id": 283979,
+            "type": "native",
+            "name": "Comment",
+            "size": 96,
+            "detachedness": 2
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "8",
+          "from": {
+            "index": 141987,
+            "id": 283985,
+            "type": "native",
+            "name": "<thead>",
+            "size": 104,
+            "detachedness": 2
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "7",
+          "from": {
+            "index": 141988,
+            "id": 283987,
+            "type": "native",
+            "name": "Comment",
+            "size": 96,
+            "detachedness": 2
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "8",
+          "from": {
+            "index": 1009765,
+            "id": 2019543,
+            "type": "native",
+            "name": "<tbody>",
+            "size": 104,
+            "detachedness": 2
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "11",
+          "from": {
+            "index": 1009769,
+            "id": 2019551,
+            "type": "native",
+            "name": "<table class=\"srk-table-row-striped\">",
+            "size": 120,
+            "detachedness": 2
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "12",
+          "from": {
+            "index": 1009769,
+            "id": 2019551,
+            "type": "native",
+            "name": "<table class=\"srk-table-row-striped\">",
+            "size": 120,
+            "detachedness": 2
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "7",
+          "from": {
+            "index": 1009771,
+            "id": 2019555,
+            "type": "native",
+            "name": "<div class=\"srk-common-table srk-main\">",
+            "size": 104,
+            "detachedness": 2
+          }
+        }
+      ],
+      "rootPath": {
+        "visited": 951548,
+        "found": true,
+        "chain": [
+          {
+            "from": {
+              "index": 0,
+              "id": 1,
+              "type": "synthetic",
+              "name": "",
+              "size": 0,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "1",
+            "to": {
+              "index": 1,
+              "id": 3,
+              "type": "synthetic",
+              "name": "(GC roots)",
+              "size": 0,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 1,
+              "id": 3,
+              "type": "synthetic",
+              "name": "(GC roots)",
+              "size": 0,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "10",
+            "to": {
+              "index": 11,
+              "id": 23,
+              "type": "synthetic",
+              "name": "(Global handles)",
+              "size": 0,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 11,
+              "id": 23,
+              "type": "synthetic",
+              "name": "(Global handles)",
+              "size": 0,
+              "detachedness": 0
+            },
+            "edgeType": "internal",
+            "edge": "41 / blink::ScriptStateProtectingContext::context_",
+            "to": {
+              "index": 3658,
+              "id": 7317,
+              "type": "native",
+              "name": "system / NativeContext / https://rl.algoux.cn",
+              "size": 1256,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 3658,
+              "id": 7317,
+              "type": "native",
+              "name": "system / NativeContext / https://rl.algoux.cn",
+              "size": 1256,
+              "detachedness": 0
+            },
+            "edgeType": "internal",
+            "edge": "global_proxy_object",
+            "to": {
+              "index": 39355,
+              "id": 78713,
+              "type": "native",
+              "name": "Window / https://rl.algoux.cn",
+              "size": 904,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 39355,
+              "id": 78713,
+              "type": "native",
+              "name": "Window / https://rl.algoux.cn",
+              "size": 904,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "5",
+            "to": {
+              "index": 582858,
+              "id": 1165743,
+              "type": "native",
+              "name": "HTMLDocument",
+              "size": 3352,
+              "detachedness": 1
+            }
+          },
+          {
+            "from": {
+              "index": 582858,
+              "id": 1165743,
+              "type": "native",
+              "name": "HTMLDocument",
+              "size": 3352,
+              "detachedness": 1
+            },
+            "edgeType": "element",
+            "edge": "37",
+            "to": {
+              "index": 1275303,
+              "id": 189758,
+              "type": "native",
+              "name": "blink::HeapHashTableBacking<blink::HashTable<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, blink::KeyValuePair<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, unsigned int>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HashTraits<unsigned int>>, blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HeapAllocator>>",
+              "size": 264,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 1275303,
+              "id": 189758,
+              "type": "native",
+              "name": "blink::HeapHashTableBacking<blink::HashTable<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, blink::KeyValuePair<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, unsigned int>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HashTraits<unsigned int>>, blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HeapAllocator>>",
+              "size": 264,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "1",
+            "to": {
+              "index": 847606,
+              "id": 1695249,
+              "type": "native",
+              "name": "<div class=\"pb-8\" data-id=\"collection-ranklist-content\" data-ranklist-id=\"icpc2026preliminary-1\" data-row-count=\"100\">",
+              "size": 104,
+              "detachedness": 1
+            }
+          },
+          {
+            "from": {
+              "index": 847606,
+              "id": 1695249,
+              "type": "native",
+              "name": "<div class=\"pb-8\" data-id=\"collection-ranklist-content\" data-ranklist-id=\"icpc2026preliminary-1\" data-row-count=\"100\">",
+              "size": 104,
+              "detachedness": 1
+            },
+            "edgeType": "element",
+            "edge": "9",
+            "to": {
+              "index": 593292,
+              "id": 1186615,
+              "type": "native",
+              "name": "Comment",
+              "size": 96,
+              "detachedness": 1
+            }
+          },
+          {
+            "from": {
+              "index": 593292,
+              "id": 1186615,
+              "type": "native",
+              "name": "Comment",
+              "size": 96,
+              "detachedness": 1
+            },
+            "edgeType": "property",
+            "edge": "__vnode",
+            "to": {
+              "index": 876742,
+              "id": 1753521,
+              "type": "object",
+              "name": "Object",
+              "size": 120,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 876742,
+              "id": 1753521,
+              "type": "object",
+              "name": "Object",
+              "size": 120,
+              "detachedness": 0
+            },
+            "edgeType": "property",
+            "edge": "dynamicChildren",
+            "to": {
+              "index": 876746,
+              "id": 1753529,
+              "type": "object",
+              "name": "Array",
+              "size": 16,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 876746,
+              "id": 1753529,
+              "type": "object",
+              "name": "Array",
+              "size": 16,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "14",
+            "to": {
+              "index": 876759,
+              "id": 1753555,
+              "type": "object",
+              "name": "Object",
+              "size": 120,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 876759,
+              "id": 1753555,
+              "type": "object",
+              "name": "Object",
+              "size": 120,
+              "detachedness": 0
+            },
+            "edgeType": "property",
+            "edge": "el",
+            "to": {
+              "index": 1009771,
+              "id": 2019555,
+              "type": "native",
+              "name": "<div class=\"srk-common-table srk-main\">",
+              "size": 104,
+              "detachedness": 2
+            }
+          },
+          {
+            "from": {
+              "index": 1009771,
+              "id": 2019555,
+              "type": "native",
+              "name": "<div class=\"srk-common-table srk-main\">",
+              "size": 104,
+              "detachedness": 2
+            },
+            "edgeType": "element",
+            "edge": "7",
+            "to": {
+              "index": 1009769,
+              "id": 2019551,
+              "type": "native",
+              "name": "<table class=\"srk-table-row-striped\">",
+              "size": 120,
+              "detachedness": 2
+            }
+          }
+        ]
+      }
+    },
+    {
+      "target": {
+        "index": 1009771,
+        "id": 2019555,
+        "type": "native",
+        "name": "<div class=\"srk-common-table srk-main\">",
+        "size": 104,
+        "detachedness": 2
+      },
+      "outgoing": [
+        {
+          "edgeType": "property",
+          "edge": "__vnode",
+          "to": {
+            "index": 141246,
+            "id": 282503,
+            "type": "object",
+            "name": "Object",
+            "size": 120,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "__vueParentComponent",
+          "to": {
+            "index": 138769,
+            "id": 277549,
+            "type": "object",
+            "name": "Object",
+            "size": 244,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "__proto__",
+          "to": {
+            "index": 86613,
+            "id": 173231,
+            "type": "object",
+            "name": "HTMLDivElement (prototype) / https://rl.algoux.cn",
+            "size": 28,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "internal",
+          "edge": "properties",
+          "to": {
+            "index": 141245,
+            "id": 282501,
+            "type": "native",
+            "name": "system / PropertyArray",
+            "size": 20,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "internal",
+          "edge": "map",
+          "to": {
+            "index": 89175,
+            "id": 178355,
+            "type": "object shape",
+            "name": "system / Map",
+            "size": 52,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "6",
+          "to": {
+            "index": 1221515,
+            "id": 82182,
+            "type": "native",
+            "name": "blink::ShareableElementData",
+            "size": 48,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "7",
+          "to": {
+            "index": 1009769,
+            "id": 2019551,
+            "type": "native",
+            "name": "<table class=\"srk-table-row-striped\">",
+            "size": 120,
+            "detachedness": 2
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "8",
+          "to": {
+            "index": 582858,
+            "id": 1165743,
+            "type": "native",
+            "name": "HTMLDocument",
+            "size": 3352,
+            "detachedness": 1
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "9",
+          "to": {
+            "index": 1009771,
+            "id": 2019555,
+            "type": "native",
+            "name": "<div class=\"srk-common-table srk-main\">",
+            "size": 104,
+            "detachedness": 2
+          }
+        }
+      ],
+      "incoming": [
+        {
+          "edgeType": "property",
+          "edge": "el",
+          "from": {
+            "index": 141246,
+            "id": 282503,
+            "type": "object",
+            "name": "Object",
+            "size": 120,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "property",
+          "edge": "el",
+          "from": {
+            "index": 876759,
+            "id": 1753555,
+            "type": "object",
+            "name": "Object",
+            "size": 120,
+            "detachedness": 0
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "10",
+          "from": {
+            "index": 1009769,
+            "id": 2019551,
+            "type": "native",
+            "name": "<table class=\"srk-table-row-striped\">",
+            "size": 120,
+            "detachedness": 2
+          }
+        },
+        {
+          "edgeType": "element",
+          "edge": "9",
+          "from": {
+            "index": 1009771,
+            "id": 2019555,
+            "type": "native",
+            "name": "<div class=\"srk-common-table srk-main\">",
+            "size": 104,
+            "detachedness": 2
+          }
+        }
+      ],
+      "rootPath": {
+        "visited": 951548,
+        "found": true,
+        "chain": [
+          {
+            "from": {
+              "index": 0,
+              "id": 1,
+              "type": "synthetic",
+              "name": "",
+              "size": 0,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "1",
+            "to": {
+              "index": 1,
+              "id": 3,
+              "type": "synthetic",
+              "name": "(GC roots)",
+              "size": 0,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 1,
+              "id": 3,
+              "type": "synthetic",
+              "name": "(GC roots)",
+              "size": 0,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "10",
+            "to": {
+              "index": 11,
+              "id": 23,
+              "type": "synthetic",
+              "name": "(Global handles)",
+              "size": 0,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 11,
+              "id": 23,
+              "type": "synthetic",
+              "name": "(Global handles)",
+              "size": 0,
+              "detachedness": 0
+            },
+            "edgeType": "internal",
+            "edge": "41 / blink::ScriptStateProtectingContext::context_",
+            "to": {
+              "index": 3658,
+              "id": 7317,
+              "type": "native",
+              "name": "system / NativeContext / https://rl.algoux.cn",
+              "size": 1256,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 3658,
+              "id": 7317,
+              "type": "native",
+              "name": "system / NativeContext / https://rl.algoux.cn",
+              "size": 1256,
+              "detachedness": 0
+            },
+            "edgeType": "internal",
+            "edge": "global_proxy_object",
+            "to": {
+              "index": 39355,
+              "id": 78713,
+              "type": "native",
+              "name": "Window / https://rl.algoux.cn",
+              "size": 904,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 39355,
+              "id": 78713,
+              "type": "native",
+              "name": "Window / https://rl.algoux.cn",
+              "size": 904,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "5",
+            "to": {
+              "index": 582858,
+              "id": 1165743,
+              "type": "native",
+              "name": "HTMLDocument",
+              "size": 3352,
+              "detachedness": 1
+            }
+          },
+          {
+            "from": {
+              "index": 582858,
+              "id": 1165743,
+              "type": "native",
+              "name": "HTMLDocument",
+              "size": 3352,
+              "detachedness": 1
+            },
+            "edgeType": "element",
+            "edge": "37",
+            "to": {
+              "index": 1275303,
+              "id": 189758,
+              "type": "native",
+              "name": "blink::HeapHashTableBacking<blink::HashTable<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, blink::KeyValuePair<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, unsigned int>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HashTraits<unsigned int>>, blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HeapAllocator>>",
+              "size": 264,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 1275303,
+              "id": 189758,
+              "type": "native",
+              "name": "blink::HeapHashTableBacking<blink::HashTable<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, blink::KeyValuePair<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>, unsigned int>, blink::KeyValuePairExtractor, blink::HashMapValueTraits<blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HashTraits<unsigned int>>, blink::HashTraits<cppgc::internal::BasicMember<blink::Element, cppgc::internal::StrongMemberTag, cppgc::internal::DijkstraWriteBarrierPolicy>>, blink::HeapAllocator>>",
+              "size": 264,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "1",
+            "to": {
+              "index": 847606,
+              "id": 1695249,
+              "type": "native",
+              "name": "<div class=\"pb-8\" data-id=\"collection-ranklist-content\" data-ranklist-id=\"icpc2026preliminary-1\" data-row-count=\"100\">",
+              "size": 104,
+              "detachedness": 1
+            }
+          },
+          {
+            "from": {
+              "index": 847606,
+              "id": 1695249,
+              "type": "native",
+              "name": "<div class=\"pb-8\" data-id=\"collection-ranklist-content\" data-ranklist-id=\"icpc2026preliminary-1\" data-row-count=\"100\">",
+              "size": 104,
+              "detachedness": 1
+            },
+            "edgeType": "element",
+            "edge": "9",
+            "to": {
+              "index": 593292,
+              "id": 1186615,
+              "type": "native",
+              "name": "Comment",
+              "size": 96,
+              "detachedness": 1
+            }
+          },
+          {
+            "from": {
+              "index": 593292,
+              "id": 1186615,
+              "type": "native",
+              "name": "Comment",
+              "size": 96,
+              "detachedness": 1
+            },
+            "edgeType": "property",
+            "edge": "__vnode",
+            "to": {
+              "index": 876742,
+              "id": 1753521,
+              "type": "object",
+              "name": "Object",
+              "size": 120,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 876742,
+              "id": 1753521,
+              "type": "object",
+              "name": "Object",
+              "size": 120,
+              "detachedness": 0
+            },
+            "edgeType": "property",
+            "edge": "dynamicChildren",
+            "to": {
+              "index": 876746,
+              "id": 1753529,
+              "type": "object",
+              "name": "Array",
+              "size": 16,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 876746,
+              "id": 1753529,
+              "type": "object",
+              "name": "Array",
+              "size": 16,
+              "detachedness": 0
+            },
+            "edgeType": "element",
+            "edge": "14",
+            "to": {
+              "index": 876759,
+              "id": 1753555,
+              "type": "object",
+              "name": "Object",
+              "size": 120,
+              "detachedness": 0
+            }
+          },
+          {
+            "from": {
+              "index": 876759,
+              "id": 1753555,
+              "type": "object",
+              "name": "Object",
+              "size": 120,
+              "detachedness": 0
+            },
+            "edgeType": "property",
+            "edge": "el",
+            "to": {
+              "index": 1009771,
+              "id": 2019555,
+              "type": "native",
+              "name": "<div class=\"srk-common-table srk-main\">",
+              "size": 104,
+              "detachedness": 2
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
