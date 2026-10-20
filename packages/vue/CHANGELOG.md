@@ -1,5 +1,11 @@
 # @algoux/standard-ranklist-renderer-component-vue
 
+## 0.7.3
+
+### Patch Changes
+
+- 1be0bb2: Add optional ProgressBar timeMachine and live content slots. Demonstrate the timeMachine slot with a CCPC26 switch beside the centered label in all framework previews.
+
 ## 0.7.2
 
 ### Patch Changes
