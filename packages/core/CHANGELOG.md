@@ -1,5 +1,11 @@
 # @algoux/standard-ranklist-renderer-component-core
 
+## 0.7.2
+
+### Patch Changes
+
+- d264031: Require standard-ranklist-utils 0.3.5 for linear-time ICPC series membership checks.
+
 ## 0.7.1
 
 ### Patch Changes
