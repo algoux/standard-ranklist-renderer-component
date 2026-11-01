@@ -2,6 +2,8 @@ import type * as srk from '@algoux/standard-ranklist';
 import type { CCPC26ProblemLayout, EnumTheme } from '@algoux/standard-ranklist-utils';
 import type {
   RanklistColumnTitles,
+  RanklistWindowOptions,
+  RanklistRowWindow,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
   ProblemClickPayload,
@@ -11,7 +13,7 @@ import type {
   UserClickPayload,
 } from '@algoux/standard-ranklist-renderer-component-core';
 
-export interface RanklistProps {
+export interface RanklistProps extends RanklistWindowOptions {
   data: StaticRanklist;
   theme?: EnumTheme;
   /** Opt in to CCPC26 presentation; the caller owns freeze timing. */
@@ -137,6 +139,8 @@ export type ModalEvents = {
 
 export type {
   RanklistColumnTitles,
+  RanklistWindowOptions,
+  RanklistRowWindow,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
   ProblemClickPayload,

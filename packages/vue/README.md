@@ -53,12 +53,7 @@ function handleSolutionClick(payload: SolutionClickPayload) {
 
 <template>
   <ProgressBar :data="props.ranklist" enable-time-travel @time-travel="(time) => console.log(time)" />
-  <Ranklist
-    :data="staticRanklist"
-    row-striped
-    @user-click="handleUserClick"
-    @solution-click="handleSolutionClick"
-  />
+  <Ranklist :data="staticRanklist" row-striped @user-click="handleUserClick" @solution-click="handleSolutionClick" />
   <DefaultUserModal
     :open="!!activeUser"
     :user="activeUser?.user"
@@ -192,3 +187,69 @@ centered replay label, without including the switch in its centering. It appears
 during replay for contests declaring the CCPC26 extension. Replay changes update it
 from the freeze boundary; toggling closes problem/submission details. Demo data is
 loaded only by the dev entry, while preview tests inject small synthetic contests.
+
+## Controlled rich-cell windows
+
+`rowWindow`, `retainUserText`, `columnWidths`, and `rowHeight` are opt-in rendering
+controls. Omitting them preserves the ordinary full table. `data` must remain the
+complete ranklist (or the complete current display-filter result); never pass only
+the viewport rows. Rankings, CCPC26 disclosure, problem statistics, footer values,
+and click payloads continue to use that complete data.
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue';
+import { Ranklist, type RanklistRowWindow } from '@algoux/standard-ranklist-renderer-component-vue';
+
+// This range is controlled by the host. The component adds no scroll listener.
+const window = ref<RanklistRowWindow>({ start: 0, end: 40 });
+</script>
+
+<template>
+  <Ranklist
+    :data="staticRanklist"
+    :row-window="window"
+    retain-user-text
+    :column-widths="widthsForEveryPhysicalColumn"
+    :row-height="60"
+    @user-click="handleUserClick"
+    @solution-click="handleSolutionClick"
+  />
+</template>
+```
+
+- `rowWindow` is zero-based and end-exclusive. Finite bounds are floored and
+  clamped; a missing or non-finite range renders every row fully. All row positions
+  remain in the table. Without `retainUserText`, rows outside the window contain an
+  empty spanning cell; with it, each participant's real name and organization
+  remain as the same span/Text nodes while rich content enters or leaves the window.
+  There is no duplicated hidden search index or interception of browser Find.
+- `columnWidths` contains one positive, finite pixel width for each physical
+  column: series, optional organization, name, score, optional time, problems,
+  optional Dirt, optional SE. The Name width is a minimum; that column absorbs
+  spare container width. A missing, invalid, or wrong-length array uses native
+  automatic table layout. In that case retained light rows keep empty rank/status
+  placeholder cells rather than using offset-dependent thin spanning cells.
+  CCPC26 uses the same revealed/anonymous colgroup boundary as full rendering.
+- `rowHeight` is an optional positive finite **minimum** participant-row height,
+  not a clipping constraint. It applies to rich and light rows. Content may still
+  grow taller with custom content or typography; the host must choose an appropriate
+  height and viewport strategy. No scrolling, measurement, or spacer-height policy
+  is enabled automatically.
+- Avatars and marker dots are mounted only in rich rows in retained-text mode.
+  Their text, languages, marker styles, and asset formatter continue to follow the
+  ordinary options. Click events use global row indexes and the complete ranklist.
+  Text and keyboard/assistive clicks remain valid without pointer coordinates;
+  a thin row's blank non-Name columns do not open the user details.
+
+A custom `user-cell` slot disables the window and retained default cells for that
+instance: all rows render fully. This preserves custom node identity and interaction
+semantics rather than replacing the slot with a different offscreen cell. Custom
+`status-cell` slots still run for rich rows, and their payloads retain original
+problem indexes and CCPC26 visibility information.
+
+The host controls full-view and printing behavior: set `rowWindow` to `undefined`
+to render all rich cells, and omit `columnWidths` to restore native auto layout.
+Keep the same `retainUserText` value if text-node identity must survive a full/window
+transition. The component does not install print hooks. `RanklistRowWindow` and
+`RanklistWindowOptions` are exported as Vue-facing types as well as by core.

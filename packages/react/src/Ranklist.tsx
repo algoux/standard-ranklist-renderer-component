@@ -14,6 +14,10 @@ import {
   calculateProblemStatisticsFooter,
   calculateSEValue,
   getRanklistProblemPresentation,
+  getRanklistTableLayout,
+  isRanklistRowInWindow,
+  normalizeRanklistRowHeight,
+  normalizeRanklistRowWindow,
   caniuse,
   formatProblemStatisticsAcceptedMinute,
   formatProblemStatisticsAverageHardness,
@@ -28,6 +32,7 @@ import type {
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
   RankValue,
+  RanklistWindowOptions,
   SolutionClickPayload,
   StaticRanklist,
   UserClickPayload,
@@ -38,11 +43,14 @@ import { StatusCell } from './internal/StatusCell';
 import type { StatusCellProps } from './internal/StatusCell';
 import { UserCell } from './internal/UserCell';
 import type { UserCellProps } from './internal/UserCell';
+import { RetainedOrganizationCell, RetainedUserCell } from './internal/RetainedIdentity';
 export type { RankValue, StaticRanklist } from '@algoux/standard-ranklist-renderer-component-core';
 export type {
   RanklistColumnTitles,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
+  RanklistRowWindow,
+  RanklistWindowOptions,
 } from '@algoux/standard-ranklist-renderer-component-core';
 export type { ProblemHeaderCellProps } from './internal/ProblemHeaderCell';
 export type { StatusCellProps } from './internal/StatusCell';
@@ -54,7 +62,7 @@ export interface RanklistComponents {
   statusCell: React.ComponentType<StatusCellProps>;
 }
 
-export interface RanklistProps {
+export interface RanklistProps extends RanklistWindowOptions {
   data: StaticRanklist;
 
   /**
@@ -281,6 +289,7 @@ export class Ranklist extends React.Component<RanklistProps, State> {
     showTimeColumn: boolean,
     problemStatistics: ReturnType<typeof calculateProblemStatisticsFooter>,
     problemColumns: readonly (number | null)[],
+    windowed: boolean,
   ) => {
     if (!this.props.showProblemStatisticsFooter) {
       return null;
@@ -351,8 +360,12 @@ export class Ranklist extends React.Component<RanklistProps, State> {
 
     return (
       <tfoot>
-        {footerRows.map((row) => (
-          <tr key={row.key} className="srk-problem-statistics-footer-row">
+        {footerRows.map((row, footerIndex) => (
+          <tr
+            aria-rowindex={windowed ? data.rows.length + footerIndex + 2 : undefined}
+            key={row.key}
+            className="srk-problem-statistics-footer-row"
+          >
             <td className="srk-problem-statistics-footer-labels srk--text-right srk--nowrap" colSpan={leftColumnCount}>
               <span className="srk-problem-statistics-footer-label srk--c-tooltip" data-tooltip={row.tooltip}>
                 {row.label}
@@ -369,7 +382,10 @@ export class Ranklist extends React.Component<RanklistProps, State> {
             {this.renderProblemStatisticsFooterExtraCells()}
           </tr>
         ))}
-        <tr className="srk-problem-statistics-footer-row srk-problem-statistics-footer-problem-label-row">
+        <tr
+          aria-rowindex={windowed ? data.rows.length + footerRows.length + 2 : undefined}
+          className="srk-problem-statistics-footer-row srk-problem-statistics-footer-problem-label-row"
+        >
           <td
             className="srk-problem-statistics-footer-labels srk--text-right srk--nowrap"
             colSpan={leftColumnCount}
@@ -444,26 +460,56 @@ export class Ranklist extends React.Component<RanklistProps, State> {
       this.props.ccpc26ProblemLayout,
     );
     const { problemColumns, revealedProblemCount, hasRevealDivider } = problemPresentation;
+    // A custom user component owns its DOM contract, so it receives complete rows.
+    const rowWindow = this.props.components?.userCell
+      ? undefined
+      : normalizeRanklistRowWindow(this.props.rowWindow, rows.length);
+    const retainIdentity = !!this.props.retainUserText && !this.props.components?.userCell;
+    const rowHeight = normalizeRanklistRowHeight(this.props.rowHeight);
+    const userColumn = series.length + (splitOrganization ? 1 : 0);
+    const totalColumns =
+      userColumn + 2 + (showTimeColumn ? 1 : 0) + problems.length + (showDirtColumn ? 1 : 0) + (showSEColumn ? 1 : 0);
+    const layout = getRanklistTableLayout(this.props.columnWidths, {
+      seriesCount: series.length,
+      problemCount: problems.length,
+      splitOrganization,
+      showTimeColumn,
+      showDirtColumn,
+      showSEColumn,
+      hasRevealDivider,
+      revealedProblemCount,
+    });
 
     return (
       <>
         <div className="srk-common-table srk-main">
           <table
+            style={layout?.style as React.CSSProperties | undefined}
+            data-row-height={rowHeight}
+            aria-rowcount={rowWindow ? rows.length + 1 + (showProblemStatisticsFooter ? 8 : 0) : undefined}
             className={classnames({
               'srk-table-row-bordered': rowBordered,
               'srk-table-column-bordered': columnBordered,
               'srk-table-row-striped': rowStriped,
             })}
           >
-            {hasRevealDivider && (
-              <>
-                <colgroup span={series.length + 2 + (showTimeColumn ? 1 : 0) + (splitOrganization ? 1 : 0)} />
-                <colgroup className="srk-ccpc26-revealed-columns" span={revealedProblemCount} />
-                <colgroup
-                  span={problems.length - revealedProblemCount + (showDirtColumn ? 1 : 0) + (showSEColumn ? 1 : 0)}
-                />
-              </>
-            )}
+            {layout
+              ? layout.groups.map((group) => (
+                  <colgroup key={group.start} className={group.className || undefined}>
+                    {group.columns.map((column) => (
+                      <col key={column.index} style={{ width: column.width }} />
+                    ))}
+                  </colgroup>
+                ))
+              : hasRevealDivider && (
+                  <>
+                    <colgroup span={series.length + 2 + (showTimeColumn ? 1 : 0) + (splitOrganization ? 1 : 0)} />
+                    <colgroup className="srk-ccpc26-revealed-columns" span={revealedProblemCount} />
+                    <colgroup
+                      span={problems.length - revealedProblemCount + (showDirtColumn ? 1 : 0) + (showSEColumn ? 1 : 0)}
+                    />
+                  </>
+                )}
             <thead>
               <tr>
                 {series.map((s, index) => (
@@ -514,79 +560,143 @@ export class Ranklist extends React.Component<RanklistProps, State> {
             </thead>
             <tbody>
               {rows.map((r, index) => {
-                if (!r.rankValues) {
+                const rich = isRanklistRowInWindow(index, rowWindow);
+                const thin = !rich && retainIdentity && !!layout;
+                const rankValues = rich ? r.rankValues || series.map(() => ({ rank: null, segmentIndex: null })) : [];
+                if (rich && !r.rankValues) {
                   console.warn(
                     'Rank values is not provided, you may need to pass static ranklist data generated by `convertToStaticRanklist()`',
                   );
                 }
-                const rankValues = r.rankValues || series.map((s) => ({ rank: null, segmentIndex: null }));
-                const problemOrder = problemPresentation.rowProblemIndexes[index];
                 return (
-                  <tr key={r.user.id || this.resolveDisplayText(r.user.name)}>
-                    {rankValues.map((rk, index) => this.renderSingleSeriesBody(rk, series[index], r))}
-                    {splitOrganization && (
-                      <td
-                        className={classnames('srk-organization-cell srk--text-left srk--nowrap', {
-                          'srk-organization-cell-avatar': showAvatarInOrganization && !!r.user.avatar,
-                        })}
-                      >
-                        {this.renderOrganizationBody(r.user, showAvatarInOrganization)}
-                      </td>
-                    )}
-                    <UserCellComponent
-                      user={r.user}
-                      row={r}
-                      rowIndex={index}
-                      ranklist={data}
-                      markers={data.markers}
-                      theme={this.props.theme!}
-                      formatSrkAssetUrl={this.formatSrkAssetUrl}
-                      onUserClick={this.props.onUserClick}
-                      hideOrganization={splitOrganization}
-                      hideAvatar={showAvatarInOrganization}
-                      languages={this.props.languages}
-                    />
-                    <td className="srk--text-right srk--nowrap">{r.score.value}</td>
-                    {showTimeColumn && (
-                      <td className="srk--text-right srk--nowrap">
-                        {r.score.time ? formatTimeDuration(r.score.time, 'min', Math.floor) : '-'}
-                      </td>
-                    )}
-                    {problemOrder.map((statusIndex) => {
-                      const status = r.statuses[statusIndex] || { result: null };
-                      const problem = problems[statusIndex];
-                      return (
-                        <StatusCellComponent
-                          key={statusIndex}
-                          status={status}
-                          problem={problem}
-                          problemIndex={statusIndex}
-                          problemRevealed={problemPresentation.problemRevealed[statusIndex] ?? true}
-                          user={r.user}
-                          row={r}
-                          rowIndex={index}
-                          ranklist={data}
-                          onSolutionClick={this.props.onSolutionClick}
-                          statusCellPreset={statusCellPreset}
-                          statusColorAsText={statusColorAsText}
-                          emptyStatusPlaceholder={emptyStatusPlaceholder}
-                          languages={this.props.languages}
-                        />
-                      );
-                    })}
-                    {showDirtColumn && (
-                      <td className="srk-dirt-cell srk--text-right srk--nowrap">{calculateDirtPercentage(r)}</td>
-                    )}
-                    {showSEColumn && (
-                      <td className="srk-se-cell srk--text-right srk--nowrap">
-                        {calculateSEValue(r, problemStatistics)}
-                      </td>
+                  <tr
+                    key={r.user.id || this.resolveDisplayText(r.user.name)}
+                    data-row-index={index}
+                    data-rich-row={rich ? 'true' : 'false'}
+                    data-thin-row={thin ? 'true' : undefined}
+                    aria-rowindex={rowWindow ? index + 2 : undefined}
+                    style={rowHeight ? { height: rowHeight } : undefined}
+                  >
+                    {!rich && !retainIdentity ? (
+                      <td key="empty" colSpan={totalColumns} aria-hidden="true" />
+                    ) : (
+                      [
+                        <React.Fragment key="ranks">
+                          {rich ? (
+                            rankValues.map((rank, seriesIndex) =>
+                              this.renderSingleSeriesBody(rank, series[seriesIndex], r),
+                            )
+                          ) : !thin && series.length > 0 ? (
+                            <td colSpan={series.length} aria-hidden="true" />
+                          ) : null}
+                        </React.Fragment>,
+                        splitOrganization ? (
+                          retainIdentity ? (
+                            <RetainedOrganizationCell
+                              key="organization"
+                              user={r.user}
+                              rich={rich}
+                              colSpan={thin ? series.length + 1 : 1}
+                              columnIndex={series.length}
+                              showAvatar={showAvatarInOrganization}
+                              formatSrkAssetUrl={this.props.formatSrkAssetUrl || resolveSrkAssetUrl}
+                              languages={this.props.languages}
+                            />
+                          ) : (
+                            <td
+                              key="organization"
+                              className={classnames('srk-organization-cell srk--text-left srk--nowrap', {
+                                'srk-organization-cell-avatar': showAvatarInOrganization && !!r.user.avatar,
+                              })}
+                            >
+                              {this.renderOrganizationBody(r.user, showAvatarInOrganization)}
+                            </td>
+                          )
+                        ) : null,
+                        retainIdentity ? (
+                          <RetainedUserCell
+                            key="identity"
+                            user={r.user}
+                            row={r}
+                            rowIndex={index}
+                            ranklist={data}
+                            markers={data.markers}
+                            theme={this.props.theme!}
+                            rich={rich}
+                            thin={thin}
+                            colSpan={thin ? totalColumns - (splitOrganization ? series.length + 1 : 0) : 1}
+                            userColumn={userColumn}
+                            formatSrkAssetUrl={this.props.formatSrkAssetUrl || resolveSrkAssetUrl}
+                            onUserClick={this.props.onUserClick}
+                            hideOrganization={splitOrganization}
+                            hideAvatar={showAvatarInOrganization}
+                            languages={this.props.languages}
+                          />
+                        ) : (
+                          <UserCellComponent
+                            key="identity"
+                            user={r.user}
+                            row={r}
+                            rowIndex={index}
+                            ranklist={data}
+                            markers={data.markers}
+                            theme={this.props.theme!}
+                            formatSrkAssetUrl={this.formatSrkAssetUrl}
+                            onUserClick={this.props.onUserClick}
+                            hideOrganization={splitOrganization}
+                            hideAvatar={showAvatarInOrganization}
+                            languages={this.props.languages}
+                          />
+                        ),
+                        <React.Fragment key="details">
+                          {rich ? (
+                            <>
+                              <td className="srk--text-right srk--nowrap">{r.score.value}</td>
+                              {showTimeColumn && (
+                                <td className="srk--text-right srk--nowrap">
+                                  {r.score.time ? formatTimeDuration(r.score.time, 'min', Math.floor) : '-'}
+                                </td>
+                              )}
+                              {problemPresentation.rowProblemIndexes[index].map((problemIndex) => (
+                                <StatusCellComponent
+                                  key={problemIndex}
+                                  status={r.statuses[problemIndex] || { result: null }}
+                                  problem={problems[problemIndex]}
+                                  problemIndex={problemIndex}
+                                  problemRevealed={problemPresentation.problemRevealed[problemIndex] ?? true}
+                                  user={r.user}
+                                  row={r}
+                                  rowIndex={index}
+                                  ranklist={data}
+                                  onSolutionClick={this.props.onSolutionClick}
+                                  statusCellPreset={statusCellPreset}
+                                  statusColorAsText={statusColorAsText}
+                                  emptyStatusPlaceholder={emptyStatusPlaceholder}
+                                  languages={this.props.languages}
+                                />
+                              ))}
+                              {showDirtColumn && (
+                                <td className="srk-dirt-cell srk--text-right srk--nowrap">
+                                  {calculateDirtPercentage(r)}
+                                </td>
+                              )}
+                              {showSEColumn && (
+                                <td className="srk-se-cell srk--text-right srk--nowrap">
+                                  {calculateSEValue(r, problemStatistics)}
+                                </td>
+                              )}
+                            </>
+                          ) : !thin ? (
+                            <td colSpan={totalColumns - userColumn - 1} aria-hidden="true" />
+                          ) : null}
+                        </React.Fragment>,
+                      ]
                     )}
                   </tr>
                 );
               })}
             </tbody>
-            {this.renderProblemStatisticsFooter(showTimeColumn, problemStatistics, problemColumns)}
+            {this.renderProblemStatisticsFooter(showTimeColumn, problemStatistics, problemColumns, !!rowWindow)}
           </table>
         </div>
       </>

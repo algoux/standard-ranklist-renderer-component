@@ -46,3 +46,7 @@ CCPC26 is disabled or its standard configuration is absent.
 
 All framework packages use these helpers and the common styles. See
 [CCPC26 render options](../../docs/agents/ranklist-renderer-props.md#ccpc26-presentation) for the shared contract.
+
+## Controlled row windows
+
+See the [shared row-window contract](../../docs/native-find-row-window.md). Core exports the shared rendering option types, pure layout/window helpers and identity click boundary helper.

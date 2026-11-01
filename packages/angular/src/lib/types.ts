@@ -3,6 +3,8 @@ export type {
   ProblemClickPayload,
   RankValue,
   RanklistColumnTitles,
+  RanklistWindowOptions,
+  RanklistRowWindow,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
   SolutionClickPayload,

@@ -18,6 +18,8 @@ export type {
 	RanklistColumnTitles,
 	RanklistEvents,
 	RanklistProps,
+	RanklistRowWindow,
+	RanklistWindowOptions,
 	RanklistStatusCellPreset,
 	RanklistUserAvatarPlacement,
 	SolutionClickPayload,

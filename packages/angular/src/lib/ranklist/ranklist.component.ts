@@ -7,6 +7,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  DoCheck,
   SimpleChanges,
   Output,
 } from '@angular/core';
@@ -35,10 +36,16 @@ import {
   getRankProblemStatusCellPresentation,
   resolveSrkAssetUrl,
   shouldShowTimeColumn,
+  normalizeRanklistRowWindow,
+  normalizeRanklistRowHeight,
+  isRanklistRowInWindow,
+  getRanklistTableLayout,
+  isRanklistIdentityClick,
   srkSupportedVersions,
 } from '@algoux/standard-ranklist-renderer-component-core';
 import type {
   ProblemStatisticsFooter,
+  RanklistRowWindow,
   RanklistColumnTitles,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
@@ -84,15 +91,25 @@ import {
     <ng-template #ranklistTable>
       <div class="srk-common-table srk-main">
         <table
+          [ngStyle]="tableStyle"
+          [attr.data-row-height]="normalizedHeight"
+          [attr.aria-rowcount]="effectiveWindow ? data.rows.length + 1 + (showProblemStatisticsFooter ? problemStatisticsFooterRows.length + 1 : 0) : null"
           [class.srk-table-row-bordered]="rowBordered"
           [class.srk-table-column-bordered]="columnBordered"
           [class.srk-table-row-striped]="rowStriped"
         >
+          <ng-container *ngIf="tableLayout; else automaticColumnGroups">
+            <colgroup *ngFor="let group of tableLayout.groups" [class]="group.className">
+              <col *ngFor="let column of group.columns" [style.width]="column.width" />
+            </colgroup>
+          </ng-container>
+          <ng-template #automaticColumnGroups>
           <ng-container *ngIf="problemPresentation.hasRevealDivider">
             <colgroup [attr.span]="leftFooterColumnCount()"></colgroup>
             <colgroup class="srk-ccpc26-revealed-columns" [attr.span]="problemPresentation.revealedProblemCount"></colgroup>
             <colgroup [attr.span]="data.problems.length - problemPresentation.revealedProblemCount + (showDirtColumn ? 1 : 0) + (showSEColumn ? 1 : 0)"></colgroup>
           </ng-container>
+          </ng-template>
           <thead>
             <tr>
               <th
@@ -179,7 +196,16 @@ import {
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let row of data.rows; let rowIndex = index">
+            <tr *ngFor="let row of data.rows; let rowIndex = index; trackBy: trackByRow"
+              [attr.data-row-index]="rowIndex" [attr.data-rich-row]="isRichRow(rowIndex) ? 'true' : 'false'"
+              [attr.data-thin-row]="isThinRow(rowIndex) ? 'true' : null"
+              [attr.aria-rowindex]="effectiveWindow ? rowIndex + 2 : null"
+              [style.height.px]="normalizedHeight">
+              <ng-container *ngIf="!isRichRow(rowIndex) && !retainIdentity; else displayedRow">
+                <td [attr.colspan]="totalColumns" aria-hidden="true"></td>
+              </ng-container>
+              <ng-template #displayedRow>
+                <ng-container *ngIf="!isThinRow(rowIndex)">
               <td
                 *ngFor="let rankValue of getRankValues(row); let seriesIndex = index"
                 class="srk--text-right srk--nowrap"
@@ -187,9 +213,43 @@ import {
                 [class.srk-series-segmented-column]="isSeriesSegmentedColumn(data.series[seriesIndex])"
                 [ngStyle]="getSeriesSegmentStyle(rankValue, data.series[seriesIndex])"
               >
-                {{ getRankText(rankValue, row) }}
+                {{ isRichRow(rowIndex) ? getRankText(rankValue, row) : '' }}
               </td>
 
+                </ng-container>
+                <ng-container *ngIf="retainIdentity; else legacyIdentity">
+                <td *ngIf="splitOrganization" class="srk-organization-cell srk--text-left srk--nowrap srk-search-org-cell"
+                  [class.srk-search-has-avatar]="showAvatarInOrganization() && !!row.user.avatar"
+                  [attr.colspan]="isThinRow(rowIndex) ? data.series.length + 1 : 1"
+                  [attr.aria-colindex]="data.series.length + 1" aria-colspan="1">
+                  <span class="srk-organization-name-text" data-search-text="organization"
+                    [title]="row.user.organization ? resolveDisplayText(row.user.organization) : ''">{{ row.user.organization ? resolveDisplayText(row.user.organization) : '' }}</span>
+                  <img *ngIf="isRichRow(rowIndex) && showAvatarInOrganization() && row.user.avatar"
+                    class="srk-search-user-avatar" [src]="formatAssetUrl(row.user.avatar, 'user.avatar')" alt="User Avatar" />
+                </td>
+                <td class="srk--text-left srk--nowrap srk-user-cell srk--cursor-pointer srk-search-user-cell"
+                  [class.srk-search-split]="splitOrganization"
+                  [class.srk-search-has-avatar]="!!row.user.avatar && !showAvatarInOrganization()"
+                  [attr.colspan]="isThinRow(rowIndex) ? totalColumns - (splitOrganization ? data.series.length + 1 : 0) : 1"
+                  [attr.aria-colindex]="data.series.length + (splitOrganization ? 1 : 0) + 1" aria-colspan="1"
+                  [style.--srk-search-marker-space]="identityMarkerSpace(row.user)"
+                  role="button" tabindex="0"
+                  (click)="emitIdentityClick($event, row, rowIndex)"
+                  (keydown.enter)="activateUserCellFromKeyboard($event, row, rowIndex)"
+                  (keydown.space)="activateUserCellFromKeyboard($event, row, rowIndex)">
+                  <span class="srk-user-name-text" data-search-text="name" [title]="resolveDisplayText(row.user.name)">{{ resolveDisplayText(row.user.name) }}</span>
+                  <span *ngIf="isRichRow(rowIndex) && resolvedUserMarkers(row.user).length" class="srk-marker-dot-group srk-search-markers">
+                    <span *ngFor="let marker of resolvedUserMarkers(row.user)" class="srk-marker srk-marker-dot srk--c-tooltip"
+                      [ngClass]="marker.presentation.className" [ngStyle]="marker.presentation.style"
+                      [attr.data-tooltip]="resolveDisplayText(marker.marker.label)"></span>
+                  </span>
+                  <span *ngIf="row.user.organization && !splitOrganization"
+                    class="srk-user-secondary-text srk-search-organization" data-search-text="organization">{{ resolveDisplayText(row.user.organization) }}</span>
+                  <img *ngIf="isRichRow(rowIndex) && row.user.avatar && !showAvatarInOrganization()" class="srk-search-user-avatar"
+                    [src]="formatAssetUrl(row.user.avatar, 'user.avatar')" alt="User Avatar" />
+                </td>
+                </ng-container>
+                <ng-template #legacyIdentity>
               <td
                 *ngIf="splitOrganization"
                 class="srk-organization-cell srk--text-left srk--nowrap"
@@ -262,6 +322,8 @@ import {
                 </td>
               </ng-template>
 
+                </ng-template>
+                <ng-container *ngIf="isRichRow(rowIndex); else emptyDetails">
               <td class="srk--text-right srk--nowrap">{{ row.score.value }}</td>
               <td *ngIf="showTimeColumn()" class="srk--text-right srk--nowrap">
                 {{ row.score.time ? formatTime(row.score.time) : '-' }}
@@ -358,11 +420,19 @@ import {
               <td *ngIf="showSEColumn" class="srk-se-cell srk--text-right srk--nowrap">
                 {{ calculateSEValue(row, problemStatistics) }}
               </td>
+                </ng-container>
+                <ng-template #emptyDetails>
+                  <ng-container *ngIf="!tableLayout">
+                    <td *ngFor="let column of tailColumnPlaceholders" aria-hidden="true"></td>
+                  </ng-container>
+                </ng-template>
+              </ng-template>
             </tr>
           </tbody>
           <tfoot *ngIf="showProblemStatisticsFooter">
             <tr
-              *ngFor="let footerRow of problemStatisticsFooterRows"
+              *ngFor="let footerRow of problemStatisticsFooterRows; let footerIndex = index"
+              [attr.aria-rowindex]="effectiveWindow ? data.rows.length + footerIndex + 2 : null"
               class="srk-problem-statistics-footer-row"
             >
               <td
@@ -407,7 +477,8 @@ import {
                 <span class="srk-problem-statistics-footer-primary"></span>
               </td>
             </tr>
-            <tr class="srk-problem-statistics-footer-row srk-problem-statistics-footer-problem-label-row">
+            <tr class="srk-problem-statistics-footer-row srk-problem-statistics-footer-problem-label-row"
+              [attr.aria-rowindex]="effectiveWindow ? data.rows.length + problemStatisticsFooterRows.length + 2 : null">
               <td
                 class="srk-problem-statistics-footer-labels srk--text-right srk--nowrap"
                 [attr.colspan]="leftFooterColumnCount()"
@@ -438,8 +509,12 @@ import {
     </ng-template>
   `,
 })
-export class RanklistComponent implements OnChanges {
+export class RanklistComponent implements OnChanges, DoCheck {
   @Input({ required: true }) data!: StaticRanklist;
+  @Input() rowWindow?: RanklistRowWindow;
+  @Input() retainUserText = false;
+  @Input() columnWidths?: readonly number[];
+  @Input() rowHeight?: number;
   @Input() enableCCPC26 = false;
   /** Layout from the complete current slice before filtering rows, using data's original problem indexes. */
   @Input() ccpc26ProblemLayout?: CCPC26ProblemLayout;
@@ -473,13 +548,88 @@ export class RanklistComponent implements OnChanges {
   userCellTemplate?: SrkUserCellTemplateDirective;
 
   problemPresentation!: ReturnType<typeof getRanklistProblemPresentation>;
+  tableLayout?: ReturnType<typeof getRanklistTableLayout>;
+  tableStyle: Record<string, string | undefined> = {};
+  normalizedHeight?: number;
+  totalColumns = 0;
+  tailColumnPlaceholders: number[] = [];
+  private timeColumnVisible = false;
+  private layoutSignature = '';
+  private windowSignature = '';
+  private normalizedWindow?: RanklistRowWindow;
   private readonly emptyStatus: srk.RankProblemStatus = { result: null, tries: 0 };
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.data.type !== 'general' || !this.isSupportedVersion()) return;
+    if (!this.data || this.data.type !== 'general' || !this.isSupportedVersion()) return;
     if (changes['data'] || changes['enableCCPC26'] || changes['ccpc26ProblemLayout'] || !this.problemPresentation) {
       this.problemPresentation = getRanklistProblemPresentation(this.data, this.enableCCPC26, this.ccpc26ProblemLayout);
     }
+    this.updateTableLayout();
+  }
+
+  ngDoCheck() {
+    // Preserve Angular's existing mutable-input behavior without scanning rows
+    // separately for every cell/template call.
+    if (this.data?.type === 'general' && this.isSupportedVersion() && this.problemPresentation) this.updateTableLayout();
+  }
+
+  private updateTableLayout() {
+    const windowSignature = JSON.stringify([this.rowWindow?.start, this.rowWindow?.end, this.data.rows.length]);
+    if (windowSignature !== this.windowSignature) {
+      this.windowSignature = windowSignature;
+      this.normalizedWindow = normalizeRanklistRowWindow(this.rowWindow, this.data.rows.length);
+    }
+    const timeColumnVisible = shouldShowTimeColumn(this.data.rows);
+    const height = normalizeRanklistRowHeight(this.rowHeight);
+    const signature = JSON.stringify([
+      this.data.series.length, this.data.problems.length, this.splitOrganization,
+      timeColumnVisible, this.showDirtColumn, this.showSEColumn, height,
+      this.problemPresentation.hasRevealDivider, this.problemPresentation.revealedProblemCount,
+      this.columnWidths,
+    ]);
+    this.timeColumnVisible = timeColumnVisible;
+    if (signature === this.layoutSignature) return;
+    this.layoutSignature = signature;
+    this.normalizedHeight = height;
+    this.totalColumns = this.leftFooterColumnCount() + this.data.problems.length + (this.showDirtColumn ? 1 : 0) + (this.showSEColumn ? 1 : 0);
+    this.tailColumnPlaceholders = Array.from({ length: this.totalColumns - this.data.series.length - (this.splitOrganization ? 1 : 0) - 1 }, (_, index) => index);
+    this.tableLayout = getRanklistTableLayout(this.columnWidths, {
+      seriesCount: this.data.series.length, problemCount: this.data.problems.length,
+      splitOrganization: this.splitOrganization, showTimeColumn: timeColumnVisible,
+      showDirtColumn: this.showDirtColumn, showSEColumn: this.showSEColumn,
+      hasRevealDivider: this.problemPresentation.hasRevealDivider,
+      revealedProblemCount: this.problemPresentation.revealedProblemCount,
+    });
+    this.tableStyle = { ...(this.tableLayout?.style || {}), ...(height ? { '--srk-row-height': `${height}px` } : {}) };
+  }
+
+  get effectiveWindow() {
+    return this.userCellTemplate ? undefined : this.normalizedWindow;
+  }
+
+  get retainIdentity() {
+    return this.retainUserText && !this.userCellTemplate;
+  }
+
+  isRichRow(index: number) {
+    return isRanklistRowInWindow(index, this.effectiveWindow);
+  }
+
+  isThinRow(index: number) {
+    return !this.isRichRow(index) && this.retainIdentity && !!this.tableLayout;
+  }
+
+  trackByRow = (_index: number, row: StaticRanklistRow) =>
+    (this.effectiveWindow || this.retainIdentity) ? (row.user.id ?? row) : row;
+
+  identityMarkerSpace(user: srk.User) {
+    const count = resolveUserMarkers(user, this.data.markers).length;
+    return count ? `${4 + count * 16}px` : null;
+  }
+
+  emitIdentityClick(event: MouseEvent, row: StaticRanklistRow, rowIndex: number) {
+    if (this.isThinRow(rowIndex) && !isRanklistIdentityClick(event, this.tableLayout!.userColumn)) return;
+    this.emitUserClick(event, row, rowIndex);
   }
 
   trackByProblemIndex(_index: number, problemIndex: number) {
@@ -549,7 +699,8 @@ export class RanklistComponent implements OnChanges {
   }
 
   showTimeColumn() {
-    return shouldShowTimeColumn(this.data.rows);
+    if (!this.rowWindow && !this.retainUserText && !this.columnWidths) return shouldShowTimeColumn(this.data.rows);
+    return this.timeColumnVisible;
   }
 
   showAvatarInOrganization() {

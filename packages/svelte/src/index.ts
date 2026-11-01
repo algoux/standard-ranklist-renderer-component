@@ -16,6 +16,8 @@ export type {
   ProgressBarProps,
   ProgressBarSlots,
   RanklistColumnTitles,
+  RanklistRowWindow,
+  RanklistWindowOptions,
   RanklistEvents,
   RanklistProps,
   RanklistStatusCellPreset,

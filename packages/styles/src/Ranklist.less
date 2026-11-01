@@ -908,3 +908,63 @@
     }
   }
 }
+
+// Opt-in resident identity rows and uniform-height rendering.
+/* Use one participant-row height in small/full/windowed/printed tables.
+   Natural text line heights are preserved; the measured two-line maximum is
+   below 60px. In particular, do not inherit the old UserCell height:100%. */
+.srk-main > table[data-row-height] > tbody > tr > td { height: auto; }
+/* The upstream 4px gap makes two-line rows 60.28125px high. Reducing only
+   that gap keeps the complete text and natural line boxes inside 60px. */
+.srk-main > table[data-row-height] .srk-prest-status-block-secondary,
+.srk-main > table[data-row-height] .srk-prest-status-block-score-details { margin-top: 3px; }
+/* Identity text is the real cell content, not an auxiliary search index. */
+/* Light rows use one physical cell (two with organization split). ARIA
+   retains the true logical column indices; text nodes are unchanged in rich rows. */
+.srk-main tr[data-thin-row="true"] > .srk-search-user-cell:not(.srk-search-split),
+.srk-main tr[data-thin-row="true"] > .srk-search-org-cell {
+  padding-left: calc(var(--srk-search-ranks-width, 0px) + 8px);
+}
+.srk-main tr[data-rich-row="true"] > .srk-search-user-cell,
+.srk-main tr[data-rich-row="true"] > .srk-search-org-cell { position: relative; }
+.srk-main .srk-search-user-cell > .srk-user-name-text,
+.srk-main .srk-search-user-cell > .srk-search-organization {
+  display: block;
+  max-width: calc(var(--srk-table-body-user-max-width, 300px) - var(--srk-search-avatar-space, 0px) - var(--srk-search-marker-space, 0px));
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* Keep markers in the name's line box, including when the Name column grows.
+   Reserve the whole marker group so an ellipsized name cannot push it outside. */
+.srk-main .srk-search-user-cell > .srk-user-name-text {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: min(calc(var(--srk-table-body-user-max-width, 300px) - var(--srk-search-avatar-space, 0px) - var(--srk-search-marker-space, 0px)), calc(100% - var(--srk-search-avatar-space, 0px) - var(--srk-search-marker-space, 0px)));
+}
+/* Name is the only flexible column. In a light row its physical cell also
+   spans the fixed trailing columns; keep text inside the real Name column. */
+.srk-main tr[data-thin-row="true"] > .srk-search-user-cell > [data-search-text] {
+  max-width: min(calc(var(--srk-table-body-user-max-width, 300px) - var(--srk-search-avatar-space, 0px) - var(--srk-search-marker-space, 0px)), calc(100% - var(--srk-search-tail-width, 0px) - var(--srk-search-avatar-space, 0px) - var(--srk-search-marker-space, 0px)));
+}
+.srk-main .srk-search-org-cell > .srk-organization-name-text {
+  display: block;
+  max-width: calc(var(--srk-search-org-width, 220px) - var(--srk-search-avatar-space, 0px));
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.srk-main .srk-search-has-avatar { --srk-search-avatar-space: 44px; }
+.srk-main .srk-search-has-avatar > [data-search-text] { margin-left: 44px; }
+.srk-main .srk-search-organization { font-size: 12px; color: var(--srk-color-user-second-name); }
+.srk-main .srk-search-markers { display: inline-block; vertical-align: middle; }
+.srk-main .srk-search-user-avatar {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  max-height: 36px;
+  object-fit: contain;
+  border-radius: 100%;
+}

@@ -5,13 +5,25 @@
   </div>
   <div v-else class="srk-common-table srk-main">
     <table
+      :style="tableLayout?.style"
+      :data-row-height="normalizedRowHeight"
+      :aria-rowcount="
+        effectiveWindow()
+          ? data.rows.length + 1 + (showProblemStatisticsFooter ? problemStatisticsFooterRows.length + 1 : 0)
+          : undefined
+      "
       :class="{
         'srk-table-row-bordered': rowBordered,
         'srk-table-column-bordered': columnBordered,
         'srk-table-row-striped': rowStriped,
       }"
     >
-      <template v-if="problemPresentation.hasRevealDivider">
+      <template v-if="tableLayout">
+        <colgroup v-for="group in tableLayout.groups" :key="group.start" :class="group.className">
+          <col v-for="column in group.columns" :key="column.index" :style="{ width: column.width }" />
+        </colgroup>
+      </template>
+      <template v-else-if="problemPresentation.hasRevealDivider">
         <colgroup :span="leftFooterColumnCount" />
         <colgroup class="srk-ccpc26-revealed-columns" :span="problemPresentation.revealedProblemCount" />
         <colgroup
@@ -78,41 +90,126 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(row, rowIndex) in data.rows" :key="row.user.id || resolveDisplayText(row.user.name)">
-          <td
-            v-for="(rankValue, seriesIndex) in getRankValues(row)"
-            :key="data.series[seriesIndex]?.title || seriesIndex"
-            class="srk--text-right srk--nowrap"
-            :class="[
-              getSeriesSegmentClass(rankValue, data.series[seriesIndex]),
-              { 'srk-series-segmented-column': isSeriesSegmentedColumn(data.series[seriesIndex]) },
-            ]"
-            :style="getSeriesSegmentStyle(rankValue, data.series[seriesIndex])"
-          >
-            {{ getRankText(rankValue, row) }}
-          </td>
+        <tr
+          v-for="(row, rowIndex) in data.rows"
+          :key="getRowKey(row)"
+          v-memo="getRowMemo(row, rowIndex)"
+          :data-row-index="hasWindowControls ? rowIndex : undefined"
+          :data-rich-row="hasWindowControls ? String(isRichRow(rowIndex)) : undefined"
+          :data-thin-row="isThinRow(rowIndex) ? 'true' : undefined"
+          :aria-rowindex="effectiveWindow() ? rowIndex + 2 : undefined"
+          :style="normalizedRowHeight ? { height: `${normalizedRowHeight}px` } : undefined"
+        >
+          <td v-if="!isRichRow(rowIndex) && !useRetainedIdentity()" :colspan="totalColumnCount" aria-hidden="true" />
+          <template v-else>
+            <template v-if="isRichRow(rowIndex)">
+              <td
+                v-for="(rankValue, seriesIndex) in getRankValues(row)"
+                :key="data.series[seriesIndex]?.title || seriesIndex"
+                class="srk--text-right srk--nowrap"
+                :class="[
+                  getSeriesSegmentClass(rankValue, data.series[seriesIndex]),
+                  { 'srk-series-segmented-column': isSeriesSegmentedColumn(data.series[seriesIndex]) },
+                ]"
+                :style="getSeriesSegmentStyle(rankValue, data.series[seriesIndex])"
+              >
+                {{ getRankText(rankValue, row) }}
+              </td>
+            </template>
+            <td
+              v-else-if="!isThinRow(rowIndex) && data.series.length"
+              :colspan="data.series.length"
+              aria-hidden="true"
+            />
 
-          <td
-            v-if="splitOrganization"
-            class="srk-organization-cell srk--text-left srk--nowrap"
-            :class="{ 'srk-organization-cell-avatar': showAvatarInOrganization && !!row.user.avatar }"
-          >
-            <div class="srk-organization-cell-content">
-              <div v-if="showAvatarInOrganization && row.user.avatar" class="srk-user-avatar">
-                <img :src="formatAssetUrl(row.user.avatar, 'user.avatar')" alt="User Avatar" />
-              </div>
+            <td
+              v-if="splitOrganization && useRetainedIdentity()"
+              key="retained-organization"
+              class="srk-organization-cell srk--text-left srk--nowrap srk-search-org-cell"
+              :class="{ 'srk-search-has-avatar': showAvatarInOrganization && !!row.user.avatar }"
+              :colspan="isThinRow(rowIndex) ? data.series.length + 1 : 1"
+              :aria-colindex="data.series.length + 1"
+              :aria-colspan="1"
+            >
               <span
                 class="srk-organization-name-text"
-                :title="row.user.organization ? resolveDisplayText(row.user.organization) : ''"
+                data-search-text="organization"
+                :title="resolveDisplayText(row.user.organization)"
+                >{{ resolveDisplayText(row.user.organization) }}</span
               >
-                {{ row.user.organization ? resolveDisplayText(row.user.organization) : '' }}
-              </span>
-            </div>
-          </td>
+              <img
+                v-if="isRichRow(rowIndex) && showAvatarInOrganization && row.user.avatar"
+                class="srk-search-user-avatar"
+                :src="formatAssetUrl(row.user.avatar, 'user.avatar')"
+                alt="User Avatar"
+              />
+            </td>
+            <td
+              v-else-if="splitOrganization"
+              class="srk-organization-cell srk--text-left srk--nowrap"
+              :class="{ 'srk-organization-cell-avatar': showAvatarInOrganization && !!row.user.avatar }"
+            >
+              <div class="srk-organization-cell-content">
+                <div v-if="showAvatarInOrganization && row.user.avatar" class="srk-user-avatar">
+                  <img :src="formatAssetUrl(row.user.avatar, 'user.avatar')" alt="User Avatar" />
+                </div>
+                <span
+                  class="srk-organization-name-text"
+                  :title="row.user.organization ? resolveDisplayText(row.user.organization) : ''"
+                >
+                  {{ row.user.organization ? resolveDisplayText(row.user.organization) : '' }}
+                </span>
+              </div>
+            </td>
 
-          <slot
-            name="user-cell"
-            v-bind="{
+            <td
+              v-if="useRetainedIdentity()"
+              key="retained-user"
+              class="srk--text-left srk--nowrap srk-user-cell srk--cursor-pointer srk-search-user-cell"
+              :class="{
+                'srk-search-split': splitOrganization,
+                'srk-search-has-avatar': !!row.user.avatar && !showAvatarInOrganization,
+              }"
+              :style="getIdentityStyle(row)"
+              :colspan="isThinRow(rowIndex) ? totalColumnCount - (splitOrganization ? data.series.length + 1 : 0) : 1"
+              :aria-colindex="userColumnIndex + 1"
+              :aria-colspan="1"
+              title=""
+              @click="handleRetainedUserClick(rowIndex, $event)"
+            >
+              <span class="srk-user-name-text" data-search-text="name" :title="resolveDisplayText(row.user.name)">{{
+                resolveDisplayText(row.user.name)
+              }}</span>
+              <span
+                v-if="isRichRow(rowIndex) && getUserMarkers(row).length"
+                class="srk-marker-dot-group srk-search-markers"
+              >
+                <span
+                  v-for="marker in getUserMarkers(row)"
+                  :key="marker.id"
+                  class="srk-marker srk-marker-dot srk--c-tooltip"
+                  :class="getMarkerPresentation(marker, resolvedTheme).className"
+                  :style="getMarkerPresentation(marker, resolvedTheme).style"
+                  :data-tooltip="resolveDisplayText(marker.label)"
+                />
+              </span>
+              <span
+                v-if="row.user.organization && !splitOrganization"
+                class="srk-user-secondary-text srk-search-organization"
+                data-search-text="organization"
+                >{{ resolveDisplayText(row.user.organization) }}</span
+              >
+              <img
+                v-if="isRichRow(rowIndex) && row.user.avatar && !showAvatarInOrganization"
+                class="srk-search-user-avatar"
+                :src="formatAssetUrl(row.user.avatar, 'user.avatar')"
+                alt="User Avatar"
+              />
+            </td>
+            <slot
+              v-else
+              name="user-cell"
+              v-bind="{
               user: row.user,
               row,
               rowIndex,
@@ -124,31 +221,32 @@
               languages,
               onClick: (event?: MouseEvent) => emitUserClick(row, rowIndex, event),
             }"
-          >
-            <UserCell
-              :user="row.user"
-              :row="row"
-              :row-index="rowIndex"
-              :ranklist="data"
-              :markers="data.markers"
-              :theme="resolvedTheme"
-              :format-srk-asset-url="formatAssetUrl"
-              :on-user-click="emitUserClick"
-              :hide-organization="splitOrganization"
-              :hide-avatar="showAvatarInOrganization"
-              :languages="languages"
-            />
-          </slot>
+            >
+              <UserCell
+                :user="row.user"
+                :row="row"
+                :row-index="rowIndex"
+                :ranklist="data"
+                :markers="data.markers"
+                :theme="resolvedTheme"
+                :format-srk-asset-url="formatAssetUrl"
+                :on-user-click="emitUserClick"
+                :hide-organization="splitOrganization"
+                :hide-avatar="showAvatarInOrganization"
+                :languages="languages"
+              />
+            </slot>
 
-          <td class="srk--text-right srk--nowrap">{{ row.score.value }}</td>
-          <td v-if="showTimeColumn" class="srk--text-right srk--nowrap">
-            {{ row.score.time ? formatTimeDuration(row.score.time, 'min', Math.floor) : '-' }}
-          </td>
+            <template v-if="isRichRow(rowIndex)">
+              <td class="srk--text-right srk--nowrap">{{ row.score.value }}</td>
+              <td v-if="showTimeColumn" class="srk--text-right srk--nowrap">
+                {{ row.score.time ? formatTimeDuration(row.score.time, 'min', Math.floor) : '-' }}
+              </td>
 
-          <template v-for="problemIndex in problemPresentation.rowProblemIndexes[rowIndex]" :key="problemIndex">
-            <slot
-              name="status-cell"
-              v-bind="{
+              <template v-for="problemIndex in problemPresentation.rowProblemIndexes[rowIndex]" :key="problemIndex">
+                <slot
+                  name="status-cell"
+                  v-bind="{
                 status: getRowStatus(row, problemIndex),
                 problem: data.problems[problemIndex],
                 problemIndex,
@@ -164,36 +262,40 @@
                 languages,
                 onClick: (event?: MouseEvent) => emitSolutionClick(row, rowIndex, getRowStatus(row, problemIndex), problemIndex, event),
               }"
-            >
-              <StatusCell
-                :status="getRowStatus(row, problemIndex)"
-                :problem="data.problems[problemIndex]"
-                :problem-index="problemIndex"
-                :problem-revealed="problemPresentation.problemRevealed[problemIndex]"
-                :user="row.user"
-                :row="row"
-                :row-index="rowIndex"
-                :ranklist="data"
-                :on-solution-click="emitSolutionClick"
-                :status-cell-preset="statusCellPreset"
-                :status-color-as-text="statusColorAsText"
-                :empty-status-placeholder="emptyStatusPlaceholder"
-                :languages="languages"
-              />
-            </slot>
+                >
+                  <StatusCell
+                    :status="getRowStatus(row, problemIndex)"
+                    :problem="data.problems[problemIndex]"
+                    :problem-index="problemIndex"
+                    :problem-revealed="problemPresentation.problemRevealed[problemIndex]"
+                    :user="row.user"
+                    :row="row"
+                    :row-index="rowIndex"
+                    :ranklist="data"
+                    :on-solution-click="emitSolutionClick"
+                    :status-cell-preset="statusCellPreset"
+                    :status-color-as-text="statusColorAsText"
+                    :empty-status-placeholder="emptyStatusPlaceholder"
+                    :languages="languages"
+                  />
+                </slot>
+              </template>
+              <td v-if="showDirtColumn" class="srk-dirt-cell srk--text-right srk--nowrap">
+                {{ calculateDirtPercentage(row) }}
+              </td>
+              <td v-if="showSEColumn" class="srk-se-cell srk--text-right srk--nowrap">
+                {{ calculateSEValue(row, problemStatistics) }}
+              </td>
+            </template>
+            <td v-else-if="!isThinRow(rowIndex)" :colspan="totalColumnCount - userColumnIndex - 1" aria-hidden="true" />
           </template>
-          <td v-if="showDirtColumn" class="srk-dirt-cell srk--text-right srk--nowrap">
-            {{ calculateDirtPercentage(row) }}
-          </td>
-          <td v-if="showSEColumn" class="srk-se-cell srk--text-right srk--nowrap">
-            {{ calculateSEValue(row, problemStatistics) }}
-          </td>
         </tr>
       </tbody>
       <tfoot v-if="showProblemStatisticsFooter">
         <tr
-          v-for="footerRow in problemStatisticsFooterRows"
+          v-for="(footerRow, footerIndex) in problemStatisticsFooterRows"
           :key="footerRow.key"
+          :aria-rowindex="effectiveWindow() ? data.rows.length + footerIndex + 2 : undefined"
           class="srk-problem-statistics-footer-row"
         >
           <td class="srk-problem-statistics-footer-labels srk--text-right srk--nowrap" :colspan="leftFooterColumnCount">
@@ -235,7 +337,10 @@
             <span class="srk-problem-statistics-footer-primary"></span>
           </td>
         </tr>
-        <tr class="srk-problem-statistics-footer-row srk-problem-statistics-footer-problem-label-row">
+        <tr
+          class="srk-problem-statistics-footer-row srk-problem-statistics-footer-problem-label-row"
+          :aria-rowindex="effectiveWindow() ? data.rows.length + problemStatisticsFooterRows.length + 2 : undefined"
+        >
           <td
             class="srk-problem-statistics-footer-labels srk--text-right srk--nowrap"
             :colspan="leftFooterColumnCount"
@@ -286,9 +391,10 @@ import {
   numberToAlphabet,
   resolveStyle,
   resolveText,
+  resolveUserMarkers,
 } from '@algoux/standard-ranklist-utils';
 import type { CCPC26ProblemLayout, ThemeColor } from '@algoux/standard-ranklist-utils';
-import { computed, getCurrentInstance } from 'vue';
+import { computed, getCurrentInstance, useSlots } from 'vue';
 import {
   calculateDirtPercentage,
   calculateProblemStatisticsFooter,
@@ -300,6 +406,12 @@ import {
   formatProblemStatisticsPercent,
   getProblemHeaderBackgroundImageIfStyled,
   getRanklistProblemPresentation,
+  getRanklistTableLayout,
+  getMarkerPresentation,
+  isRanklistIdentityClick,
+  isRanklistRowInWindow,
+  normalizeRanklistRowWindow,
+  normalizeRanklistRowHeight,
   resolveSrkAssetUrl,
   shouldShowTimeColumn,
   srkSupportedVersions,
@@ -308,6 +420,7 @@ import type {
   ProblemStatisticsFooter,
   ProblemClickPayload,
   RanklistColumnTitles,
+  RanklistRowWindow,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
   RankValue,
@@ -323,6 +436,10 @@ import UserCell from './parts/UserCell.vue';
 const props = withDefaults(
   defineProps<{
     data: StaticRanklist;
+    rowWindow?: RanklistRowWindow;
+    retainUserText?: boolean;
+    columnWidths?: readonly number[];
+    rowHeight?: number;
     enableCCPC26?: boolean;
     ccpc26ProblemLayout?: CCPC26ProblemLayout;
     theme?: EnumTheme;
@@ -343,6 +460,7 @@ const props = withDefaults(
   }>(),
   {
     theme: EnumTheme.light,
+    retainUserText: false,
     enableCCPC26: false,
     rowBordered: false,
     columnBordered: false,
@@ -365,6 +483,7 @@ const emit = defineEmits<{
 }>();
 
 const instance = getCurrentInstance();
+const slots = useSlots();
 const problemPresentation = computed(() =>
   getRanklistProblemPresentation(props.data, props.enableCCPC26, props.ccpc26ProblemLayout),
 );
@@ -382,6 +501,91 @@ const problemStatistics = computed(() =>
 const leftFooterColumnCount = computed(
   () => props.data.series.length + 1 + 1 + (showTimeColumn.value ? 1 : 0) + (props.splitOrganization ? 1 : 0),
 );
+
+const normalizedWindow = computed(() => normalizeRanklistRowWindow(props.rowWindow, props.data.rows.length));
+const normalizedRowHeight = computed(() => normalizeRanklistRowHeight(props.rowHeight));
+const userColumnIndex = computed(() => props.data.series.length + (props.splitOrganization ? 1 : 0));
+const totalColumnCount = computed(
+  () =>
+    leftFooterColumnCount.value +
+    props.data.problems.length +
+    (props.showDirtColumn ? 1 : 0) +
+    (props.showSEColumn ? 1 : 0),
+);
+const tableLayout = computed(() =>
+  getRanklistTableLayout(props.columnWidths, {
+    seriesCount: props.data.series.length,
+    problemCount: props.data.problems.length,
+    splitOrganization: props.splitOrganization,
+    showTimeColumn: showTimeColumn.value,
+    showDirtColumn: props.showDirtColumn,
+    showSEColumn: props.showSEColumn,
+    hasRevealDivider: problemPresentation.value.hasRevealDivider,
+    revealedProblemCount: problemPresentation.value.revealedProblemCount,
+  }),
+);
+const hasWindowControls = computed(
+  () =>
+    props.rowWindow !== undefined ||
+    props.retainUserText ||
+    normalizedRowHeight.value !== undefined ||
+    !!tableLayout.value,
+);
+
+// Slot presence is read during render, not cached: Vue's slots object is not a
+// reactive source, and a parent may add/remove a custom user slot dynamically.
+function effectiveWindow() {
+  return slots['user-cell'] ? undefined : normalizedWindow.value;
+}
+function useRetainedIdentity() {
+  return props.retainUserText && !slots['user-cell'];
+}
+function isRichRow(index: number) {
+  return isRanklistRowInWindow(index, effectiveWindow());
+}
+function isThinRow(index: number) {
+  return !isRichRow(index) && useRetainedIdentity() && !!tableLayout.value;
+}
+function getUserMarkers(row: StaticRanklistRow) {
+  return resolveUserMarkers(row.user, props.data.markers);
+}
+function getIdentityStyle(row: StaticRanklistRow) {
+  const count = getUserMarkers(row).length;
+  return count ? { '--srk-search-marker-space': `${4 + count * 16}px` } : undefined;
+}
+function handleRetainedUserClick(index: number, event: MouseEvent) {
+  if (isThinRow(index) && !isRanklistIdentityClick(event, userColumnIndex.value)) return;
+  event.preventDefault();
+  const row = props.data.rows[index];
+  if (row) emitUserClick(row, index, event);
+}
+function getRowKey(row: StaticRanklistRow) {
+  return row.user.id || resolveDisplayText(row.user.name);
+}
+function getRowMemo(row: StaticRanklistRow, index: number) {
+  // Default/custom/rich rendering keeps ordinary Vue deep-reactive updates.
+  // Only light identities are memoized; all of their visual inputs are read.
+  if (!useRetainedIdentity() || isRichRow(index) || slots['status-cell']) return [{}];
+  return [
+    row,
+    index,
+    props.data,
+    normalizedRowHeight.value,
+    tableLayout.value,
+    props.theme,
+    props.languages,
+    props.splitOrganization,
+    props.userAvatarPlacement,
+    props.formatSrkAssetUrl,
+    props.data.markers,
+    row.user.avatar,
+    resolveDisplayText(row.user.name),
+    resolveDisplayText(row.user.organization),
+    getUserMarkers(row).length,
+    totalColumnCount.value,
+    userColumnIndex.value,
+  ];
+}
 
 const problemStatisticsFooterRows = [
   {

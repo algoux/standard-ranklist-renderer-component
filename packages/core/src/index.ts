@@ -5,3 +5,4 @@ export * from './caniuse';
 export * from './modal';
 export * from './ccpc26';
 export { convertToStaticRanklist } from '@algoux/standard-ranklist-utils';
+export * from './window';

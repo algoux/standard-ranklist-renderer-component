@@ -3,6 +3,8 @@ import type { CSSProperties } from 'vue';
 import type { CCPC26ProblemLayout, EnumTheme } from '@algoux/standard-ranklist-utils';
 import type {
   RanklistColumnTitles,
+  RanklistRowWindow,
+  RanklistWindowOptions,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
   ProblemClickPayload,
@@ -14,7 +16,7 @@ import type {
 
 export type ModalCloseReason = 'mask' | 'close-button' | 'escape';
 
-export interface RanklistProps {
+export interface RanklistProps extends RanklistWindowOptions {
   /** Opt in to configured CCPC26 presentation; the caller owns freeze timing. */
   enableCCPC26?: boolean;
   /** Layout from the complete current slice before filtering rows, using data's original problem indexes. */
@@ -135,6 +137,8 @@ export type ModalEvents = {
 
 export type {
   RanklistColumnTitles,
+  RanklistRowWindow,
+  RanklistWindowOptions,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
   ProblemClickPayload,

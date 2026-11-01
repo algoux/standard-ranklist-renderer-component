@@ -24,10 +24,19 @@
     getRankProblemStatusCellPresentation,
     resolveSrkAssetUrl,
     shouldShowTimeColumn,
+    normalizeRanklistRowWindow,
+    normalizeRanklistRowHeight,
+    isRanklistRowInWindow,
+    getRanklistTableLayout,
+    isRanklistIdentityClick,
   } from '@algoux/standard-ranklist-renderer-component-core';
   import { caniuse, srkSupportedVersions } from '@algoux/standard-ranklist-renderer-component-core';
 
   export let data;
+  export let rowWindow = undefined;
+  export let retainUserText = false;
+  export let columnWidths = undefined;
+  export let rowHeight = undefined;
   export let theme = EnumTheme.light;
   export let enableCCPC26 = false;
   export let ccpc26ProblemLayout = undefined;
@@ -57,6 +66,28 @@
   $: showAvatarInOrganization = splitOrganization && userAvatarPlacement === 'organization';
   $: problemStatistics = showProblemStatisticsFooter || showSEColumn ? calculateProblemStatisticsFooter(data) : [];
   $: leftFooterColumnCount = data.series.length + 1 + 1 + (showTimeColumn ? 1 : 0) + (splitOrganization ? 1 : 0);
+
+  $: effectiveWindow = $$slots['user-cell'] ? undefined : normalizeRanklistRowWindow(rowWindow, data.rows.length);
+  $: retainIdentity = retainUserText && !$$slots['user-cell'];
+  $: normalizedHeight = normalizeRanklistRowHeight(rowHeight);
+  $: totalColumns = problemPresentation ? leftFooterColumnCount + data.problems.length + (showDirtColumn ? 1 : 0) + (showSEColumn ? 1 : 0) : 0;
+  $: tailColumnCount = totalColumns - data.series.length - (splitOrganization ? 1 : 0) - 1;
+  $: tableLayout = problemPresentation ? getRanklistTableLayout(columnWidths, {
+    seriesCount: data.series.length, problemCount: data.problems.length, splitOrganization,
+    showTimeColumn, showDirtColumn, showSEColumn,
+    hasRevealDivider: problemPresentation.hasRevealDivider,
+    revealedProblemCount: problemPresentation.revealedProblemCount,
+  }) : undefined;
+  $: tableStyle = Object.entries({
+    ...(tableLayout ? tableLayout.style : {}),
+    ...(normalizedHeight ? { '--srk-row-height': `${normalizedHeight}px` } : {}),
+  }).map(([key, value]) => `${key.replace(/[A-Z]/g, char => `-${char.toLowerCase()}`)}:${value}`).join(';');
+
+  function identityClick(event, row, rowIndex, rich) {
+    if (!rich && tableLayout && !isRanklistIdentityClick(event, tableLayout.userColumn)) return;
+    event.preventDefault();
+    emitUserClick(event, row, rowIndex);
+  }
 
   const firstBloodStar = '\u2605';
   const footerRows = [
@@ -336,11 +367,22 @@
 {:else}
   <div class="srk-common-table srk-main">
     <table
+      style={tableStyle || undefined}
+      data-row-height={normalizedHeight}
+      aria-rowcount={effectiveWindow ? data.rows.length + 1 + (showProblemStatisticsFooter ? footerRows.length + 1 : 0) : undefined}
       class:srk-table-row-bordered={rowBordered}
       class:srk-table-column-bordered={columnBordered}
       class:srk-table-row-striped={rowStriped}
     >
-      {#if problemPresentation.hasRevealDivider}
+      {#if tableLayout}
+        {#each tableLayout.groups as group (group.start)}
+          <colgroup class={group.className || undefined}>
+            {#each group.columns as column (column.index)}
+              <col style:width={column.width} />
+            {/each}
+          </colgroup>
+        {/each}
+      {:else if problemPresentation.hasRevealDivider}
         <colgroup span={leftFooterColumnCount}></colgroup>
         <colgroup class="srk-ccpc26-revealed-columns" span={problemPresentation.revealedProblemCount}></colgroup>
         <colgroup span={data.problems.length - problemPresentation.revealedProblemCount + (showDirtColumn ? 1 : 0) + (showSEColumn ? 1 : 0)}></colgroup>
@@ -423,8 +465,17 @@
         </tr>
       </thead>
       <tbody>
-        {#each data.rows as row, rowIndex}
-          <tr>
+        {#each data.rows as row, rowIndex ((effectiveWindow || retainIdentity) ? (row.user.id ?? rowIndex) : rowIndex)}
+          {@const rich = isRanklistRowInWindow(rowIndex, effectiveWindow)}
+          {@const thin = !rich && retainIdentity && !!tableLayout}
+          <tr data-row-index={rowIndex} data-rich-row={rich ? 'true' : 'false'}
+            data-thin-row={thin ? 'true' : undefined}
+            aria-rowindex={effectiveWindow ? rowIndex + 2 : undefined}
+            style:height={normalizedHeight ? `${normalizedHeight}px` : undefined}>
+            {#if !rich && !retainIdentity}
+              <td colspan={totalColumns} aria-hidden="true"></td>
+            {:else}
+              {#if !thin}
             {#each getRankValues(row) as rankValue, seriesIndex}
               <td
                 class={`srk--text-right srk--nowrap ${getSeriesSegmentClass(rankValue, data.series[seriesIndex])}`}
@@ -432,9 +483,47 @@
                 style:color={getSeriesSegmentStyle(rankValue, data.series[seriesIndex]).color}
                 style:background-color={getSeriesSegmentStyle(rankValue, data.series[seriesIndex]).backgroundColor}
               >
-                {getRankText(rankValue, row)}
+                {#if rich}{getRankText(rankValue, row)}{/if}
               </td>
             {/each}
+              {/if}
+              {#if retainIdentity}
+            {#if splitOrganization}
+              <td class="srk-organization-cell srk--text-left srk--nowrap srk-search-org-cell"
+                class:srk-search-has-avatar={showAvatarInOrganization && !!row.user.avatar}
+                colspan={thin ? data.series.length + 1 : 1}
+                aria-colindex={data.series.length + 1} aria-colspan="1">
+                <span class="srk-organization-name-text" data-search-text="organization"
+                  title={row.user.organization ? resolveDisplayText(row.user.organization) : ''}>{row.user.organization ? resolveDisplayText(row.user.organization) : ''}</span>
+                {#if rich && showAvatarInOrganization && row.user.avatar}
+                  <img class="srk-search-user-avatar" src={formatAssetUrl(row.user.avatar, 'user.avatar')} alt="User Avatar" />
+                {/if}
+              </td>
+            {/if}
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <td class="srk--text-left srk--nowrap srk-user-cell srk--cursor-pointer srk-search-user-cell"
+              class:srk-search-split={splitOrganization}
+              class:srk-search-has-avatar={!!row.user.avatar && !showAvatarInOrganization}
+              colspan={thin ? totalColumns - (splitOrganization ? data.series.length + 1 : 0) : 1}
+              aria-colindex={data.series.length + (splitOrganization ? 1 : 0) + 1} aria-colspan="1"
+              style:--srk-search-marker-space={resolveUserMarkers(row.user, data.markers || []).length ? `${4 + resolveUserMarkers(row.user, data.markers || []).length * 16}px` : undefined}
+              on:click={(event) => identityClick(event, row, rowIndex, rich)}>
+              <span class="srk-user-name-text" data-search-text="name" title={resolveDisplayText(row.user.name)}>{resolveDisplayText(row.user.name)}</span>
+              {#if rich && getResolvedUserMarkers(row.user).length}
+                <span class="srk-marker-dot-group srk-search-markers">
+                  {#each getResolvedUserMarkers(row.user) as entry}
+                    <span class={markerClass(entry)} style:background-color={markerBackgroundColor(entry)} data-tooltip={resolveDisplayText(entry.marker.label)}></span>
+                  {/each}
+                </span>
+              {/if}
+              {#if row.user.organization && !splitOrganization}
+                <span class="srk-user-secondary-text srk-search-organization" data-search-text="organization">{resolveDisplayText(row.user.organization)}</span>
+              {/if}
+              {#if rich && row.user.avatar && !showAvatarInOrganization}
+                <img class="srk-search-user-avatar" src={formatAssetUrl(row.user.avatar, 'user.avatar')} alt="User Avatar" />
+              {/if}
+            </td>
+              {:else}
             {#if splitOrganization}
               <td
                 class="srk-organization-cell srk--text-left srk--nowrap"
@@ -504,6 +593,8 @@
                 </div>
               </td>
             </slot>
+              {/if}
+              {#if rich}
             <td class="srk--text-right srk--nowrap">{row.score.value}</td>
             {#if showTimeColumn}
               <td class="srk--text-right srk--nowrap">
@@ -585,13 +676,17 @@
             {#if showSEColumn}
               <td class="srk-se-cell srk--text-right srk--nowrap">{calculateSEValue(row, problemStatistics)}</td>
             {/if}
+              {:else if !tableLayout}
+                {#each Array(tailColumnCount) as _}<td aria-hidden="true"></td>{/each}
+              {/if}
+            {/if}
           </tr>
         {/each}
       </tbody>
       {#if showProblemStatisticsFooter}
         <tfoot>
-          {#each footerRows as footerRow}
-            <tr class="srk-problem-statistics-footer-row">
+          {#each footerRows as footerRow, footerIndex}
+            <tr class="srk-problem-statistics-footer-row" aria-rowindex={effectiveWindow ? data.rows.length + footerIndex + 2 : undefined}>
               <td class="srk-problem-statistics-footer-labels srk--text-right srk--nowrap" colspan={leftFooterColumnCount}>
                 <span class="srk-problem-statistics-footer-label srk--c-tooltip" data-tooltip={footerRow.tooltip}>
                   {footerRow.label}
@@ -623,7 +718,7 @@
               {/if}
             </tr>
           {/each}
-          <tr class="srk-problem-statistics-footer-row srk-problem-statistics-footer-problem-label-row">
+          <tr class="srk-problem-statistics-footer-row srk-problem-statistics-footer-problem-label-row" aria-rowindex={effectiveWindow ? data.rows.length + footerRows.length + 2 : undefined}>
             <td class="srk-problem-statistics-footer-labels srk--text-right srk--nowrap" colspan={leftFooterColumnCount}></td>
             {#each problemPresentation.problemColumns as problemIndex}
               {#if problemIndex === null}

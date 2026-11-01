@@ -14,6 +14,8 @@ export type {
   RanklistColumnTitles,
   RanklistParts,
   RanklistProps,
+  RanklistRowWindow,
+  RanklistWindowOptions,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
   StatusCellPartProps,

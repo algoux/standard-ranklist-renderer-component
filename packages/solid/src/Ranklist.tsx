@@ -23,6 +23,11 @@ import {
   getRankProblemStatusCellClassName,
   getRankProblemDisplayStatus,
   getRanklistProblemPresentation,
+  getRanklistTableLayout,
+  isRanklistIdentityClick,
+  isRanklistRowInWindow,
+  normalizeRanklistRowHeight,
+  normalizeRanklistRowWindow,
   getRankProblemStatusCellPresentation,
   resolveSrkAssetUrl,
   shouldShowTimeColumn,
@@ -34,6 +39,7 @@ import type {
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
   RankValue,
+  RanklistWindowOptions,
   SolutionClickPayload,
   StaticRanklist,
   StaticRanklistRow,
@@ -89,7 +95,7 @@ export interface RanklistParts {
   statusCell?: (props: StatusCellPartProps) => JSX.Element;
 }
 
-export interface RanklistProps {
+export interface RanklistProps extends RanklistWindowOptions {
   /** Opt in to configured CCPC26 presentation; the caller owns freeze timing. */
   enableCCPC26?: boolean;
   /** Layout from the complete current slice before filtering rows, using data's original problem indexes. */
@@ -129,6 +135,49 @@ export function Ranklist(props: RanklistProps) {
   const formatAssetUrl = (url: string, field: string) => resolveSrkAssetUrl(url, field, props.formatSrkAssetUrl);
   const resolveDisplayText = (text: Parameters<typeof resolveText>[0]) => resolveText(text, props.languages);
   const showAvatarInOrganization = () => !!props.splitOrganization && props.userAvatarPlacement === 'organization';
+  const rowWindow = createMemo(() =>
+    props.parts?.userCell ? undefined : normalizeRanklistRowWindow(props.rowWindow, props.data.rows.length),
+  );
+  const retainIdentity = () => !!props.retainUserText && !props.parts?.userCell;
+  const rowHeight = () => normalizeRanklistRowHeight(props.rowHeight);
+  const userColumn = () => props.data.series.length + (props.splitOrganization ? 1 : 0);
+  const totalColumns = () =>
+    userColumn() +
+    2 +
+    (showTimeColumn() ? 1 : 0) +
+    props.data.problems.length +
+    (props.showDirtColumn ? 1 : 0) +
+    (props.showSEColumn ? 1 : 0);
+  const tableLayout = createMemo(() =>
+    getRanklistTableLayout(props.columnWidths, {
+      seriesCount: props.data.series.length,
+      problemCount: props.data.problems.length,
+      splitOrganization: props.splitOrganization,
+      showTimeColumn: showTimeColumn(),
+      showDirtColumn: props.showDirtColumn,
+      showSEColumn: props.showSEColumn,
+      hasRevealDivider: presentation()?.hasRevealDivider,
+      revealedProblemCount: presentation()?.revealedProblemCount,
+    }),
+  );
+  const tableStyle = (): JSX.CSSProperties | undefined => {
+    const layout = tableLayout();
+    if (!layout) return undefined;
+    return Object.fromEntries(
+      Object.entries(layout.style).map(([key, value]) => [
+        key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`),
+        value,
+      ]),
+    ) as JSX.CSSProperties;
+  };
+  // Key by participant, not index or snapshot object: immutable replay/filter
+  // snapshots must update the existing identity nodes instead of remounting them.
+  const keyedRows = createMemo(() => {
+    const rows = props.data.rows;
+    const keys = rows.map((row) => row.user.id || row);
+    return { keys, byKey: new Map(keys.map((key, index) => [key, rows[index]])) };
+  });
+
   const problemStatistics = createMemo(() =>
     props.showProblemStatisticsFooter || props.showSEColumn ? calculateProblemStatisticsFooter(props.data) : [],
   );
@@ -230,25 +279,45 @@ export function Ranklist(props: RanklistProps) {
       >
         <div class="srk-common-table srk-main">
           <table
+            style={tableStyle()}
+            data-row-height={rowHeight()}
+            aria-rowcount={
+              rowWindow() ? props.data.rows.length + 1 + (props.showProblemStatisticsFooter ? 8 : 0) : undefined
+            }
             classList={{
               'srk-table-row-bordered': !!props.rowBordered,
               'srk-table-column-bordered': !!props.columnBordered,
               'srk-table-row-striped': !!props.rowStriped,
             }}
           >
-            <Show when={problemPresentation().hasRevealDivider}>
-              <colgroup
-                span={props.data.series.length + 2 + (showTimeColumn() ? 1 : 0) + (props.splitOrganization ? 1 : 0)}
-              />
-              <colgroup class="srk-ccpc26-revealed-columns" span={problemPresentation().revealedProblemCount} />
-              <colgroup
-                span={
-                  props.data.problems.length -
-                  problemPresentation().revealedProblemCount +
-                  (props.showDirtColumn ? 1 : 0) +
-                  (props.showSEColumn ? 1 : 0)
-                }
-              />
+            <Show
+              when={tableLayout()}
+              fallback={
+                <Show when={problemPresentation().hasRevealDivider}>
+                  <colgroup
+                    span={props.data.series.length + 2 + (showTimeColumn() ? 1 : 0) + (props.splitOrganization ? 1 : 0)}
+                  />
+                  <colgroup class="srk-ccpc26-revealed-columns" span={problemPresentation().revealedProblemCount} />
+                  <colgroup
+                    span={
+                      props.data.problems.length -
+                      problemPresentation().revealedProblemCount +
+                      (props.showDirtColumn ? 1 : 0) +
+                      (props.showSEColumn ? 1 : 0)
+                    }
+                  />
+                </Show>
+              }
+            >
+              {(layout) => (
+                <For each={layout().groups}>
+                  {(group) => (
+                    <colgroup class={group.className || undefined}>
+                      <For each={group.columns}>{(column) => <col style={{ width: column.width }} />}</For>
+                    </colgroup>
+                  )}
+                </For>
+              )}
             </Show>
             <thead>
               <tr>
@@ -329,181 +398,270 @@ export function Ranklist(props: RanklistProps) {
               </tr>
             </thead>
             <tbody>
-              <For each={props.data.rows}>
-                {(row, rowIndex) => (
-                  <tr>
-                    <For each={getRankValues(row, props.data.series)}>
-                      {(rankValue, seriesIndex) => (
-                        <td
-                          class={`srk--text-right srk--nowrap ${getSeriesSegmentClass(
-                            rankValue,
-                            props.data.series[seriesIndex()],
-                          )}`}
-                          classList={{
-                            'srk-series-segmented-column': isSeriesSegmentedColumn(props.data.series[seriesIndex()]),
-                          }}
-                          style={getSeriesSegmentStyle(rankValue, props.data.series[seriesIndex()], theme())}
-                        >
-                          {getRankText(rankValue, row)}
-                        </td>
-                      )}
-                    </For>
-                    <Show when={props.splitOrganization}>
-                      <td
-                        class="srk-organization-cell srk--text-left srk--nowrap"
-                        classList={{ 'srk-organization-cell-avatar': showAvatarInOrganization() && !!row.user.avatar }}
+              <For each={keyedRows().keys}>
+                {(key, rowIndex) => {
+                  let latestRow = keyedRows().byKey.get(key)!;
+                  const row = () => (latestRow = keyedRows().byKey.get(key) || latestRow);
+                  const rich = () => isRanklistRowInWindow(rowIndex(), rowWindow());
+                  const thin = () => !rich() && retainIdentity() && !!tableLayout();
+                  return (
+                    <tr
+                      data-row-index={rowIndex()}
+                      data-rich-row={rich() ? 'true' : 'false'}
+                      data-thin-row={thin() ? 'true' : undefined}
+                      aria-rowindex={rowWindow() ? rowIndex() + 2 : undefined}
+                      style={rowHeight() ? { height: `${rowHeight()}px` } : undefined}
+                    >
+                      <Show
+                        when={rich() || retainIdentity()}
+                        fallback={<td colSpan={totalColumns()} aria-hidden="true" />}
                       >
-                        <div class="srk-organization-cell-content">
-                          <Show when={showAvatarInOrganization() && row.user.avatar}>
-                            {(avatar) => (
-                              <div class="srk-user-avatar">
-                                <img src={formatAssetUrl(avatar(), 'user.avatar')} alt="User Avatar" />
-                              </div>
-                            )}
-                          </Show>
-                          <span
-                            class="srk-organization-name-text"
-                            title={row.user.organization ? resolveDisplayText(row.user.organization) : ''}
-                          >
-                            {row.user.organization ? resolveDisplayText(row.user.organization) : ''}
-                          </span>
-                        </div>
-                      </td>
-                    </Show>
-                    {(() => {
-                      const UserCellPart = props.parts?.userCell;
-                      return UserCellPart ? (
-                        <UserCellPart
-                          user={row.user}
-                          row={row}
-                          rowIndex={rowIndex()}
-                          ranklist={props.data}
-                          markers={props.data.markers}
-                          theme={theme()}
-                          hideOrganization={!!props.splitOrganization}
-                          hideAvatar={showAvatarInOrganization()}
-                          languages={props.languages}
-                          onClick={(event) => emitUserClick(event, row, rowIndex())}
-                        />
-                      ) : (
-                        <td
-                          class="srk--text-left srk--nowrap srk-user-cell"
-                          classList={{ 'srk--cursor-pointer': !!props.onUserClick }}
-                          onClick={(event) => {
-                            event.preventDefault();
-                            emitUserClick(event, row, rowIndex());
-                          }}
-                        >
-                          <div class="srk-user-cell-content">
-                            <Show when={!showAvatarInOrganization() && row.user.avatar ? row.user.avatar : undefined}>
-                              {(avatar) => (
-                                <div class="srk-user-avatar">
-                                  <img src={formatAssetUrl(avatar(), 'user.avatar')} alt="User Avatar" />
-                                </div>
-                              )}
+                        <Show
+                          when={rich()}
+                          fallback={
+                            <Show when={!thin() && props.data.series.length > 0}>
+                              <td colSpan={props.data.series.length} aria-hidden="true" />
                             </Show>
-                            <div class="srk-user-body">
-                              <div class="srk-user-name-row">
-                                <span class="srk-user-name-text" title={resolveDisplayText(row.user.name)}>
-                                  {resolveDisplayText(row.user.name)}
-                                </span>
-                                <span class="srk-marker-dot-group">
-                                  <For each={getResolvedUserMarkers(row.user, props.data.markers, theme())}>
-                                    {(entry) => (
-                                      <span
-                                        class={`srk-marker srk-marker-dot srk--c-tooltip ${
-                                          entry.presentation.className || ''
-                                        }`}
-                                        style={getMarkerStyle(entry.presentation.style)}
-                                        data-tooltip={resolveDisplayText(entry.marker.label)}
-                                      />
-                                    )}
-                                  </For>
-                                </span>
-                              </div>
-                              <Show
-                                when={
-                                  !props.splitOrganization && row.user.organization ? row.user.organization : undefined
-                                }
+                          }
+                        >
+                          <For each={getRankValues(row(), props.data.series)}>
+                            {(rankValue, seriesIndex) => (
+                              <td
+                                class={`srk--text-right srk--nowrap ${getSeriesSegmentClass(
+                                  rankValue,
+                                  props.data.series[seriesIndex()],
+                                )}`}
+                                classList={{
+                                  'srk-series-segmented-column': isSeriesSegmentedColumn(
+                                    props.data.series[seriesIndex()],
+                                  ),
+                                }}
+                                style={getSeriesSegmentStyle(rankValue, props.data.series[seriesIndex()], theme())}
                               >
-                                {(organization) => (
-                                  <p class="srk-user-secondary-text srk--text-ellipsis" title="">
-                                    {resolveDisplayText(organization())}
-                                  </p>
-                                )}
+                                {getRankText(rankValue, row())}
+                              </td>
+                            )}
+                          </For>
+                        </Show>
+                        <Show
+                          when={retainIdentity()}
+                          fallback={
+                            <>
+                              <Show when={props.splitOrganization}>
+                                <td
+                                  class="srk-organization-cell srk--text-left srk--nowrap"
+                                  classList={{
+                                    'srk-organization-cell-avatar': showAvatarInOrganization() && !!row().user.avatar,
+                                  }}
+                                >
+                                  <div class="srk-organization-cell-content">
+                                    <Show when={showAvatarInOrganization() && row().user.avatar}>
+                                      {(avatar) => (
+                                        <div class="srk-user-avatar">
+                                          <img src={formatAssetUrl(avatar(), 'user.avatar')} alt="User Avatar" />
+                                        </div>
+                                      )}
+                                    </Show>
+                                    <span
+                                      class="srk-organization-name-text"
+                                      title={row().user.organization ? resolveDisplayText(row().user.organization) : ''}
+                                    >
+                                      {row().user.organization ? resolveDisplayText(row().user.organization) : ''}
+                                    </span>
+                                  </div>
+                                </td>
                               </Show>
-                            </div>
-                          </div>
-                        </td>
-                      );
-                    })()}
-                    <td class="srk--text-right srk--nowrap">{row.score.value}</td>
-                    <Show when={showTimeColumn()}>
-                      <td class="srk--text-right srk--nowrap">
-                        {row.score.time ? formatTimeDuration(row.score.time, 'min', Math.floor) : '-'}
-                      </td>
-                    </Show>
-                    <For each={problemPresentation().rowProblemIndexes[rowIndex()]}>
-                      {(problemIndex) => {
-                        const status = () => row.statuses[problemIndex] || { result: null };
-                        const StatusCellPart = props.parts?.statusCell;
-
-                        if (StatusCellPart) {
-                          return (
-                            <StatusCellPart
-                              status={status()}
-                              problem={props.data.problems[problemIndex]}
-                              problemIndex={problemIndex}
-                              problemRevealed={problemPresentation().problemRevealed[problemIndex]}
-                              user={row.user}
-                              row={row}
-                              rowIndex={rowIndex()}
-                              ranklist={props.data}
-                              solutions={getStatusSolutions(status())}
-                              statusCellPreset={props.statusCellPreset || 'classic'}
-                              statusColorAsText={!!props.statusColorAsText}
-                              emptyStatusPlaceholder={props.emptyStatusPlaceholder ?? null}
+                              {(() => {
+                                const UserCellPart = props.parts?.userCell;
+                                return UserCellPart ? (
+                                  <UserCellPart
+                                    user={row().user}
+                                    row={row()}
+                                    rowIndex={rowIndex()}
+                                    ranklist={props.data}
+                                    markers={props.data.markers}
+                                    theme={theme()}
+                                    hideOrganization={!!props.splitOrganization}
+                                    hideAvatar={showAvatarInOrganization()}
+                                    languages={props.languages}
+                                    onClick={(event) => emitUserClick(event, row(), rowIndex())}
+                                  />
+                                ) : (
+                                  <td
+                                    class="srk--text-left srk--nowrap srk-user-cell"
+                                    classList={{ 'srk--cursor-pointer': !!props.onUserClick }}
+                                    onClick={(event) => {
+                                      event.preventDefault();
+                                      emitUserClick(event, row(), rowIndex());
+                                    }}
+                                  >
+                                    <div class="srk-user-cell-content">
+                                      <Show
+                                        when={
+                                          !showAvatarInOrganization() && row().user.avatar
+                                            ? row().user.avatar
+                                            : undefined
+                                        }
+                                      >
+                                        {(avatar) => (
+                                          <div class="srk-user-avatar">
+                                            <img src={formatAssetUrl(avatar(), 'user.avatar')} alt="User Avatar" />
+                                          </div>
+                                        )}
+                                      </Show>
+                                      <div class="srk-user-body">
+                                        <div class="srk-user-name-row">
+                                          <span class="srk-user-name-text" title={resolveDisplayText(row().user.name)}>
+                                            {resolveDisplayText(row().user.name)}
+                                          </span>
+                                          <span class="srk-marker-dot-group">
+                                            <For each={getResolvedUserMarkers(row().user, props.data.markers, theme())}>
+                                              {(entry) => (
+                                                <span
+                                                  class={`srk-marker srk-marker-dot srk--c-tooltip ${
+                                                    entry.presentation.className || ''
+                                                  }`}
+                                                  style={getMarkerStyle(entry.presentation.style)}
+                                                  data-tooltip={resolveDisplayText(entry.marker.label)}
+                                                />
+                                              )}
+                                            </For>
+                                          </span>
+                                        </div>
+                                        <Show
+                                          when={
+                                            !props.splitOrganization && row().user.organization
+                                              ? row().user.organization
+                                              : undefined
+                                          }
+                                        >
+                                          {(organization) => (
+                                            <p class="srk-user-secondary-text srk--text-ellipsis" title="">
+                                              {resolveDisplayText(organization())}
+                                            </p>
+                                          )}
+                                        </Show>
+                                      </div>
+                                    </div>
+                                  </td>
+                                );
+                              })()}
+                            </>
+                          }
+                        >
+                          <Show when={props.splitOrganization}>
+                            <RetainedOrganizationCell
+                              user={row().user}
+                              rich={rich()}
+                              colSpan={thin() ? props.data.series.length + 1 : 1}
+                              columnIndex={props.data.series.length}
+                              showAvatar={showAvatarInOrganization()}
                               languages={props.languages}
-                              onClick={(event) => emitSolutionClick(event, row, rowIndex(), status(), problemIndex)}
+                              formatAssetUrl={formatAssetUrl}
                             />
-                          );
-                        }
-
-                        return (
-                          <StatusCell
-                            status={status()}
-                            problem={props.data.problems[problemIndex]}
-                            problemIndex={problemIndex}
-                            problemRevealed={problemPresentation().problemRevealed[problemIndex]}
-                            user={row.user}
-                            row={row}
+                          </Show>
+                          <RetainedUserCell
+                            row={row()}
                             rowIndex={rowIndex()}
                             ranklist={props.data}
-                            solutions={getStatusSolutions(status())}
-                            statusCellPreset={props.statusCellPreset || 'classic'}
-                            statusColorAsText={!!props.statusColorAsText}
-                            emptyStatusPlaceholder={props.emptyStatusPlaceholder ?? null}
+                            rich={rich()}
+                            thin={thin()}
+                            theme={theme()}
                             languages={props.languages}
-                            onClick={(event) => emitSolutionClick(event, row, rowIndex(), status(), problemIndex)}
-                            onSolutionClick={props.onSolutionClick}
+                            colSpan={
+                              thin() ? totalColumns() - (props.splitOrganization ? props.data.series.length + 1 : 0) : 1
+                            }
+                            userColumn={userColumn()}
+                            hideOrganization={!!props.splitOrganization}
+                            hideAvatar={showAvatarInOrganization()}
+                            clickable={!!props.onUserClick}
+                            formatAssetUrl={formatAssetUrl}
+                            onClick={(event) => emitUserClick(event, row(), rowIndex())}
                           />
-                        );
-                      }}
-                    </For>
-                    <Show when={props.showDirtColumn}>
-                      <td class="srk-dirt-cell srk--text-right srk--nowrap">{calculateDirtPercentage(row)}</td>
-                    </Show>
-                    <Show when={props.showSEColumn}>
-                      <td class="srk-se-cell srk--text-right srk--nowrap">
-                        {calculateSEValue(row, problemStatistics())}
-                      </td>
-                    </Show>
-                  </tr>
-                )}
+                        </Show>
+                        <Show
+                          when={rich()}
+                          fallback={
+                            <Show when={!thin()}>
+                              <td colSpan={totalColumns() - userColumn() - 1} aria-hidden="true" />
+                            </Show>
+                          }
+                        >
+                          <td class="srk--text-right srk--nowrap">{row().score.value}</td>
+                          <Show when={showTimeColumn()}>
+                            <td class="srk--text-right srk--nowrap">
+                              {row().score.time ? formatTimeDuration(row().score.time, 'min', Math.floor) : '-'}
+                            </td>
+                          </Show>
+                          <For each={problemPresentation().rowProblemIndexes[rowIndex()]}>
+                            {(problemIndex) => {
+                              const status = () => row().statuses[problemIndex] || { result: null };
+                              const StatusCellPart = props.parts?.statusCell;
+
+                              if (StatusCellPart) {
+                                return (
+                                  <StatusCellPart
+                                    status={status()}
+                                    problem={props.data.problems[problemIndex]}
+                                    problemIndex={problemIndex}
+                                    problemRevealed={problemPresentation().problemRevealed[problemIndex]}
+                                    user={row().user}
+                                    row={row()}
+                                    rowIndex={rowIndex()}
+                                    ranklist={props.data}
+                                    solutions={getStatusSolutions(status())}
+                                    statusCellPreset={props.statusCellPreset || 'classic'}
+                                    statusColorAsText={!!props.statusColorAsText}
+                                    emptyStatusPlaceholder={props.emptyStatusPlaceholder ?? null}
+                                    languages={props.languages}
+                                    onClick={(event) =>
+                                      emitSolutionClick(event, row(), rowIndex(), status(), problemIndex)
+                                    }
+                                  />
+                                );
+                              }
+
+                              return (
+                                <StatusCell
+                                  status={status()}
+                                  problem={props.data.problems[problemIndex]}
+                                  problemIndex={problemIndex}
+                                  problemRevealed={problemPresentation().problemRevealed[problemIndex]}
+                                  user={row().user}
+                                  row={row()}
+                                  rowIndex={rowIndex()}
+                                  ranklist={props.data}
+                                  solutions={getStatusSolutions(status())}
+                                  statusCellPreset={props.statusCellPreset || 'classic'}
+                                  statusColorAsText={!!props.statusColorAsText}
+                                  emptyStatusPlaceholder={props.emptyStatusPlaceholder ?? null}
+                                  languages={props.languages}
+                                  onClick={(event) =>
+                                    emitSolutionClick(event, row(), rowIndex(), status(), problemIndex)
+                                  }
+                                  onSolutionClick={props.onSolutionClick}
+                                />
+                              );
+                            }}
+                          </For>
+                          <Show when={props.showDirtColumn}>
+                            <td class="srk-dirt-cell srk--text-right srk--nowrap">{calculateDirtPercentage(row())}</td>
+                          </Show>
+                          <Show when={props.showSEColumn}>
+                            <td class="srk-se-cell srk--text-right srk--nowrap">
+                              {calculateSEValue(row(), problemStatistics())}
+                            </td>
+                          </Show>
+                        </Show>
+                      </Show>
+                    </tr>
+                  );
+                }}
               </For>
             </tbody>
             <Show when={props.showProblemStatisticsFooter}>
               <ProblemStatisticsFooterRows
+                windowed={!!rowWindow()}
                 data={props.data}
                 theme={theme()}
                 showTimeColumn={showTimeColumn()}
@@ -518,6 +676,109 @@ export function Ranklist(props: RanklistProps) {
         </div>
       </Show>
     </Show>
+  );
+}
+
+function RetainedUserCell(props: {
+  row: StaticRanklistRow;
+  rowIndex: number;
+  ranklist: StaticRanklist;
+  rich: boolean;
+  thin: boolean;
+  colSpan: number;
+  userColumn: number;
+  theme: EnumTheme;
+  languages?: readonly string[];
+  hideOrganization: boolean;
+  hideAvatar: boolean;
+  clickable: boolean;
+  formatAssetUrl: (url: string, field: string) => string;
+  onClick: (event: MouseEvent) => void;
+}) {
+  const name = () => resolveText(props.row.user.name, props.languages);
+  const avatar = () => !!props.row.user.avatar && !props.hideAvatar;
+  const markers = createMemo(() => getResolvedUserMarkers(props.row.user, props.ranklist.markers, props.theme));
+  return (
+    <td
+      class="srk--text-left srk--nowrap srk-user-cell srk-search-user-cell"
+      title=""
+      classList={{
+        'srk--cursor-pointer': props.clickable,
+        'srk-search-split': props.hideOrganization,
+        'srk-search-has-avatar': avatar(),
+      }}
+      colSpan={props.colSpan}
+      aria-colindex={props.userColumn + 1}
+      aria-colspan={1}
+      style={markers().length ? { '--srk-search-marker-space': `${4 + markers().length * 16}px` } : undefined}
+      onClick={(event) => {
+        if (props.thin && !isRanklistIdentityClick(event, props.userColumn)) return;
+        event.preventDefault();
+        props.onClick(event);
+      }}
+    >
+      <span class="srk-user-name-text" data-search-text="name" title={name()}>
+        {name()}
+      </span>
+      <Show when={props.rich && markers().length > 0}>
+        <span class="srk-marker-dot-group srk-search-markers">
+          <For each={markers()}>
+            {(entry) => (
+              <span
+                class={`srk-marker srk-marker-dot srk--c-tooltip ${entry.presentation.className || ''}`}
+                style={getMarkerStyle(entry.presentation.style)}
+                data-tooltip={resolveText(entry.marker.label, props.languages)}
+              />
+            )}
+          </For>
+        </span>
+      </Show>
+      <Show when={!props.hideOrganization && !!props.row.user.organization}>
+        <span class="srk-user-secondary-text srk-search-organization" data-search-text="organization">
+          {resolveText(props.row.user.organization, props.languages)}
+        </span>
+      </Show>
+      <Show when={props.rich && avatar()}>
+        <img
+          class="srk-search-user-avatar"
+          src={props.formatAssetUrl(props.row.user.avatar!, 'user.avatar')}
+          alt="User Avatar"
+        />
+      </Show>
+    </td>
+  );
+}
+
+function RetainedOrganizationCell(props: {
+  user: srk.User;
+  rich: boolean;
+  colSpan: number;
+  columnIndex: number;
+  showAvatar: boolean;
+  languages?: readonly string[];
+  formatAssetUrl: (url: string, field: string) => string;
+}) {
+  const avatar = () => props.showAvatar && !!props.user.avatar;
+  const organization = () => resolveText(props.user.organization, props.languages);
+  return (
+    <td
+      class="srk-organization-cell srk--text-left srk--nowrap srk-search-org-cell"
+      classList={{ 'srk-search-has-avatar': avatar() }}
+      colSpan={props.colSpan}
+      aria-colindex={props.columnIndex + 1}
+      aria-colspan={1}
+    >
+      <span class="srk-organization-name-text" data-search-text="organization" title={organization()}>
+        {organization()}
+      </span>
+      <Show when={props.rich && avatar()}>
+        <img
+          class="srk-search-user-avatar"
+          src={props.formatAssetUrl(props.user.avatar!, 'user.avatar')}
+          alt="User Avatar"
+        />
+      </Show>
+    </td>
   );
 }
 
@@ -686,6 +947,7 @@ function getMarkerStyle(style: { backgroundColor?: string } | undefined): JSX.CS
 }
 
 function ProblemStatisticsFooterRows(props: {
+  windowed?: boolean;
   data: StaticRanklist;
   theme: EnumTheme;
   showTimeColumn: boolean;
@@ -738,8 +1000,11 @@ function ProblemStatisticsFooterRows(props: {
   return (
     <tfoot>
       <For each={footerRows}>
-        {(row) => (
-          <tr class="srk-problem-statistics-footer-row">
+        {(row, footerIndex) => (
+          <tr
+            aria-rowindex={props.windowed ? props.data.rows.length + footerIndex() + 2 : undefined}
+            class="srk-problem-statistics-footer-row"
+          >
             <td class="srk-problem-statistics-footer-labels srk--text-right srk--nowrap" colSpan={leftColumnCount()}>
               <span class="srk-problem-statistics-footer-label srk--c-tooltip" data-tooltip={row.tooltip}>
                 {row.label}
@@ -766,7 +1031,10 @@ function ProblemStatisticsFooterRows(props: {
           </tr>
         )}
       </For>
-      <tr class="srk-problem-statistics-footer-row srk-problem-statistics-footer-problem-label-row">
+      <tr
+        aria-rowindex={props.windowed ? props.data.rows.length + footerRows.length + 2 : undefined}
+        class="srk-problem-statistics-footer-row srk-problem-statistics-footer-problem-label-row"
+      >
         <td class="srk-problem-statistics-footer-labels srk--text-right srk--nowrap" colSpan={leftColumnCount()} />
         <For each={props.problemColumns}>
           {(problemIndex) => (
@@ -850,3 +1118,4 @@ function footerCellSecondary(key: string, stat: ProblemStatisticsFooter) {
 }
 
 export type { RanklistColumnTitles, RanklistStatusCellPreset, RanklistUserAvatarPlacement };
+export type { RanklistRowWindow, RanklistWindowOptions } from '@algoux/standard-ranklist-renderer-component-core';

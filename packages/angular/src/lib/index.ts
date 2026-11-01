@@ -24,6 +24,8 @@ export {
 } from './ranklist/user-cell-template.directive';
 export type {
   RanklistColumnTitles,
+  RanklistRowWindow,
+  RanklistWindowOptions,
   RanklistStatusCellPreset,
   RanklistUserAvatarPlacement,
   RankValue,

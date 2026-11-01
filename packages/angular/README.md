@@ -98,6 +98,27 @@ export class BoardComponent {
 }
 ```
 
+## Controlled row window and native Find
+
+The optional `rowWindow`, `retainUserText`, `columnWidths`, and `rowHeight` props share the `RanklistWindowOptions` contract exported by this package and core.
+
+- `rowWindow: { start, end }` selects zero-based, end-exclusive **rich** rows. Bounds are floored/clamped; non-finite bounds disable windowing. All real `tr` positions remain in the table, and payload `rowIndex` values always refer to the complete `data.rows` array. Ranking, statistics, and CCPC26 disclosure still use the complete input.
+- `retainUserText: true` keeps one real participant-name/organization text node in every row for native browser Find. Those elements and Text nodes stay mounted as the window moves or `rowWindow` becomes undefined. Rich rows additionally render ranks, scores, statuses, avatars and markers. Without retention, light rows contain only an empty spanning cell; their participant text is not searchable.
+- `columnWidths` supplies one positive finite pixel width per physical column: series, optional organization, name, score, optional time, problems, then optional Dirt/SE. A complete valid array enables fixed colgroups (including CCPC26 reveal boundaries), with Name absorbing spare space. Retained light rows then use thin spanning cells. Missing/invalid widths use empty physical rank/detail cells to preserve automatic-column alignment.
+- `rowHeight` supplies a positive finite minimum participant-row height in pixels, including full-render mode. It is not a clipping rule; use a height that accommodates your fonts, avatars and status preset.
+
+The renderer does not own scrolling or viewport measurement: the host calculates and updates the window and may clear it for copy/print/full data access. Offscreen status/score fields are intentionally not rendered or searchable. Keep user IDs unique and stable. A custom user-cell template plus a window falls back to full rendering so existing custom-cell contracts remain intact; custom status templates are invoked only for rich rows. Omitting the new props preserves the default table and interactions.
+
+```html
+<srk-ranklist
+  [data]="staticRanklist"
+  [rowWindow]="{ start: 80, end: 110 }"
+  [retainUserText]="true"
+  [columnWidths]="columnWidths"
+  [rowHeight]="61"
+/>
+```
+
 ## Advanced Usage
 
 Use `ModalComponent` directly when you want custom modal content. `SrkUserCellTemplateDirective` and `SrkStatusCellTemplateDirective` let you replace selected ranklist table cells with Angular templates.
