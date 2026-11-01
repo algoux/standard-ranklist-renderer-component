@@ -1,5 +1,11 @@
 # @algoux/standard-ranklist-renderer-component-core
 
+## 0.7.3
+
+### Patch Changes
+
+- 0f8a75b: Add controlled row windows across all framework adapters, retaining real participant identity text for native browser Find. Share SSR-safe fixed-column layout, optional uniform row heights, stable identity nodes and custom-user-cell fallback.
+
 ## 0.7.2
 
 ### Patch Changes
