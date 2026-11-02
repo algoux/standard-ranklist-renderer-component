@@ -100,3 +100,35 @@ jobs:
 
           git tag "$tag"
           git push origin "$tag"
+
+      - name: Prepare release notification
+        id: notification
+        if: >-
+          ${{
+            success() &&
+            steps.changesets.outputs.published == 'true' &&
+            (
+              (github.event_name == 'workflow_run' &&
+               github.event.workflow_run.event == 'push' &&
+               github.event.workflow_run.head_branch == 'master') ||
+              (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master')
+            )
+          }}
+        continue-on-error: true
+        env:
+          PUBLISHED_PACKAGES: ${{ steps.changesets.outputs.publishedPackages }}
+          RELEASE_COMMIT: ${{ github.event.workflow_run.head_sha || github.sha }}
+          REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}
+          WORKFLOW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: node ./scripts/build-release-notification.mjs
+
+      - name: Notify package release success
+        if: ${{ success() && steps.notification.outcome == 'success' && steps.notification.outputs.body != '' }}
+        continue-on-error: true
+        uses: azurdream/meowpush-gh-actions@v1
+        with:
+          key: ${{ secrets.MEOWPUSH_KEY }}
+          title: '${{ github.repository }} Release Success'
+          body: ${{ steps.notification.outputs.body }}
+          url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          group: github-actions
